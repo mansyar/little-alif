@@ -38,7 +38,7 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 **TDD Ref:** §1 (Project Structure)
 
 **Key Deliverables:**
-- `npm create tanstack-app` with React + TypeScript + Vite
+- `pnpm create tanstack-app` with React + TypeScript + Vite
 - Tailwind CSS v4 configuration with design tokens
 - Radix UI theme primitives installed
 - Lucide React icons installed
