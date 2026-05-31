@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Little Alif — Screen Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       ROOT & RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --sand: #E8D5B7;
+      --sand-light: #F5EDE0;
+      --sand-dark: #C9B394;
+      --green: #2D6A4F;
+      --green-light: #40916C;
+      --green-dark: #1B4332;
+      --orange: #F4A261;
+      --orange-light: #F7B977;
+      --coral: #E76F51;
+      --bg-warm: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --text-dark: #1A1A2E;
+      --text-muted: #8A8A9A;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: var(--bg-warm);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============================================
+       NAVIGATION BAR (Screen Switcher)
+    ============================================ */
+    .mockup-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid #eee;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .mockup-nav .logo {
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--green);
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+    .mockup-nav .logo span { color: var(--orange); }
+    .nav-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid #e0ddd8;
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+      color: var(--text-muted);
+    }
+    .nav-btn:hover { border-color: var(--green); color: var(--green); }
+    .nav-btn.active { background: var(--green); color: white; border-color: var(--green); }
+    .nav-btn.parent { border-left: 3px solid var(--green); }
+    .nav-btn.child { border-left: 3px solid var(--orange); }
+
+    /* ============================================
+       SCREEN CONTAINER
+    ============================================ */
+    .screen-container {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      position: relative;
+    }
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+    }
+    .screen.active { display: block; }
+
+    /* ============================================
+       TYPOGRAPHY
+    ============================================ */
+    .arabic {
+      font-family: 'Cairo', 'Traditional Arabic', serif;
+    }
+    h1 { font-size: 24px; font-weight: 800; }
+    h2 { font-size: 20px; font-weight: 700; }
+    h3 { font-size: 18px; font-weight: 700; }
+
+    /* ============================================
+       PARENT: LOGIN / REGISTER
+    ============================================ */
+    .auth-screen {
+      padding: 40px 28px 32px;
+      background: white;
+    }
+    .auth-screen .app-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .auth-screen .app-logo .icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: white;
+      font-weight: 900;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.25);
+    }
+    .auth-screen .app-logo h1 { font-size: 22px; color: var(--text-dark); }
+    .auth-screen .app-logo h1 span { color: var(--orange); }
+    .auth-screen .app-logo p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e8e4de;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bg-warm);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-group input:focus { border-color: var(--green); background: white; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { background: var(--green); color: white; }
+
+    .auth-footer { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
+    .auth-footer a { color: var(--green); font-weight: 700; text-decoration: none; cursor: pointer; }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    .lang-toggle {
+      position: absolute; top: 16px; right: 16px;
+      padding: 6px 14px; border-radius: 20px; border: 1.5px solid #e0ddd8;
+      background: white; font-size: 12px; font-weight: 600; cursor: pointer;
+      font-family: inherit; color: var(--text-muted); transition: all 0.15s;
+    }
+    .lang-toggle:hover { border-color: var(--green); color: var(--green); }
+
+    /* ============================================
+       PARENT: DASHBOARD
+    ============================================ */
+    .dashboard { background: white; min-height: 100%; }
+    .dash-header {
+      padding: 24px 24px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .dash-header h2 { font-size: 20px; }
+    .dash-header .parent-badge {
+      font-size: 12px; color: var(--green); background: #E8F5E9;
+      padding: 4px 12px; border-radius: 12px; font-weight: 600;
+    }
+
+    .profile-list { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .profile-card {
+      display: flex; align-items: center; gap: 16px; padding: 16px;
+      background: var(--bg-warm); border-radius: var(--radius); cursor: pointer;
+      transition: all 0.15s; border: 2px solid transparent;
+    }
+    .profile-card:hover { border-color: var(--sand); }
+    .profile-card .avatar {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .profile-card .info { flex: 1; }
+    .profile-card .info .name { font-weight: 700; font-size: 16px; }
+    .profile-card .info .letters-count { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .profile-card .info .vowel-badge {
+      font-size: 11px; display: inline-block;
+      margin-top: 4px; padding: 2px 8px; border-radius: 6px;
+      font-weight: 600;
+    }
+    .profile-card .actions { display: flex; gap: 6px; }
+    .profile-card .actions button {
+      width: 36px; height: 36px; border-radius: 10px; border: none;
+      background: transparent; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+    }
+    .profile-card .actions button:hover { background: #e8e4de; }
+    .profile-card .actions .edit-btn { color: var(--green); }
+    .profile-card .actions .delete-btn { color: var(--coral); }
+
+    .add-profile {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px; border: 2px dashed #ddd; border-radius: var(--radius);
+      cursor: pointer; color: var(--text-muted); font-weight: 600; font-size: 14px;
+      transition: all 0.15s; background: transparent; font-family: inherit; width: 100%;
+    }
+    .add-profile:hover { border-color: var(--green); color: var(--green); }
+
+    .childmode-banner {
+      margin: 0 24px 16px; padding: 12px 16px;
+      background: linear-gradient(135deg, #FFF3E0, #FFECB3);
+      border-radius: var(--radius-sm); display: flex;
+      align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .childmode-banner .label { font-size: 13px; font-weight: 600; color: #E65100; }
+    .childmode-banner .label small { font-weight: 400; color: #BF360C; display: block; font-size: 11px; }
+    .childmode-banner .enable-btn {
+      padding: 8px 16px; background: var(--orange); color: white; border: none;
+      border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
+      font-family: inherit; transition: background 0.15s; white-space: nowrap;
+    }
+    .childmode-banner .enable-btn:hover { background: #E6892E; }
+
+    /* ============================================
+       HARAKAT MODE SELECTOR
+    ============================================ */
+    .harakat-selector {
+      display: flex; gap: 8px; padding: 0 24px 16px;
+    }
+    .harakat-btn {
+      flex: 1; padding: 10px 8px; border-radius: var(--radius-sm);
+      border: 2px solid #e8e4de; background: white;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: all 0.15s; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .harakat-btn .arabic-example {
+      font-family: 'Cairo', serif;
+      font-size: 18px; font-weight: 700; line-height: 1.2;
+    }
+    .harakat-btn:hover { border-color: var(--sand-dark); }
+    .harakat-btn.active {
+      border-color: var(--green); background: #E8F5E9; color: var(--green-dark);
+    }
+    .harakat-btn .label-text { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+
+    /* ============================================
+       PARENT: LETTER TOGGLE GRID
+    ============================================ */
+    .toggle-screen { background: white; min-height: 100%; }
+    .toggle-header {
+      padding: 20px 24px 12px; display: flex; align-items: center; gap: 12px;
+    }
+    .toggle-header .back-btn {
+      width: 36px; height: 36px; border-radius: 10px; border: none;
+      background: var(--bg-warm); cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+    }
+    .toggle-header .back-btn:hover { background: #e8e4de; }
+    .toggle-header .child-info { flex: 1; }
+    .toggle-header .child-info h3 { font-size: 16px; }
+    .toggle-header .child-info .sub { font-size: 12px; color: var(--text-muted); }
+
+    .toggle-grid {
+      padding: 4px 24px 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .toggle-item {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 12px 8px; background: var(--bg-warm);
+      border-radius: var(--radius-sm); transition: all 0.15s;
+    }
+    .toggle-item .letter-char {
+      font-family: 'Cairo', serif;
+      font-size: 28px; font-weight: 700; line-height: 1.2;
+    }
+    .toggle-item .letter-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .switch { position: relative; width: 36px; height: 20px; cursor: pointer; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .slider {
+      position: absolute; inset: 0; background: #ddd; border-radius: 20px; transition: 0.2s;
+    }
+    .switch .slider::before {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      left: 2px; bottom: 2px; background: white; border-radius: 50%;
+      transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .switch input:checked + .slider { background: var(--green); }
+    .switch input:checked + .slider::before { transform: translateX(16px); }
+    .toggle-item.on { background: #E8F5E9; }
+    .toggle-item.off { opacity: 0.6; }
+
+    .bulk-actions { display: flex; gap: 8px; padding: 0 24px 4px; }
+    .bulk-actions button {
+      flex: 1; padding: 10px; border-radius: var(--radius-sm);
+      border: 1.5px solid #ddd; background: white; font-size: 12px;
+      font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .bulk-actions .show-all:hover { background: var(--green); color: white; border-color: var(--green); }
+    .bulk-actions .hide-all:hover { background: var(--coral); color: white; border-color: var(--coral); }
+
+    /* ============================================
+       CHILD: LETTER GRID
+    ============================================ */
+    .child-grid { min-height: 100%; padding: 0; position: relative; }
+    .child-grid-bg {
+      position: absolute; inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(244,162,97,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(45,106,79,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(231,111,81,0.06) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .child-top {
+      position: relative; z-index: 1; padding: 20px 20px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .child-top .profile-avatar { display: flex; align-items: center; gap: 10px; }
+    .child-top .profile-avatar .avatar-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .child-top .profile-avatar .name { font-weight: 700; font-size: 16px; }
+    .child-top .settings-link {
+      width: 36px; height: 36px; border-radius: 10px; border: none;
+      background: white; box-shadow: var(--shadow); cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center; transition: transform 0.15s;
+    }
+    .child-top .settings-link:hover { transform: scale(1.05); }
+
+    /* Current harakat indicator in child view */
+    .harakat-indicator {
+      position: relative; z-index: 1; text-align: center;
+      font-size: 12px; color: var(--text-muted); font-weight: 600;
+      padding: 4px 0 8px;
+    }
+
+    .child-letters {
+      position: relative; z-index: 1;
+      padding: 4px 16px 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .letter-card {
+      aspect-ratio: 1; border-radius: var(--radius);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; cursor: pointer; border: none;
+      font-family: inherit; transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: relative; overflow: hidden;
+    }
+    .letter-card:active { transform: scale(0.92); }
+    .letter-card .glyph {
+      font-family: 'Cairo', serif;
+      font-size: 38px; font-weight: 700; line-height: 1.2;
+      transition: all 0.2s;
+    }
+    .letter-card .audio-indicator {
+      position: absolute; bottom: 6px; right: 6px;
+      width: 22px; height: 22px; background: rgba(255,255,255,0.5);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 11px; opacity: 0.7;
+    }
+    /* Letter card colors */
+    .letter-card.c0 { background: linear-gradient(135deg, #FFE0B2, #FFCC80); }
+    .letter-card.c1 { background: linear-gradient(135deg, #C8E6C9, #A5D6A7); }
+    .letter-card.c2 { background: linear-gradient(135deg, #BBDEFB, #90CAF9); }
+    .letter-card.c3 { background: linear-gradient(135deg, #F8BBD0, #F48FB1); }
+    .letter-card.c4 { background: linear-gradient(135deg, #D1C4E9, #B39DDB); }
+    .letter-card.c5 { background: linear-gradient(135deg, #B2DFDB, #80CBC4); }
+    .letter-card.c6 { background: linear-gradient(135deg, #FFECB3, #FFD54F); }
+    .letter-card.c7 { background: linear-gradient(135deg, #E8EAF6, #C5CAE9); }
+
+    /* ============================================
+       CHILD: EMPTY STATE
+    ============================================ */
+    .empty-state {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 60px 32px;
+    }
+    .empty-state .illustration { font-size: 72px; margin-bottom: 16px; opacity: 0.8; }
+    .empty-state p { font-size: 16px; color: var(--text-muted); max-width: 240px; line-height: 1.5; }
+
+    /* ============================================
+       CHILD: LETTER PLAYBACK (Full-screen)
+    ============================================ */
+    .playback-overlay {
+      position: absolute; inset: 0; z-index: 10; background: white;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; border-radius: var(--radius-lg); gap: 8px;
+    }
+    .playback-overlay .big-letter {
+      font-family: 'Cairo', serif; font-size: 120px; font-weight: 900;
+      line-height: 1; color: var(--text-dark);
+      animation: letterPop 0.4s ease-out;
+    }
+    @keyframes letterPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .playback-overlay .speaker-icon {
+      font-size: 32px; animation: pulse 1.2s ease-in-out infinite; margin-top: 8px;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    .playback-overlay .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .playback-overlay .harakat-badge {
+      font-size: 11px; color: var(--text-muted); background: var(--bg-warm);
+      padding: 4px 12px; border-radius: 12px; font-weight: 600;
+    }
+
+    /* ============================================
+       MODAL (Profile Editor)
+    ============================================ */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 200; align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: var(--radius-lg); padding: 28px;
+      width: 100%; max-width: 380px; box-shadow: var(--shadow-lg);
+      animation: modalIn 0.2s ease-out;
+    }
+    @keyframes modalIn {
+      from { transform: translateY(20px) scale(0.95); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .modal h3 { margin-bottom: 20px; }
+    .avatar-selection {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px;
+    }
+    .avatar-option {
+      aspect-ratio: 1; border-radius: var(--radius-sm); border: 3px solid transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; background: var(--bg-warm); transition: all 0.15s;
+    }
+    .avatar-option:hover { border-color: var(--sand); }
+    .avatar-option.selected { border-color: var(--green); background: #E8F5E9; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 8px; }
+    .modal-actions .btn-primary { flex: 1; }
+    .modal-actions .btn-cancel {
+      padding: 15px 24px; background: transparent; border: 2px solid #ddd;
+      border-radius: var(--radius-sm); font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: inherit; color: var(--text-muted);
+    }
+
+    /* ============================================
+       READING PRACTICE (Iqra' Layout)
+    ============================================ */
+    .reading-practice { background: white; min-height: 100%; }
+    .practice-header {
+      padding: 20px 24px 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .practice-header .back-btn {
+      width: 36px; height: 36px; border-radius: 10px; border: none;
+      background: var(--bg-warm); cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+    }
+    .practice-header .back-btn:hover { background: #e8e4de; }
+    .practice-header .title { flex: 1; text-align: center; }
+    .practice-header .title h3 { font-size: 16px; }
+
+    /* Group header - shows which letters are being practiced */
+    .group-header {
+      margin: 0 24px 8px;
+      padding: 16px;
+      background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    .group-header .group-label {
+      font-size: 11px; font-weight: 700; color: #7B1FA2;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+    }
+    .group-header .group-letters {
+      font-family: 'Cairo', serif;
+      font-size: 28px; font-weight: 700; color: #4A148C;
+      display: flex; justify-content: center; gap: 20px;
+    }
+
+    /* Reading practice grid */
+    .practice-grid {
+      padding: 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .practice-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 2px;
+    }
+    .practice-row.header-row {
+      background: none;
+    }
+    .practice-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cairo', serif;
+      font-size: 26px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: all 0.1s;
+      background: white;
+      border-radius: 4px;
+      position: relative;
+    }
+    .practice-cell:active { transform: scale(0.9); }
+    .practice-cell:hover { background: #f0ece6; }
+    /* Row separator - thin line between practice rows */
+    .practice-row + .practice-row { border-top: 1px solid #e8e4de; }
+
+    /* Practice action buttons */
+    .practice-actions {
+      display: flex; gap: 8px; padding: 16px 24px 24px;
+    }
+    .practice-actions button {
+      flex: 1; padding: 12px; border-radius: var(--radius-sm);
+      border: 2px solid #e8e4de; background: white;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .practice-actions button:hover { border-color: var(--green); color: var(--green); }
+    .practice-actions button.primary-action {
+      background: var(--green); color: white; border-color: var(--green);
+    }
+    .practice-actions button.primary-action:hover { background: var(--green-dark); }
+
+    /* Group navigation pills */
+    .group-pills {
+      display: flex; gap: 6px; padding: 0 24px 12px; overflow-x: auto;
+    }
+    .group-pill {
+      padding: 6px 14px; border-radius: 20px;
+      border: 1.5px solid #e0ddd8; background: white;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      font-family: inherit; white-space: nowrap; transition: all 0.15s;
+      color: var(--text-muted);
+    }
+    .group-pill:hover { border-color: var(--green); color: var(--green); }
+    .group-pill.active { background: var(--green); color: white; border-color: var(--green); }
+
+    /* ============================================
+       MISC
+    ============================================ */
+    .screen-label {
+      text-align: center; padding: 8px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-muted); background: #f0ece6;
+    }
+    @media (min-width: 768px) {
+      .screen-container { padding: 32px 24px; background: #f0ece6; }
+      .screen { border-radius: 32px; }
+    }
+    @media (max-width: 380px) {
+      .child-letters { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .toggle-grid { grid-template-columns: repeat(3, 1fr); }
+      .letter-card .glyph { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION
+  ============================================ -->
+  <nav class="mockup-nav">
+    <div class="logo">لا <span>Alif</span></div>
+    <button class="nav-btn parent active" onclick="showScreen('login')">🔐 Login</button>
+    <button class="nav-btn parent" onclick="showScreen('register')">📝 Register</button>
+    <button class="nav-btn parent" onclick="showScreen('dashboard')">📊 Dashboard</button>
+    <button class="nav-btn parent" onclick="showScreen('toggles')">🔘 Toggles</button>
+    <button class="nav-btn child" onclick="showScreen('child-grid')">🧒 Letters</button>
+    <button class="nav-btn child" onclick="showScreen('reading')">📖 Reading</button>
+    <button class="nav-btn child" onclick="showScreen('playback')">🔊 Playback</button>
+    <button class="nav-btn child" onclick="showScreen('empty')">📭 Empty</button>
+  </nav>
+
+  <!-- ============================================
+       SCREEN: LOGIN
+  ============================================ -->
+  <div class="screen-container">
+    <div class="screen active" id="screen-login">
+      <div class="screen-label">Parent Login</div>
+      <div class="auth-screen">
+        <button class="lang-toggle" onclick="alert('Switch to Indonesian')">🇮🇩 ID</button>
+        <div class="app-logo">
+          <div class="icon">لا</div>
+          <h1>Little <span>Alif</span></h1>
+          <p>Introducing the Arabic alphabet, one letter at a time</p>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" value="parent@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" value="password123" />
+        </div>
+        <button class="btn-primary" onclick="showScreen('dashboard')">Sign In</button>
+        <div class="auth-footer">Don't have an account? <a onclick="showScreen('register')">Create one</a></div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: REGISTER
+    ============================================ -->
+    <div class="screen" id="screen-register">
+      <div class="screen-label">Parent Registration</div>
+      <div class="auth-screen">
+        <button class="lang-toggle" onclick="alert('Switch to Indonesian')">🇮🇩 ID</button>
+        <div class="app-logo">
+          <div class="icon">لا</div>
+          <h1>Little <span>Alif</span></h1>
+          <p>Create your parent account</p>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="At least 8 characters" />
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Re-enter password" />
+        </div>
+        <button class="btn-primary" onclick="showScreen('dashboard')">Create Account</button>
+        <div class="auth-footer">Already have an account? <a onclick="showScreen('login')">Sign in</a></div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: DASHBOARD
+    ============================================ -->
+    <div class="screen" id="screen-dashboard">
+      <div class="screen-label">Parent Dashboard</div>
+      <div class="dashboard">
+        <div class="dash-header">
+          <h2>Dashboard</h2>
+          <span class="parent-badge">👤 Parent</span>
+        </div>
+
+        <div class="childmode-banner">
+          <div class="label">
+            🧒 Child Mode
+            <small>Let your child use the app without logging in</small>
+          </div>
+          <button class="enable-btn" onclick="alert('Child Mode enabled for Aisyah!')">Enable</button>
+        </div>
+
+        <div class="profile-list">
+          <!-- Profile 1 -->
+          <div class="profile-card" onclick="showScreen('toggles')">
+            <div class="avatar" style="background: linear-gradient(135deg, #FFE0B2, #FFCC80);">🏮</div>
+            <div class="info">
+              <div class="name">Aisyah</div>
+              <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+                <span class="vowel-badge" style="background:#FFF3E0;color:#E65100;">Fathah (بَ)</span>
+                <span class="letters-count">6 letters</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="edit-btn" onclick="event.stopPropagation(); openModal('aisyah')">✏️</button>
+              <button class="delete-btn" onclick="event.stopPropagation(); alert('Delete Aisyah?')">🗑️</button>
+            </div>
+          </div>
+
+          <!-- Profile 2 -->
+          <div class="profile-card" onclick="showScreen('toggles')">
+            <div class="avatar" style="background: linear-gradient(135deg, #B2DFDB, #80CBC4);">🚢</div>
+            <div class="info">
+              <div class="name">Adam</div>
+              <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+                <span class="vowel-badge" style="background:#E8F5E9;color:#2D6A4F;">No Harakat (ب)</span>
+                <span class="letters-count">3 letters</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="edit-btn" onclick="event.stopPropagation(); openModal('adam')">✏️</button>
+              <button class="delete-btn" onclick="event.stopPropagation(); alert('Delete Adam?')">🗑️</button>
+            </div>
+          </div>
+
+          <!-- Profile 3 -->
+          <div class="profile-card" onclick="showScreen('toggles')">
+            <div class="avatar" style="background: linear-gradient(135deg, #D1C4E9, #B39DDB);">🌙</div>
+            <div class="info">
+              <div class="name">Fatimah</div>
+              <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+                <span class="vowel-badge" style="background:#F3E5F5;color:#7B1FA2;">Kasrah (بِ)</span>
+                <span class="letters-count">0 letters</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="edit-btn" onclick="event.stopPropagation(); openModal('fatimah')">✏️</button>
+              <button class="delete-btn" onclick="event.stopPropagation(); alert('Delete Fatimah?')">🗑️</button>
+            </div>
+          </div>
+
+          <button class="add-profile" onclick="openModal('new')">
+            <span style="font-size:20px;line-height:1;">+</span> Add Child
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: LETTER TOGGLES (with Harakat selector)
+    ============================================ -->
+    <div class="screen" id="screen-toggles">
+      <div class="screen-label">Parent: Letter Toggles + Vowel Mode</div>
+      <div class="toggle-screen">
+        <div class="toggle-header">
+          <button class="back-btn" onclick="showScreen('dashboard')">←</button>
+          <div class="child-info">
+            <h3>🏮 Aisyah's Letters</h3>
+            <div class="sub">Toggle letters + choose vowel mode below</div>
+          </div>
+        </div>
+
+        <!-- Harakat Mode Selector -->
+        <div class="harakat-selector">
+          <button class="harakat-btn" data-harakat="none" onclick="setHarakat('none')">
+            <span class="arabic-example">ب</span>
+            <span class="label-text">Plain</span>
+          </button>
+          <button class="harakat-btn active" data-harakat="fathah" onclick="setHarakat('fathah')">
+            <span class="arabic-example">بَ</span>
+            <span class="label-text">Fathah (a)</span>
+          </button>
+          <button class="harakat-btn" data-harakat="kasrah" onclick="setHarakat('kasrah')">
+            <span class="arabic-example">بِ</span>
+            <span class="label-text">Kasrah (i)</span>
+          </button>
+          <button class="harakat-btn" data-harakat="dammah" onclick="setHarakat('dammah')">
+            <span class="arabic-example">بُ</span>
+            <span class="label-text">Dammah (u)</span>
+          </button>
+        </div>
+
+        <div class="bulk-actions">
+          <button class="show-all" onclick="toggleAll(true)">Show All</button>
+          <button class="hide-all" onclick="toggleAll(false)">Hide All</button>
+        </div>
+
+        <div class="toggle-grid" id="toggleGrid"></div>
+
+        <div style="padding: 0 24px 24px;">
+          <button class="btn-primary" onclick="showScreen('child-grid')" style="font-size:14px;padding:12px;">
+            👀 Preview Child View
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: CHILD LETTER GRID (Dynamic Harakat)
+    ============================================ -->
+    <div class="screen" id="screen-child-grid">
+      <div class="screen-label">Child: Letter Grid (with Harakat)</div>
+      <div class="child-grid">
+        <div class="child-grid-bg"></div>
+        
+        <div class="child-top">
+          <div class="profile-avatar">
+            <div class="avatar-icon" style="background: linear-gradient(135deg, #FFE0B2, #FFCC80);">🏮</div>
+            <span class="name">Aisyah</span>
+          </div>
+          <button class="settings-link" onclick="alert('Settings (Parent Gate)')">⚙️</button>
+        </div>
+
+        <div class="harakat-indicator">
+          <span id="childHarakatLabel">🔊 Fathah (َ) — listen with vowel</span>
+        </div>
+
+        <div class="child-letters" id="childLetterGrid"></div>
+
+        <div style="position:relative;z-index:1;padding:0 24px 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+          <button class="harakat-btn small" data-harakat="none" onclick="setChildHarakat('none')" style="padding:6px;font-size:11px;">
+            <span class="arabic-example" style="font-size:14px;">ب</span>
+          </button>
+          <button class="harakat-btn small active" data-harakat="fathah" onclick="setChildHarakat('fathah')" style="padding:6px;font-size:11px;">
+            <span class="arabic-example" style="font-size:14px;">بَ</span>
+          </button>
+          <button class="harakat-btn small" data-harakat="kasrah" onclick="setChildHarakat('kasrah')" style="padding:6px;font-size:11px;">
+            <span class="arabic-example" style="font-size:14px;">بِ</span>
+          </button>
+          <button class="harakat-btn small" data-harakat="dammah" onclick="setChildHarakat('dammah')" style="padding:6px;font-size:11px;">
+            <span class="arabic-example" style="font-size:14px;">بُ</span>
+          </button>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;padding:0 24px 12px;">
+          <span style="font-size:11px;color:var(--text-muted);">👆 Tap a vowel to change how letters sound</span>
+        </div>
+        <div style="position:relative;z-index:1;padding:0 24px 20px;">
+          <button class="btn-primary" onclick="showScreen('reading')" style="font-size:14px;padding:12px;background:var(--orange);">
+            📖 Reading Practice
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: PLAYBACK
+    ============================================ -->
+    <div class="screen" id="screen-playback">
+      <div class="screen-label">Child: Letter Playback</div>
+      <div class="child-grid" style="min-height:520px;">
+        <div class="child-grid-bg"></div>
+        <div class="child-top" style="position:relative;z-index:11;">
+          <div class="profile-avatar">
+            <div class="avatar-icon" style="background: linear-gradient(135deg, #FFE0B2, #FFCC80);">🏮</div>
+            <span class="name">Aisyah</span>
+          </div>
+          <button class="settings-link" onclick="showScreen('child-grid')" style="z-index:11;">✕</button>
+        </div>
+        <div class="playback-overlay">
+          <div class="big-letter">بَ</div>
+          <div class="harakat-badge">Fathah (a)</div>
+          <div class="speaker-icon">🔊</div>
+          <div class="hint">Tap to hear "Ba"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: EMPTY STATE
+    ============================================ -->
+    <div class="screen" id="screen-empty">
+      <div class="screen-label">Child: No Letters Yet</div>
+      <div class="child-grid" style="min-height:500px;">
+        <div class="child-grid-bg"></div>
+        <div class="child-top">
+          <div class="profile-avatar">
+            <div class="avatar-icon" style="background: linear-gradient(135deg, #D1C4E9, #B39DDB);">🌙</div>
+            <span class="name">Fatimah</span>
+          </div>
+          <button class="settings-link" onclick="alert('Settings (Parent Gate)')">⚙️</button>
+        </div>
+        <div class="empty-state">
+          <div class="illustration">📖</div>
+          <p style="font-size:20px;font-weight:700;color:var(--text-dark);margin-bottom:4px;">Belum ada huruf</p>
+          <p>Minta Ayah atau Ibu untuk menambahkan huruf!</p>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;padding:0 24px;">
+          <button class="btn-secondary" onclick="showScreen('dashboard')" style="font-size:13px;">👋 Panggil Orang Tua</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SCREEN: READING PRACTICE (Iqra' Layout)
+    ============================================ -->
+    <div class="screen" id="screen-reading">
+      <div class="screen-label">Child: Reading Practice (Iqra' Mode)</div>
+      <div class="reading-practice">
+        <div class="practice-header">
+          <button class="back-btn" onclick="showScreen('child-grid')">←</button>
+          <div class="title">
+            <h3>📖 Reading Practice</h3>
+          </div>
+          <button class="back-btn" onclick="shufflePractice()" title="Shuffle">🎲</button>
+        </div>
+
+        <!-- Group navigation pills -->
+        <div class="group-pills" id="groupPills"></div>
+
+        <!-- Group header -->
+        <div class="group-header" id="groupHeader">
+          <div class="group-label">Practice Group</div>
+          <div class="group-letters" id="groupLetters"></div>
+        </div>
+
+        <!-- Reading practice grid -->
+        <div class="practice-grid" id="practiceGrid"></div>
+
+        <!-- Action buttons -->
+        <div class="practice-actions">
+          <button onclick="shufflePractice()">🎲 Shuffle</button>
+          <button onclick="nextGroup()">📖 Next Group</button>
+          <button onclick="showScreen('child-grid')" class="primary-action">✅ Done</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================
+       MODAL: Profile Editor
+  ============================================ -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <h3 id="modalTitle">Edit Profile</h3>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="profileName" placeholder="Child's name" value="Aisyah" />
+      </div>
+      <div class="form-group">
+        <label>Avatar</label>
+        <div class="avatar-selection">
+          <div class="avatar-option selected" onclick="selectAvatar(this)">🏮</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🚢</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🌙</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">⭐</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🐱</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🦉</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🌸</div>
+          <div class="avatar-option" onclick="selectAvatar(this)">🐰</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="closeModal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       JAVASCRIPT
+  ============================================ -->
+  <script>
+    // ── Screen Navigation ──
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('screen-' + id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ── Modal ──
+    function openModal(child) {
+      document.getElementById('profileModal').classList.add('open');
+      const title = document.getElementById('modalTitle');
+      const nameInput = document.getElementById('profileName');
+      if (child === 'new') {
+        title.textContent = 'Add Child';
+        nameInput.value = '';
+      } else {
+        title.textContent = 'Edit Profile';
+        const names = { aisyah: 'Aisyah', adam: 'Adam', fatimah: 'Fatimah' };
+        nameInput.value = names[child] || 'Child';
+      }
+    }
+    function closeModal() {
+      document.getElementById('profileModal').classList.remove('open');
+    }
+    function selectAvatar(el) {
+      document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // ── Letter Data ──
+    const ALL_LETTERS = [
+      { id: 'alif', char: 'ا', name: 'Alif' },
+      { id: 'ba',   char: 'ب', name: 'Ba' },
+      { id: 'ta',   char: 'ت', name: 'Ta' },
+      { id: 'tsa',  char: 'ث', name: 'Tsa' },
+      { id: 'jim',  char: 'ج', name: 'Jim' },
+      { id: 'ha',   char: 'ح', name: 'Ha' },
+      { id: 'kho',  char: 'خ', name: 'Kho' },
+      { id: 'dal',  char: 'د', name: 'Dal' },
+      { id: 'dzal', char: 'ذ', name: 'Dzal' },
+      { id: 'ra',   char: 'ر', name: 'Ra' },
+      { id: 'zai',  char: 'ز', name: 'Zai' },
+      { id: 'sin',  char: 'س', name: 'Sin' },
+      { id: 'syin', char: 'ش', name: 'Syin' },
+      { id: 'shad', char: 'ص', name: 'Shad' },
+      { id: 'dhad', char: 'ض', name: 'Dhad' },
+      { id: 'tha',  char: 'ط', name: 'Tha' },
+      { id: 'dzha', char: 'ظ', name: 'Dzha' },
+      { id: 'ain',  char: 'ع', name: 'Ain' },
+      { id: 'ghain',char: 'غ', name: 'Ghain' },
+      { id: 'fa',   char: 'ف', name: 'Fa' },
+      { id: 'qaf',  char: 'ق', name: 'Qaf' },
+      { id: 'kaf',  char: 'ك', name: 'Kaf' },
+      { id: 'lam',  char: 'ل', name: 'Lam' },
+      { id: 'mim',  char: 'م', name: 'Mim' },
+      { id: 'nun',  char: 'ن', name: 'Nun' },
+      { id: 'waw',  char: 'و', name: 'Waw' },
+      { id: 'hae',  char: 'ه', name: 'Ha' },
+      { id: 'ya',   char: 'ي', name: 'Ya' },
+    ];
+
+    // Unicode combining diacritics for Arabic
+    const HARAKAT = {
+      none:   '',
+      fathah: '\u064E',   // Fathah (a)  ـَ
+      kasrah: '\u0650',   // Kasrah (i)  ـِ
+      dammah: '\u064F',   // Dammah (u)  ـُ
+    };
+    const HARAKAT_LABELS = {
+      none:   'No Harakat (consonant)',
+      fathah: 'Fathah (a) — listen with vowel',
+      kasrah: 'Kasrah (i) — listen with vowel',
+      dammah: 'Dammah (u) — listen with vowel',
+    };
+    const HARAKAT_SHORT = {
+      none:   'Plain',
+      fathah: 'Fathah (a)',
+      kasrah: 'Kasrah (i)',
+      dammah: 'Dammah (u)',
+    };
+
+    const VISIBLE_IDS = ['alif', 'ba', 'ta', 'tsa', 'jim', 'ha'];
+    const LETTER_COLORS = ['c0','c1','c2','c3','c4','c5','c6','c7'];
+
+    // Current harakat mode
+    let currentHarakat = 'fathah';
+
+    // ── Compose letter with harakat ──
+    function composeLetter(baseChar, harakat) {
+      if (harakat === 'none' || !harakat) return baseChar;
+
+      // Special handling for letters that don't visually combine well with harakat
+      // Alif (ا) with Fathah/Kasrah/Dammah → use the alef-specific forms
+      if (baseChar === 'ا') {
+        if (harakat === 'fathah') return 'اَ';
+        if (harakat === 'kasrah') return 'اِ';
+        if (harakat === 'dammah') return 'اُ';
+      }
+      // Waw (و) 
+      if (baseChar === 'و') {
+        if (harakat === 'fathah') return 'وَ';
+        if (harakat === 'kasrah') return 'وِ';
+        if (harakat === 'dammah') return 'وُ';
+      }
+      // Ya (ي)
+      if (baseChar === 'ي') {
+        if (harakat === 'fathah') return 'يَ';
+        if (harakat === 'kasrah') return 'يِ';
+        if (harakat === 'dammah') return 'يُ';
+      }
+      // Ra (ر)
+      if (baseChar === 'ر') {
+        if (harakat === 'fathah') return 'رَ';
+        if (harakat === 'kasrah') return 'رِ';
+        if (harakat === 'dammah') return 'رُ';
+      }
+      // Dal (د)
+      if (baseChar === 'د') {
+        if (harakat === 'fathah') return 'دَ';
+        if (harakat === 'kasrah') return 'دِ';
+        if (harakat === 'dammah') return 'دُ';
+      }
+      // Dzal (ذ)
+      if (baseChar === 'ذ') {
+        if (harakat === 'fathah') return 'ذَ';
+        if (harakat === 'kasrah') return 'ذِ';
+        if (harakat === 'dammah') return 'ذُ';
+      }
+
+      // General case: combine base character with harakat diacritic
+      // Note: Some letters like ا و ر د ذ don't connect to following letters,
+      // but the Unicode combining still works visually
+      return baseChar + HARAKAT[harakat];
+    }
+
+    // ── Set harakat from parent toggle screen ──
+    function setHarakat(mode) {
+      currentHarakat = mode;
+      document.querySelectorAll('.harakat-btn[data-harakat]').forEach(b => {
+        b.classList.toggle('active', b.dataset.harakat === mode);
+      });
+      // Update toggle grid preview
+      document.querySelectorAll('.toggle-item .letter-char').forEach((el, i) => {
+        if (i < ALL_LETTERS.length) {
+          el.textContent = composeLetter(ALL_LETTERS[i].char, mode);
+        }
+      });
+      // Update child grid too
+      renderChildGrid();
+    }
+
+    // ── Set harakat from child grid ──
+    function setChildHarakat(mode) {
+      currentHarakat = mode;
+      document.querySelectorAll('#screen-child-grid .harakat-btn.small').forEach(b => {
+        b.classList.toggle('active', b.dataset.harakat === mode);
+      });
+      document.getElementById('childHarakatLabel').textContent = '🔊 ' + HARAKAT_LABELS[mode];
+      renderChildGrid();
+    }
+
+    // ── Toggle single letter (updates VISIBLE_IDS) ──
+    function toggleLetter(letterId, show) {
+      const idx = VISIBLE_IDS.indexOf(letterId);
+      if (show && idx === -1) VISIBLE_IDS.push(letterId);
+      if (!show && idx >= 0) VISIBLE_IDS.splice(idx, 1);
+    }
+
+    // ── Toggle all letters ──
+    function toggleAll(show) {
+      // Also update VISIBLE_IDS
+      if (show) {
+        ALL_LETTERS.forEach(l => {
+          if (!VISIBLE_IDS.includes(l.id)) VISIBLE_IDS.push(l.id);
+        });
+      } else {
+        VISIBLE_IDS.length = 0;
+      }
+      document.querySelectorAll('.toggle-item').forEach(item => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+          checkbox.checked = show;
+          item.className = 'toggle-item' + (show ? ' on' : ' off');
+        }
+      });
+    }
+
+    // ── Render Toggle Grid ──
+    function renderToggles() {
+      const grid = document.getElementById('toggleGrid');
+      grid.innerHTML = '';
+      ALL_LETTERS.forEach((letter) => {
+        const isOn = VISIBLE_IDS.includes(letter.id);
+        const div = document.createElement('div');
+        div.className = 'toggle-item' + (isOn ? ' on' : ' off');
+        div.innerHTML = `
+          <div class="letter-char">${composeLetter(letter.char, currentHarakat)}</div>
+          <div class="letter-label">${letter.name}</div>
+          <label class="switch">
+            <input type="checkbox" ${isOn ? 'checked' : ''} onchange="toggleLetter('${letter.id}', this.checked); this.closest('.toggle-item').className='toggle-item' + (this.checked ? ' on' : ' off')" />
+            <span class="slider"></span>
+          </label>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // ── Render Child Grid ──
+    function renderChildGrid() {
+      const grid = document.getElementById('childLetterGrid');
+      grid.innerHTML = '';
+      const visible = ALL_LETTERS.filter(l => VISIBLE_IDS.includes(l.id));
+      visible.forEach((letter, i) => {
+        const card = document.createElement('button');
+        card.className = 'letter-card ' + LETTER_COLORS[i % LETTER_COLORS.length];
+        card.onclick = () => showScreen('playback');
+        const composed = composeLetter(letter.char, currentHarakat);
+        card.innerHTML = `
+          <span class="glyph">${composed}</span>
+          <span class="audio-indicator">🔊</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ── Reading Practice: Dynamic Groups from VISIBLE_IDS ──
+    let currentGroupIndex = 0;
+
+    function getLetterGroups() {
+      const visible = ALL_LETTERS.filter(l => VISIBLE_IDS.includes(l.id));
+      const groups = [];
+      for (let i = 0; i < visible.length; i += 3) {
+        const chunk = visible.slice(i, i + 3);
+        groups.push({
+          id: groups.length,
+          letters: chunk.map(l => l.id),
+          label: chunk.map(l => l.char).join(' \u200E'),
+        });
+      }
+      // Fallback: if no letters are visible, create one placeholder group
+      if (groups.length === 0) {
+        groups.push({ id: 0, letters: [], label: '—' });
+      }
+      return groups;
+    }
+
+    // Get letter char by id
+    function getLetterById(id) {
+      return ALL_LETTERS.find(l => l.id === id);
+    }
+
+    // Generate a single practice row with mixed harakat
+    function generatePracticeRow(groupLetters, rowType) {
+      const cells = [];
+      const harakatModes = ['fathah', 'kasrah', 'dammah'];
+      
+      if (rowType === 'systematic') {
+        // Row 1: each letter with fathah, then kasrah, then dammah
+        for (const h of harakatModes) {
+          for (const lid of groupLetters) {
+            const letter = getLetterById(lid);
+            if (letter) {
+              cells.push(composeLetter(letter.char, h));
+            }
+          }
+        }
+      } else {
+        // Rows 2+: random mix
+        const expanded = [];
+        for (const lid of groupLetters) {
+          const letter = getLetterById(lid);
+          if (letter) {
+            for (const h of harakatModes) {
+              expanded.push(composeLetter(letter.char, h));
+            }
+          }
+        }
+        // Shuffle
+        for (let i = expanded.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [expanded[i], expanded[j]] = [expanded[j], expanded[i]];
+        }
+        cells.push(...expanded);
+      }
+      return cells;
+    }
+
+    // Render the reading practice grid
+    function renderPracticeGrid() {
+      const groups = getLetterGroups();
+      // Clamp group index to available groups
+      if (currentGroupIndex >= groups.length) currentGroupIndex = 0;
+      const group = groups[currentGroupIndex];
+      if (!group) return;
+
+      // Update group header
+      const groupLettersEl = document.getElementById('groupLetters');
+      groupLettersEl.innerHTML = '';
+      for (const lid of group.letters) {
+        const letter = getLetterById(lid);
+        if (letter) {
+          const span = document.createElement('span');
+          span.textContent = letter.char;
+          groupLettersEl.appendChild(span);
+        }
+      }
+
+      // Update group pills
+      const pillsEl = document.getElementById('groupPills');
+      pillsEl.innerHTML = '';
+      for (let i = 0; i < groups.length; i++) {
+        const pill = document.createElement('button');
+        pill.className = 'group-pill' + (i === currentGroupIndex ? ' active' : '');
+        pill.textContent = groups[i].label;
+        pill.onclick = () => { currentGroupIndex = i; renderPracticeGrid(); };
+        pillsEl.appendChild(pill);
+      }
+
+      // Generate practice grid
+      const grid = document.getElementById('practiceGrid');
+      grid.innerHTML = '';
+      const totalRows = 6;
+      for (let row = 0; row < totalRows; row++) {
+        const rowType = row === 0 ? 'systematic' : 'mixed';
+        const cells = generatePracticeRow(group.letters, rowType);
+        
+        const rowEl = document.createElement('div');
+        rowEl.className = 'practice-row' + (row === 0 ? ' header-row' : '');
+        
+        for (const cellText of cells) {
+          const cell = document.createElement('button');
+          cell.className = 'practice-cell';
+          cell.textContent = cellText;
+          cell.onclick = () => {
+            cell.style.background = '#E8F5E9';
+            setTimeout(() => { cell.style.background = 'white'; }, 300);
+            alert('🔊 Play: ' + cellText);
+          };
+          rowEl.appendChild(cell);
+        }
+        grid.appendChild(rowEl);
+      }
+    }
+
+    // Shuffle the practice grid (keep current group)
+    function shufflePractice() {
+      renderPracticeGrid();
+    }
+
+    // Go to next group
+    function nextGroup() {
+      const groups = getLetterGroups();
+      if (groups.length === 0) return;
+      currentGroupIndex = (currentGroupIndex + 1) % groups.length;
+      renderPracticeGrid();
+    }
+
+    // ── Init ──
+    renderToggles();
+    renderChildGrid();
+    renderPracticeGrid();
+    document.getElementById('childHarakatLabel').textContent = '🔊 ' + HARAKAT_LABELS[currentHarakat];
+  </script>
+
+</body>
+</html>
