@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { registerFn } from '~/server/auth-fns';
 import { useI18nContext } from '~/lib/i18n';
+import { LanguageToggle } from '~/components/parent/LanguageToggle';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -30,7 +31,10 @@ function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-6 bg-background-warm">
+    <main className="min-h-screen flex items-center justify-center px-6 bg-background-warm relative">
+      <div className="absolute top-4 right-4">
+        <LanguageToggle />
+      </div>
       <form
         onSubmit={(event) => {
           void handleSubmit(event);
