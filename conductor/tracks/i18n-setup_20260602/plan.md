@@ -137,5 +137,16 @@
 
 ---
 
+---
+
+## Phase 7: Review Fixes
+
+**Goal:** Address code review findings — update spec to match v5 reality, ignore generated i18n files from linter and formatter.
+
+- [x] Task: Apply review suggestions `9098b11`
+  - [x] Update spec.md to match actual v5 implementation (FR-1, FR-2, FR-5)
+  - [x] Add generated i18n files to ESLint `ignores` array
+  - [x] Add generated i18n files to `.prettierignore`
+
 **Checkpoint:** Implementation complete, track ready for closure.
 </protect>
