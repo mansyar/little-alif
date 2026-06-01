@@ -1,0 +1,107 @@
+import { describe, expect, it } from 'vitest';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
+
+function readJson<T>(relativePath: string): T {
+  const fullPath = path.join(PROJECT_ROOT, relativePath);
+  return JSON.parse(readFileSync(fullPath, 'utf-8')) as T;
+}
+
+interface PackageJson {
+  scripts?: Record<string, string>;
+  'lint-staged'?: Record<string, string[]>;
+}
+
+describe('Tooling: Prettier', () => {
+  it('has a .prettierrc file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.prettierrc'))).toBe(true);
+  });
+
+  it('.prettierrc is valid JSON', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.prettierrc'), 'utf-8');
+    expect(() => JSON.parse(raw)).not.toThrow();
+  });
+
+  it('.prettierrc uses project-appropriate defaults', () => {
+    const config = readJson<Record<string, unknown>>('.prettierrc');
+    expect(config).toMatchObject({
+      printWidth: 100,
+      semi: true,
+      singleQuote: true,
+      tabWidth: 2,
+    });
+  });
+
+  it('has a .prettierignore file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.prettierignore'))).toBe(true);
+  });
+
+  it('.prettierignore excludes build artifacts and lockfiles', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.prettierignore'), 'utf-8');
+    const entries = raw
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !line.startsWith('#'));
+    for (const required of ['node_modules', 'dist', '.output', 'coverage', 'pnpm-lock.yaml']) {
+      expect(entries).toContain(required);
+    }
+  });
+});
+
+describe('Tooling: ESLint', () => {
+  it('has an eslint.config.js file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, 'eslint.config.js'))).toBe(true);
+  });
+
+  it('eslint.config.js is loadable and exports an array', async () => {
+    const configPath = path.join(PROJECT_ROOT, 'eslint.config.js');
+    const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
+    const mod = (await import(fileUrl.href)) as { default: unknown };
+    expect(Array.isArray(mod.default)).toBe(true);
+  });
+});
+
+describe('Tooling: Husky + lint-staged', () => {
+  it('has a .husky/pre-commit hook', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'))).toBe(true);
+  });
+
+  it('.husky/pre-commit invokes pnpm lint-staged', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'), 'utf-8');
+    expect(raw).toContain('pnpm lint-staged');
+  });
+
+  it('package.json lint-staged block maps *.{ts,tsx} to eslint+prettier+tsc', () => {
+    const pkg = readJson<PackageJson>('package.json');
+    const tsCommands = pkg['lint-staged']?.['*.{ts,tsx}'] ?? [];
+    expect(tsCommands).toContain('eslint --fix');
+    expect(tsCommands).toContain('prettier --write');
+    expect(tsCommands).toContain('tsc --noEmit');
+  });
+
+  it('package.json lint-staged block maps *.{json,md,css} to prettier --write', () => {
+    const pkg = readJson<PackageJson>('package.json');
+    const textCommands = pkg['lint-staged']?.['*.{json,md,css}'] ?? [];
+    expect(textCommands).toContain('prettier --write');
+  });
+
+  it('package.json prepare script runs husky', () => {
+    const pkg = readJson<PackageJson>('package.json');
+    expect(pkg.scripts?.['prepare']).toBe('husky');
+  });
+});
+
+describe('Tooling: package.json scripts', () => {
+  it.each([
+    ['format', 'prettier --write'],
+    ['format:check', 'prettier --check'],
+    ['lint', 'eslint'],
+    ['lint:fix', 'eslint --fix'],
+  ])('script "%s" invokes "%s"', (scriptName, expectedSubstring) => {
+    const pkg = readJson<PackageJson>('package.json');
+    const script = pkg.scripts?.[scriptName] ?? '';
+    expect(script).toContain(expectedSubstring);
+  });
+});
