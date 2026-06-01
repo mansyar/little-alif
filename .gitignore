@@ -39,3 +39,6 @@ data/
 local.db
 *.db
 *.db-journal
+
+# Husky internal directory
+.husky/_
