@@ -4,11 +4,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## Active Tracks
-
-- [x] **Track: Setup code quality check on commit**
-      _Link: [./tracks/code-quality_20260601/](./tracks/code-quality_20260601/)_
-
----
-
-_No completed tracks. The latest archived track is `scaffolding_20260531` (see `archive/`)._
+_No active tracks. The latest archived track is `code-quality_20260601` (see `archive/`)._
