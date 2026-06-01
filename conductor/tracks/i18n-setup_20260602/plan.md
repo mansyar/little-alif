@@ -117,7 +117,7 @@
 
 ---
 
-## Phase 6: Final Verification & Checkpoint
+## Phase 6: Final Verification & Checkpoint [checkpoint: 1cfe7a0]
 
 **Goal:** Run full verification — automated tests + manual review of locale switching.
 
