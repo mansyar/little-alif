@@ -45,3 +45,6 @@ local.db
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+# Test coverage reports
+coverage/
