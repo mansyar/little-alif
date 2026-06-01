@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { registerFn } from '~/server/auth-fns';
+import { useI18nContext } from '~/lib/i18n';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -8,6 +9,7 @@ export const Route = createFileRoute('/register')({
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const { LL } = useI18nContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +23,7 @@ function RegisterPage() {
       await registerFn({ data: { email, password } });
       await navigate({ to: '/dashboard' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed.');
+      setError(err instanceof Error ? err.message : LL.ERROR_GENERIC());
     } finally {
       setSubmitting(false);
     }
@@ -35,13 +37,11 @@ function RegisterPage() {
         }}
         className="w-full max-w-md bg-white rounded-large shadow-card p-8 flex flex-col gap-5"
       >
-        <h1 className="text-2xl font-bold text-text-dark">Create Account</h1>
-        <p className="text-text-muted -mt-3">
-          A parent account is the first step — child profiles come next.
-        </p>
+        <h1 className="text-2xl font-bold text-text-dark">{LL.REGISTER_TITLE()}</h1>
+        <p className="text-text-muted -mt-3">{LL.REGISTER_SUBTITLE()}</p>
 
         <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-text-dark">Email</span>
+          <span className="text-sm font-semibold text-text-dark">{LL.LOGIN_EMAIL()}</span>
           <input
             type="email"
             required
@@ -53,7 +53,7 @@ function RegisterPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-text-dark">Password</span>
+          <span className="text-sm font-semibold text-text-dark">{LL.LOGIN_PASSWORD()}</span>
           <input
             type="password"
             required
@@ -63,7 +63,7 @@ function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="px-3 py-2 border border-sand-dark rounded-small focus:outline-none focus:ring-2 focus:ring-green"
           />
-          <span className="text-xs text-text-muted">At least 8 characters.</span>
+          <span className="text-xs text-text-muted">{LL.REGISTER_PASSWORD_HINT()}</span>
         </label>
 
         {error !== null && (
@@ -77,17 +77,16 @@ function RegisterPage() {
           disabled={submitting}
           className="px-6 py-3 rounded-small bg-green text-white font-semibold hover:bg-green-light transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {submitting ? 'Creating account…' : 'Create account'}
+          {submitting ? LL.REGISTER_SUBMITTING() : LL.REGISTER_SUBMIT()}
         </button>
 
         <p className="text-sm text-text-muted text-center">
-          Already have an account?{' '}
           <Link
             to="/login"
             search={{ redirect: '/dashboard' }}
             className="text-green font-semibold hover:underline"
           >
-            Sign in
+            {LL.REGISTER_SIGNIN_LINK()}
           </Link>
         </p>
       </form>
