@@ -22,23 +22,24 @@ TypeScript error. The child UI uses icons and letter glyphs (no text) and does n
 ### FR-1: Install & Configure typesafe-i18n
 
 - Install `typesafe-i18n@^5.26.0` as a dev dependency
-- Create `.typesafe-i18n.json` config pointing to `./app/lib/i18n/` as output path
-- Default locale: `en`, locales: `['en', 'id']`
-- Adapter: `react`
+- Create `.typesafe-i18n.json` config pointing to `./app/lib/i18n/` as output path with `baseLocale: "en"`
+- Adapter (`react`) and locales (`['en', 'id']`) are auto-detected by typesafe-i18n v5 from `package.json` dependencies and translation file structure — no explicit config needed
 
 ### FR-2: Create Directory Structure
 
 ```
 app/lib/i18n/
 ├── index.ts                    # i18n init + locale detection (SSR + client)
-├── .typesafe-i18n.json         # Generator configuration
+├── en/
+│   └── index.ts                # English strings (satisfies BaseTranslation)
+├── id/
+│   └── index.ts                # Indonesian strings (satisfies Translation)
 ├── i18n-types.ts               # Generated TypeScript types
 ├── i18n-util.ts                # Generated util
-├── i18n-util.async.ts          # Generated async loader
-└── translations/
-    ├── en.ts                   # English strings
-    └── id.ts                   # Indonesian strings
+└── i18n-util.async.ts          # Generated async loader
 ```
+
+> Note: The `.typesafe-i18n.json` config file lives at the project root, not inside `app/lib/i18n/`. typesafe-i18n v5 generates locale folders (`en/`, `id/`) instead of a flat `translations/` directory.
 
 ### FR-3: Locale Detection
 
@@ -62,9 +63,11 @@ Following TDD §9, the initial keys cover:
 
 ### FR-5: Build Pipeline Integration
 
-- Add script: `"i18n": "typesafe-i18n"`
-- Update `"dev"` to: `typesafe-i18n && vite dev`
-- Update `"build"` to: `typesafe-i18n && vite build`
+- Add script: `"i18n": "typesafe-i18n --no-watch"`
+- Update `"dev"` to: `typesafe-i18n --no-watch && vite dev`
+- Update `"build"` to: `typesafe-i18n --no-watch && vite build`
+
+> Note: The `--no-watch` flag prevents the typesafe-i18n CLI from entering watch mode, which would hang the pipeline.
 
 ### FR-6: Language Toggle Component
 

@@ -15,6 +15,13 @@ export default tseslint.config(
       'app/db/migrations/**',
       'app/routeTree.gen.ts',
       '*.tsbuildinfo',
+      'app/lib/i18n/i18n-types.ts',
+      'app/lib/i18n/i18n-util.ts',
+      'app/lib/i18n/i18n-util.async.ts',
+      'app/lib/i18n/i18n-util.sync.ts',
+      'app/lib/i18n/i18n-react.tsx',
+      'app/lib/i18n/formatters.ts',
+      'app/lib/i18n/custom-types.ts',
     ],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
