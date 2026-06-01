@@ -1,15 +1,16 @@
+<protect>
 # Implementation Plan: Parent Dashboard & Child Profiles
 
 ## Phase 1: Validation Schemas & Avatar Components
 
 **Goal:** Create Zod validation schemas for profile CRUD and inline SVG avatar components.
 
-- [ ] Task: Create Zod validation schemas (`app/lib/validations/profiles.ts`)
+- [x] Task: Create Zod validation schemas (`app/lib/validations/profiles.ts`) [294900b]
   - [ ] Create `createProfileSchema` with name (1-50 chars), avatar (enum from AVATAR_KEYS), optional vowelMode defaulting to 'fathah'
   - [ ] Create `updateProfileSchema` with profileId (uuid), optional name, avatar, vowelMode
   - [ ] Create `deleteProfileSchema` with profileId (uuid)
   - [ ] Write tests: `app/lib/validations/profiles.test.ts` — valid input, missing name, invalid avatar key, too-long name
-- [ ] Task: Create inline avatar SVG components (`app/components/parent/avatars.tsx`)
+- [x] Task: Create inline avatar SVG components (`app/components/parent/avatars.tsx`) [294900b]
   - [ ] Create 8 themed avatar SVG components as named exports: `AlifLamp`, `BaBoat`, `TaTable`, `TsaButterfly`, `JimMountain`, `HaJar`, `KhoHat`, `DalBook`
   - [ ] Export an `AVATAR_MAP` constant mapping avatar key → component for lookup
 - [ ] Task: Conductor - User Manual Verification 'Validation Schemas & Avatar Components' (Protocol in workflow.md)
@@ -74,3 +75,4 @@
   - [ ] Edit button opens ProfileEditor in edit mode
   - [ ] Delete button opens ConfirmDialog → confirms → calls deleteProfileFn → refreshes list
 - [ ] Task: Conductor - User Manual Verification 'Profile Editor & Delete Confirmation' (Protocol in workflow.md)
+      </protect>
