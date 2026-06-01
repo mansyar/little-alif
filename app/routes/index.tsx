@@ -5,6 +5,7 @@ export const Route = createFileRoute('/')({
   beforeLoad: async () => {
     const session = await validateSessionFn();
     if (session !== null) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router idiom: throw the redirect sentinel
       throw redirect({ to: '/dashboard' });
     }
     return { user: null };

@@ -6,6 +6,7 @@ export const Route = createFileRoute('/dashboard')({
   beforeLoad: async () => {
     const session = await validateSessionFn();
     if (session === null) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router idiom: throw the redirect sentinel
       throw redirect({ to: '/login', search: { redirect: '/dashboard' } });
     }
     return { user: session.user };
@@ -33,7 +34,9 @@ function DashboardPage() {
         <h1 className="text-3xl font-bold text-text-dark">Dashboard</h1>
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={() => {
+            void handleLogout();
+          }}
           disabled={signingOut}
           className="px-4 py-2 rounded-small border border-sand-dark text-text-muted hover:text-text-dark transition-colors disabled:opacity-60"
         >

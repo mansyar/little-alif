@@ -25,7 +25,7 @@ function buildAuth() {
         session_token: {
           attributes: {
             httpOnly: true,
-            secure: process.env['NODE_ENV'] === 'production',
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
           },
         },
@@ -51,8 +51,6 @@ let _auth: AuthInstance | null = null;
  * after sign-in / sign-out handlers.
  */
 export function getAuth(): AuthInstance {
-  if (_auth === null) {
-    _auth = buildAuth();
-  }
+  _auth ??= buildAuth();
   return _auth;
 }

@@ -4,7 +4,7 @@ import { loginFn } from '~/server/auth-fns';
 
 export const Route = createFileRoute('/login')({
   validateSearch: (search: Record<string, unknown>) => {
-    const redirect = search['redirect'];
+    const redirect = search.redirect;
     return {
       redirect: typeof redirect === 'string' ? redirect : '/dashboard',
     };
@@ -37,7 +37,9 @@ function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6 bg-background-warm">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
         className="w-full max-w-md bg-white rounded-large shadow-card p-8 flex flex-col gap-5"
       >
         <h1 className="text-2xl font-bold text-text-dark">Parent Login</h1>

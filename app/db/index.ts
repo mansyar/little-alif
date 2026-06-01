@@ -16,7 +16,7 @@ export type DbClient = LibSQLDatabase<typeof fullSchema>;
  * Turso remote URLs (`libsql://...`).
  */
 function resolveDatabaseUrl(): string {
-  return process.env['DATABASE_URL'] ?? 'file:./data/little-alif.db';
+  return process.env.DATABASE_URL ?? 'file:./data/little-alif.db';
 }
 
 let _client: Client | null = null;
@@ -27,9 +27,7 @@ let _db: DbClient | null = null;
  * The client is reused across calls within a single process.
  */
 export function getClient(): Client {
-  if (_client === null) {
-    _client = createClient({ url: resolveDatabaseUrl() });
-  }
+  _client ??= createClient({ url: resolveDatabaseUrl() });
   return _client;
 }
 
@@ -39,9 +37,7 @@ export function getClient(): Client {
  * typed query building.
  */
 export function getDb(): DbClient {
-  if (_db === null) {
-    _db = drizzle(getClient(), { schema: fullSchema });
-  }
+  _db ??= drizzle(getClient(), { schema: fullSchema });
   return _db;
 }
 

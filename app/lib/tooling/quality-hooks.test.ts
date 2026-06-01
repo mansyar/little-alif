@@ -21,7 +21,9 @@ describe('Tooling: Prettier', () => {
 
   it('.prettierrc is valid JSON', () => {
     const raw = readFileSync(path.join(PROJECT_ROOT, '.prettierrc'), 'utf-8');
-    expect(() => JSON.parse(raw)).not.toThrow();
+    expect(() => {
+      JSON.parse(raw);
+    }).not.toThrow();
   });
 
   it('.prettierrc uses project-appropriate defaults', () => {
@@ -89,7 +91,7 @@ describe('Tooling: Husky + lint-staged', () => {
 
   it('package.json prepare script runs husky', () => {
     const pkg = readJson<PackageJson>('package.json');
-    expect(pkg.scripts?.['prepare']).toBe('husky');
+    expect(pkg.scripts?.prepare).toBe('husky');
   });
 });
 
