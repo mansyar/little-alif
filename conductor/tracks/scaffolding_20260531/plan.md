@@ -139,3 +139,15 @@
     - [x] Run all tests, confirm they pass (59/59)
 
 - [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+
+---
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions 22ba589
+    - [x] Delete unused `app/lib/auth-client.ts` (exported `authClient` was never imported)
+    - [x] Remove unused `out` field from `drizzle.config.ts` (migrations are not generated; `drizzle-kit push` is used)
+    - [x] Remove no-op `font-display: block` from `.font-arabic` in `app/app.css` (the property only applies to `@font-face`; correct `display=block` is set via the Google Fonts URL in `__root.tsx`)
+    - [x] Replace `<a href>` with TanStack `<Link>` in `login.tsx` and `register.tsx` for client-side navigation (and add the required `search={{ redirect: '/dashboard' }}` on the `/login` link to satisfy `validateSearch`)
+    - [x] Replace `border-gray-200` with `border-sand-dark` in `login.tsx`, `register.tsx`, and `dashboard.tsx` to keep the form chrome within the design token palette
+    - [x] Re-run `pnpm test` (59/59 pass) and `pnpm typecheck` (clean)
