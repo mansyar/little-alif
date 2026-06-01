@@ -1,3 +1,4 @@
+<protect>
 # Specification: i18n Setup
 
 **Track ID:** `i18n-setup_20260602`
@@ -101,3 +102,4 @@ Following TDD §9, the initial keys cover:
 - i18n for child-facing UI
 - SSR locale detection from `Accept-Language` header
 - Dynamic locale switching on the server during SSR
+  </protect>

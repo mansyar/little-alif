@@ -1,3 +1,4 @@
+<protect>
 # Implementation Plan: i18n Setup
 
 **Track ID:** `i18n-setup_20260602`
@@ -134,3 +135,4 @@
 ---
 
 **Checkpoint:** Implementation complete, track ready for closure.
+</protect>
