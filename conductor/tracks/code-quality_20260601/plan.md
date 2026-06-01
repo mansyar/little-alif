@@ -67,7 +67,7 @@
 
 ---
 
-## Phase 3: Husky + lint-staged Setup + End-to-End Smoke
+## Phase 3: Husky + lint-staged Setup + End-to-End Smoke [checkpoint: b52b635]
 
 **Goal:** Wire the Git pre-commit hook via Husky, configure lint-staged to run formatters/linters on staged files, and verify the full pipeline end-to-end with intentional failure cases. Husky/lint-staged meta-tests transition from Red to Green in this phase.
 
@@ -100,7 +100,7 @@
   - [x] Smoke test 5 — Performance: measure the pre-commit duration with the Sample Commit (5 files, 1 TS / 1 TSX / 1 JSON / 1 MD / 1 CSS), confirm <10s
   - [x] Clean up all temporary test files used in smoke tests; reset working tree
 
-- [~] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ---
 
