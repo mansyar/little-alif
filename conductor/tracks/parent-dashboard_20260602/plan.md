@@ -1,7 +1,7 @@
 <protect>
 # Implementation Plan: Parent Dashboard & Child Profiles
 
-## Phase 1: Validation Schemas & Avatar Components
+## Phase 1: Validation Schemas & Avatar Components [checkpoint: a77e160]
 
 **Goal:** Create Zod validation schemas for profile CRUD and inline SVG avatar components.
 
