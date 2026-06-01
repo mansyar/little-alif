@@ -6,30 +6,52 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ## Track Overview
 
-| ID   | Title                             | Depends On             | Complexity | Est. Effort |
-| ---- | --------------------------------- | ---------------------- | ---------- | ----------- |
-| T-01 | Project Scaffolding & Config      | —                      | Low        | 1–2h        |
-| T-02 | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        |
-| T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        |
-| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        |
-| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        |
-| T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        |
-| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        |
-| T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        |
-| T-09 | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        |
-| T-10 | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        |
-| T-11 | Child Mode                        | T-03, T-05             | Low        | 2–3h        |
-| T-12 | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        |
+| ID   | Title                             | Depends On             | Complexity | Est. Effort | Status      |
+| ---- | --------------------------------- | ---------------------- | ---------- | ----------- | ----------- |
+| T-01 | Project Scaffolding & Config      | —                      | Low        | 1–2h        | ✅ Complete |
+| T-02 | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        | ✅ Complete |
+| T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
+| —    | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
+| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ⬜ Pending  |
+| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ⬜ Pending  |
+| T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ⬜ Pending  |
+| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ⬜ Pending  |
+| T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
+| T-09 | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ⬜ Pending  |
+| T-10 | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
+| T-11 | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
+| T-12 | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
 
 **Total estimated effort: ~32–52 hours**
+
+### Implementation Status
+
+| ID   | Title                                  | Status      | Archived Track                                                         |
+| ---- | -------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| T-01 | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| T-02 | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| T-03 | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| —    | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
+| T-04 | i18n Setup                             | ⬜ Pending  | —                                                                      |
+| T-05 | Parent Dashboard & Child Profiles      | ⬜ Pending  | —                                                                      |
+| T-06 | Letter Toggle Management               | ⬜ Pending  | —                                                                      |
+| T-07 | Vowel Mode (Harakat)                   | ⬜ Pending  | —                                                                      |
+| T-08 | Child Letter Grid                      | ⬜ Pending  | —                                                                      |
+| T-09 | Audio Service (Web Speech API)         | ⬜ Pending  | —                                                                      |
+| T-10 | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                      |
+| T-11 | Child Mode                             | ⬜ Pending  | —                                                                      |
+| T-12 | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                      |
+
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
 ---
 
 ## Track Details
 
-### T-01: Project Scaffolding & Config
+### T-01: Project Scaffolding & Config ✅
 
 **Dependencies:** None
+**Status:** ✅ Complete (`scaffolding_20260531`)
 
 **Description:**
 Initialize the TanStack Start project with all foundational tooling. Set up the project structure, install dependencies, configure Tailwind CSS v4, and verify the dev server runs.
@@ -37,18 +59,19 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 **PRD Ref:** §3 (System Architecture)
 **TDD Ref:** §1 (Project Structure)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `pnpm create tanstack-app` with React + TypeScript + Vite
-- Tailwind CSS v4 configuration with design tokens
-- Radix UI theme primitives installed
-- Lucide React icons installed
-- Zustand store scaffolding (`app/stores/`)
-- Drizzle ORM + SQLite configuration (`app/db/`)
-- `app.config.ts`, `tsconfig.json`, `drizzle.config.ts`
-- `.env.example` with required environment variables
-- Folder structure matching TDD §1
-- Update `docs/tdd.md` if project generation deviates from plan
+- [x] `pnpm create tanstack-app` with React + TypeScript + Vite
+- [x] Tailwind CSS v4 configuration with design tokens (Cairo + Nunito fonts)
+- [x] Radix UI primitives installed (`@radix-ui/react-switch`, `dialog`, `alert-dialog`, `radio-group`)
+- [x] Lucide React icons installed
+- [x] Zustand store scaffolding (`app/stores/`) — auth-store, child-store, ui-store
+- [x] Drizzle ORM + SQLite configuration (`app/db/`)
+- [x] Vite config, `tsconfig.json`, `drizzle.config.ts`
+- [x] `.env.example` with required environment variables
+- [x] Folder structure matching TDD §1
+- [x] `app/lib/utils/cn.ts` for Tailwind class merging (clsx + tailwind-merge)
+- [x] Tests: 21/21 passing for scaffolding verification
 
 **Key Decisions:**
 
@@ -57,7 +80,7 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 - Server functions (`createServerFn`) for all data mutations
 - `app/lib/utils/cn.ts` for Tailwind class merging (clsx + tailwind-merge pattern)
 
-**Verification:**
+**Verification (all passing):**
 
 - `pnpm dev` starts without errors
 - `/` route renders a placeholder page
@@ -66,9 +89,10 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 
 ---
 
-### T-02: Database Schema & Seed Data
+### T-02: Database Schema & Seed Data ✅
 
 **Dependencies:** T-01
+**Status:** ✅ Complete (`scaffolding_20260531`)
 
 **Description:**
 Define all Drizzle schema files, apply migrations, and seed the 28-letter master table. Better Auth manages its own tables — only application tables need manual creation.
@@ -76,13 +100,14 @@ Define all Drizzle schema files, apply migrations, and seed the 28-letter master
 **PRD Ref:** §7 (Database Schema)
 **TDD Ref:** §1 (Project Structure — `app/db/`), §6 (Schema Definitions)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/db/schema.ts` — Drizzle schemas for `profiles`, `letters`, `letter_toggles`
-- `app/db/index.ts` — DB client initialization (Turso/Bun SQLite driver)
-- `app/db/seed.ts` — Seed script for 28 letters with character, display_order, and audio_file paths
-- Migration files (auto-generated by `drizzle-kit push`)
-- `drizzle.config.ts` pointing to the SQLite file
+- [x] `app/db/schema.ts` — Drizzle schemas for `profiles`, `letters`, `letter_toggles`
+- [x] `app/db/index.ts` — DB client initialization (libSQL driver)
+- [x] `app/db/seed.ts` — Seed script for 28 letters with character, display_order, and audio_file paths
+- [x] Migration applied (via `drizzle-kit push`)
+- [x] `drizzle.config.ts` pointing to the SQLite file
+- [x] Tests: 36/36 passing for database layer
 
 **Zod Ref:** `app/lib/validations/profiles.ts`, `app/lib/validations/letters.ts`
 
@@ -99,7 +124,7 @@ Define all Drizzle schema files, apply migrations, and seed the 28-letter master
 - Letter IDs must match `z.enum()` exactly — any rename requires a migration
 - Seed script is idempotent (checks for existing data before inserting)
 
-**Verification:**
+**Verification (all passing):**
 
 - `pnpm drizzle-kit push` creates all tables
 - `pnpm tsx app/db/seed.ts` inserts 28 letters
@@ -107,9 +132,10 @@ Define all Drizzle schema files, apply migrations, and seed the 28-letter master
 
 ---
 
-### T-03: Authentication (Better Auth)
+### T-03: Authentication (Better Auth) ✅
 
 **Dependencies:** T-02
+**Status:** ✅ Complete (`scaffolding_20260531`)
 
 **Description:**
 Integrate Better Auth for email/password authentication. Configure session management, CSRF protection, and the auth middleware chain for route protection.
@@ -117,17 +143,19 @@ Integrate Better Auth for email/password authentication. Configure session manag
 **PRD Ref:** §4 — Module 1 (Parent Authentication)
 **TDD Ref:** §2 (Route Design — middleware chain), §3 (Auth Server Functions)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- Better Auth Drizzle adapter configuration
-- `app/server/auth.ts` — Server functions: `registerFn`, `loginFn`, `logoutFn`, `validateSessionFn`
-- Auth middleware in router `beforeLoad` (checks JWT cookie, injects context)
-- `app/routes/login.tsx` — Login form
-- `app/routes/register.tsx` — Registration form
-- Session cookie configuration (HttpOnly, Secure, SameSite=Lax, 30-day expiry)
-- CSRF protection via Better Auth middleware
-
-**TDD Ref:** §3 (Auth Server Functions — full contract signatures), §4 (Auth Zod Schemas)
+- [x] Better Auth Drizzle adapter configuration
+- [x] `app/server/auth.ts` — Better Auth singleton with email/password + 30-day session
+- [x] `app/server/auth-fns.ts` — Server functions: `registerFn`, `loginFn`, `logoutFn`, `validateSessionFn`
+- [x] Auth middleware in router `beforeLoad` (checks session, injects context)
+- [x] `app/routes/login.tsx` — Login form
+- [x] `app/routes/register.tsx` — Registration form
+- [x] Session cookie configuration (HttpOnly, Secure, SameSite=Lax, 30-day expiry)
+- [x] CSRF protection via Better Auth middleware
+- [x] Landing page with auth gate (`app/routes/index.tsx`)
+- [x] `app/lib/validations/auth.ts` — Zod schemas for login/register
+- [x] Tests: 59/59 passing (auth + schema + middleware)
 
 **Key Decisions:**
 
@@ -142,7 +170,7 @@ Integrate Better Auth for email/password authentication. Configure session manag
 - Both JWT and child-mode cookie present → child mode takes precedence for `/learn` routes
 - Server-side session validation on every protected server function
 
-**Verification:**
+**Verification (all passing):**
 
 - Can register a new account
 - Can log in with valid credentials
@@ -150,6 +178,43 @@ Integrate Better Auth for email/password authentication. Configure session manag
 - Protected routes redirect to `/login` when unauthenticated
 - Session persists across page reloads
 - CSRF token present in mutation requests
+
+---
+
+### T-03b: Code Quality Tooling (Prettier, ESLint, Husky) ✅
+
+**Dependencies:** T-01
+**Status:** ✅ Complete (`code-quality_20260601`)
+
+**Description:**
+Establish a Git pre-commit hook pipeline that enforces TypeScript type-checking, ESLint linting, and Prettier formatting on staged files before commits can be created. This track was added as a bonus tooling track not present in the original roadmap.
+
+**PRD Ref:** None (developer tooling)
+**TDD Ref:** §14 (Code Quality & Tooling)
+
+**Key Deliverables (all delivered):**
+
+- [x] **Prettier:** `.prettierrc` (printWidth: 100, semi, singleQuote, tabWidth: 2), `.prettierignore`, `format`/`format:check` scripts
+- [x] **ESLint v9:** Flat config (`eslint.config.js`) with TypeScript strict + stylistic rules, React + React-Hooks plugins, `lint`/`lint:fix` scripts
+- [x] **Husky v9:** `.husky/pre-commit` hook running `pnpm lint-staged` + `pnpm typecheck`
+- [x] **lint-staged:** Runs `eslint --fix`, `prettier --write`, `tsc --noEmit` on staged `*.{ts,tsx}`; `prettier --write` on `*.{json,md,css}`
+- [x] **Meta-tests:** `app/lib/tooling/quality-hooks.test.ts` validates all tooling configs
+- [x] **Documentation:** Updated `conductor/workflow.md` and `conductor/tech-stack.md`
+
+**Key Decisions:**
+
+- `tsc --noEmit` runs outside lint-staged (full-project check, not per-file)
+- Initial ESLint rules set to `warn` to avoid blocking on pre-existing style debt (can tighten later)
+- `git commit --no-verify` escape hatch documented for emergencies
+- Pre-commit pipeline completes in <10s for typical commits (1–5 files)
+
+**Verification (all passing):**
+
+- Prettier formats staged files on commit
+- ESLint violations reject commits (after auto-fix attempted)
+- TypeScript type errors reject commits
+- `git commit --no-verify` bypasses all checks
+- All 59 scaffolding tests + meta-tests pass
 
 ---
 
@@ -570,22 +635,23 @@ Final polish: error handling, responsive testing, performance optimization. Pack
 ## Track Dependencies Graph
 
 ```
-T-01 (Scaffolding)
- ├── T-02 (Database)
- │    ├── T-03 (Auth)
- │    │    ├── T-05 (Dashboard & Profiles)
- │    │    │    ├── T-06 (Letter Toggles)
- │    │    │    │    ├── T-08 (Child Grid)
- │    │    │    │    │    └── T-10 (Reading Practice) ─┐
- │    │    │    │    └── T-11 (Child Mode) ─────────────┤
- │    │    │    └── T-11 (Child Mode) ──────────────────┤
- │    │    └── T-11 (Child Mode) ───────────────────────┤
- │    └── T-07 (Harakat) ───────────────────────────────┤
- │                                                      │
-T-04 (i18n — parallel to T-02/T-03)                     │
-T-09 (Audio — parallel to T-02/T-03)                    │
-                                                       ▼
-                                                T-12 (Polish & Deploy)
+T-01 (Scaffolding)  ── ✅
+ ├── T-02 (Database) ── ✅
+ │    ├── T-03 (Auth) ── ✅
+ │    │    ├── T-05 (Dashboard & Profiles) ⬜
+ │    │    │    ├── T-06 (Letter Toggles) ⬜
+ │    │    │    │    ├── T-08 (Child Grid) ⬜
+ │    │    │    │    │    └── T-10 (Reading Practice) ⬜ ─┐
+ │    │    │    │    └── T-11 (Child Mode) ⬜ ────────────┤
+ │    │    │    └── T-11 (Child Mode) ⬜ ─────────────────┤
+ │    │    └── T-11 (Child Mode) ⬜ ──────────────────────┤
+ │    └── T-07 (Harakat) ⬜ ──────────────────────────────┤
+ │                                                        │
+T-03b (Code Quality) ── ✅                                │
+T-04 (i18n — parallel to T-02/T-03) ⬜                    │
+T-09 (Audio — parallel to T-02/T-03) ⬜                   │
+                                                          ▼
+                                                   T-12 (Polish & Deploy) ⬜
 ```
 
 ## Track Format

@@ -1,8 +1,31 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.1 (Reading-First Scope)
-**Based on:** PRD v1.1
+**Version:** 1.2 (Development Update)
+**Based on:** PRD v1.2
+
+### Implementation Status
+
+> Sections marked **✅ Implemented** are delivered in the archived tracks. Sections marked **⬜ Pending** are planned for future tracks.
+
+| §   | Section                              | Status                    | Track                                                                  |
+| --- | ------------------------------------ | ------------------------- | ---------------------------------------------------------------------- |
+| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 2   | Route Design (auth sections)         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 3   | Server Functions (auth only)         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 4   | Zod Schemas (auth only)              | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 5   | UI Component Library                 | ⬜ Pending                | —                                                                      |
+| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 7   | Audio Architecture                   | ⬜ Pending                | —                                                                      |
+| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 9   | Component Data Flow                  | ⬜ Pending                | —                                                                      |
+| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
+| 11  | Bilingual UI                         | ⬜ Pending                | —                                                                      |
+| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                      |
+| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                      |
+| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                      |
+| 15  | Error Handling                       | ⬜ Pending                | —                                                                      |
+| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
 
 ---
 

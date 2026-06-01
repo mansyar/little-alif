@@ -4,7 +4,8 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.1 (Revised — Reading-First Scope)
+**Version:** 1.2 (Development Update)
+**Development Phase:** Foundation Complete — Feature Development Pending
 
 ---
 
@@ -20,6 +21,24 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 - **Kid-Friendly UX:** Large touch targets, zero text instructions, instant audio feedback.
 - **Self-Hosted & Private:** All data stays on the parent's own VPS.
 - **Mobile-First:** Designed for the devices kids actually use — tablets and phones.
+
+### Development Status
+
+| Area                     | Status      | Details                                                                                                                                             |
+| ------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Project Scaffolding**  | ✅ Complete | TanStack Start + Tailwind v4 + Radix UI + Zustand. See [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                         |
+| **Database Schema**      | ✅ Complete | Drizzle ORM + SQLite — `profiles`, `letters`, `letter_toggles` tables. 28 letters seeded.                                                           |
+| **Authentication**       | ✅ Complete | Better Auth — register, login, logout, session management, CSRF, route protection.                                                                  |
+| **Code Quality Tooling** | ✅ Complete | Prettier, ESLint v9 (flat config), Husky + lint-staged pre-commit hooks. See [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
+| **Parent Dashboard**     | ⬜ Pending  | Profile CRUD, avatar selection, child mode toggle                                                                                                   |
+| **Letter Toggle Mgmt**   | ⬜ Pending  | ON/OFF switches per letter per child                                                                                                                |
+| **Vowel Mode (Harakat)** | ⬜ Pending  | Unicode diacritic rendering + non-connecting letter exceptions                                                                                      |
+| **Child Letter Grid**    | ⬜ Pending  | Touch grid with audio playback, empty state                                                                                                         |
+| **Audio Service**        | ⬜ Pending  | Web Speech API pronunciation                                                                                                                        |
+| **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                      |
+| **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                   |
+| **i18n**                 | ⬜ Pending  | English + Indonesian parent UI                                                                                                                      |
+| **Docker / Deploy**      | ⬜ Pending  | Containerization for Coolify                                                                                                                        |
 
 ---
 
