@@ -93,26 +93,26 @@
 
 **Goal:** Replace all hardcoded strings in login and register pages with type-safe i18n keys.
 
-- [ ] Task: Update `app/routes/login.tsx` to use i18n
-  - [ ] Replace `"Parent Login"` with `{LL.LOGIN_TITLE()}`
-  - [ ] Replace `"Sign in to manage your child profiles."` with `{LL.LOGIN_SUBTITLE()}`
-  - [ ] Replace `"Email"` label with `{LL.LOGIN_EMAIL()}`
-  - [ ] Replace `"Password"` label with `{LL.LOGIN_PASSWORD()}`
-  - [ ] Replace `"Signing in…"/"Sign in"` with `{submitting ? LL.LOGIN_SUBMITTING() : LL.LOGIN_SUBMIT()}`
-  - [ ] Replace `"No account? Create one"` with i18n keys
-- [ ] Task: Update translation files with new keys from login page integration
-  - [ ] Add `LOGIN_SUBTITLE`, `LOGIN_SUBMITTING`, `LOGIN_SIGNUP_LINK` to both `en.ts` and `id.ts`
-- [ ] Task: Update `app/routes/register.tsx` to use i18n
-  - [ ] Replace `"Create Account"` with `{LL.REGISTER_TITLE()}`
-  - [ ] Replace subtitle with `{LL.REGISTER_SUBTITLE()}`
-  - [ ] Replace `"Email"` and `"Password"` labels
-  - [ ] Replace `"At least 8 characters."` hint with `{LL.REGISTER_PASSWORD_HINT()}`
-  - [ ] Replace `"Creating account…"/"Create account"` with i18n keys
-  - [ ] Replace `"Already have an account? Sign in"` with i18n keys
-- [ ] Task: Update translation files with new keys from register page
-  - [ ] Add `REGISTER_SUBTITLE`, `REGISTER_PASSWORD_HINT`, `REGISTER_SUBMITTING`, `REGISTER_SIGNIN_LINK` to both `en.ts` and `id.ts`
-- [ ] Task: Run `pnpm i18n` to regenerate types with new keys
-- [ ] Task: Run full test suite — confirm all tests pass
+- [x] Task: Update `app/routes/login.tsx` to use i18n `d811d2a`
+  - [x] Replace `"Parent Login"` with `{LL.LOGIN_TITLE()}`
+  - [x] Replace `"Sign in to manage your child profiles."` with `{LL.LOGIN_SUBTITLE()}`
+  - [x] Replace `"Email"` label with `{LL.LOGIN_EMAIL()}`
+  - [x] Replace `"Password"` label with `{LL.LOGIN_PASSWORD()}`
+  - [x] Replace `"Signing in…"/"Sign in"` with `{submitting ? LL.LOGIN_SUBMITTING() : LL.LOGIN_SUBMIT()}`
+  - [x] Replace `"No account? Create one"` with `{LL.LOGIN_SIGNUP_LINK()}`
+- [x] Task: Update translation files with new keys from login page integration `d811d2a`
+  - [x] Keys already exist from Phase 2 — no new keys needed
+- [x] Task: Update `app/routes/register.tsx` to use i18n `d811d2a`
+  - [x] Replace `"Create Account"` with `{LL.REGISTER_TITLE()}`
+  - [x] Replace subtitle with `{LL.REGISTER_SUBTITLE()}`
+  - [x] Replace `"Email"` and `"Password"` labels with `{LL.LOGIN_EMAIL()}` / `{LL.LOGIN_PASSWORD()}`
+  - [x] Replace `"At least 8 characters."` hint with `{LL.REGISTER_PASSWORD_HINT()}`
+  - [x] Replace `"Creating account…"/"Create account"` with i18n keys
+  - [x] Replace `"Already have an account? Sign in"` with `{LL.REGISTER_SIGNIN_LINK()}`
+- [x] Task: Update translation files with new keys from register page `d811d2a`
+  - [x] Keys already exist from Phase 2 — no new keys needed
+- [x] Task: Run `pnpm i18n` to regenerate types with new keys
+- [x] Task: Run full test suite — confirm all tests pass
 - [ ] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md)
 
 ---
