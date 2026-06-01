@@ -71,18 +71,20 @@
 
 **Goal:** Build the dashboard navbar locale toggle that switches between EN and ID.
 
-- [ ] Task: Write failing tests for LanguageToggle component (Red phase)
-  - [ ] Create `app/components/parent/LanguageToggle.test.tsx`
-  - [ ] Test that the toggle renders with correct initial label
-  - [ ] Test that clicking the toggle switches locale
-  - [ ] Test that locale cookie is updated on toggle
-  - [ ] Run tests and confirm they fail
-- [ ] Task: Implement `app/components/parent/LanguageToggle.tsx`
-  - [ ] Import `useI18nContext` and `setLocale` from `~/lib/i18n`
-  - [ ] Read current locale from context
-  - [ ] On click: toggle between `en` and `id`, update cookie, call `setLocale(next)`
-  - [ ] Render with `LL.LOCALE_SWITCH()` as button label
-- [ ] Task: Run tests — confirm LanguageToggle tests pass (Green phase)
+- [x] Task: Write failing tests for LanguageToggle component (Red phase) `3c9b4dd`
+  - [x] Create `app/components/parent/LanguageToggle.test.tsx`
+  - [x] Test that the toggle renders with correct initial label
+  - [x] Test that clicking the toggle switches locale
+  - [x] Test that locale cookie is updated on toggle
+  - [x] Run tests and confirm they fail
+- [x] Task: Implement `app/components/parent/LanguageToggle.tsx` `3c9b4dd`
+  - [x] Import `useI18nContext` and `setLocale` from `~/lib/i18n`
+  - [x] Read current locale from context
+  - [x] On click: toggle between `en` and `id`, update cookie, call `setLocale(next)`
+  - [x] Render with `LL.LOCALE_SWITCH()` as button label
+- [x] Task: Run tests — confirm LanguageToggle tests pass (Green phase) `3c9b4dd`
+  - [x] 4 LanguageToggle tests pass, 103/103 total tests pass
+  - [x] `pnpm lint` clean, `pnpm typecheck` clean
 - [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
 
 ---
