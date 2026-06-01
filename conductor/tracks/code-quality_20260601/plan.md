@@ -92,15 +92,15 @@
   - [x] Ensure `.husky/pre-commit` is executable (verify on Windows: Husky v9 handles this internally)
   - [x] Run `CI=true pnpm test` and confirm all meta-tests pass (Green)
 
-- [ ] Task: End-to-end smoke test of the pre-commit pipeline
-  - [ ] Smoke test 1 — Prettier auto-fix: create a temporary file with intentional bad formatting, `git add` it, attempt `git commit`, verify Prettier reformats and the commit succeeds
-  - [ ] Smoke test 2 — Type error blocked: stage a `.ts` file containing an obvious type error (e.g., `const x: number = "string"`), attempt `git commit`, verify rejection with tsc error output and the commit is NOT created
-  - [ ] Smoke test 3 — Lint error blocked: stage a `.tsx` file with a `react-hooks/exhaustive-deps` violation, attempt `git commit`, verify rejection with ESLint output
-  - [ ] Smoke test 4 — Escape hatch: verify `git commit --no-verify` still works and bypasses all hooks
-  - [ ] Smoke test 5 — Performance: measure the pre-commit duration with the Sample Commit (5 files, 1 TS / 1 TSX / 1 JSON / 1 MD / 1 CSS), confirm <10s
-  - [ ] Clean up all temporary test files used in smoke tests; reset working tree
+- [x] Task: End-to-end smoke test of the pre-commit pipeline (6c28b8a)
+  - [x] Smoke test 1 — Prettier auto-fix: create a temporary file with intentional bad formatting, `git add` it, attempt `git commit`, verify Prettier reformats and the commit succeeds
+  - [x] Smoke test 2 — Type error blocked: stage a `.ts` file containing an obvious type error (e.g., `const x: number = "string"`), attempt `git commit`, verify rejection with tsc error output and the commit is NOT created
+  - [x] Smoke test 3 — Lint error blocked: stage a `.tsx` file with a `react-hooks/exhaustive-deps` violation, attempt `git commit`, verify rejection with ESLint output
+  - [x] Smoke test 4 — Escape hatch: verify `git commit --no-verify` still works and bypasses all hooks
+  - [x] Smoke test 5 — Performance: measure the pre-commit duration with the Sample Commit (5 files, 1 TS / 1 TSX / 1 JSON / 1 MD / 1 CSS), confirm <10s
+  - [x] Clean up all temporary test files used in smoke tests; reset working tree
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ---
 
