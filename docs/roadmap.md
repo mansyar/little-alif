@@ -12,7 +12,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-02 | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        | ✅ Complete |
 | T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
 | —    | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ⬜ Pending  |
+| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
 | T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ⬜ Pending  |
 | T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ⬜ Pending  |
 | T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ⬜ Pending  |
@@ -32,7 +32,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-02 | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
 | T-03 | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
 | —    | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
-| T-04 | i18n Setup                             | ⬜ Pending  | —                                                                      |
+| T-04 | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)     |
 | T-05 | Parent Dashboard & Child Profiles      | ⬜ Pending  | —                                                                      |
 | T-06 | Letter Toggle Management               | ⬜ Pending  | —                                                                      |
 | T-07 | Vowel Mode (Harakat)                   | ⬜ Pending  | —                                                                      |
@@ -218,44 +218,70 @@ Establish a Git pre-commit hook pipeline that enforces TypeScript type-checking,
 
 ---
 
-### T-04: i18n Setup
+### T-04: i18n Setup ✅
 
 **Dependencies:** T-01
+**Status:** ✅ Complete ([`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/))
 
 **Description:**
-Initialize typesafe-i18n with English and Indonesian locales. Generate TypeScript types so all translation keys are type-safe across the app.
+Initialize typesafe-i18n v5 with English and Indonesian locales. Generate TypeScript types so all translation keys are compile-time checked. Parent-facing text in login and register pages is fully localized.
 
 **PRD Ref:** §4 — REQ-4.6 (Bilingual UI)
-**TDD Ref:** §1 (Project Structure — `app/lib/i18n/`)
+**TDD Ref:** §11 (Bilingual UI Implementation)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/lib/i18n/index.ts` — i18n initialization
-- `app/lib/i18n/en.ts` — English translations
-- `app/lib/i18n/id.ts` — Indonesian translations
-- Generated type files (`i18n-types.ts`, `i18n-util.ts`, `i18n-util.async.ts`)
-- Language toggle component (minimal — flag icon or dropdown in parent UI)
-- Locale detector (browser `Accept-Language` header → default to `id` for Indonesian users)
-
-**Translation Keys (initial set):**
-
-- Auth: `login.title`, `login.email`, `login.password`, `login.submit`, `register.title`, `register.submit`
-- Dashboard: `dashboard.title`, `dashboard.addChild`, `dashboard.noChildren`
-- Toggles: `toggles.title`, `toggles.on`, `toggles.off`, `toggles.vowelMode`
-- Grid: `grid.emptyState`, `grid.readingPractice`
-- Reading: `reading.title`, `reading.shuffle`, `reading.nextGroup`, `reading.done`
-- Common: `common.save`, `common.cancel`, `common.delete`, `common.confirm`
+- `typesafe-i18n@^5.26.0` installed as dev dependency, `.typesafe-i18n.json` with minimal config (auto-detects adapter + locales)
+- `app/lib/i18n/en/index.ts` — 27 English strings (`satisfies BaseTranslation`)
+- `app/lib/i18n/id/index.ts` — 27 Indonesian strings (`satisfies Translation`)
+- Generated type files: `i18n-types.ts`, `i18n-util.ts`, `i18n-util.sync.ts`, `i18n-util.async.ts`, `i18n-react.tsx`
+- `app/lib/i18n/index.ts` — i18n init, locale detection, re-exports
+- `app/lib/i18n/get-server-locale.ts` — SSR cookie-based locale detection
+- `app/lib/i18n/set-locale-fn.ts` — Zod-validated server function for locale cookie (1-year expiry, sameSite lax)
+- `app/components/parent/LanguageToggle.tsx` — Toggle button using `useI18nContext`, toggles between EN/ID
+- `app/routes/__root.tsx` — Wrapped with `<I18nClient locale="en">` provider
+- `app/routes/login.tsx` — All hardcoded strings replaced with `LL.*()`, LanguageToggle added
+- `app/routes/register.tsx` — Same pattern as login
+- ESLint + Prettier config updated to ignore auto-generated i18n files
+- Generated files have `/* eslint-disable */` headers
 
 **Key Decisions:**
 
-- Parent UI is bilingual (EN + ID). Child UI uses minimal text (icons + letter glyphs) and does not need i18n.
-- Detect locale from browser Accept-Language header; persist choice in localStorage
+- typesafe-i18n v5 auto-detects adapter (`react`) and locales (`['en', 'id']`) — no explicit config needed
+- Locale persisted in cookie (not localStorage) for SSR access
+- Set locale via server function (`set-locale-fn.ts`) rather than direct `document.cookie` — validates input via Zod
+- Cookie: 1-year expiry, `sameSite: 'lax'`, accessible to both server and client
+- Translation key naming: `SCREAMING_SNAKE_CASE` (typesafe-i18n convention)
+- 27 keys covering: auth (login/register), dashboard, child mode, profile, locale switch, error messages
+- Child UI does not use i18n (icons + letter glyphs only)
+- `__root.tsx` hardcodes `locale="en"` — dynamic SSR locale detection deferred to follow-up
 
-**Verification:**
+**Translation Keys (27 total):**
 
-- Switching language changes all text on parent-facing pages
-- No TypeScript errors for translation keys
-- Fallback to English when a key is missing in Indonesian
+- Auth: `LOGIN_TITLE`, `LOGIN_SUBTITLE`, `LOGIN_EMAIL`, `LOGIN_PASSWORD`, `LOGIN_SUBMIT`, `LOGIN_SUBMITTING`, `LOGIN_SIGNUP_LINK`
+- Register: `REGISTER_TITLE`, `REGISTER_SUBTITLE`, `REGISTER_SUBMIT`, `REGISTER_SUBMITTING`, `REGISTER_PASSWORD_HINT`, `REGISTER_SIGNIN_LINK`
+- Dashboard: `DASHBOARD_TITLE`, `DASHBOARD_ADD_CHILD`, `DASHBOARD_NO_CHILDREN`
+- Letters: `LETTERS_SHOW`, `LETTERS_HIDE`
+- Child Mode: `CHILDMODE_ENABLE`, `CHILDMODE_DISABLE`, `CHILDMODE_ACTIVE`
+- Profile: `PROFILE_NAME`, `PROFILE_AVATAR`, `PROFILE_SAVE`, `PROFILE_DELETE`, `PROFILE_DELETE_CONFIRM`
+- Locale: `LOCALE_SWITCH`
+- Errors: `ERROR_GENERIC`, `ERROR_INVALID_EMAIL`, `ERROR_SHORT_PASSWORD`
+
+**Edge Cases:**
+
+- Missing Indonesian key → falls back to English (typesafe-i18n built-in behavior)
+- Invalid locale cookie value → defaults to `en` (fallback in `getServerLocale`)
+- Auto-generated i18n files ignored by ESLint + Prettier — no formatting conflicts on regeneration
+
+**Verification (all passing):**
+
+- `pnpm i18n` generates type files without errors
+- Mistyping `LL.LOGIN_TITLE` as `LL.LOGIN_TITL` causes a compile error
+- Language toggle switches EN ↔ ID instantly (client-side, no server round-trip)
+- Locale persists in cookie across page reloads (1-year expiry)
+- Login and register pages display correct localized text
+- 103/103 tests pass, typecheck clean, lint clean
+- Coverage: 84.16%
 
 ---
 
@@ -648,7 +674,7 @@ T-01 (Scaffolding)  ── ✅
  │    └── T-07 (Harakat) ⬜ ──────────────────────────────┤
  │                                                        │
 T-03b (Code Quality) ── ✅                                │
-T-04 (i18n — parallel to T-02/T-03) ⬜                    │
+T-04 (i18n — parallel to T-02/T-03) ✅                    │
 T-09 (Audio — parallel to T-02/T-03) ⬜                   │
                                                           ▼
                                                    T-12 (Polish & Deploy) ⬜

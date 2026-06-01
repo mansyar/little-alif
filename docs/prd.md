@@ -37,7 +37,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Audio Service**        | ⬜ Pending  | Web Speech API pronunciation                                                                                                                        |
 | **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                      |
 | **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                   |
-| **i18n**                 | ⬜ Pending  | English + Indonesian parent UI                                                                                                                      |
+| **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                            |
 | **Docker / Deploy**      | ⬜ Pending  | Containerization for Coolify                                                                                                                        |
 
 ---
