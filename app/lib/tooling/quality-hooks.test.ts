@@ -46,7 +46,15 @@ describe('Tooling: Prettier', () => {
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && !line.startsWith('#'));
-    for (const required of ['node_modules', 'dist', '.output', 'coverage', 'pnpm-lock.yaml']) {
+    for (const required of [
+      'node_modules',
+      'dist',
+      '.output',
+      'coverage',
+      'pnpm-lock.yaml',
+      'app/routeTree.gen.ts',
+      'app/db/migrations',
+    ]) {
       expect(entries).toContain(required);
     }
   });
@@ -62,6 +70,26 @@ describe('Tooling: ESLint', () => {
     const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
     const mod = (await import(fileUrl.href)) as { default: unknown };
     expect(Array.isArray(mod.default)).toBe(true);
+  });
+
+  it('eslint.config.js ignores generated files and build artifacts', async () => {
+    const configPath = path.join(PROJECT_ROOT, 'eslint.config.js');
+    const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
+    const mod = (await import(fileUrl.href)) as {
+      default: { ignores?: string[] }[];
+    };
+    const ignoreConfig = mod.default.find((c) => Array.isArray(c.ignores));
+    const ignores = ignoreConfig?.ignores ?? [];
+    for (const required of [
+      'node_modules/**',
+      'dist/**',
+      '.output/**',
+      'coverage/**',
+      'app/db/migrations/**',
+      'app/routeTree.gen.ts',
+    ]) {
+      expect(ignores).toContain(required);
+    }
   });
 });
 

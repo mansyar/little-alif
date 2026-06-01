@@ -13,6 +13,7 @@ export default tseslint.config(
       'coverage/**',
       '*.config.js',
       'app/db/migrations/**',
+      'app/routeTree.gen.ts',
     ],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
