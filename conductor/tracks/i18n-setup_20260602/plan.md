@@ -89,7 +89,7 @@
 
 ---
 
-## Phase 5: Integrate i18n into Existing Pages
+## Phase 5: Integrate i18n into Existing Pages [checkpoint: 9d74d3c]
 
 **Goal:** Replace all hardcoded strings in login and register pages with type-safe i18n keys.
 
