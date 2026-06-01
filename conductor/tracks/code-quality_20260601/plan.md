@@ -30,7 +30,7 @@
     - [ ] `lint:fix` script exists and invokes `eslint --fix`
   - [ ] Run `CI=true pnpm test` and confirm Prettier tests fail (no config yet) and the other tests also fail (missing config)
 
-- [~] Task: Implement Prettier configuration
+- [x] Task: Implement Prettier configuration (f26bdf0)
   - [ ] Run `pnpm add -D prettier` to install Prettier
   - [ ] Create `.prettierrc` at project root with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: "all"`
   - [ ] Create `.prettierignore` at project root listing: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`, `.husky`
