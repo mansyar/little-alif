@@ -1,6 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { validateSessionFn } from '~/server/auth-fns';
 
 export const Route = createFileRoute('/')({
+  beforeLoad: async () => {
+    const session = await validateSessionFn();
+    if (session !== null) {
+      throw redirect({ to: '/dashboard' });
+    }
+    return { user: null };
+  },
   component: LandingPage,
 });
 
@@ -13,18 +21,19 @@ function LandingPage() {
         Introducing the Arabic alphabet, one letter at a time.
       </p>
       <div className="flex gap-4 flex-col sm:flex-row">
-        <a
-          href="/login"
+        <Link
+          to="/login"
+          search={{ redirect: '/dashboard' }}
           className="px-6 py-3 rounded-small bg-green text-white font-semibold hover:bg-green-light transition-colors"
         >
           Parent Login
-        </a>
-        <a
-          href="/register"
+        </Link>
+        <Link
+          to="/register"
           className="px-6 py-3 rounded-small border-2 border-green text-green font-semibold hover:bg-green hover:text-white transition-colors"
         >
           Create Account
-        </a>
+        </Link>
       </div>
     </main>
   );

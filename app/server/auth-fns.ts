@@ -1,9 +1,27 @@
 import { APIError } from 'better-auth';
 import { createServerFn } from '@tanstack/react-start';
-import { getCookie, getRequest } from '@tanstack/react-start/server';
+import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
 import { loginSchema, registerSchema } from '~/lib/validations/auth';
 import { getAuth } from './auth';
+
+/**
+ * Pure helper — derives a display name from the email local-part.
+ * Falls back to 'Parent' when the local-part is empty.
+ */
+export function deriveNameFromEmail(email: string): string {
+  const local = email.split('@')[0] ?? '';
+  return local.length > 0 ? local : 'Parent';
+}
+
+/**
+ * Build the cookie header that we hand to Better Auth when we only
+ * have a single session cookie value. The cookie name is what Better
+ * Auth's TanStack Start integration reads on the response.
+ */
+export function buildCookieHeader(token: string): string {
+  return `better-auth.session_token=${token}`;
+}
 
 /**
  * Register a new parent account with email + password.
@@ -17,7 +35,7 @@ export const registerFn = createServerFn({ method: 'POST' })
     try {
       const result = await auth.api.signUpEmail({
         body: {
-          name: data.email.split('@')[0] ?? 'Parent',
+          name: deriveNameFromEmail(data.email),
           email: data.email,
           password: data.password,
         },
@@ -76,7 +94,7 @@ export const logoutFn = createServerFn({ method: 'POST' }).handler(
  * when no valid session exists. Does not throw on missing session.
  */
 export const validateSessionFn = createServerFn({ method: 'GET' })
-  .inputValidator(z.object({}))
+  .inputValidator(z.object({}).optional())
   .handler(async () => {
     const auth = getAuth();
     const token = getCookie('better-auth.session_token');
@@ -84,7 +102,10 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
       return null;
     }
     const result = await auth.api.getSession({
-      headers: new Headers({ cookie: `better-auth.session_token=${token}` }),
+      headers: new Headers({ cookie: buildCookieHeader(token) }),
     });
     return result ?? null;
   });
+
+// Re-export the request/cookie helpers that tests may want to mock.
+export { getCookie, getRequest, setCookie };
