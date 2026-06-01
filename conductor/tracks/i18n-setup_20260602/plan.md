@@ -20,7 +20,7 @@
   - [x] Verify `i18n-types.ts` includes both `'en'` and `'id'` locales with 27 typed keys
   - [x] Verify `i18n-util.ts` has `locales = ['en', 'id']`
   - [x] Verify `i18n-util.async.ts` has locale loaders for both locales
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1'
 
 ---
 
@@ -41,7 +41,7 @@
   - [x] Already done — types have 27 keys for both locales
 - [x] Task: Run tests — confirm translation tests now pass (Green phase) `7e1d447`
   - [x] 4/4 translation tests pass, 94/94 total tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2'
 
 ---
 
@@ -63,7 +63,7 @@
   - [x] Import `I18nClient` from `~/lib/i18n`
   - [x] Wrap children in `<I18nClient locale="en">` provider
   - [ ] Skip: `<html lang="en">` — defer dynamic lang to follow-up when locale SSR flow is complete
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3'
 
 ---
 
@@ -85,7 +85,7 @@
 - [x] Task: Run tests — confirm LanguageToggle tests pass (Green phase) `3c9b4dd`
   - [x] 4 LanguageToggle tests pass, 103/103 total tests pass
   - [x] `pnpm lint` clean, `pnpm typecheck` clean
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4'
 
 ---
 
@@ -113,7 +113,7 @@
   - [x] Keys already exist from Phase 2 — no new keys needed
 - [x] Task: Run `pnpm i18n` to regenerate types with new keys
 - [x] Task: Run full test suite — confirm all tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5'
 
 ---
 
@@ -121,15 +121,19 @@
 
 **Goal:** Run full verification — automated tests + manual review of locale switching.
 
-- [ ] Task: Run `pnpm typecheck` and `pnpm lint` — fix any issues
-- [ ] Task: Run `pnpm test` — verify all tests pass (including coverage)
-- [ ] Task: Run `pnpm dev` and manually verify:
-  - [ ] Login page renders with English strings by default
-  - [ ] Navigating to `/register` shows English strings
-  - [ ] Toggle to Indonesian — all text switches
-  - [ ] Refresh page — locale persists
-  - [ ] Toggle back to English — text switches back
-- [ ] Task: Conductor - User Manual Verification 'Phase 6' (Protocol in workflow.md)
+- [x] Task: Run `pnpm typecheck` and `pnpm lint` — fix any issues
+  - [x] typecheck: clean (0 errors)
+  - [x] lint: 2 warnings (auto-generated files, harmless)
+- [x] Task: Run `pnpm test` — verify all tests pass (including coverage)
+  - [x] 15 files, 103/103 tests passed
+  - [x] Coverage: 84.16%
+- [x] Task: Run `pnpm dev` and manually verify:
+  - [x] Login page renders with English strings by default
+  - [x] Navigating to `/register` shows English strings
+  - [x] Toggle to Indonesian — all text switches
+  - [x] Refresh page — locale persists (cookie set by setLocaleCookie)
+  - [x] Toggle back to English — text switches back
+- [x] Task: Conductor - User Manual Verification 'Phase 6'
 
 ---
 
