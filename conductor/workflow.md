@@ -184,6 +184,45 @@ Before marking any task complete, verify:
 - [ ] Documentation updated if needed
 - [ ] No security vulnerabilities introduced
 
+### Pre-Commit Quality Gates
+
+Every `git commit` runs an automated quality-gate pipeline locally before the commit is
+created. The pipeline is wired with [Husky](https://typicode.github.io/husky/) and
+[lint-staged](https://github.com/lint-staged/lint-staged), and runs entirely on the
+developer's machine so feedback is immediate.
+
+**Pipeline (in order):**
+
+1. **`pnpm lint-staged`** — runs per staged file:
+   - `*.{ts,tsx}` → `eslint --fix` then `prettier --write`
+   - `*.{json,md,css}` → `prettier --write`
+2. **`pnpm typecheck`** — runs `tsc --noEmit --incremental` on the whole project.
+   This is intentionally **outside** the per-file glob: TypeScript cannot meaningfully
+   scope a type check to a single file (it always walks the project's import graph),
+   so the whole-project check lives in the hook itself. `--incremental` reuses a
+   local `tsconfig.tsbuildinfo` cache to keep warm runs fast.
+3. If any step exits non-zero, the commit is **rejected** and the working tree is
+   restored to its pre-commit state (lint-staged stashes unstaged changes, runs the
+   tasks, then restores on failure).
+
+**Escape hatch:** `git commit --no-verify` bypasses the hook. Use this only in genuine
+emergencies; it disables all of the above gates for that commit. Prefer fixing the
+underlying issue locally.
+
+**Running the gates manually (without committing):**
+
+```bash
+pnpm lint          # eslint on the whole project
+pnpm lint:fix      # eslint --fix on the whole project
+pnpm format        # prettier --write on the whole project
+pnpm format:check  # prettier --check (no writes) — useful in CI
+pnpm typecheck     # tsc --noEmit --incremental
+pnpm test          # vitest run (not on the commit hook by design — too slow)
+```
+
+The full tool versions and configuration files are listed in
+[Tech Stack — Development Tools](./tech-stack.md#development-tools).
+
 ## Development Commands
 
 **AI AGENT INSTRUCTION: This section should be adapted to the project's specific language, framework, and build tools.**

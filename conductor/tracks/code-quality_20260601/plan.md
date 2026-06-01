@@ -108,7 +108,7 @@
 
 **Goal:** Document the new pre-commit pipeline in the project's workflow and tech-stack files so future contributors understand the policy.
 
-- [ ] Task: Update `conductor/workflow.md` and `conductor/tech-stack.md`
+- [~] Task: Update `conductor/workflow.md` and `conductor/tech-stack.md`
   - [ ] In `conductor/workflow.md`, add a "Pre-Commit Quality Gates" subsection under "Quality Gates" with:
     - [ ] The pre-commit pipeline: Husky + lint-staged → ESLint + Prettier + tsc
     - [ ] The `git commit --no-verify` escape hatch (with warning that it bypasses all checks)

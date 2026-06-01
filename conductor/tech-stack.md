@@ -68,7 +68,9 @@
 
 ## Development Tools
 
-- **Type Checking:** TypeScript (strict)
-- **Linting:** ESLint (TanStack recommended config)
-- **Formatting:** Prettier
-- **Testing:** Vitest (planned)
+- **Type Checking:** TypeScript 5.7 (strict, `tsc --noEmit --incremental`)
+- **Linting:** ESLint 9 (flat config) with `@typescript-eslint/recommended-type-checked` + `stylistic-type-checked`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. Initial rule severity is `warn` to avoid blocking on pre-existing style debt; tighten to `error` in a follow-up track.
+- **Formatting:** Prettier 3 with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: 'all'`. Ignored: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`, `.husky`, `*.tsbuildinfo`, `app/routeTree.gen.ts`, `app/db/migrations`.
+- **Git Hooks:** Husky 9 (`.husky/pre-commit` invokes `pnpm lint-staged && pnpm typecheck`)
+- **Staged-File Runner:** lint-staged 17 (runs ESLint/Prettier on staged files only; tsc is intentionally outside the per-file glob — see [Workflow — Pre-Commit Quality Gates](./workflow.md#pre-commit-quality-gates))
+- **Testing:** Vitest 3 (planned for follow-up tracks)
