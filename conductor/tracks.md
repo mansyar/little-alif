@@ -4,4 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-_No active tracks. The latest archived track is `code-quality_20260601` (see `archive/`)._
+- [ ] **Track: T-04 — i18n Setup (typesafe-i18n)**
+      _Link: ./tracks/i18n-setup_20260602/_\_
