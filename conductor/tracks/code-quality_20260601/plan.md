@@ -121,3 +121,9 @@
   - [x] Re-run `CI=true pnpm test` to confirm the meta-tests still pass after docs changes
 
 - [x] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md) [0f66d4a]
+
+---
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions 7df3a3f
