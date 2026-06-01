@@ -5,7 +5,7 @@
 
 ---
 
-## Phase 1: Prettier Setup + Initial Meta-Tests (Red→Green for Prettier)
+## Phase 1: Prettier Setup + Initial Meta-Tests (Red→Green for Prettier) [checkpoint: 6f7db0c]
 
 **Goal:** Install and configure Prettier for the entire project, and write the first wave of meta-tests that validate the tooling configuration. Prettier-related tests transition from Red to Green in this phase; tests for ESLint/Husky/lint-staged remain Red until later phases.
 
