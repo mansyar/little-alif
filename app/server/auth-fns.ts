@@ -1,6 +1,6 @@
 import { APIError } from 'better-auth';
 import { createServerFn } from '@tanstack/react-start';
-import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
+import { getCookie, getRequest } from '@tanstack/react-start/server';
 import { z } from 'zod';
 import { loginSchema, registerSchema } from '~/lib/validations/auth';
 import { getAuth } from './auth';
@@ -104,6 +104,3 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
     });
     return result ?? null;
   });
-
-// Re-export the request/cookie helpers that tests may want to mock.
-export { getCookie, getRequest, setCookie };
