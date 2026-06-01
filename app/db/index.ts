@@ -1,8 +1,12 @@
 import { createClient, type Client } from '@libsql/client';
 import { drizzle, type LibSQLDatabase } from 'drizzle-orm/libsql';
+import * as authSchema from './auth-schema';
 import * as schema from './schema';
 
-export type DbClient = LibSQLDatabase<typeof schema>;
+/** Combined schema: application tables + Better Auth tables. */
+const fullSchema = { ...schema, ...authSchema };
+
+export type DbClient = LibSQLDatabase<typeof fullSchema>;
 
 /**
  * Resolve the database URL. Defaults to a local SQLite file inside
@@ -31,13 +35,14 @@ export function getClient(): Client {
 
 /**
  * Lazily initialize and return a singleton Drizzle DB instance.
- * The DB is bound to the schema for typed query building.
+ * The DB is bound to the combined schema (application + auth) for
+ * typed query building.
  */
 export function getDb(): DbClient {
   if (_db === null) {
-    _db = drizzle(getClient(), { schema });
+    _db = drizzle(getClient(), { schema: fullSchema });
   }
   return _db;
 }
 
-export { schema };
+export { schema, authSchema, fullSchema };
