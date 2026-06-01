@@ -47,7 +47,7 @@
 
 **Goal:** Install ESLint v9 with TypeScript, React, and React-Hooks plugins. Configure with the flat config format. Set initial rules to `warn` to avoid blocking the track on pre-existing style debt. ESLint-related meta-tests transition from Red to Green in this phase.
 
-- [ ] Task: Implement ESLint configuration
+- [x] Task: Implement ESLint configuration (9ebd272)
   - [ ] Run `pnpm add -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react eslint-plugin-react-hooks globals typescript-eslint` to install ESLint and plugins
   - [ ] Create `eslint.config.js` at project root using flat config:
     - [ ] Import `tseslint` from `typescript-eslint`
