@@ -5,7 +5,7 @@ export default defineConfig({
   out: './app/db/migrations',
   dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? 'file:./local.db',
+    url: process.env.DATABASE_URL ?? 'file:./data/little-alif.db',
   },
   verbose: true,
   strict: true,

@@ -33,3 +33,9 @@ pnpm-debug.log*
 
 # TanStack Router generated file
 app/routeTree.gen.ts
+
+# Local SQLite database files
+data/
+local.db
+*.db
+*.db-journal
