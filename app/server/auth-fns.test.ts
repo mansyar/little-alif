@@ -2,6 +2,34 @@ import { describe, expect, it, vi } from 'vitest';
 import { APIError } from 'better-auth';
 import { deriveNameFromEmail, buildCookieHeader } from './auth-fns';
 
+const authMocks = vi.hoisted(() => ({
+  fakeDb: { __fakeDb: true },
+  betterAuthResult: { __mockAuth: true, handler: vi.fn() },
+}));
+
+vi.mock('~/db', () => ({
+  getDb: () => authMocks.fakeDb,
+  schema: {},
+  authSchema: {},
+  fullSchema: {},
+}));
+
+vi.mock('better-auth', async () => {
+  const actual = await vi.importActual<typeof import('better-auth')>('better-auth');
+  return {
+    betterAuth: vi.fn(() => authMocks.betterAuthResult),
+    APIError: actual.APIError,
+  };
+});
+
+vi.mock('better-auth/adapters/drizzle', () => ({
+  drizzleAdapter: vi.fn(() => ({ __adapter: true })),
+}));
+
+vi.mock('better-auth/tanstack-start', () => ({
+  tanstackStartCookies: vi.fn(() => ({ __plugin: true })),
+}));
+
 describe('deriveNameFromEmail', () => {
   it('returns the local-part of a standard email', () => {
     expect(deriveNameFromEmail('parent@example.com')).toBe('parent');
@@ -71,5 +99,15 @@ describe('server module smoke', () => {
     const spy = vi.fn();
     spy('ok');
     expect(spy).toHaveBeenCalledWith('ok');
+  });
+});
+
+describe('getAuth singleton', () => {
+  it('returns a stable auth instance across calls', async () => {
+    const { getAuth } = await import('./auth');
+    const a = getAuth();
+    const b = getAuth();
+    expect(a).toBe(b);
+    expect(a).toBeDefined();
   });
 });
