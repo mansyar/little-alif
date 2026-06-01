@@ -20,6 +20,8 @@ const en = {
   DASHBOARD_TITLE: 'Dashboard',
   DASHBOARD_ADD_CHILD: 'Add Child',
   DASHBOARD_NO_CHILDREN: 'No child profiles yet. Add one to get started.',
+  DASHBOARD_SIGN_OUT: 'Sign out',
+  DASHBOARD_SIGNING_OUT: 'Signing out\u2026',
 
   // Letters
   LETTERS_SHOW: 'Show',
@@ -33,6 +35,7 @@ const en = {
   // Profile
   PROFILE_NAME: 'Name',
   PROFILE_AVATAR: 'Avatar',
+  PROFILE_EDIT: 'Edit',
   PROFILE_SAVE: 'Save',
   PROFILE_CANCEL: 'Cancel',
   PROFILE_ADD_TITLE: 'Add Child Profile',

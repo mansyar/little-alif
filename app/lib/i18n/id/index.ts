@@ -20,6 +20,8 @@ const id = {
   DASHBOARD_TITLE: 'Dasbor',
   DASHBOARD_ADD_CHILD: 'Tambah Anak',
   DASHBOARD_NO_CHILDREN: 'Belum ada profil anak. Tambahkan satu untuk memulai.',
+  DASHBOARD_SIGN_OUT: 'Keluar',
+  DASHBOARD_SIGNING_OUT: 'Keluar\u2026',
 
   // Letters
   LETTERS_SHOW: 'Tampilkan',
@@ -33,6 +35,7 @@ const id = {
   // Profile
   PROFILE_NAME: 'Nama',
   PROFILE_AVATAR: 'Avatar',
+  PROFILE_EDIT: 'Edit',
   PROFILE_SAVE: 'Simpan',
   PROFILE_CANCEL: 'Batal',
   PROFILE_ADD_TITLE: 'Tambah Profil Anak',

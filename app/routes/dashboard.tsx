@@ -1,6 +1,9 @@
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
 import { logoutFn, validateSessionFn } from '~/server/auth-fns';
+import { useI18nContext } from '~/lib/i18n';
+import { LanguageToggle } from '~/components/parent/LanguageToggle';
+import { ProfileList } from '~/components/parent/ProfileList';
 
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: async () => {
@@ -15,7 +18,7 @@ export const Route = createFileRoute('/dashboard')({
 });
 
 function DashboardPage() {
-  const { user } = Route.useRouteContext();
+  const { LL } = useI18nContext();
   const [signingOut, setSigningOut] = useState(false);
 
   async function handleLogout() {
@@ -29,29 +32,48 @@ function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10 max-w-3xl mx-auto">
-      <header className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-text-dark">Dashboard</h1>
-        <button
-          type="button"
-          onClick={() => {
-            void handleLogout();
-          }}
-          disabled={signingOut}
-          className="px-4 py-2 rounded-small border border-sand-dark text-text-muted hover:text-text-dark transition-colors disabled:opacity-60"
-        >
-          {signingOut ? 'Signing out…' : 'Sign out'}
-        </button>
-      </header>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <aside className="flex w-64 shrink-0 flex-col border-r border-sand-light bg-white px-5 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-text-dark">{LL.DASHBOARD_TITLE()}</h1>
+        </div>
 
-      <section className="bg-white rounded-large shadow-card p-6 mb-6">
-        <h2 className="text-xl font-semibold text-text-dark mb-1">Welcome, {user.email}</h2>
-        <p className="text-text-muted">Child profile management lands in the next milestone.</p>
-      </section>
+        <nav className="flex flex-col gap-2">
+          <span className="rounded-small bg-sand-light px-3 py-2 text-sm font-semibold text-text-dark">
+            {LL.PROFILE_NAME()}
+          </span>
+        </nav>
 
-      <Link to="/" className="text-green font-semibold hover:underline">
-        Back to home
-      </Link>
-    </main>
+        <div className="mt-auto flex flex-col gap-3">
+          <LanguageToggle />
+          <button
+            type="button"
+            onClick={() => {
+              void handleLogout();
+            }}
+            disabled={signingOut}
+            className="rounded-small px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
+          >
+            {signingOut ? LL.DASHBOARD_SIGNING_OUT() : LL.DASHBOARD_SIGN_OUT()}
+          </button>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 px-8 py-8">
+        <header className="mb-8 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-text-dark">{LL.PROFILE_NAME()}</h2>
+          <button
+            type="button"
+            className="rounded-small bg-green px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-green/90"
+          >
+            {LL.DASHBOARD_ADD_CHILD()}
+          </button>
+        </header>
+
+        <ProfileList />
+      </main>
+    </div>
   );
 }

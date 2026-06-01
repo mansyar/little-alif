@@ -36,14 +36,14 @@
 
 **Goal:** Refactor the dashboard route with sidebar layout, profile list with cards, empty state, and i18n integration.
 
-- [ ] Task: Write tests for dashboard components
+- [x] Task: Write tests for dashboard components
   - [ ] Test `ProfileList` — renders profile cards, shows empty state, displays letter toggle counts
   - [ ] Test dashboard route rendering — sidebar, header, locale toggle, logout button
-- [ ] Task: Create `app/components/parent/ProfileList.tsx`
+- [x] Task: Create `app/components/parent/ProfileList.tsx`
   - [ ] Fetch profiles via `listProfilesFn()` on mount
   - [ ] Render profile cards with avatar SVG + child name + "X/28 introduced" summary + action buttons (Edit, Delete, Manage Letters placeholder)
   - [ ] Empty state: icon + localized message when no profiles
-- [ ] Task: Refactor `app/routes/dashboard.tsx`
+- [x] Task: Refactor `app/routes/dashboard.tsx`
   - [ ] Sidebar layout: left sidebar with dashboard title, locale toggle (LanguageToggle), logout button; main content area shows ProfileList
   - [ ] Add "Add Child" button that opens ProfileEditor (placeholder for Phase 4)
   - [ ] Replace placeholder text with full profile management UI
