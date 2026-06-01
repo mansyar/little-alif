@@ -108,16 +108,16 @@
 
 **Goal:** Document the new pre-commit pipeline in the project's workflow and tech-stack files so future contributors understand the policy.
 
-- [~] Task: Update `conductor/workflow.md` and `conductor/tech-stack.md`
-  - [ ] In `conductor/workflow.md`, add a "Pre-Commit Quality Gates" subsection under "Quality Gates" with:
-    - [ ] The pre-commit pipeline: Husky + lint-staged → ESLint + Prettier + tsc
-    - [ ] The `git commit --no-verify` escape hatch (with warning that it bypasses all checks)
-    - [ ] Manual commands: `pnpm lint`, `pnpm lint:fix`, `pnpm format`, `pnpm format:check`, `pnpm typecheck`, `pnpm test`
-    - [ ] Cross-link to the new dev tools in `tech-stack.md`
-  - [ ] In `conductor/tech-stack.md`, update the "Development Tools" section to record:
-    - [ ] Added: `prettier`, `eslint` + TypeScript/React plugins, `husky`, `lint-staged`
-    - [ ] Initial Prettier settings, initial ESLint config format (flat)
-  - [ ] Verify both files render as valid Markdown and links resolve
-  - [ ] Re-run `CI=true pnpm test` to confirm the meta-tests still pass after docs changes
+- [x] Task: Update `conductor/workflow.md` and `conductor/tech-stack.md` (7619125)
+  - [x] In `conductor/workflow.md`, add a "Pre-Commit Quality Gates" subsection under "Quality Gates" with:
+    - [x] The pre-commit pipeline: Husky + lint-staged → ESLint + Prettier + tsc
+    - [x] The `git commit --no-verify` escape hatch (with warning that it bypasses all checks)
+    - [x] Manual commands: `pnpm lint`, `pnpm lint:fix`, `pnpm format`, `pnpm format:check`, `pnpm typecheck`, `pnpm test`
+    - [x] Cross-link to the new dev tools in `tech-stack.md`
+  - [x] In `conductor/tech-stack.md`, update the "Development Tools" section to record:
+    - [x] Added: `prettier`, `eslint` + TypeScript/React plugins, `husky`, `lint-staged`
+    - [x] Initial Prettier settings, initial ESLint config format (flat)
+  - [x] Verify both files render as valid Markdown and links resolve
+  - [x] Re-run `CI=true pnpm test` to confirm the meta-tests still pass after docs changes
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
