@@ -6,8 +6,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Active Tracks
 
-- [~] **Track: Setup code quality check on commit**
-  _Link: [./tracks/code-quality_20260601/](./tracks/code-quality_20260601/)_
+- [x] **Track: Setup code quality check on commit**
+      _Link: [./tracks/code-quality_20260601/](./tracks/code-quality_20260601/)_
 
 ---
 
