@@ -5,6 +5,10 @@
 
 **Goal:** Create Zod validation schemas for profile CRUD and inline SVG avatar components.
 
+## Phase 2: Profile Server Functions [checkpoint: 1aaf146]
+
+**Goal:** Create server functions for profile CRUD operations with Drizzle ORM queries, Zod validation, and JWT session checks.
+
 - [x] Task: Create Zod validation schemas (`app/lib/validations/profiles.ts`) [294900b]
   - [ ] Create `createProfileSchema` with name (1-50 chars), avatar (enum from AVATAR_KEYS), optional vowelMode defaulting to 'fathah'
   - [ ] Create `updateProfileSchema` with profileId (uuid), optional name, avatar, vowelMode
@@ -14,10 +18,6 @@
   - [ ] Create 8 themed avatar SVG components as named exports: `AlifLamp`, `BaBoat`, `TaTable`, `TsaButterfly`, `JimMountain`, `HaJar`, `KhoHat`, `DalBook`
   - [ ] Export an `AVATAR_MAP` constant mapping avatar key → component for lookup
 - [ ] Task: Conductor - User Manual Verification 'Validation Schemas & Avatar Components' (Protocol in workflow.md)
-
-## Phase 2: Profile Server Functions
-
-**Goal:** Implement all profile CRUD server functions with DB integration.
 
 - [x] Task: Write tests for profile server functions [b9510d9]
   - [x] Test `listProfilesFn` — returns profiles for authenticated user, rejects unauthenticated
@@ -30,7 +30,7 @@
   - [x] Implement `updateProfileFn({ profileId, name?, avatar?, vowelMode? })` — validates ownership, updates fields
   - [x] Implement `deleteProfileFn({ profileId })` — validates ownership, deletes profile (cascade handles toggles)
   - [x] All functions use `.inputValidator()` with Zod schemas and require JWT session validation
-- [ ] Task: Conductor - User Manual Verification 'Profile Server Functions' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Profile Server Functions' (Protocol in workflow.md)
 
 ## Phase 3: Dashboard Route & Profile Components
 
