@@ -45,6 +45,5 @@
 
   .font-arabic {
     font-family: var(--font-arabic);
-    font-display: block;
   }
 }

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { registerFn } from '~/server/auth-fns';
 
@@ -46,7 +46,7 @@ function RegisterPage() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-small focus:outline-none focus:ring-2 focus:ring-green"
+            className="px-3 py-2 border border-sand-dark rounded-small focus:outline-none focus:ring-2 focus:ring-green"
           />
         </label>
 
@@ -59,7 +59,7 @@ function RegisterPage() {
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-small focus:outline-none focus:ring-2 focus:ring-green"
+            className="px-3 py-2 border border-sand-dark rounded-small focus:outline-none focus:ring-2 focus:ring-green"
           />
           <span className="text-xs text-text-muted">At least 8 characters.</span>
         </label>
@@ -80,9 +80,13 @@ function RegisterPage() {
 
         <p className="text-sm text-text-muted text-center">
           Already have an account?{' '}
-          <a href="/login" className="text-green font-semibold hover:underline">
+          <Link
+            to="/login"
+            search={{ redirect: '/dashboard' }}
+            className="text-green font-semibold hover:underline"
+          >
             Sign in
-          </a>
+          </Link>
         </p>
       </form>
     </main>

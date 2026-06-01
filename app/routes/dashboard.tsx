@@ -35,7 +35,7 @@ function DashboardPage() {
           type="button"
           onClick={handleLogout}
           disabled={signingOut}
-          className="px-4 py-2 rounded-small border border-gray-200 text-text-muted hover:text-text-dark transition-colors disabled:opacity-60"
+          className="px-4 py-2 rounded-small border border-sand-dark text-text-muted hover:text-text-dark transition-colors disabled:opacity-60"
         >
           {signingOut ? 'Signing out…' : 'Sign out'}
         </button>

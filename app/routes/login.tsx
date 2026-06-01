@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { loginFn } from '~/server/auth-fns';
 
@@ -53,7 +53,7 @@ function LoginPage() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-small focus:outline-none focus:ring-2 focus:ring-green"
+            className="px-3 py-2 border border-sand-dark rounded-small focus:outline-none focus:ring-2 focus:ring-green"
           />
         </label>
 
@@ -65,7 +65,7 @@ function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-small focus:outline-none focus:ring-2 focus:ring-green"
+            className="px-3 py-2 border border-sand-dark rounded-small focus:outline-none focus:ring-2 focus:ring-green"
           />
         </label>
 
@@ -85,9 +85,9 @@ function LoginPage() {
 
         <p className="text-sm text-text-muted text-center">
           No account?{' '}
-          <a href="/register" className="text-green font-semibold hover:underline">
+          <Link to="/register" className="text-green font-semibold hover:underline">
             Create one
-          </a>
+          </Link>
         </p>
       </form>
     </main>
