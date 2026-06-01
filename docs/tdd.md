@@ -1596,3 +1596,45 @@ volumes:
 | Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | None          |
 | SQLite write failure                         | Toast: "Could not save changes"                     | console.error |
 | Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | console.warn  |
+
+---
+
+## 14. Code Quality & Tooling
+
+The project ships with automated code-quality tooling wired to run on every commit. Formatting, lint, and type errors are caught locally before code reaches the remote.
+
+### Tooling
+
+| Tool        | Purpose                           | Config               |
+| ----------- | --------------------------------- | -------------------- |
+| Prettier    | Code formatting                   | `.prettierrc.json`   |
+| ESLint      | Linting (flat config, TS + React) | `eslint.config.js`   |
+| TypeScript  | Static type checking              | `tsconfig.json`      |
+| Vitest      | Test runner                       | `vitest.config.ts`   |
+| Husky       | Git hook orchestrator             | `.husky/pre-commit`  |
+| lint-staged | Run gates only on staged files    | `.lintstagedrc.json` |
+
+### Pre-Commit Pipeline
+
+`.husky/pre-commit` runs in order:
+
+1. **`pnpm lint-staged`** — Prettier + ESLint on staged files (`*.{ts,tsx}` and `*.{json,md,css}`)
+2. **`pnpm typecheck`** — `tsc --noEmit --incremental` over the whole project
+
+If any step exits non-zero, the commit is rejected. `tsc` is intentionally **outside** the lint-staged glob: TypeScript cannot meaningfully scope a type check to a single file (it always walks the project's import graph), so the whole-project check lives in the hook itself.
+
+### Style Guides
+
+Authoritative style rules live in `conductor/code_styleguides/` (one file per concern: TypeScript, React, HTML/CSS, SQL). Lint and formatter rules are derived from them where possible. Always read them before contributing.
+
+### Quality Gates (Manual)
+
+| Command              | Checks                             |
+| -------------------- | ---------------------------------- |
+| `pnpm format:check`  | Verify Prettier compliance         |
+| `pnpm lint`          | Run ESLint                         |
+| `pnpm typecheck`     | Run `tsc --noEmit`                 |
+| `pnpm test`          | Run Vitest suite                   |
+| `pnpm test:coverage` | Run Vitest with V8 coverage report |
+
+The full tool versions and configuration are listed in [Tech Stack — Development Tools](./tech-stack.md#development-tools). The pipeline itself is detailed in [Workflow — Pre-Commit Quality Gates](./workflow.md#pre-commit-quality-gates).
