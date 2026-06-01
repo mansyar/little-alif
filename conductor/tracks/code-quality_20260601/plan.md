@@ -39,7 +39,7 @@
   - [ ] Run `pnpm format` to normalize existing tracked code; review the diff to confirm only formatting changes
   - [ ] Commit the formatting changes separately with message `style(repo): apply prettier formatting`
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) [6f7db0c]
 
 ---
 
