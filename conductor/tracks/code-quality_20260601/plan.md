@@ -71,10 +71,10 @@
 
 **Goal:** Wire the Git pre-commit hook via Husky, configure lint-staged to run formatters/linters on staged files, and verify the full pipeline end-to-end with intentional failure cases. Husky/lint-staged meta-tests transition from Red to Green in this phase.
 
-- [ ] Task: Implement Husky and lint-staged configuration
-  - [ ] Run `pnpm add -D husky lint-staged` to install Husky and lint-staged
-  - [ ] Add to `package.json` `scripts`: `prepare: "husky"`
-  - [ ] Add to `package.json` a top-level `lint-staged` block:
+- [x] Task: Implement Husky and lint-staged configuration [5f930ea]
+  - [x] Run `pnpm add -D husky lint-staged` to install Husky and lint-staged
+  - [x] Add to `package.json` `scripts`: `prepare: "husky"`
+  - [x] Add to `package.json` a top-level `lint-staged` block:
     ```json
     "lint-staged": {
       "*.{ts,tsx}": [
@@ -87,10 +87,10 @@
       ]
     }
     ```
-  - [ ] Run `pnpm exec husky init` to create the `.husky/` directory and update the path in `.gitignore` if needed
-  - [ ] Replace `.husky/pre-commit` content with: `pnpm lint-staged`
-  - [ ] Ensure `.husky/pre-commit` is executable (verify on Windows: Husky v9 handles this internally)
-  - [ ] Run `CI=true pnpm test` and confirm all meta-tests pass (Green)
+  - [x] Run `pnpm exec husky init` to create the `.husky/` directory and update the path in `.gitignore` if needed
+  - [x] Replace `.husky/pre-commit` content with: `pnpm lint-staged`
+  - [x] Ensure `.husky/pre-commit` is executable (verify on Windows: Husky v9 handles this internally)
+  - [x] Run `CI=true pnpm test` and confirm all meta-tests pass (Green)
 
 - [ ] Task: End-to-end smoke test of the pre-commit pipeline
   - [ ] Smoke test 1 — Prettier auto-fix: create a temporary file with intentional bad formatting, `git add` it, attempt `git commit`, verify Prettier reformats and the commit succeeds
