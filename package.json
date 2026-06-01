@@ -5,9 +5,9 @@
   "description": "Little Alif — Arabic alphabet learning app for children",
   "type": "module",
   "scripts": {
-    "i18n": "typesafe-i18n",
-    "dev": "typesafe-i18n && vite dev",
-    "build": "typesafe-i18n && vite build",
+    "i18n": "typesafe-i18n --no-watch",
+    "dev": "typesafe-i18n --no-watch && vite dev",
+    "build": "typesafe-i18n --no-watch && vite build",
     "start": "node .output/server/index.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
