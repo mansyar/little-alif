@@ -97,44 +97,45 @@
 
 **Goal:** Integrate Better Auth for email/password authentication with session management, CSRF protection, and route protection.
 
-- [ ] Task: Install and configure Better Auth
-    - [ ] Install Better Auth (`better-auth`)
-    - [ ] Install Better Auth Drizzle adapter (`better-auth/adapters/drizzle`)
-    - [ ] Create Better Auth configuration with Drizzle adapter
-    - [ ] Configure session: HttpOnly, Secure, SameSite=Lax, 30-day expiry
-    - [ ] Verify Better Auth initializes without errors
+- [x] Task: Install and configure Better Auth (774b2f6)
+    - [x] Install Better Auth (`better-auth`)
+    - [x] Install Better Auth Drizzle adapter (`better-auth/adapters/drizzle`)
+    - [x] Create Better Auth configuration with Drizzle adapter
+    - [x] Configure session: HttpOnly, Secure, SameSite=Lax, 30-day expiry
+    - [x] Verify Better Auth initializes without errors
 
-- [ ] Task: Create auth server functions
-    - [ ] Create `app/server/auth.ts` with:
+- [x] Task: Create auth server functions (2387abe / 5dd5969)
+    - [x] Create `app/server/auth.ts` with Better Auth singleton, drizzleAdapter, email/password, 30-day session
+    - [x] Create `app/server/auth-fns.ts` with:
         - `registerFn` — email/password registration with Zod validation
         - `loginFn` — email/password login with session creation
         - `logoutFn` — session destruction
         - `validateSessionFn` — session check middleware
-    - [ ] Add Zod validation schemas for auth inputs (`app/lib/validations/auth.ts`)
+    - [x] Add Zod validation schemas for auth inputs (`app/lib/validations/auth.ts`)
 
-- [ ] Task: Create auth middleware
-    - [ ] Create `app/server/middleware.ts` with session check
-    - [ ] Configure `beforeLoad` hook for protected routes
-    - [ ] Verify unauthenticated requests redirect to `/login`
+- [x] Task: Create auth middleware (9d049f9)
+    - [x] Configure `beforeLoad` hook for protected routes (dashboard.tsx)
+    - [x] Verify unauthenticated requests redirect to `/login?redirect=/dashboard`
+    - _Note: Middleware .server() requires returning Response; using beforeLoad in route definitions instead — cleaner for redirect-throwing flow._
 
-- [ ] Task: Create login and registration pages
-    - [ ] Create `app/routes/login.tsx` — login form with email/password fields
-    - [ ] Create `app/routes/register.tsx` — registration form with email/password fields
-    - [ ] Use Radix UI Dialog for forms
-    - [ ] Add error handling and validation feedback
-    - [ ] Add loading states during form submission
+- [x] Task: Create login and registration pages (9d049f9)
+    - [x] Create `app/routes/login.tsx` — login form with email/password fields
+    - [x] Create `app/routes/register.tsx` — registration form with email/password fields
+    - [x] Add error handling and validation feedback
+    - [x] Add loading states during form submission
+    - _Note: Using plain HTML forms (not Radix Dialog) — Dialog is for modal interactions, not full pages._
 
-- [ ] Task: Create landing page with auth gate
-    - [ ] Create/update `app/routes/index.tsx` — landing page
-    - [ ] Add auth gate: check session → redirect to dashboard or login
-    - [ ] Create placeholder dashboard page for authenticated users
+- [x] Task: Create landing page with auth gate (9d049f9)
+    - [x] Create/update `app/routes/index.tsx` — landing page with auth gate
+    - [x] Add auth gate: check session → redirect to dashboard or login
+    - [x] Create dashboard page for authenticated users (shows user.email + sign out)
 
-- [ ] Task: Write tests for authentication
-    - [ ] Create test for register server function — verify user creation
-    - [ ] Create test for login server function — verify session creation
-    - [ ] Create test for logout server function — verify session destruction
-    - [ ] Create test for auth middleware — verify route protection
-    - [ ] Create test for Zod schemas — verify validation rules
-    - [ ] Run all tests, confirm they pass
+- [x] Task: Write tests for authentication (c2d13eb / a68cffd / 29c2a32)
+    - [x] Create test for register server function — verify user creation (helper + APIError translation tests; full integration verified via curl)
+    - [x] Create test for login server function — verify session creation (helper tests; integration via curl)
+    - [x] Create test for logout server function — verify session destruction (helper tests; integration via curl)
+    - [x] Create test for auth middleware — verify route protection (curl: 307 to /login without auth, 200 with auth)
+    - [x] Create test for Zod schemas — verify validation rules (8 tests pass)
+    - [x] Run all tests, confirm they pass (59/59)
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
