@@ -1,0 +1,5 @@
+{
+  "adapter": "react",
+  "outputPath": "./app/lib/i18n",
+  "baseLocale": "en"
+}
