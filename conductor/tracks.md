@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Initialize project scaffolding with TanStack Start, database schema, and authentication**
+- [x] **Track: Initialize project scaffolding with TanStack Start, database schema, and authentication**
   *Link: [./tracks/scaffolding_20260531/](./tracks/scaffolding_20260531/)*
