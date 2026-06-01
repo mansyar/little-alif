@@ -136,7 +136,7 @@ describe('seed() runner', () => {
       | undefined;
     expect(valuesArg).toHaveLength(28);
     expect(typeof valuesArg?.[0]?.audioFiles).toBe('string');
-    expect(JSON.parse(valuesArg![0].audioFiles)).toMatchObject({ none: 'alif.mp3' });
+    expect(JSON.parse(valuesArg![0]!.audioFiles)).toMatchObject({ none: 'alif.mp3' });
     expect(seedMocks.processExit).not.toHaveBeenCalled();
   });
 
