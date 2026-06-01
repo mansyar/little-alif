@@ -104,7 +104,7 @@
 
 ---
 
-## Phase 4: Documentation Update
+## Phase 4: Documentation Update [checkpoint: 0f66d4a]
 
 **Goal:** Document the new pre-commit pipeline in the project's workflow and tech-stack files so future contributors understand the policy.
 
@@ -120,4 +120,4 @@
   - [x] Verify both files render as valid Markdown and links resolve
   - [x] Re-run `CI=true pnpm test` to confirm the meta-tests still pass after docs changes
 
-- [~] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md) [0f66d4a]
