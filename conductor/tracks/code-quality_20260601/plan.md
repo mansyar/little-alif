@@ -43,7 +43,7 @@
 
 ---
 
-## Phase 2: ESLint Setup (Flat Config)
+## Phase 2: ESLint Setup (Flat Config) [checkpoint: 101e586]
 
 **Goal:** Install ESLint v9 with TypeScript, React, and React-Hooks plugins. Configure with the flat config format. Set initial rules to `warn` to avoid blocking the track on pre-existing style debt. ESLint-related meta-tests transition from Red to Green in this phase.
 
@@ -63,7 +63,7 @@
   - [ ] Verify `pnpm typecheck` still passes (no new errors introduced by the new lint config)
   - [ ] Verify all existing tests still pass (`CI=true pnpm test`)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) [101e586]
 
 ---
 
