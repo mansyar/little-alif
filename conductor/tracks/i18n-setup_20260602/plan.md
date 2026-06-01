@@ -28,23 +28,19 @@
 
 **Goal:** Create complete English and Indonesian translation files matching the initial key set.
 
-- [ ] Task: Write failing test for translation key completeness (Red phase)
-  - [ ] Create `app/lib/i18n/translations.test.ts`
-  - [ ] Test that `en.ts` exports all expected Translation keys
-  - [ ] Test that `id.ts` exports all expected Translation keys
-  - [ ] Run tests and confirm they fail (no translation files exist yet)
-- [ ] Task: Write `app/lib/i18n/translations/en.ts` with all English strings
-  - [ ] Auth keys: `LOGIN_TITLE`, `LOGIN_EMAIL`, `LOGIN_PASSWORD`, `LOGIN_SUBMIT`, `LOGIN_NO_ACCOUNT`, `REGISTER_TITLE`, `REGISTER_SUBMIT`
-  - [ ] Dashboard keys: `DASHBOARD_TITLE`, `DASHBOARD_ADD_CHILD`, `DASHBOARD_NO_CHILDREN`
-  - [ ] Letter keys: `LETTERS_SHOW`, `LETTERS_HIDE`
-  - [ ] Child Mode keys: `CHILDMODE_ENABLE`, `CHILDMODE_DISABLE`, `CHILDMODE_ACTIVE`
-  - [ ] Profile keys: `PROFILE_NAME`, `PROFILE_AVATAR`, `PROFILE_SAVE`, `PROFILE_DELETE`, `PROFILE_DELETE_CONFIRM`
-  - [ ] Locale key: `LOCALE_SWITCH` (value: "Bahasa Indonesia")
-  - [ ] Error keys: `ERROR_GENERIC`, `ERROR_INVALID_EMAIL`, `ERROR_SHORT_PASSWORD`
-- [ ] Task: Write `app/lib/i18n/translations/id.ts` with all Indonesian translations
-  - [ ] Same key structure as `en.ts`, values in Bahasa Indonesia
-- [ ] Task: Run `pnpm i18n` to regenerate type files with full translations
-- [ ] Task: Run tests — confirm translation tests now pass (Green phase)
+- [x] Task: Write failing test for translation key completeness (Red phase) `7e1d447`
+  - [x] Create `app/lib/i18n/translation-keys.test.ts`
+  - [x] Test that `en/index.ts` exports all 27 expected translation keys
+  - [x] Test that `id/index.ts` exports all 27 expected translation keys
+  - [x] Run tests — 4 translation tests pass (Green phase)
+- [x] Task: Write `app/lib/i18n/en/index.ts` with all English strings `6775a35`
+  - [x] Already done during Phase 1 v5 setup
+- [x] Task: Write `app/lib/i18n/id/index.ts` with all Indonesian translations `6775a35`
+  - [x] Already done during Phase 1 v5 setup
+- [x] Task: Run `pnpm i18n` to regenerate type files with full translations `6775a35`
+  - [x] Already done — types have 27 keys for both locales
+- [x] Task: Run tests — confirm translation tests now pass (Green phase) `7e1d447`
+  - [x] 4/4 translation tests pass, 94/94 total tests pass
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ---
