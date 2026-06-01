@@ -19,17 +19,17 @@
 
 **Goal:** Implement all profile CRUD server functions with DB integration.
 
-- [ ] Task: Write tests for profile server functions
-  - [ ] Test `listProfilesFn` — returns profiles for authenticated user, rejects unauthenticated
-  - [ ] Test `createProfileFn` — creates profile, seeds 28 letter_toggles, enforces max 4, rejects unauthenticated
-  - [ ] Test `updateProfileFn` — updates name/avatar/vowelMode, rejects unauthenticated, rejects non-owned profile
-  - [ ] Test `deleteProfileFn` — deletes profile, cascades to toggles, rejects unauthenticated
-- [ ] Task: Implement `app/server/profiles.ts`
-  - [ ] Implement `listProfilesFn()` — queries profiles by userId, joins letter_toggles count
-  - [ ] Implement `createProfileFn({ name, avatar })` — validates Zod, checks max 4 profiles, inserts profile + 28 letter_toggles (default OFF)
-  - [ ] Implement `updateProfileFn({ profileId, name?, avatar?, vowelMode? })` — validates ownership, updates fields
-  - [ ] Implement `deleteProfileFn({ profileId })` — validates ownership, deletes profile (cascade handles toggles)
-  - [ ] All functions use `.inputValidator()` with Zod schemas and require JWT session validation
+- [x] Task: Write tests for profile server functions [b9510d9]
+  - [x] Test `listProfilesFn` — returns profiles for authenticated user, rejects unauthenticated
+  - [x] Test `createProfileFn` — creates profile, seeds 28 letter_toggles, enforces max 4, rejects unauthenticated
+  - [x] Test `updateProfileFn` — updates name/avatar/vowelMode, rejects unauthenticated, rejects non-owned profile
+  - [x] Test `deleteProfileFn` — deletes profile, cascades to toggles, rejects unauthenticated
+- [x] Task: Implement `app/server/profiles.ts` [b9510d9]
+  - [x] Implement `listProfilesFn()` — queries profiles by userId, joins letter_toggles count
+  - [x] Implement `createProfileFn({ name, avatar })` — validates Zod, checks max 4 profiles, inserts profile + 28 letter_toggles (default OFF)
+  - [x] Implement `updateProfileFn({ profileId, name?, avatar?, vowelMode? })` — validates ownership, updates fields
+  - [x] Implement `deleteProfileFn({ profileId })` — validates ownership, deletes profile (cascade handles toggles)
+  - [x] All functions use `.inputValidator()` with Zod schemas and require JWT session validation
 - [ ] Task: Conductor - User Manual Verification 'Profile Server Functions' (Protocol in workflow.md)
 
 ## Phase 3: Dashboard Route & Profile Components
