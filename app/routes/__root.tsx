@@ -1,6 +1,7 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 import appCss from '../app.css?url';
+import { I18nClient } from '~/lib/i18n';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -46,7 +47,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <I18nClient locale="en">{children}</I18nClient>
         <Scripts />
       </body>
     </html>
