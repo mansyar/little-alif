@@ -1,8 +1,0 @@
-{
-  "track_id": "scaffolding_20260531",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-05-31T00:00:00Z",
-  "updated_at": "2026-05-31T00:00:00Z",
-  "description": "Initialize project scaffolding with TanStack Start, database schema, and authentication"
-}
