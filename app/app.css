@@ -16,17 +16,8 @@
   --color-text-dark: #1A1A2E;
   --color-text-muted: #8A8A9A;
 
-  /* Spacing scale */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-
-  /* Border radius */
+  /* Border radius (custom names; the Tailwind default --radius is also kept) */
   --radius-small: 10px;
-  --radius: 16px;
   --radius-large: 24px;
 
   /* Shadows */
