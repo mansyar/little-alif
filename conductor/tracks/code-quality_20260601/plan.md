@@ -9,7 +9,7 @@
 
 **Goal:** Install and configure Prettier for the entire project, and write the first wave of meta-tests that validate the tooling configuration. Prettier-related tests transition from Red to Green in this phase; tests for ESLint/Husky/lint-staged remain Red until later phases.
 
-- [ ] Task: Write failing meta-tests for tooling configuration
+- [x] Task: Write failing meta-tests for tooling configuration (4f959bd)
     - [ ] Create `app/lib/tooling/quality-hooks.test.ts` with `describe` blocks for: `Prettier`, `ESLint`, `Husky + lint-staged`, `package.json scripts`
     - [ ] Add Prettier tests:
         - [ ] `.prettierrc` exists at project root and is valid JSON
@@ -30,7 +30,7 @@
         - [ ] `lint:fix` script exists and invokes `eslint --fix`
     - [ ] Run `CI=true pnpm test` and confirm Prettier tests fail (no config yet) and the other tests also fail (missing config)
 
-- [ ] Task: Implement Prettier configuration
+- [~] Task: Implement Prettier configuration
     - [ ] Run `pnpm add -D prettier` to install Prettier
     - [ ] Create `.prettierrc` at project root with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: "all"`
     - [ ] Create `.prettierignore` at project root listing: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`, `.husky`
