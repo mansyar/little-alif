@@ -1,21 +1,26 @@
 # Specification: Initialize Project Scaffolding with TanStack Start, Database Schema, and Authentication
 
 ## Track ID
+
 `scaffolding_20260531`
 
 ## Summary
+
 This track establishes the foundational infrastructure for Little Alif. It initializes the TanStack Start project, configures Tailwind CSS v4 with design tokens, sets up the Drizzle ORM with SQLite for the database layer, seeds the 28-letter Arabic alphabet master table, and integrates Better Auth for parent authentication. By the end of this track, the app runs locally with a working login page and a seeded database.
 
 ## Roadmap References
+
 - **T-01:** Project Scaffolding & Config
 - **T-02:** Database Schema & Seed Data
 - **T-03:** Authentication (Better Auth)
 
 ## PRD References
+
 - §3 — System Architecture
 - §4 — Module 1 (Parent Authentication)
 
 ## TDD References
+
 - §1 — Project Structure
 - §2 — Route Design (middleware chain)
 - §3 — Auth Server Functions
@@ -27,6 +32,7 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 ## Scope
 
 ### In-Scope
+
 1. **TanStack Start project initialization** — `pnpm create tanstack-app` with React + TypeScript + Vite
 2. **Tailwind CSS v4 configuration** — design tokens, class merging utility (`cn.ts`)
 3. **Radix UI theme primitives** — installed and available
@@ -41,6 +47,7 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 12. **Zod validation schemas** — for auth inputs
 
 ### Out-of-Scope
+
 - Parent dashboard UI (T-05)
 - Letter toggle management (T-06)
 - Child mode (T-11)
@@ -53,6 +60,7 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 ## Key Deliverables
 
 ### From T-01 (Scaffolding)
+
 - `app.config.ts`, `tsconfig.json`, `drizzle.config.ts`
 - `.env.example` with required environment variables
 - Folder structure matching TDD §1
@@ -63,6 +71,7 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 - `app/lib/utils/cn.ts` for Tailwind class merging
 
 ### From T-02 (Database Schema)
+
 - `app/db/schema.ts` — Drizzle schemas for `profiles`, `letters`, `letter_toggles`
 - `app/db/index.ts` — DB client initialization (libSQL SQLite driver)
 - `app/db/seed.ts` — Seed script for 28 letters
@@ -70,6 +79,7 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 - `drizzle.config.ts` pointing to the SQLite file
 
 ### From T-03 (Authentication)
+
 - Better Auth Drizzle adapter configuration
 - `app/server/auth.ts` — Server functions: `registerFn`, `loginFn`, `logoutFn`, `validateSessionFn`
 - Auth middleware in router `beforeLoad`
@@ -82,32 +92,34 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 
 ## Key Technical Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Package manager | pnpm | Already set up in project |
-| TanStack routing | File-based via `@tanstack/react-router` | Standard for TanStack Start |
-| Data mutations | `createServerFn` | TanStack Start server functions |
-| Class merging | clsx + tailwind-merge via `cn.ts` | Standard Tailwind pattern |
-| DB driver | libSQL (Turso-compatible) | SQLite over network or local file |
-| Letter IDs | String enum matching `z.enum()` | Type-safe, migration-aware |
-| `letters.audio_files` | JSON string (TEXT column) | Map of mode → file path |
-| Profile `vowel_mode` | TEXT, defaults to `'fathah'` | Simple, flexible |
-| `letter_toggles.is_visible` | INTEGER, defaults to 0 | Parent explicitly enables |
-| Timestamps | ISO 8601 strings | SQLite has no native datetime |
-| Auth library | Better Auth | Handles sessions, CSRF, password hashing |
-| Session expiry | 30 days | PRD REQ-1.3 |
-| Single parent account | Phase 1 constraint | Better Auth supports multi-user but Phase 1 only uses one |
+| Decision                    | Choice                                  | Rationale                                                 |
+| --------------------------- | --------------------------------------- | --------------------------------------------------------- |
+| Package manager             | pnpm                                    | Already set up in project                                 |
+| TanStack routing            | File-based via `@tanstack/react-router` | Standard for TanStack Start                               |
+| Data mutations              | `createServerFn`                        | TanStack Start server functions                           |
+| Class merging               | clsx + tailwind-merge via `cn.ts`       | Standard Tailwind pattern                                 |
+| DB driver                   | libSQL (Turso-compatible)               | SQLite over network or local file                         |
+| Letter IDs                  | String enum matching `z.enum()`         | Type-safe, migration-aware                                |
+| `letters.audio_files`       | JSON string (TEXT column)               | Map of mode → file path                                   |
+| Profile `vowel_mode`        | TEXT, defaults to `'fathah'`            | Simple, flexible                                          |
+| `letter_toggles.is_visible` | INTEGER, defaults to 0                  | Parent explicitly enables                                 |
+| Timestamps                  | ISO 8601 strings                        | SQLite has no native datetime                             |
+| Auth library                | Better Auth                             | Handles sessions, CSRF, password hashing                  |
+| Session expiry              | 30 days                                 | PRD REQ-1.3                                               |
+| Single parent account       | Phase 1 constraint                      | Better Auth supports multi-user but Phase 1 only uses one |
 
 ---
 
 ## Edge Cases & Constraints
 
 ### Database
+
 - Profile deletion must cascade to `letter_toggles` (Drizzle `onDelete: 'cascade'`)
 - Letter IDs must match `z.enum()` exactly — any rename requires a migration
 - Seed script must be idempotent (checks for existing data before inserting)
 
 ### Authentication
+
 - Session expiry mid-session → redirect to login with a toast
 - Registration with existing email → return validation error
 - Server-side session validation on every protected server function
@@ -117,26 +129,27 @@ This track establishes the foundational infrastructure for Little Alif. It initi
 
 ## Verification Criteria
 
-| Check | Expected Result |
-|---|---|
-| `pnpm dev` starts without errors | Dev server runs on localhost |
-| `/` route renders | Placeholder or landing page visible |
-| Tailwind classes apply | Styling works correctly |
-| `pnpm drizzle-kit push` | Creates all tables in SQLite |
-| `pnpm tsx app/db/seed.ts` | Inserts 28 letters into the database |
-| DB file contains correct record count | 28 letters present |
-| Can register a new account | Registration form submits, user created |
-| Can log in with valid credentials | Login form submits, session established |
-| Invalid credentials return proper error | Error message displayed |
-| Protected routes redirect to `/login` | Unauthenticated access redirects |
-| Session persists across page reloads | User stays logged in |
-| CSRF token present in mutation requests | Token included in forms |
+| Check                                   | Expected Result                         |
+| --------------------------------------- | --------------------------------------- |
+| `pnpm dev` starts without errors        | Dev server runs on localhost            |
+| `/` route renders                       | Placeholder or landing page visible     |
+| Tailwind classes apply                  | Styling works correctly                 |
+| `pnpm drizzle-kit push`                 | Creates all tables in SQLite            |
+| `pnpm tsx app/db/seed.ts`               | Inserts 28 letters into the database    |
+| DB file contains correct record count   | 28 letters present                      |
+| Can register a new account              | Registration form submits, user created |
+| Can log in with valid credentials       | Login form submits, session established |
+| Invalid credentials return proper error | Error message displayed                 |
+| Protected routes redirect to `/login`   | Unauthenticated access redirects        |
+| Session persists across page reloads    | User stays logged in                    |
+| CSRF token present in mutation requests | Token included in forms                 |
 
 ---
 
 ## Dependency Notes
 
 This track has no external dependencies (it's the first track). It enables:
+
 - **T-04 (i18n)** — depends on T-01 scaffolding
 - **T-05 (Parent Dashboard)** — depends on T-02 + T-03
 - **T-07 (Harakat)** — depends on T-02 schema

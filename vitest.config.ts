@@ -11,11 +11,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       include: ['app/**/*.{ts,tsx}'],
-      exclude: [
-        'app/**/*.{test,spec}.{ts,tsx}',
-        'app/db/migrations/**',
-        'app/routes/**',
-      ],
+      exclude: ['app/**/*.{test,spec}.{ts,tsx}', 'app/db/migrations/**', 'app/routes/**'],
     },
   },
 });

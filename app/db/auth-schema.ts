@@ -16,12 +16,12 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 /** The registered user. */
 export const user = sqliteTable('user', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
-  emailVerified: integer('email_verified', { mode: 'boolean' })
-    .notNull()
-    .default(false),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
   image: text('image'),
   createdAt: text('created_at')
     .notNull()
@@ -33,7 +33,9 @@ export const user = sqliteTable('user', {
 
 /** A session token issued to a user. */
 export const session = sqliteTable('session', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
@@ -51,7 +53,9 @@ export const session = sqliteTable('session', {
 
 /** A linked account (email/password, OAuth, etc.). */
 export const account = sqliteTable('account', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
@@ -68,7 +72,9 @@ export const account = sqliteTable('account', {
 
 /** Email verification, password reset, and other one-time token records. */
 export const verification = sqliteTable('verification', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
   expiresAt: text('expires_at').notNull(),

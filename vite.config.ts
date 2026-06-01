@@ -5,10 +5,5 @@ import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [
-    tsconfigPaths(),
-    tanstackStart({ srcDirectory: './app' }),
-    viteReact(),
-    tailwindcss(),
-  ],
+  plugins: [tsconfigPaths(), tanstackStart({ srcDirectory: './app' }), viteReact(), tailwindcss()],
 });

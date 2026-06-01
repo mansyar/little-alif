@@ -41,9 +41,7 @@ function LoginPage() {
         className="w-full max-w-md bg-white rounded-large shadow-card p-8 flex flex-col gap-5"
       >
         <h1 className="text-2xl font-bold text-text-dark">Parent Login</h1>
-        <p className="text-text-muted -mt-3">
-          Sign in to manage your child profiles.
-        </p>
+        <p className="text-text-muted -mt-3">Sign in to manage your child profiles.</p>
 
         <label className="flex flex-col gap-1">
           <span className="text-sm font-semibold text-text-dark">Email</span>

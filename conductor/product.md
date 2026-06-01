@@ -28,10 +28,10 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 
 ## User Personas
 
-| Persona | Role | Primary Needs |
-|---|---|---|
+| Persona                 | Role     | Primary Needs                                                                                     |
+| ----------------------- | -------- | ------------------------------------------------------------------------------------------------- |
 | **The Child (Learner)** | End User | Tap letters, hear sounds, feel discovery. Cannot read text. Needs large touch targets (≥64x64dp). |
-| **The Parent (Admin)** | Manager | Introduce letters at their pace, manage profiles, lock device into Child Mode. |
+| **The Parent (Admin)**  | Manager  | Introduce letters at their pace, manage profiles, lock device into Child Mode.                    |
 
 ## Key Features (Phase 1)
 
@@ -61,36 +61,44 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 ## Product Requirements
 
 ### Module 1: Parent Authentication
+
 Auth powered by Better Auth with email/password registration, session management via HttpOnly secure cookies, CSRF protection, and 30-day session expiry.
 
 ### Module 2: Child Profiles
+
 Authenticated parent can add up to 4 child profiles with name + avatar selection, edit, and delete (cascading).
 
 ### Module 3: Child Mode
+
 Cookie-based mode that bypasses auth. Parent enables for one profile per device. On subsequent visits, the child goes straight to their letter grid.
 
 ### Module 4: Parent Dashboard — Letter Management
+
 Dashboard shows all child profiles. Clicking a profile opens a letter management view with ON/OFF toggles for all 28 letters.
 
 ### Module 5: Child Letter Grid
+
 Full-screen grid showing only parent-introduced letters. Large tappable cards (≥64x64dp) with Arabic glyph and subtle background. Tapping plays pronunciation.
 
 ### Module 6: Audio Engine
+
 Audio playback via Web Audio API / Web Speech API. Preloads during idle time for instant playback (< 150ms latency).
 
 ### Module 7: Harakat (Vowel Modes)
+
 Parent selects global vowel mode per child. Child can independently change mode from their grid. Unicode combining diacritics with precomposed fallbacks for non-connecting letters.
 
 ### Module 8: Reading Practice (Iqra' Mode)
+
 Separate screen accessible from child grid. Dynamic groups of 3 letters from toggled-on set. Systematic + randomized practice rows. Minimum 3 letters required.
 
 ## Design Decisions
 
-| # | Decision | Rationale |
-|---|---|---|
-| DD-1 | Alif (ا) gets no special treatment | Pure vowel — renders correctly in grid, audio handles pronunciation |
-| DD-2 | ز (zai) added to non-connecting list | Same base shape as ر — needs same precomposed glyph treatment |
-| DD-3 | 3-letter minimum for Reading Practice | 1–2 letters produce sparse, confusing grid |
-| DD-4 | Cairo font with `font-display: block` | Consistent harakat rendering across platforms |
-| DD-5 | Sukun and tashdid are Phase 2 | Current scope is single-diacritic per letter |
-| DD-6 | `composeLetter()` is a pure function | Returns string, no DOM wrapper — usable everywhere |
+| #    | Decision                              | Rationale                                                           |
+| ---- | ------------------------------------- | ------------------------------------------------------------------- |
+| DD-1 | Alif (ا) gets no special treatment    | Pure vowel — renders correctly in grid, audio handles pronunciation |
+| DD-2 | ز (zai) added to non-connecting list  | Same base shape as ر — needs same precomposed glyph treatment       |
+| DD-3 | 3-letter minimum for Reading Practice | 1–2 letters produce sparse, confusing grid                          |
+| DD-4 | Cairo font with `font-display: block` | Consistent harakat rendering across platforms                       |
+| DD-5 | Sukun and tashdid are Phase 2         | Current scope is single-diacritic per letter                        |
+| DD-6 | `composeLetter()` is a pure function  | Returns string, no DOM wrapper — usable everywhere                  |

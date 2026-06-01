@@ -7,9 +7,34 @@ import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core
  * downstream validation (Zod) without importing Drizzle table types.
  */
 export const LETTER_IDS = [
-  'alif', 'ba', 'ta', 'tsa', 'jim', 'ha', 'kho', 'dal', 'dzal', 'ra',
-  'zai', 'sin', 'syin', 'shad', 'dhad', 'tha', 'dzha', 'ain', 'ghain',
-  'fa', 'qaf', 'kaf', 'lam', 'mim', 'nun', 'waw', 'hae', 'ya',
+  'alif',
+  'ba',
+  'ta',
+  'tsa',
+  'jim',
+  'ha',
+  'kho',
+  'dal',
+  'dzal',
+  'ra',
+  'zai',
+  'sin',
+  'syin',
+  'shad',
+  'dhad',
+  'tha',
+  'dzha',
+  'ain',
+  'ghain',
+  'fa',
+  'qaf',
+  'kaf',
+  'lam',
+  'mim',
+  'nun',
+  'waw',
+  'hae',
+  'ya',
 ] as const;
 export type LetterId = (typeof LETTER_IDS)[number];
 
@@ -25,8 +50,14 @@ export type VowelMode = (typeof VOWEL_MODES)[number];
  * 8 themed avatars per docs/roadmap.md T-04.
  */
 export const AVATAR_KEYS = [
-  'alif-lamp', 'ba-boat', 'ta-table', 'tsa-butterfly',
-  'jim-mountain', 'ha-jar', 'kho-hat', 'dal-book',
+  'alif-lamp',
+  'ba-boat',
+  'ta-table',
+  'tsa-butterfly',
+  'jim-mountain',
+  'ha-jar',
+  'kho-hat',
+  'dal-book',
 ] as const;
 export type AvatarKey = (typeof AVATAR_KEYS)[number];
 
@@ -35,7 +66,9 @@ export type AvatarKey = (typeof AVATAR_KEYS)[number];
  * Deletion cascades to letter_toggles (Drizzle `onDelete: 'cascade'`).
  */
 export const profiles = sqliteTable('profiles', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id').notNull(),
   name: text('name').notNull(),
   avatar: text('avatar').notNull().$type<AvatarKey>(),
@@ -64,7 +97,9 @@ export const letters = sqliteTable('letters', {
 export const letterToggles = sqliteTable(
   'letter_toggles',
   {
-    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     profileId: text('profile_id')
       .notNull()
       .references(() => profiles.id, { onDelete: 'cascade' }),
@@ -76,10 +111,7 @@ export const letterToggles = sqliteTable(
     toggledAt: text('toggled_at').default(sql`(datetime('now'))`),
   },
   (table) => ({
-    unqProfileLetter: uniqueIndex('unq_profile_letter').on(
-      table.profileId,
-      table.letterId,
-    ),
+    unqProfileLetter: uniqueIndex('unq_profile_letter').on(table.profileId, table.letterId),
   }),
 );
 

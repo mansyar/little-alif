@@ -22,6 +22,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
 ## Functional Requirements
 
 ### FR-1: Install and Configure Prettier
+
 - Install `prettier` as a dev dependency.
 - Create `.prettierrc` with project-appropriate defaults (printWidth: 100, semi: true, singleQuote: true, tabWidth: 2).
 - Create `.prettierignore` excluding `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`.
@@ -29,6 +30,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
 - Run `pnpm format` once to normalize existing tracked code and commit the result as a `style(repo): apply prettier formatting` commit (separate from this track's work).
 
 ### FR-2: Install and Configure ESLint (Flat Config)
+
 - Install `eslint`, `@typescript-eslint/parser`, `@typescript-eslint/eslint-plugin`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `globals`, `typescript-eslint` as dev dependencies.
 - Create `eslint.config.js` (flat config, ESLint v9 default) with:
   - `@typescript-eslint/recommended-type-checked` and `@typescript-eslint/stylistic-type-checked` rules
@@ -39,6 +41,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
 - On initial run, set `lint` rules to **warn** (not error) for any rules that flag pre-existing code, so this track doesn't get blocked by its own tooling. Tighten to error in a follow-up track.
 
 ### FR-3: Install and Configure Husky
+
 - Install `husky` (v9+) as a dev dependency.
 - Add `prepare: "husky"` script to `package.json` so `pnpm install` re-installs hooks on a fresh clone.
 - Initialize the Git hooks directory with `.husky/pre-commit` containing:
@@ -47,6 +50,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
   ```
 
 ### FR-4: Install and Configure lint-staged
+
 - Install `lint-staged` as a dev dependency.
 - Add `lint-staged` configuration block to `package.json`:
   ```json
@@ -61,10 +65,12 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
     ]
   }
   ```
+
   - `tsc --noEmit` runs on the full project (TypeScript limitation); lint-staged still scopes ESLint/Prettier to staged files.
   - All commands chained with `&&` semantics so any failure halts the chain.
 
 ### FR-5: Write Meta-Tests for Tooling Configuration
+
 - Create `app/lib/tooling/quality-hooks.test.ts` that validates:
   - `.husky/pre-commit` exists and contains the `pnpm lint-staged` invocation.
   - `package.json` `lint-staged` block matches the expected glob→command map.
@@ -75,6 +81,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
   - Run `CI=true pnpm test` — these meta-tests must pass alongside the existing test suite.
 
 ### FR-6: Update Workflow Documentation
+
 - Update `conductor/workflow.md` — add a "Pre-Commit Quality Gates" subsection under "Quality Gates" describing:
   - The pre-commit pipeline (Husky + lint-staged → ESLint + Prettier + tsc).
   - The `git commit --no-verify` escape hatch.
@@ -84,13 +91,16 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
 ## Non-Functional Requirements
 
 ### NFR-1: Performance
+
 - Pre-commit execution must complete in <10 seconds for typical commits (1–5 files changed).
 - `tsc --noEmit` is the slowest step; its cost is amortized per-commit, not per-file.
 
 ### NFR-2: Cross-Platform Compatibility
+
 - Hooks must work on macOS, Linux, and Windows (PowerShell / WSL / Git Bash). Husky v9+ supports this natively.
 
 ### NFR-3: Non-Interactive Operation
+
 - All hook commands must run non-interactively. No prompts, no TTY dependencies. Follows the Workflow's "CI-Aware" principle.
 
 ## Acceptance Criteria

@@ -1,11 +1,6 @@
 import { sqliteTable } from 'drizzle-orm/sqlite-core';
 import { describe, expect, it } from 'vitest';
-import {
-  account,
-  session,
-  user,
-  verification,
-} from './auth-schema';
+import { account, session, user, verification } from './auth-schema';
 
 type DrizzleTable = ReturnType<typeof sqliteTable>;
 
@@ -70,14 +65,7 @@ describe('auth schema tables', () => {
 
   it('verification table has id, identifier, value, expiresAt, createdAt, updatedAt', () => {
     const cols = getTableColumns(verification as unknown as DrizzleTable);
-    for (const required of [
-      'id',
-      'identifier',
-      'value',
-      'expiresAt',
-      'createdAt',
-      'updatedAt',
-    ]) {
+    for (const required of ['id', 'identifier', 'value', 'expiresAt', 'createdAt', 'updatedAt']) {
       expect(cols, `verification.${required}`).toContain(required);
     }
   });

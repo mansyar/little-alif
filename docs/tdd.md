@@ -103,14 +103,14 @@ little-alif/
 
 ## 2. Route Design (TanStack Router)
 
-| Route | Auth Required | Description |
-|---|---|---|---|
-| `/` | No | Landing. Checks child-mode cookie → redirects to `/learn` or `/login`. |
-| `/login` | No | Parent login form. |
-| `/register` | No | Parent registration form. |
-| `/dashboard` | Yes (parent JWT) | Parent dashboard — profile listing + per-child letter management. |
-| `/learn` | Yes (child-mode cookie or JWT) | Child letter grid. Shows only parent-introduced letters. Includes harakat mode buttons. |
-| `/learn/reading` | Yes (child-mode cookie or JWT) | Child reading practice (Iqra' mode). Dynamic groups from toggled-on letters. |
+| Route            | Auth Required                  | Description                                                                             |
+| ---------------- | ------------------------------ | --------------------------------------------------------------------------------------- |
+| `/`              | No                             | Landing. Checks child-mode cookie → redirects to `/learn` or `/login`.                  |
+| `/login`         | No                             | Parent login form.                                                                      |
+| `/register`      | No                             | Parent registration form.                                                               |
+| `/dashboard`     | Yes (parent JWT)               | Parent dashboard — profile listing + per-child letter management.                       |
+| `/learn`         | Yes (child-mode cookie or JWT) | Child letter grid. Shows only parent-introduced letters. Includes harakat mode buttons. |
+| `/learn/reading` | Yes (child-mode cookie or JWT) | Child reading practice (Iqra' mode). Dynamic groups from toggled-on letters.            |
 
 **Middleware Chain (applied to `/dashboard` and `/learn`):**
 
@@ -126,6 +126,7 @@ beforeLoad →
 ```
 
 **Child Mode Cookie spec:**
+
 ```
 Name: child_mode
 Value: signed({ profileId: string, expires: number })
@@ -223,7 +224,7 @@ bulkToggleLettersFn({ profileId: string, letterIds: string[], isVisible: boolean
 ```typescript
 // GET — fetch reading data for a child profile
 getReadingDataFn({ profileId: string })
-  → { 
+  → {
       letters: Array<{ letterId: string, character: string }>,
       vowelMode: string       // 'none' | 'fathah' | 'kasrah' | 'dammah'
     }
@@ -241,93 +242,123 @@ Every server function validates its inputs against a Zod schema. This ensures ty
 ### Auth Schemas (`app/lib/validations/auth.ts`)
 
 ```typescript
-import { z } from 'zod'
+import { z } from 'zod';
 
-export const emailSchema = z.string().email('Invalid email address')
-export const passwordSchema = z.string().min(8, 'Password must be at least 8 characters')
+export const emailSchema = z.string().email('Invalid email address');
+export const passwordSchema = z.string().min(8, 'Password must be at least 8 characters');
 
 export const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-})
+});
 
 export const registerSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-})
+});
 ```
 
 ### Profile Schemas (`app/lib/validations/profiles.ts`)
 
 ```typescript
-import { z } from 'zod'
+import { z } from 'zod';
 
 const AVATAR_KEYS = [
-  'alif-lamp', 'ba-boat', 'ta-table', 'tsa-butterfly',
-  'jim-mountain', 'ha-jar', 'kho-hat', 'dal-book',
-] as const
+  'alif-lamp',
+  'ba-boat',
+  'ta-table',
+  'tsa-butterfly',
+  'jim-mountain',
+  'ha-jar',
+  'kho-hat',
+  'dal-book',
+] as const;
 
-export const VOWEL_MODES = ['none', 'fathah', 'kasrah', 'dammah'] as const
+export const VOWEL_MODES = ['none', 'fathah', 'kasrah', 'dammah'] as const;
 
 export const createProfileSchema = z.object({
   name: z.string().min(1).max(50),
   avatar: z.enum(AVATAR_KEYS),
   vowelMode: z.enum(VOWEL_MODES).default('fathah'),
-})
+});
 
 export const updateProfileSchema = z.object({
   profileId: z.string().uuid(),
   name: z.string().min(1).max(50).optional(),
   avatar: z.enum(AVATAR_KEYS).optional(),
   vowelMode: z.enum(VOWEL_MODES).optional(),
-})
+});
 
 export const deleteProfileSchema = z.object({
   profileId: z.string().uuid(),
-})
+});
 ```
 
 ### Letter Schemas (`app/lib/validations/letters.ts`)
 
 ```typescript
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const toggleLetterSchema = z.object({
   profileId: z.string().uuid(),
   letterId: z.enum([
-    'alif', 'ba', 'ta', 'tsa', 'jim', 'ha', 'kho',
-    'dal', 'dzal', 'ra', 'zai', 'sin', 'syin', 'shad',
-    'dhad', 'tha', 'dzha', 'ain', 'ghain', 'fa', 'qaf',
-    'kaf', 'lam', 'mim', 'nun', 'waw', 'hae', 'ya',
+    'alif',
+    'ba',
+    'ta',
+    'tsa',
+    'jim',
+    'ha',
+    'kho',
+    'dal',
+    'dzal',
+    'ra',
+    'zai',
+    'sin',
+    'syin',
+    'shad',
+    'dhad',
+    'tha',
+    'dzha',
+    'ain',
+    'ghain',
+    'fa',
+    'qaf',
+    'kaf',
+    'lam',
+    'mim',
+    'nun',
+    'waw',
+    'hae',
+    'ya',
   ] as const),
   // Note: 'ha' = ح (throaty ḥāʼ), 'hae' = ه (soft hāʼ)
   isVisible: z.boolean(),
-})
+});
 
 export const getVisibleLettersSchema = z.object({
   profileId: z.string().uuid(),
-})
+});
 
 export const getReadingDataSchema = z.object({
   profileId: z.string().uuid(),
-})
+});
 ```
 
 ### Harakat Composer (`app/lib/utils/harakat.ts`)
 
 ```typescript
-import { z } from 'zod'
+import { z } from 'zod';
 
 // Unicode combining diacritics for Arabic
 export const HARAKAT_COMBINING = {
-  none:   '',           // No diacritic
-  fathah: '\u064E',     // Fathah (a) ـَ
-  kasrah: '\u0650',     // Kasrah (i) ـِ
-  dammah: '\u064F',     // Dammah (u) ـُ
-} as const
+  none: '', // No diacritic
+  fathah: '\u064E', // Fathah (a) ـَ
+  kasrah: '\u0650', // Kasrah (i) ـِ
+  dammah: '\u064F', // Dammah (u) ـُ
+} as const;
 
-export const VOWEL_MODES = ['none', 'fathah', 'kasrah', 'dammah'] as const
-export type VowelMode = (typeof VOWEL_MODES)[number]
+export const VOWEL_MODES = ['none', 'fathah', 'kasrah', 'dammah'] as const;
+export type VowelMode = (typeof VOWEL_MODES)[number];
 
 // Letters that don't connect to following letters — need precomposed glyphs
 const NON_CONNECTING: Record<string, Record<string, string>> = {
@@ -335,40 +366,40 @@ const NON_CONNECTING: Record<string, Record<string, string>> = {
   و: { fathah: 'وَ', kasrah: 'وِ', dammah: 'وُ' },
   ي: { fathah: 'يَ', kasrah: 'يِ', dammah: 'يُ' },
   ر: { fathah: 'رَ', kasrah: 'رِ', dammah: 'رُ' },
-  ز: { fathah: 'زَ', kasrah: 'زِ', dammah: 'زُ' },  // same base shape as ر
+  ز: { fathah: 'زَ', kasrah: 'زِ', dammah: 'زُ' }, // same base shape as ر
   د: { fathah: 'دَ', kasrah: 'دِ', dammah: 'دُ' },
   ذ: { fathah: 'ذَ', kasrah: 'ذِ', dammah: 'ذُ' },
-}
+};
 
 /**
  * Compose an Arabic letter with a harakat diacritic.
  * Uses Unicode combining diacritics for most letters.
  * Falls back to precomposed glyphs for non-connecting letters
  * where combining diacritics may render incorrectly.
- * 
+ *
  * Note: Alif (ا) is a pure vowel (اَ = /a/, not /ʔa/) — the glyph
  * renders correctly in the grid and audio files handle the
  * pronunciation difference. No special treatment needed.
  */
 export function composeLetter(baseChar: string, harakat: VowelMode): string {
-  if (harakat === 'none') return baseChar
+  if (harakat === 'none') return baseChar;
 
-  const special = NON_CONNECTING[baseChar]
-  if (special?.[harakat]) return special[harakat]
+  const special = NON_CONNECTING[baseChar];
+  if (special?.[harakat]) return special[harakat];
 
-  return baseChar + HARAKAT_COMBINING[harakat]
+  return baseChar + HARAKAT_COMBINING[harakat];
 }
 ```
 
 ### Reading Practice Utilities (`app/lib/utils/reading.ts`)
 
 ```typescript
-import type { VowelMode } from './harakat'
+import type { VowelMode } from './harakat';
 
 interface ReadingGroup {
-  id: number
-  letters: string[]     // letter IDs (e.g., ['alif', 'ba', 'ta'])
-  label: string         // Arabic chars separated by spaces (e.g., 'ا ب ت')
+  id: number;
+  letters: string[]; // letter IDs (e.g., ['alif', 'ba', 'ta'])
+  label: string; // Arabic chars separated by spaces (e.g., 'ا ب ت')
 }
 
 /**
@@ -379,18 +410,18 @@ interface ReadingGroup {
  */
 export function generateReadingGroups(visibleLetterIds: string[]): ReadingGroup[] {
   // Require at least 3 letters — fewer produces a sparse broken grid
-  if (visibleLetterIds.length < 3) return []
+  if (visibleLetterIds.length < 3) return [];
 
-  const groups: ReadingGroup[] = []
+  const groups: ReadingGroup[] = [];
   for (let i = 0; i < visibleLetterIds.length; i += 3) {
-    const chunk = visibleLetterIds.slice(i, i + 3)
+    const chunk = visibleLetterIds.slice(i, i + 3);
     groups.push({
       id: groups.length,
       letters: chunk,
       label: chunk.join(' '),
-    })
+    });
   }
-  return groups
+  return groups;
 }
 
 /**
@@ -404,50 +435,50 @@ export function generatePracticeRow(
   composeFn: (char: string, mode: VowelMode) => string,
   getCharById: (id: string) => string | undefined,
 ): string[] {
-  const modes: VowelMode[] = ['fathah', 'kasrah', 'dammah']
-  const cells: string[] = []
+  const modes: VowelMode[] = ['fathah', 'kasrah', 'dammah'];
+  const cells: string[] = [];
 
   if (rowType === 'systematic') {
     for (const mode of modes) {
       for (const lid of groupLetters) {
-        const ch = getCharById(lid)
-        if (ch) cells.push(composeFn(ch, mode))
+        const ch = getCharById(lid);
+        if (ch) cells.push(composeFn(ch, mode));
       }
     }
   } else {
-    const expanded: string[] = []
+    const expanded: string[] = [];
     for (const lid of groupLetters) {
       for (const mode of modes) {
-        const ch = getCharById(lid)
-        if (ch) expanded.push(composeFn(ch, mode))
+        const ch = getCharById(lid);
+        if (ch) expanded.push(composeFn(ch, mode));
       }
     }
     // Fisher-Yates shuffle
     for (let i = expanded.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [expanded[i], expanded[j]] = [expanded[j], expanded[i]]
+      [expanded[i], expanded[j]] = [expanded[j], expanded[i]];
     }
-    cells.push(...expanded)
+    cells.push(...expanded);
   }
 
-  return cells
+  return cells;
 }
 ```
 
 ### Usage Pattern in Server Functions
 
 ```typescript
-import { createServerFn } from '@tanstack/start'
-import { loginSchema } from '~/lib/validations/auth'
+import { createServerFn } from '@tanstack/start';
+import { loginSchema } from '~/lib/validations/auth';
 
 export const loginFn = createServerFn({ method: 'POST' })
-  .validator(loginSchema)       // <-- Zod validation at the boundary
+  .validator(loginSchema) // <-- Zod validation at the boundary
   .handler(async ({ data }) => {
     // data is fully typed: { email: string, password: string }
     // If Zod rejects, TanStack Start returns a structured error automatically
-    const { email, password } = data
+    const { email, password } = data;
     // ... auth logic
-  })
+  });
 ```
 
 ---
@@ -458,18 +489,18 @@ Radix UI primitives provide accessible, unstyled components. Tailwind handles th
 
 ### Component Mapping
 
-| PRD Feature | Radix Primitive | Purpose |
-|---|---|---|
-| Letter ON/OFF toggles | `@radix-ui/react-switch` | Accessible toggle switch for each letter in the parent dashboard |
-| Profile editor | `@radix-ui/react-dialog` | Modal for adding/editing child profiles |
-| Delete confirmation | `@radix-ui/react-alert-dialog` | Destructive action confirmation |
-| Avatar picker | `@radix-ui/react-radio-group` | Single-select avatar grid |
+| PRD Feature           | Radix Primitive                | Purpose                                                          |
+| --------------------- | ------------------------------ | ---------------------------------------------------------------- |
+| Letter ON/OFF toggles | `@radix-ui/react-switch`       | Accessible toggle switch for each letter in the parent dashboard |
+| Profile editor        | `@radix-ui/react-dialog`       | Modal for adding/editing child profiles                          |
+| Delete confirmation   | `@radix-ui/react-alert-dialog` | Destructive action confirmation                                  |
+| Avatar picker         | `@radix-ui/react-radio-group`  | Single-select avatar grid                                        |
 
 ### Styling Pattern
 
 ```tsx
 // Example: LetterToggle with Radix Switch + Tailwind
-import * as Switch from '@radix-ui/react-switch'
+import * as Switch from '@radix-ui/react-switch';
 
 function LetterToggle({ checked, onCheckedChange }: Props) {
   return (
@@ -486,7 +517,7 @@ function LetterToggle({ checked, onCheckedChange }: Props) {
           data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"
       />
     </Switch.Root>
-  )
+  );
 }
 ```
 
@@ -514,18 +545,18 @@ import { Volume2, Lock, Pencil, Trash2, ToggleLeft, ArrowLeft } from 'lucide-rea
 
 ```typescript
 interface AuthState {
-  mode: 'parent' | 'child' | 'guest'
-  user: { id: string; email: string } | null
-  childProfileId: string | null   // set when in child mode
-  isLoading: boolean
+  mode: 'parent' | 'child' | 'guest';
+  user: { id: string; email: string } | null;
+  childProfileId: string | null; // set when in child mode
+  isLoading: boolean;
 
   // Actions
-  checkSession: () => Promise<void>      // called on app mount
-  login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string) => Promise<void>
-  logout: () => Promise<void>
-  enableChildMode: (profileId: string) => Promise<void>
-  disableChildMode: () => Promise<void>
+  checkSession: () => Promise<void>; // called on app mount
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  enableChildMode: (profileId: string) => Promise<void>;
+  disableChildMode: () => Promise<void>;
 }
 ```
 
@@ -533,36 +564,36 @@ interface AuthState {
 
 ```typescript
 interface ChildProfile {
-  id: string
-  name: string
-  avatar: string
+  id: string;
+  name: string;
+  avatar: string;
 }
 
 interface VisibleLetter {
-  letterId: string
-  character: string      // Arabic glyph
-  audioFile: string
-  isVisible: boolean
+  letterId: string;
+  character: string; // Arabic glyph
+  audioFile: string;
+  isVisible: boolean;
 }
 
 interface ChildState {
-  profiles: ChildProfile[]       // populated for parent
-  visibleLetters: VisibleLetter[] // populated for child view
-  activeProfile: ChildProfile | null
-  isLoading: boolean
+  profiles: ChildProfile[]; // populated for parent
+  visibleLetters: VisibleLetter[]; // populated for child view
+  activeProfile: ChildProfile | null;
+  isLoading: boolean;
 
   // Actions (parent)
-  loadProfiles: () => Promise<void>
-  createProfile: (name: string, avatar: string) => Promise<void>
-  updateProfile: (id: string, name?: string, avatar?: string) => Promise<void>
-  deleteProfile: (id: string) => Promise<void>
+  loadProfiles: () => Promise<void>;
+  createProfile: (name: string, avatar: string) => Promise<void>;
+  updateProfile: (id: string, name?: string, avatar?: string) => Promise<void>;
+  deleteProfile: (id: string) => Promise<void>;
 
   // Actions (child)
-  loadVisibleLetters: (profileId: string) => Promise<void>
-  toggleLetter: (profileId: string, letterId: string, isVisible: boolean) => Promise<void>
+  loadVisibleLetters: (profileId: string) => Promise<void>;
+  toggleLetter: (profileId: string, letterId: string, isVisible: boolean) => Promise<void>;
 
   // Actions (shared)
-  selectProfile: (profile: ChildProfile) => void
+  selectProfile: (profile: ChildProfile) => void;
 }
 ```
 
@@ -570,19 +601,19 @@ interface ChildState {
 
 ```typescript
 interface UIState {
-  selectedLetterId: string | null
-  isPlaying: boolean              // audio currently playing
-  currentHarakat: 'none' | 'fathah' | 'kasrah' | 'dammah'  // child-side vowel override
-  audioPreloadProgress: number    // 0–100
-  toasts: Array<{ id: string; message: string; type: 'success' | 'error' }>
+  selectedLetterId: string | null;
+  isPlaying: boolean; // audio currently playing
+  currentHarakat: 'none' | 'fathah' | 'kasrah' | 'dammah'; // child-side vowel override
+  audioPreloadProgress: number; // 0–100
+  toasts: Array<{ id: string; message: string; type: 'success' | 'error' }>;
 
   // Actions
-  selectLetter: (id: string | null) => void
-  setPlaying: (playing: boolean) => void
-  setHarakat: (mode: 'none' | 'fathah' | 'kasrah' | 'dammah') => void
-  setPreloadProgress: (progress: number) => void
-  addToast: (message: string, type: 'success' | 'error') => void
-  removeToast: (id: string) => void
+  selectLetter: (id: string | null) => void;
+  setPlaying: (playing: boolean) => void;
+  setHarakat: (mode: 'none' | 'fathah' | 'kasrah' | 'dammah') => void;
+  setPreloadProgress: (progress: number) => void;
+  addToast: (message: string, type: 'success' | 'error') => void;
+  removeToast: (id: string) => void;
 }
 ```
 
@@ -608,38 +639,39 @@ On Letter Tap →
 
 ```typescript
 class AudioEngine {
-  private context: AudioContext | null = null
-  private buffers: Map<string, AudioBuffer> = new Map()
-  private gainNode: GainNode | null = null
-  private preloadQueue: string[] = []
-  private isPreloading: boolean = false
+  private context: AudioContext | null = null;
+  private buffers: Map<string, AudioBuffer> = new Map();
+  private gainNode: GainNode | null = null;
+  private preloadQueue: string[] = [];
+  private isPreloading: boolean = false;
 
   // Must be called from user gesture (browser autoplay policy)
-  async init(): Promise<void>
+  async init(): Promise<void>;
 
   // Preload a single letter+vowel combination
   // audioKey: "{letterId}_{vowelMode}" e.g., "alif_fathah"
-  async preload(audioKey: string): Promise<void>
+  async preload(audioKey: string): Promise<void>;
 
   // Preload a batch — used on idle
-  async preloadBatch(audioKeys: string[]): Promise<void>
+  async preloadBatch(audioKeys: string[]): Promise<void>;
 
   // Play letter+vowel pronunciation. Returns a promise that resolves when done.
   // audioKey: "{letterId}_{vowelMode}"
-  async play(audioKey: string): Promise<void>
+  async play(audioKey: string): Promise<void>;
 
   // Preload all 4 vowel modes for a set of letter IDs
-  async preloadAllModes(letterIds: string[]): Promise<void>
+  async preloadAllModes(letterIds: string[]): Promise<void>;
 
   // Get preload progress
-  getProgress(): { loaded: number; total: number }
+  getProgress(): { loaded: number; total: number };
 
   // Cleanup
-  dispose(): void
+  dispose(): void;
 }
 ```
 
 **Harakat-Aware Preloading:**
+
 ```
 App Mount (Child Mode) →
   1. Determine visible letters + current vowel mode
@@ -649,6 +681,7 @@ App Mount (Child Mode) →
 ```
 
 **Audio File Requirements:**
+
 - Format: MP3 (128kbps CBR, 44.1kHz, mono)
 - Duration: 1–2 seconds per letter+vowel combination
 - Total files: **112** (28 letters × 4 vowel modes: plain, fathah, kasrah, dammah)
@@ -666,78 +699,373 @@ import { sqliteTable, text, integer, uniqueIndex } from 'drizzle-orm/sqlite-core
 import { sql } from 'drizzle-orm';
 
 export const users = sqliteTable('users', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   createdAt: text('created_at').default(sql`(datetime('now'))`),
 });
 
 export const profiles = sqliteTable('profiles', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   avatar: text('avatar').notNull(),
-    // Avatar keys: 'alif-lamp', 'ba-boat', 'ta-table', 'tsa-butterfly',
-    //              'jim-mountain', 'ha-jar', 'kho-hat', 'dal-book'
+  // Avatar keys: 'alif-lamp', 'ba-boat', 'ta-table', 'tsa-butterfly',
+  //              'jim-mountain', 'ha-jar', 'kho-hat', 'dal-book'
   vowelMode: text('vowel_mode', { enum: ['none', 'fathah', 'kasrah', 'dammah'] })
-    .notNull().default('fathah'),
+    .notNull()
+    .default('fathah'),
   createdAt: text('created_at').default(sql`(datetime('now'))`),
 });
 
 export const letters = sqliteTable('letters', {
-  id: text('id').primaryKey(),       // 'alif', 'ba', 'ta', ...
-  character: text('character').notNull(),  // Arabic glyph
+  id: text('id').primaryKey(), // 'alif', 'ba', 'ta', ...
+  character: text('character').notNull(), // Arabic glyph
   displayOrder: integer('display_order').notNull(),
   audioFiles: text('audio_files').notNull().default('{}'),
-    // JSON map of vowel mode to filename:
-    // {"none":"alif.mp3","fathah":"alif_fathah.mp3","kasrah":"alif_kasrah.mp3","dammah":"alif_dammah.mp3"}
+  // JSON map of vowel mode to filename:
+  // {"none":"alif.mp3","fathah":"alif_fathah.mp3","kasrah":"alif_kasrah.mp3","dammah":"alif_dammah.mp3"}
 });
 
-export const letterToggles = sqliteTable('letter_toggles', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  profileId: text('profile_id').notNull()
-    .references(() => profiles.id, { onDelete: 'cascade' }),
-  letterId: text('letter_id').notNull()
-    .references(() => letters.id),
-  isVisible: integer('is_visible', { mode: 'boolean' }).default(false),
-  toggledAt: text('toggled_at').default(sql`(datetime('now'))`),
-}, (table) => ({
-  unq: uniqueIndex('unq_profile_letter').on(table.profileId, table.letterId),
-}));
+export const letterToggles = sqliteTable(
+  'letter_toggles',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    letterId: text('letter_id')
+      .notNull()
+      .references(() => letters.id),
+    isVisible: integer('is_visible', { mode: 'boolean' }).default(false),
+    toggledAt: text('toggled_at').default(sql`(datetime('now'))`),
+  },
+  (table) => ({
+    unq: uniqueIndex('unq_profile_letter').on(table.profileId, table.letterId),
+  }),
+);
 ```
 
 ### Seed Data (`app/db/seed.ts`)
 
 ```typescript
 const SEED_LETTERS = [
-  { id: 'alif', character: 'ا', displayOrder: 1, audioFiles: { none: 'alif.mp3', fathah: 'alif_fathah.mp3', kasrah: 'alif_kasrah.mp3', dammah: 'alif_dammah.mp3' } },
-  { id: 'ba',   character: 'ب', displayOrder: 2, audioFiles: { none: 'ba.mp3', fathah: 'ba_fathah.mp3', kasrah: 'ba_kasrah.mp3', dammah: 'ba_dammah.mp3' } },
-  { id: 'ta',   character: 'ت', displayOrder: 3, audioFiles: { none: 'ta.mp3', fathah: 'ta_fathah.mp3', kasrah: 'ta_kasrah.mp3', dammah: 'ta_dammah.mp3' } },
-  { id: 'tsa',  character: 'ث', displayOrder: 4, audioFiles: { none: 'tsa.mp3', fathah: 'tsa_fathah.mp3', kasrah: 'tsa_kasrah.mp3', dammah: 'tsa_dammah.mp3' } },
-  { id: 'jim',  character: 'ج', displayOrder: 5, audioFiles: { none: 'jim.mp3', fathah: 'jim_fathah.mp3', kasrah: 'jim_kasrah.mp3', dammah: 'jim_dammah.mp3' } },
-  { id: 'ha',   character: 'ح', displayOrder: 6, audioFiles: { none: 'ha.mp3', fathah: 'ha_fathah.mp3', kasrah: 'ha_kasrah.mp3', dammah: 'ha_dammah.mp3' } },
-  { id: 'kho',  character: 'خ', displayOrder: 7, audioFiles: { none: 'kho.mp3', fathah: 'kho_fathah.mp3', kasrah: 'kho_kasrah.mp3', dammah: 'kho_dammah.mp3' } },
-  { id: 'dal',  character: 'د', displayOrder: 8, audioFiles: { none: 'dal.mp3', fathah: 'dal_fathah.mp3', kasrah: 'dal_kasrah.mp3', dammah: 'dal_dammah.mp3' } },
-  { id: 'dzal', character: 'ذ', displayOrder: 9, audioFiles: { none: 'dzal.mp3', fathah: 'dzal_fathah.mp3', kasrah: 'dzal_kasrah.mp3', dammah: 'dzal_dammah.mp3' } },
-  { id: 'ra',   character: 'ر', displayOrder: 10, audioFiles: { none: 'ra.mp3', fathah: 'ra_fathah.mp3', kasrah: 'ra_kasrah.mp3', dammah: 'ra_dammah.mp3' } },
-  { id: 'zai',  character: 'ز', displayOrder: 11, audioFiles: { none: 'zai.mp3', fathah: 'zai_fathah.mp3', kasrah: 'zai_kasrah.mp3', dammah: 'zai_dammah.mp3' } },
-  { id: 'sin',  character: 'س', displayOrder: 12, audioFiles: { none: 'sin.mp3', fathah: 'sin_fathah.mp3', kasrah: 'sin_kasrah.mp3', dammah: 'sin_dammah.mp3' } },
-  { id: 'syin', character: 'ش', displayOrder: 13, audioFiles: { none: 'syin.mp3', fathah: 'syin_fathah.mp3', kasrah: 'syin_kasrah.mp3', dammah: 'syin_dammah.mp3' } },
-  { id: 'shad', character: 'ص', displayOrder: 14, audioFiles: { none: 'shad.mp3', fathah: 'shad_fathah.mp3', kasrah: 'shad_kasrah.mp3', dammah: 'shad_dammah.mp3' } },
-  { id: 'dhad', character: 'ض', displayOrder: 15, audioFiles: { none: 'dhad.mp3', fathah: 'dhad_fathah.mp3', kasrah: 'dhad_kasrah.mp3', dammah: 'dhad_dammah.mp3' } },
-  { id: 'tha',  character: 'ط', displayOrder: 16, audioFiles: { none: 'tha.mp3', fathah: 'tha_fathah.mp3', kasrah: 'tha_kasrah.mp3', dammah: 'tha_dammah.mp3' } },
-  { id: 'dzha', character: 'ظ', displayOrder: 17, audioFiles: { none: 'dzha.mp3', fathah: 'dzha_fathah.mp3', kasrah: 'dzha_kasrah.mp3', dammah: 'dzha_dammah.mp3' } },
-  { id: 'ain',  character: 'ع', displayOrder: 18, audioFiles: { none: 'ain.mp3', fathah: 'ain_fathah.mp3', kasrah: 'ain_kasrah.mp3', dammah: 'ain_dammah.mp3' } },
-  { id: 'ghain', character: 'غ', displayOrder: 19, audioFiles: { none: 'ghain.mp3', fathah: 'ghain_fathah.mp3', kasrah: 'ghain_kasrah.mp3', dammah: 'ghain_dammah.mp3' } },
-  { id: 'fa',   character: 'ف', displayOrder: 20, audioFiles: { none: 'fa.mp3', fathah: 'fa_fathah.mp3', kasrah: 'fa_kasrah.mp3', dammah: 'fa_dammah.mp3' } },
-  { id: 'qaf',  character: 'ق', displayOrder: 21, audioFiles: { none: 'qaf.mp3', fathah: 'qaf_fathah.mp3', kasrah: 'qaf_kasrah.mp3', dammah: 'qaf_dammah.mp3' } },
-  { id: 'kaf',  character: 'ك', displayOrder: 22, audioFiles: { none: 'kaf.mp3', fathah: 'kaf_fathah.mp3', kasrah: 'kaf_kasrah.mp3', dammah: 'kaf_dammah.mp3' } },
-  { id: 'lam',  character: 'ل', displayOrder: 23, audioFiles: { none: 'lam.mp3', fathah: 'lam_fathah.mp3', kasrah: 'lam_kasrah.mp3', dammah: 'lam_dammah.mp3' } },
-  { id: 'mim',  character: 'م', displayOrder: 24, audioFiles: { none: 'mim.mp3', fathah: 'mim_fathah.mp3', kasrah: 'mim_kasrah.mp3', dammah: 'mim_dammah.mp3' } },
-  { id: 'nun',  character: 'ن', displayOrder: 25, audioFiles: { none: 'nun.mp3', fathah: 'nun_fathah.mp3', kasrah: 'nun_kasrah.mp3', dammah: 'nun_dammah.mp3' } },
-  { id: 'waw',  character: 'و', displayOrder: 26, audioFiles: { none: 'waw.mp3', fathah: 'waw_fathah.mp3', kasrah: 'waw_kasrah.mp3', dammah: 'waw_dammah.mp3' } },
-  { id: 'ha',   character: 'ه', displayOrder: 27, audioFiles: { none: 'ha.mp3', fathah: 'ha_fathah.mp3', kasrah: 'ha_kasrah.mp3', dammah: 'ha_dammah.mp3' } },
-  { id: 'ya',   character: 'ي', displayOrder: 28, audioFiles: { none: 'ya.mp3', fathah: 'ya_fathah.mp3', kasrah: 'ya_kasrah.mp3', dammah: 'ya_dammah.mp3' } },
+  {
+    id: 'alif',
+    character: 'ا',
+    displayOrder: 1,
+    audioFiles: {
+      none: 'alif.mp3',
+      fathah: 'alif_fathah.mp3',
+      kasrah: 'alif_kasrah.mp3',
+      dammah: 'alif_dammah.mp3',
+    },
+  },
+  {
+    id: 'ba',
+    character: 'ب',
+    displayOrder: 2,
+    audioFiles: {
+      none: 'ba.mp3',
+      fathah: 'ba_fathah.mp3',
+      kasrah: 'ba_kasrah.mp3',
+      dammah: 'ba_dammah.mp3',
+    },
+  },
+  {
+    id: 'ta',
+    character: 'ت',
+    displayOrder: 3,
+    audioFiles: {
+      none: 'ta.mp3',
+      fathah: 'ta_fathah.mp3',
+      kasrah: 'ta_kasrah.mp3',
+      dammah: 'ta_dammah.mp3',
+    },
+  },
+  {
+    id: 'tsa',
+    character: 'ث',
+    displayOrder: 4,
+    audioFiles: {
+      none: 'tsa.mp3',
+      fathah: 'tsa_fathah.mp3',
+      kasrah: 'tsa_kasrah.mp3',
+      dammah: 'tsa_dammah.mp3',
+    },
+  },
+  {
+    id: 'jim',
+    character: 'ج',
+    displayOrder: 5,
+    audioFiles: {
+      none: 'jim.mp3',
+      fathah: 'jim_fathah.mp3',
+      kasrah: 'jim_kasrah.mp3',
+      dammah: 'jim_dammah.mp3',
+    },
+  },
+  {
+    id: 'ha',
+    character: 'ح',
+    displayOrder: 6,
+    audioFiles: {
+      none: 'ha.mp3',
+      fathah: 'ha_fathah.mp3',
+      kasrah: 'ha_kasrah.mp3',
+      dammah: 'ha_dammah.mp3',
+    },
+  },
+  {
+    id: 'kho',
+    character: 'خ',
+    displayOrder: 7,
+    audioFiles: {
+      none: 'kho.mp3',
+      fathah: 'kho_fathah.mp3',
+      kasrah: 'kho_kasrah.mp3',
+      dammah: 'kho_dammah.mp3',
+    },
+  },
+  {
+    id: 'dal',
+    character: 'د',
+    displayOrder: 8,
+    audioFiles: {
+      none: 'dal.mp3',
+      fathah: 'dal_fathah.mp3',
+      kasrah: 'dal_kasrah.mp3',
+      dammah: 'dal_dammah.mp3',
+    },
+  },
+  {
+    id: 'dzal',
+    character: 'ذ',
+    displayOrder: 9,
+    audioFiles: {
+      none: 'dzal.mp3',
+      fathah: 'dzal_fathah.mp3',
+      kasrah: 'dzal_kasrah.mp3',
+      dammah: 'dzal_dammah.mp3',
+    },
+  },
+  {
+    id: 'ra',
+    character: 'ر',
+    displayOrder: 10,
+    audioFiles: {
+      none: 'ra.mp3',
+      fathah: 'ra_fathah.mp3',
+      kasrah: 'ra_kasrah.mp3',
+      dammah: 'ra_dammah.mp3',
+    },
+  },
+  {
+    id: 'zai',
+    character: 'ز',
+    displayOrder: 11,
+    audioFiles: {
+      none: 'zai.mp3',
+      fathah: 'zai_fathah.mp3',
+      kasrah: 'zai_kasrah.mp3',
+      dammah: 'zai_dammah.mp3',
+    },
+  },
+  {
+    id: 'sin',
+    character: 'س',
+    displayOrder: 12,
+    audioFiles: {
+      none: 'sin.mp3',
+      fathah: 'sin_fathah.mp3',
+      kasrah: 'sin_kasrah.mp3',
+      dammah: 'sin_dammah.mp3',
+    },
+  },
+  {
+    id: 'syin',
+    character: 'ش',
+    displayOrder: 13,
+    audioFiles: {
+      none: 'syin.mp3',
+      fathah: 'syin_fathah.mp3',
+      kasrah: 'syin_kasrah.mp3',
+      dammah: 'syin_dammah.mp3',
+    },
+  },
+  {
+    id: 'shad',
+    character: 'ص',
+    displayOrder: 14,
+    audioFiles: {
+      none: 'shad.mp3',
+      fathah: 'shad_fathah.mp3',
+      kasrah: 'shad_kasrah.mp3',
+      dammah: 'shad_dammah.mp3',
+    },
+  },
+  {
+    id: 'dhad',
+    character: 'ض',
+    displayOrder: 15,
+    audioFiles: {
+      none: 'dhad.mp3',
+      fathah: 'dhad_fathah.mp3',
+      kasrah: 'dhad_kasrah.mp3',
+      dammah: 'dhad_dammah.mp3',
+    },
+  },
+  {
+    id: 'tha',
+    character: 'ط',
+    displayOrder: 16,
+    audioFiles: {
+      none: 'tha.mp3',
+      fathah: 'tha_fathah.mp3',
+      kasrah: 'tha_kasrah.mp3',
+      dammah: 'tha_dammah.mp3',
+    },
+  },
+  {
+    id: 'dzha',
+    character: 'ظ',
+    displayOrder: 17,
+    audioFiles: {
+      none: 'dzha.mp3',
+      fathah: 'dzha_fathah.mp3',
+      kasrah: 'dzha_kasrah.mp3',
+      dammah: 'dzha_dammah.mp3',
+    },
+  },
+  {
+    id: 'ain',
+    character: 'ع',
+    displayOrder: 18,
+    audioFiles: {
+      none: 'ain.mp3',
+      fathah: 'ain_fathah.mp3',
+      kasrah: 'ain_kasrah.mp3',
+      dammah: 'ain_dammah.mp3',
+    },
+  },
+  {
+    id: 'ghain',
+    character: 'غ',
+    displayOrder: 19,
+    audioFiles: {
+      none: 'ghain.mp3',
+      fathah: 'ghain_fathah.mp3',
+      kasrah: 'ghain_kasrah.mp3',
+      dammah: 'ghain_dammah.mp3',
+    },
+  },
+  {
+    id: 'fa',
+    character: 'ف',
+    displayOrder: 20,
+    audioFiles: {
+      none: 'fa.mp3',
+      fathah: 'fa_fathah.mp3',
+      kasrah: 'fa_kasrah.mp3',
+      dammah: 'fa_dammah.mp3',
+    },
+  },
+  {
+    id: 'qaf',
+    character: 'ق',
+    displayOrder: 21,
+    audioFiles: {
+      none: 'qaf.mp3',
+      fathah: 'qaf_fathah.mp3',
+      kasrah: 'qaf_kasrah.mp3',
+      dammah: 'qaf_dammah.mp3',
+    },
+  },
+  {
+    id: 'kaf',
+    character: 'ك',
+    displayOrder: 22,
+    audioFiles: {
+      none: 'kaf.mp3',
+      fathah: 'kaf_fathah.mp3',
+      kasrah: 'kaf_kasrah.mp3',
+      dammah: 'kaf_dammah.mp3',
+    },
+  },
+  {
+    id: 'lam',
+    character: 'ل',
+    displayOrder: 23,
+    audioFiles: {
+      none: 'lam.mp3',
+      fathah: 'lam_fathah.mp3',
+      kasrah: 'lam_kasrah.mp3',
+      dammah: 'lam_dammah.mp3',
+    },
+  },
+  {
+    id: 'mim',
+    character: 'م',
+    displayOrder: 24,
+    audioFiles: {
+      none: 'mim.mp3',
+      fathah: 'mim_fathah.mp3',
+      kasrah: 'mim_kasrah.mp3',
+      dammah: 'mim_dammah.mp3',
+    },
+  },
+  {
+    id: 'nun',
+    character: 'ن',
+    displayOrder: 25,
+    audioFiles: {
+      none: 'nun.mp3',
+      fathah: 'nun_fathah.mp3',
+      kasrah: 'nun_kasrah.mp3',
+      dammah: 'nun_dammah.mp3',
+    },
+  },
+  {
+    id: 'waw',
+    character: 'و',
+    displayOrder: 26,
+    audioFiles: {
+      none: 'waw.mp3',
+      fathah: 'waw_fathah.mp3',
+      kasrah: 'waw_kasrah.mp3',
+      dammah: 'waw_dammah.mp3',
+    },
+  },
+  {
+    id: 'ha',
+    character: 'ه',
+    displayOrder: 27,
+    audioFiles: {
+      none: 'ha.mp3',
+      fathah: 'ha_fathah.mp3',
+      kasrah: 'ha_kasrah.mp3',
+      dammah: 'ha_dammah.mp3',
+    },
+  },
+  {
+    id: 'ya',
+    character: 'ي',
+    displayOrder: 28,
+    audioFiles: {
+      none: 'ya.mp3',
+      fathah: 'ya_fathah.mp3',
+      kasrah: 'ya_kasrah.mp3',
+      dammah: 'ya_dammah.mp3',
+    },
+  },
 ];
 ```
 
@@ -962,7 +1290,7 @@ app/
 **`app/i18n/translations/en.ts`**
 
 ```typescript
-import type { Translation } from '../i18n-types'
+import type { Translation } from '../i18n-types';
 
 const en: Translation = {
   // Login
@@ -1004,15 +1332,15 @@ const en: Translation = {
   ERROR_GENERIC: 'Something went wrong. Please try again.',
   ERROR_INVALID_EMAIL: 'Please enter a valid email.',
   ERROR_SHORT_PASSWORD: 'Password must be at least 8 characters.',
-}
+};
 
-export default en
+export default en;
 ```
 
 **`app/i18n/translations/id.ts`**
 
 ```typescript
-import type { Translation } from '../i18n-types'
+import type { Translation } from '../i18n-types';
 
 const id: Translation = {
   LOGIN_TITLE: 'Masuk Orang Tua',
@@ -1046,9 +1374,9 @@ const id: Translation = {
   ERROR_GENERIC: 'Terjadi kesalahan. Silakan coba lagi.',
   ERROR_INVALID_EMAIL: 'Masukkan email yang valid.',
   ERROR_SHORT_PASSWORD: 'Kata sandi minimal 8 karakter.',
-}
+};
 
-export default id
+export default id;
 ```
 
 ### Initialization
@@ -1056,37 +1384,38 @@ export default id
 **`app/i18n/index.ts`**
 
 ```typescript
-import { createI18nServer } from 'typesafe-i18n/ssr'
-import { createI18nClient } from 'typesafe-i18n/react'
-import type { Locales } from './i18n-types'
+import { createI18nServer } from 'typesafe-i18n/ssr';
+import { createI18nClient } from 'typesafe-i18n/react';
+import type { Locales } from './i18n-types';
 
 // Default locale
-export const defaultLocale: Locales = 'en'
+export const defaultLocale: Locales = 'en';
 
 // Supported locales
-export const locales: Locales[] = ['en', 'id']
+export const locales: Locales[] = ['en', 'id'];
 
 // Server-side: reads locale from cookie
-export const I18nServer = createI18nServer({ getLocale: request =>
-  request.headers.get('cookie')?.match(/locale=(en|id)/)?.[1] ?? defaultLocale
-})
+export const I18nServer = createI18nServer({
+  getLocale: (request) =>
+    request.headers.get('cookie')?.match(/locale=(en|id)/)?.[1] ?? defaultLocale,
+});
 
 // Client-side: reads locale from cookie, falls back to server
 export const { I18nClient, useI18nContext, setLocale } = createI18nClient({
   getLocale: () => {
-    if (typeof document === 'undefined') return defaultLocale
-    return (document.cookie.match(/locale=(en|id)/)?.[1] ?? defaultLocale) as Locales
+    if (typeof document === 'undefined') return defaultLocale;
+    return (document.cookie.match(/locale=(en|id)/)?.[1] ?? defaultLocale) as Locales;
   },
-})
+});
 ```
 
 ### Component Usage
 
 ```tsx
-import { I18nClient } from '~/i18n'
+import { I18nClient } from '~/i18n';
 
 function LoginForm() {
-  const { LL } = useI18nContext()
+  const { LL } = useI18nContext();
   // LL is fully typed — autocomplete works, mistyped keys fail to compile
   return (
     <form>
@@ -1095,26 +1424,26 @@ function LoginForm() {
       <input type="email" />
       <button>{LL.LOGIN_SUBMIT()}</button>
     </form>
-  )
+  );
 }
 ```
 
 ### Locale Switching
 
 ```tsx
-import { setLocale } from '~/i18n'
-import { LL } from '~/i18n'
+import { setLocale } from '~/i18n';
+import { LL } from '~/i18n';
 
 function LocaleToggle() {
-  const { locale } = useI18nContext()
+  const { locale } = useI18nContext();
 
   const toggle = () => {
-    const next = locale === 'en' ? 'id' : 'en'
-    document.cookie = `locale=${next}; path=/; maxAge=${365 * 24 * 60 * 60}`
-    setLocale(next)  // instant client-side switch
-  }
+    const next = locale === 'en' ? 'id' : 'en';
+    document.cookie = `locale=${next}; path=/; maxAge=${365 * 24 * 60 * 60}`;
+    setLocale(next); // instant client-side switch
+  };
 
-  return <button onClick={toggle}>{LL.LOCALE_SWITCH()}</button>
+  return <button onClick={toggle}>{LL.LOCALE_SWITCH()}</button>;
 }
 ```
 
@@ -1185,15 +1514,15 @@ The generator reads the translation files and produces `i18n-types.ts`, `i18n-ut
 
 ## 11. Performance Budgets
 
-| Metric | Target | Measurement |
-|---|---|---|
-| **LCP (Largest Contentful Paint)** | < 2.5s | Lighthouse |
-| **FID (First Input Delay)** | < 100ms | Lighthouse / RUM |
-| **Audio Tap-to-Play** | < 150ms | Custom Performance.mark |
-| **Harakat Mode Switch Re-render** | < 50ms | React DevTools Profiler |
-| **First Preload Batch** | Within 3s of idle | requestIdleCallback |
-| **Bundle Size (initial JS)** | < 120KB gzipped | Bundler analyzer |
-| **SQLite Query (single row)** | < 10ms | Drizzle logging |
+| Metric                             | Target            | Measurement             |
+| ---------------------------------- | ----------------- | ----------------------- |
+| **LCP (Largest Contentful Paint)** | < 2.5s            | Lighthouse              |
+| **FID (First Input Delay)**        | < 100ms           | Lighthouse / RUM        |
+| **Audio Tap-to-Play**              | < 150ms           | Custom Performance.mark |
+| **Harakat Mode Switch Re-render**  | < 50ms            | React DevTools Profiler |
+| **First Preload Batch**            | Within 3s of idle | requestIdleCallback     |
+| **Bundle Size (initial JS)**       | < 120KB gzipped   | Bundler analyzer        |
+| **SQLite Query (single row)**      | < 10ms            | Drizzle logging         |
 
 ---
 
@@ -1231,7 +1560,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - DATABASE_URL=file:./data/little-alif.db
@@ -1245,25 +1574,25 @@ volumes:
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|---|---|---|
-| `JWT_SECRET` | Yes | Secret for signing JWT tokens (min 32 chars) |
-| `DATABASE_URL` | No | SQLite path. Default: `file:./data/little-alif.db` |
-| `NODE_ENV` | No | `production` or `development` |
+| Variable       | Required | Description                                        |
+| -------------- | -------- | -------------------------------------------------- |
+| `JWT_SECRET`   | Yes      | Secret for signing JWT tokens (min 32 chars)       |
+| `DATABASE_URL` | No       | SQLite path. Default: `file:./data/little-alif.db` |
+| `NODE_ENV`     | No       | `production` or `development`                      |
 
 ---
 
 ## 13. Error Handling
 
-| Scenario | UX | Logging |
-|---|---|---|
-| Auth session expired | Silent redirect to `/login` | None |
-| Server function network error | Toast: "Connection error" + retry | console.error |
-| Audio file not found | Silent — skip playback | console.warn |
-| Letter toggle save fails | Toast: "Could not save" + revert toggle visually | console.error |
-| Profile creation exceeds 4 | Toast: "Maximum 4 children" | None |
-| Vowel mode save fails | Toast: "Could not update vowel mode" | console.error |
-| Reading practice: no visible letters | Show empty state with "Ask parent to add letters" | None |
-| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | None |
-| SQLite write failure | Toast: "Could not save changes" | console.error |
-| Invalid child-mode cookie | Clear cookie → redirect to `/login` | console.warn |
+| Scenario                                     | UX                                                  | Logging       |
+| -------------------------------------------- | --------------------------------------------------- | ------------- |
+| Auth session expired                         | Silent redirect to `/login`                         | None          |
+| Server function network error                | Toast: "Connection error" + retry                   | console.error |
+| Audio file not found                         | Silent — skip playback                              | console.warn  |
+| Letter toggle save fails                     | Toast: "Could not save" + revert toggle visually    | console.error |
+| Profile creation exceeds 4                   | Toast: "Maximum 4 children"                         | None          |
+| Vowel mode save fails                        | Toast: "Could not update vowel mode"                | console.error |
+| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | None          |
+| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | None          |
+| SQLite write failure                         | Toast: "Could not save changes"                     | console.error |
+| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | console.warn  |

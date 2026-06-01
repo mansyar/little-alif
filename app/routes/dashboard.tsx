@@ -42,12 +42,8 @@ function DashboardPage() {
       </header>
 
       <section className="bg-white rounded-large shadow-card p-6 mb-6">
-        <h2 className="text-xl font-semibold text-text-dark mb-1">
-          Welcome, {user.email}
-        </h2>
-        <p className="text-text-muted">
-          Child profile management lands in the next milestone.
-        </p>
+        <h2 className="text-xl font-semibold text-text-dark mb-1">Welcome, {user.email}</h2>
+        <p className="text-text-muted">Child profile management lands in the next milestone.</p>
       </section>
 
       <Link to="/" className="text-green font-semibold hover:underline">

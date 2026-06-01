@@ -1,20 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Color palette (Product Guidelines) */
-  --color-sand: #E8D5B7;
-  --color-sand-light: #F5EDE0;
-  --color-sand-dark: #C9B394;
-  --color-green: #2D6A4F;
-  --color-green-light: #40916C;
-  --color-green-dark: #1B4332;
-  --color-orange: #F4A261;
-  --color-orange-light: #F7B977;
-  --color-coral: #E76F51;
-  --color-background-warm: #FAF8F5;
-  --color-card: #FFFFFF;
-  --color-text-dark: #1A1A2E;
-  --color-text-muted: #8A8A9A;
+  --color-sand: #e8d5b7;
+  --color-sand-light: #f5ede0;
+  --color-sand-dark: #c9b394;
+  --color-green: #2d6a4f;
+  --color-green-light: #40916c;
+  --color-green-dark: #1b4332;
+  --color-orange: #f4a261;
+  --color-orange-light: #f7b977;
+  --color-coral: #e76f51;
+  --color-background-warm: #faf8f5;
+  --color-card: #ffffff;
+  --color-text-dark: #1a1a2e;
+  --color-text-muted: #8a8a9a;
 
   /* Border radius (custom names; the Tailwind default --radius is also kept) */
   --radius-small: 10px;
@@ -25,8 +25,8 @@
   --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   /* Font families */
-  --font-latin: "Nunito", system-ui, sans-serif;
-  --font-arabic: "Cairo", "Noto Sans Arabic", system-ui, sans-serif;
+  --font-latin: 'Nunito', system-ui, sans-serif;
+  --font-arabic: 'Cairo', 'Noto Sans Arabic', system-ui, sans-serif;
 }
 
 @layer base {

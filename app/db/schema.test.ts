@@ -1,12 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  profiles,
-  letters,
-  letterToggles,
-  LETTER_IDS,
-  VOWEL_MODES,
-  AVATAR_KEYS,
-} from './schema';
+import { profiles, letters, letterToggles, LETTER_IDS, VOWEL_MODES, AVATAR_KEYS } from './schema';
 
 const DRIZZLE_NAME = Symbol.for('drizzle:Name');
 const DRIZZLE_COLUMNS = Symbol.for('drizzle:Columns');

@@ -78,16 +78,14 @@ export const loginFn = createServerFn({ method: 'POST' })
 /**
  * Sign out the current session by invalidating the session token.
  */
-export const logoutFn = createServerFn({ method: 'POST' }).handler(
-  async () => {
-    const auth = getAuth();
-    const request = getRequest();
-    await auth.api.signOut({
-      headers: request.headers,
-    });
-    return { success: true };
-  },
-);
+export const logoutFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const auth = getAuth();
+  const request = getRequest();
+  await auth.api.signOut({
+    headers: request.headers,
+  });
+  return { success: true };
+});
 
 /**
  * Validate the current session cookie and return the active user, or null

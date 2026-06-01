@@ -6,20 +6,20 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ## Track Overview
 
-| ID | Title | Depends On | Complexity | Est. Effort |
-|---|---|---|---|---|
-| T-01 | Project Scaffolding & Config | — | Low | 1–2h |
-| T-02 | Database Schema & Seed Data | T-01 | Low | 2–3h |
-| T-03 | Authentication (Better Auth) | T-02 | Medium | 3–5h |
-| T-04 | i18n Setup | T-01 | Low | 1–2h |
-| T-05 | Parent Dashboard & Child Profiles | T-02, T-03 | Medium | 4–6h |
-| T-06 | Letter Toggle Management | T-02, T-03, T-05 | Medium | 3–5h |
-| T-07 | Vowel Mode (Harakat) | T-02 | Low | 2–3h |
-| T-08 | Child Letter Grid | T-06, T-07, T-09 | Medium | 4–6h |
-| T-09 | Audio Service (Web Speech API) | T-01 | Low | 2–3h |
-| T-10 | Reading Practice (Iqra' Mode) | T-06, T-07, T-08, T-09 | High | 5–8h |
-| T-11 | Child Mode | T-03, T-05 | Low | 2–3h |
-| T-12 | Polish, Docker & Deployment | T-10, T-11 | Medium | 4–6h |
+| ID   | Title                             | Depends On             | Complexity | Est. Effort |
+| ---- | --------------------------------- | ---------------------- | ---------- | ----------- |
+| T-01 | Project Scaffolding & Config      | —                      | Low        | 1–2h        |
+| T-02 | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        |
+| T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        |
+| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        |
+| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        |
+| T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        |
+| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        |
+| T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        |
+| T-09 | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        |
+| T-10 | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        |
+| T-11 | Child Mode                        | T-03, T-05             | Low        | 2–3h        |
+| T-12 | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        |
 
 **Total estimated effort: ~32–52 hours**
 
@@ -38,6 +38,7 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 **TDD Ref:** §1 (Project Structure)
 
 **Key Deliverables:**
+
 - `pnpm create tanstack-app` with React + TypeScript + Vite
 - Tailwind CSS v4 configuration with design tokens
 - Radix UI theme primitives installed
@@ -50,12 +51,14 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 - Update `docs/tdd.md` if project generation deviates from plan
 
 **Key Decisions:**
+
 - Use `pnpm` as package manager (already set up)
 - TanStack Start router (`@tanstack/react-router`) for file-based routing
 - Server functions (`createServerFn`) for all data mutations
 - `app/lib/utils/cn.ts` for Tailwind class merging (clsx + tailwind-merge pattern)
 
 **Verification:**
+
 - `pnpm dev` starts without errors
 - `/` route renders a placeholder page
 - Tailwind classes apply correctly
@@ -74,6 +77,7 @@ Define all Drizzle schema files, apply migrations, and seed the 28-letter master
 **TDD Ref:** §1 (Project Structure — `app/db/`), §6 (Schema Definitions)
 
 **Key Deliverables:**
+
 - `app/db/schema.ts` — Drizzle schemas for `profiles`, `letters`, `letter_toggles`
 - `app/db/index.ts` — DB client initialization (Turso/Bun SQLite driver)
 - `app/db/seed.ts` — Seed script for 28 letters with character, display_order, and audio_file paths
@@ -83,17 +87,20 @@ Define all Drizzle schema files, apply migrations, and seed the 28-letter master
 **Zod Ref:** `app/lib/validations/profiles.ts`, `app/lib/validations/letters.ts`
 
 **Key Decisions:**
+
 - `letters.audio_files` stored as JSON string (TEXT column) — map of mode → file path
 - Profile `vowel_mode` defaults to `'fathah'` (TEXT)
 - `letter_toggles.is_visible` defaults to 0 (OFF) — parent explicitly enables each letter
 - Timestamps use ISO 8601 strings (SQLite has no native datetime)
 
 **Edge Cases:**
+
 - Profile deletion must cascade to `letter_toggles` (Drizzle `onDelete: 'cascade'`)
 - Letter IDs must match `z.enum()` exactly — any rename requires a migration
 - Seed script is idempotent (checks for existing data before inserting)
 
 **Verification:**
+
 - `pnpm drizzle-kit push` creates all tables
 - `pnpm tsx app/db/seed.ts` inserts 28 letters
 - DB file contains correct record count
@@ -111,6 +118,7 @@ Integrate Better Auth for email/password authentication. Configure session manag
 **TDD Ref:** §2 (Route Design — middleware chain), §3 (Auth Server Functions)
 
 **Key Deliverables:**
+
 - Better Auth Drizzle adapter configuration
 - `app/server/auth.ts` — Server functions: `registerFn`, `loginFn`, `logoutFn`, `validateSessionFn`
 - Auth middleware in router `beforeLoad` (checks JWT cookie, injects context)
@@ -122,17 +130,20 @@ Integrate Better Auth for email/password authentication. Configure session manag
 **TDD Ref:** §3 (Auth Server Functions — full contract signatures), §4 (Auth Zod Schemas)
 
 **Key Decisions:**
+
 - Single parent account per deployment (Phase 1 constraint — Better Auth supports multi-user but Phase 1 only uses one)
 - Better Auth's built-in session management vs manual JWT — Better Auth handles this automatically
 - CSRF middleware applied to all `/dashboard` and `/parent/*` routes
 
 **Edge Cases:**
+
 - Session expiry mid-session → redirect to login with a toast
 - Registration with existing email → return validation error
 - Both JWT and child-mode cookie present → child mode takes precedence for `/learn` routes
 - Server-side session validation on every protected server function
 
 **Verification:**
+
 - Can register a new account
 - Can log in with valid credentials
 - Invalid credentials return proper error
@@ -153,6 +164,7 @@ Initialize typesafe-i18n with English and Indonesian locales. Generate TypeScrip
 **TDD Ref:** §1 (Project Structure — `app/lib/i18n/`)
 
 **Key Deliverables:**
+
 - `app/lib/i18n/index.ts` — i18n initialization
 - `app/lib/i18n/en.ts` — English translations
 - `app/lib/i18n/id.ts` — Indonesian translations
@@ -161,6 +173,7 @@ Initialize typesafe-i18n with English and Indonesian locales. Generate TypeScrip
 - Locale detector (browser `Accept-Language` header → default to `id` for Indonesian users)
 
 **Translation Keys (initial set):**
+
 - Auth: `login.title`, `login.email`, `login.password`, `login.submit`, `register.title`, `register.submit`
 - Dashboard: `dashboard.title`, `dashboard.addChild`, `dashboard.noChildren`
 - Toggles: `toggles.title`, `toggles.on`, `toggles.off`, `toggles.vowelMode`
@@ -169,10 +182,12 @@ Initialize typesafe-i18n with English and Indonesian locales. Generate TypeScrip
 - Common: `common.save`, `common.cancel`, `common.delete`, `common.confirm`
 
 **Key Decisions:**
+
 - Parent UI is bilingual (EN + ID). Child UI uses minimal text (icons + letter glyphs) and does not need i18n.
 - Detect locale from browser Accept-Language header; persist choice in localStorage
 
 **Verification:**
+
 - Switching language changes all text on parent-facing pages
 - No TypeScript errors for translation keys
 - Fallback to English when a key is missing in Indonesian
@@ -190,6 +205,7 @@ Build the parent dashboard showing child profile cards. Implement profile CRUD (
 **TDD Ref:** §2 (Route Design — `/dashboard`), §3 (Profile Server Functions), §4 (Profile Zod Schemas)
 
 **Key Deliverables:**
+
 - `app/routes/dashboard.tsx` — Authenticated dashboard page
 - `app/components/parent/ProfileList.tsx` — Profile cards with avatar + name + letter count
 - `app/components/parent/ProfileEditor.tsx` — Add/edit profile (Radix Dialog)
@@ -202,17 +218,20 @@ Build the parent dashboard showing child profile cards. Implement profile CRUD (
 **TDD Ref:** §3 (Server Functions — full signatures), §4 (Zod Schemas)
 
 **Key Decisions:**
+
 - 8 themed avatars: Alif-lamp, Ba-boat, Ta-table, Tsa-butterfly, Jim-mountain, Ha-jar, Kho-hat, Dal-book
 - Avatar images as inline SVGs (no external dependencies)
 - Profile creation auto-seeds 28 `letter_toggles` rows (all OFF)
 - Max 4 profiles enforced server-side (Zod + DB query)
 
 **Edge Cases:**
+
 - Attempt to create 5th profile → return error with i18n message
 - Delete profile → confirm dialog (Radix Dialog)
 - Edit with no changes → no-op (detect via comparison)
 
 **Verification:**
+
 - Can create, view, edit, and delete child profiles
 - Avatar selection shows correct images
 - Max 4 profiles enforced
@@ -232,6 +251,7 @@ Implement the per-child letter toggle grid on the parent dashboard. Each letter 
 **TDD Ref:** §2 (Route Design), §3 (Letter Server Functions), §4 (Letter Zod Schemas)
 
 **Key Deliverables:**
+
 - `app/components/parent/LetterToggleGrid.tsx` — 28-letter grid with Radix Switch per letter
 - `app/components/parent/ChildModeToggle.tsx` — Enable/disable child mode per profile
 - `app/server/letters.ts` — `getVisibleLettersFn`, `toggleLetterFn`, `bulkToggleLettersFn`
@@ -241,17 +261,20 @@ Implement the per-child letter toggle grid on the parent dashboard. Each letter 
 **TDD Ref:** §3 (Server Functions — full signatures), §4 (Letter Zod Schemas)
 
 **Key Decisions:**
+
 - Toggle state reads from `letter_toggles` table, not a client-side array
 - ON/OFF switch uses Radix UI Switch (accessible by default)
 - Toggle mutations use `createServerFn` with POST method
 - Summary view on profile card shows ON count (e.g., "5/28 introduced")
 
 **Edge Cases:**
+
 - Rapid toggling → debounce requests (300ms)
 - Network error during toggle → revert to previous state + show error toast
 - Switch is disabled while server function is in flight
 
 **Verification:**
+
 - Letters render in correct order (1–28)
 - Toggle ON → letter visible in child grid (verify across sessions)
 - Toggle OFF → letter disappears from child grid
@@ -271,6 +294,7 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 **TDD Ref:** §5 (Harakat Composer — `app/lib/utils/harakat.ts`)
 
 **Key Deliverables:**
+
 - `app/lib/utils/harakat.ts` — `composeLetter()` pure function with combining diacritics + 7 exceptions (ا و ي ر ز د ذ)
 - `app/components/parent/HarakatSelector.tsx` — Vowel mode dropdown/radio in the toggle screen
 - `app/components/child/ChildHarakatBar.tsx` — 4-button bar (Plain, Fathah, Kasrah, Dammah)
@@ -278,6 +302,7 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 - Update `updateProfileFn` to accept `vowelMode`
 
 **Key Decisions (from DD-1 through DD-6):**
+
 - DD-1: Alif (ا) gets no special treatment despite being a pure vowel.
 - DD-2: ز (zai) included in non-connecting exception list alongside ر, د, ذ.
 - DD-4: Cairo font preloaded aggressively to minimize FOUT/FOIT.
@@ -285,11 +310,13 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 - DD-6: `composeLetter()` is a pure function returning a string, not a React component.
 
 **Edge Cases:**
+
 - Font not loaded → diacritics may render as tofu (boxes). Mitigated by aggressive preload + `font-display: block`
 - Child changes vowel mode → grid re-renders all letter glyphs. Parent's global setting is preserved in DB
 - Vowel mode change on child side is temporary (session-only, does not update DB)
 
 **Verification:**
+
 - `composeLetter('ب', 'fathah')` returns `'بَ'` (Unicode combining)
 - `composeLetter('ر', 'kasrah')` returns `'رِ'` (precomposed fallback)
 - All 7 exception letters render correctly with all 3 harakat modes
@@ -308,6 +335,7 @@ Build the child-facing letter grid showing only parent-introduced letters with d
 **TDD Ref:** §2 (Route Design — `/learn`)
 
 **Key Deliverables:**
+
 - `app/routes/learn.tsx` — Child letter grid page
 - `app/components/child/LetterGrid.tsx` — Grid layout with dynamic columns (responsive)
 - `app/components/child/LetterCard.tsx` — Single letter card with tap animation
@@ -321,6 +349,7 @@ Build the child-facing letter grid showing only parent-introduced letters with d
 **PRD Ref:** REQ-5.1 through REQ-5.8
 
 **Key Decisions:**
+
 - Grid is portrait-first, adapts to landscape (CSS Grid with `auto-fill`)
 - Minimum touch target: 64×64dp (WCAG compliant)
 - No text labels on cards — purely visual (Arabic glyph + background color)
@@ -328,11 +357,13 @@ Build the child-facing letter grid showing only parent-introduced letters with d
 - "Reading Practice" button disabled state visually distinct (grayed out + tooltip)
 
 **Edge Cases:**
+
 - Zero letters toggled → show EmptyState with icon + "Ask your parent!" message (no text — icon-only for pre-literate children)
 - Child changes vowel mode → grid re-renders without refetching data
 - Network error during server function → retry with exponential backoff
 
 **Verification:**
+
 - Only toggled-on letters appear
 - Vowel mode applies to all letters dynamically
 - Tapping a card triggers playback
@@ -353,6 +384,7 @@ Implement the audio service using the Web Speech API. Handle voice loading, play
 **TDD Ref:** §1 (Project Structure — `app/lib/audio/`)
 
 **Key Deliverables:**
+
 - `app/lib/audio/AudioEngine.ts` — Singleton managing `SpeechSynthesis` lifecycle
 - `app/lib/audio/preloader.ts` — Idle-time voice preloading via `requestIdleCallback`
 - Audio playback function: `speak(letterChar, vowelMode)` → builds text via `composeLetter()` → calls `speechSynthesis.speak()`
@@ -364,6 +396,7 @@ Implement the audio service using the Web Speech API. Handle voice loading, play
 **TDD Ref:** §1 (`app/lib/audio/AudioEngine.ts`, `preloader.ts`)
 
 **Key Decisions:**
+
 - Web Speech API chosen over pre-recorded files (TTS quality for isolated letters is acceptable; zero file management; instant setup)
 - No MP3 file generation needed (previous Google TTS approach abandoned)
 - `SpeechSynthesis.speak()` is async — returns immediately, plays in background
@@ -372,12 +405,14 @@ Implement the audio service using the Web Speech API. Handle voice loading, play
 - Future upgrade path: swap to pre-recorded MP3 files by dropping them into `public/audio/` and updating `AudioEngine`
 
 **Edge Cases:**
+
 - Voice not loaded yet → delay first utterance by 100ms, show subtle loading indicator on the first card tap
 - Browser doesn't support SpeechSynthesis (very rare) → graceful degradation (letter highlights but no audio)
 - Multiple rapid taps → cancel previous utterance before starting new one
 - Page visibility change → pause/resume not needed (utterances are short)
 
 **Verification:**
+
 - Tapping a letter card plays pronunciation
 - Pronunciation uses correct vowel mode (fathah → "ba", kasrah → "bi", dammah → "bu")
 - Rapid taps cancel previous audio correctly
@@ -397,6 +432,7 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 **TDD Ref:** §5 (Reading Practice — `app/lib/utils/reading.ts`)
 
 **Key Deliverables:**
+
 - `app/routes/learn/reading.tsx` — Reading practice page
 - `app/components/child/reading/ReadingGrid.tsx` — 6-row grid layout
 - `app/components/child/reading/ReadingCell.tsx` — Single tappable cell with tap highlight
@@ -409,11 +445,13 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 **TDD Ref:** §3 (Reading server function), §5 (Reading utilities — full implementation details)
 
 **Grid Structure (per group):**
+
 - Row 1: Systematic — each letter with Fathah, Kasrah, Dammah in order (e.g., بَ بِ بُ تَ تِ تُ ثَ ثِ ثُ)
 - Rows 2–6: Mixed — all 9 combinations shuffled into random sequence (5 different shuffles)
 - Total: 54 cells per group (9 systematic + 45 randomized)
 
 **Key Decisions:**
+
 - 3-letter minimum gate (DD-3) — button disabled if fewer than 3 letters toggled
 - Groups generated on the client from server data (letters + vowel mode), not pre-computed
 - Cell tap plays audio via same AudioService used by the letter grid
@@ -422,6 +460,7 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 - Shuffle re-randomizes rows 2–6 without affecting Row 1 or group order
 
 **Edge Cases:**
+
 - Exactly 3 letters → single group, No next group button needed
 - 4–5 letters → first group of 3, second group of 1–2 → second group disabled with tooltip
 - 6 letters → two full groups of 3
@@ -430,6 +469,7 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 - Very fast or repeated shuffle → debounce to prevent flickering
 
 **Verification:**
+
 - Groups of 3 generated from toggled-on letters
 - Row 1 is systematic
 - Rows 2–6 are randomized (different each time)
@@ -453,6 +493,7 @@ Implement cookie-based child mode that bypasses auth. One profile per device. Pa
 **TDD Ref:** §2 (Child Mode Cookie spec), §3 (enableChildModeFn, disableChildModeFn)
 
 **Key Deliverables:**
+
 - Child mode cookie: signed `{ profileId, name, avatar }`, HttpOnly: false, Secure: true in prod
 - `enableChildModeFn({ profileId })` — Sets cookie, redirects to `/learn`
 - `disableChildModeFn()` — Clears cookie, redirects to `/dashboard`
@@ -461,17 +502,20 @@ Implement cookie-based child mode that bypasses auth. One profile per device. Pa
 - Router middleware: `/learn` route accepts either JWT or child-mode cookie
 
 **Key Decisions:**
+
 - Cookie is NOT HttpOnly (JS needs to read profile info for UI hints) — signed to prevent tampering
 - Only one profile per device in child mode (setting new clears old)
 - Child mode has no expiry (persists until parent logs out or explicitly disables)
 - Child mode cookie is cleared on parent logout
 
 **Edge Cases:**
+
 - Child mode cookie expired/malformed/signed incorrectly → treat as no cookie → redirect to `/login`
 - Parent deletes the profile that has child mode active → clear child mode cookie on next request
 - Both JWT and child mode cookie present → child mode wins for `/learn` routes
 
 **Verification:**
+
 - Enable child mode → cookie set with correct profile data
 - Close tab, reopen → auto-redirects to `/learn`
 - Disable child mode → cookie cleared → redirects to `/login`
@@ -491,6 +535,7 @@ Final polish: error handling, responsive testing, performance optimization. Pack
 **TDD Ref:** §1 (Docker files), §9 (Error Handling), §10 (Performance Budgets)
 
 **Key Deliverables:**
+
 - `docker/Dockerfile` — Multi-stage build with Node.js
 - `docker-compose.yml` — App service + SQLite volume mount
 - `.env.example` — Complete environment variable reference
@@ -505,12 +550,14 @@ Final polish: error handling, responsive testing, performance optimization. Pack
 **TDD Ref:** §9 (Error Handling strategies), §10 (Performance budgets: 150ms audio, 2s first paint)
 
 **Key Decisions:**
+
 - Docker multi-stage build: `node:20-alpine` → `nginx:alpine` (static files) or keep as Node.js for SSR
 - SQLite file mounted as Docker volume (survives container rebuilds)
 - Coolify deploy: connect Git repo → set env vars → deploy
 - Error states: toast for recoverable errors, error boundary page for crashes
 
 **Verification:**
+
 - `pnpm build` produces production bundle
 - `docker compose up` starts the app
 - SQLite data persists after container restart

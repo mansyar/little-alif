@@ -6,26 +6,26 @@ Warm, inviting, and intentionally minimal. The UI should feel like a cozy learni
 
 ### Color Palette
 
-| Token | Hex | Usage |
-|---|---|---|
-| Sand | `#E8D5B7` | Warm accent, decorative elements |
-| Sand Light | `#F5EDE0` | Subtle backgrounds, hover states |
-| Sand Dark | `#C9B394` | Borders, dividers |
-| Green | `#2D6A4F` | Primary actions, parent UI accents, ON state |
-| Green Light | `#40916C` | Hover states, highlights |
-| Green Dark | `#1B4332` | Active states, pressed buttons |
-| Orange | `#F4A261` | Child mode accents, Reading Practice button |
-| Orange Light | `#F7B977` | Hover states |
-| Coral | `#E76F51` | Destructive actions, delete buttons |
-| Background Warm | `#FAF8F5` | Page backgrounds |
-| Card Background | `#FFFFFF` | Cards, modals, form areas |
-| Text Dark | `#1A1A2E` | Primary text |
-| Text Muted | `#8A8A9A` | Secondary text, labels |
-| Radius | `16px` | Card corner radius |
-| Radius Small | `10px` | Button/form corner radius |
-| Radius Large | `24px` | Screen container radius |
-| Shadow | `0 2px 16px rgba(0,0,0,0.06)` | Card shadows |
-| Shadow Large | `0 8px 32px rgba(0,0,0,0.1)` | Modal/dialog shadows |
+| Token           | Hex                           | Usage                                        |
+| --------------- | ----------------------------- | -------------------------------------------- |
+| Sand            | `#E8D5B7`                     | Warm accent, decorative elements             |
+| Sand Light      | `#F5EDE0`                     | Subtle backgrounds, hover states             |
+| Sand Dark       | `#C9B394`                     | Borders, dividers                            |
+| Green           | `#2D6A4F`                     | Primary actions, parent UI accents, ON state |
+| Green Light     | `#40916C`                     | Hover states, highlights                     |
+| Green Dark      | `#1B4332`                     | Active states, pressed buttons               |
+| Orange          | `#F4A261`                     | Child mode accents, Reading Practice button  |
+| Orange Light    | `#F7B977`                     | Hover states                                 |
+| Coral           | `#E76F51`                     | Destructive actions, delete buttons          |
+| Background Warm | `#FAF8F5`                     | Page backgrounds                             |
+| Card Background | `#FFFFFF`                     | Cards, modals, form areas                    |
+| Text Dark       | `#1A1A2E`                     | Primary text                                 |
+| Text Muted      | `#8A8A9A`                     | Secondary text, labels                       |
+| Radius          | `16px`                        | Card corner radius                           |
+| Radius Small    | `10px`                        | Button/form corner radius                    |
+| Radius Large    | `24px`                        | Screen container radius                      |
+| Shadow          | `0 2px 16px rgba(0,0,0,0.06)` | Card shadows                                 |
+| Shadow Large    | `0 8px 32px rgba(0,0,0,0.1)`  | Modal/dialog shadows                         |
 
 ### Typography
 
@@ -38,6 +38,7 @@ Warm, inviting, and intentionally minimal. The UI should feel like a cozy learni
 ## UX Principles
 
 ### For the Child (Pre-literate, ages 3–6)
+
 1. **Zero Text Instructions:** Children cannot read. All feedback must be visual or auditory.
 2. **Large Touch Targets:** Minimum 64x64dp tap area, preferably larger on tablets.
 3. **Instant Feedback:** Tap → action within 150ms (especially audio playback).
@@ -46,6 +47,7 @@ Warm, inviting, and intentionally minimal. The UI should feel like a cozy learni
 6. **Consistent Patterns:** Letters always behave the same way. Predictable = comfortable.
 
 ### For the Parent
+
 1. **Parent-Led Control:** Parent decides what the child sees. The app never auto-advances.
 2. **Clear Status:** Dashboard shows exactly which letters are visible per child and which vowel mode is active.
 3. **Bilingual UI:** Toggle between English and Indonesian via a persistent cookie.

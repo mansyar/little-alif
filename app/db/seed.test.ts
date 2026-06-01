@@ -32,9 +32,7 @@ describe('SEED_LETTERS', () => {
 
   it('every letter has audioFiles for none, fathah, kasrah, dammah modes', () => {
     for (const letter of SEED_LETTERS) {
-      expect(Object.keys(letter.audioFiles).sort()).toEqual(
-        ['dammah', 'fathah', 'kasrah', 'none'],
-      );
+      expect(Object.keys(letter.audioFiles).sort()).toEqual(['dammah', 'fathah', 'kasrah', 'none']);
     }
   });
 
@@ -51,9 +49,34 @@ describe('SEED_LETTERS', () => {
     const ordered = [...SEED_LETTERS].sort((a, b) => a.displayOrder - b.displayOrder);
     // Note: ha = ح (ḥāʼ), hae = ه (soft hāʼ) per docs/tdd.md §6
     const expectedIds = [
-      'alif', 'ba', 'ta', 'tsa', 'jim', 'ha', 'kho', 'dal', 'dzal', 'ra',
-      'zai', 'sin', 'syin', 'shad', 'dhad', 'tha', 'dzha', 'ain', 'ghain',
-      'fa', 'qaf', 'kaf', 'lam', 'mim', 'nun', 'waw', 'hae', 'ya',
+      'alif',
+      'ba',
+      'ta',
+      'tsa',
+      'jim',
+      'ha',
+      'kho',
+      'dal',
+      'dzal',
+      'ra',
+      'zai',
+      'sin',
+      'syin',
+      'shad',
+      'dhad',
+      'tha',
+      'dzha',
+      'ain',
+      'ghain',
+      'fa',
+      'qaf',
+      'kaf',
+      'lam',
+      'mim',
+      'nun',
+      'waw',
+      'hae',
+      'ya',
     ];
     expect(ordered.map((l) => l.id)).toEqual(expectedIds);
   });

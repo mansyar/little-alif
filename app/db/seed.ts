@@ -31,7 +31,7 @@ async function seed(): Promise<void> {
 
   console.log(
     `[seed] Inserted ${toInsert.length} letter(s); ` +
-    `total in table: ${existing.length + toInsert.length} / ${SEED_LETTERS.length}.`,
+      `total in table: ${existing.length + toInsert.length} / ${SEED_LETTERS.length}.`,
   );
 }
 

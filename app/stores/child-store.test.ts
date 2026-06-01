@@ -31,9 +31,7 @@ describe('useChildStore', () => {
   });
 
   it('setVisibleLetters replaces the list of visible letters', () => {
-    useChildStore.getState().setVisibleLetters([
-      { id: 'alif', character: 'ا', displayOrder: 1 },
-    ]);
+    useChildStore.getState().setVisibleLetters([{ id: 'alif', character: 'ا', displayOrder: 1 }]);
     useChildStore.getState().setVisibleLetters([
       { id: 'ba', character: 'ب', displayOrder: 2 },
       { id: 'ta', character: 'ت', displayOrder: 3 },

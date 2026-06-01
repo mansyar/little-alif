@@ -12,9 +12,7 @@ describe('deriveNameFromEmail', () => {
   });
 
   it('returns the local-part when it contains plus tags', () => {
-    expect(deriveNameFromEmail('parent+school@example.com')).toBe(
-      'parent+school',
-    );
+    expect(deriveNameFromEmail('parent+school@example.com')).toBe('parent+school');
   });
 
   it('falls back to "Parent" when the email has no local-part', () => {
@@ -24,15 +22,11 @@ describe('deriveNameFromEmail', () => {
 
 describe('buildCookieHeader', () => {
   it('formats a single cookie header value', () => {
-    expect(buildCookieHeader('abc.def')).toBe(
-      'better-auth.session_token=abc.def',
-    );
+    expect(buildCookieHeader('abc.def')).toBe('better-auth.session_token=abc.def');
   });
 
   it('preserves tokens containing dots, dashes, and underscores', () => {
-    expect(buildCookieHeader('a.b-c_d')).toBe(
-      'better-auth.session_token=a.b-c_d',
-    );
+    expect(buildCookieHeader('a.b-c_d')).toBe('better-auth.session_token=a.b-c_d');
   });
 });
 
