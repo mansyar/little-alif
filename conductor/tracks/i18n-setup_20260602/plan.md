@@ -67,7 +67,7 @@
 
 ---
 
-## Phase 4: Create Language Toggle Component
+## Phase 4: Create Language Toggle Component [checkpoint: 2e5fa75]
 
 **Goal:** Build the dashboard navbar locale toggle that switches between EN and ID.
 
