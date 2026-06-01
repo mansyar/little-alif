@@ -9,41 +9,41 @@
 
 **Goal:** Initialize TanStack Start project with all foundational tooling, Tailwind CSS v4, and UI primitives.
 
-- [ ] Task: Initialize TanStack Start project with React + TypeScript + Vite
-    - [ ] Run `pnpm create tanstack-app` with React + TypeScript template
-    - [ ] Verify project structure matches TDD §1
-    - [ ] Update `package.json` name/description for Little Alif
-    - [ ] Verify `pnpm dev` starts without errors
+- [x] Task: Initialize TanStack Start project with React + TypeScript + Vite (1e576fc)
+    - [x] Run `pnpm create tanstack-app` with React + TypeScript template
+    - [x] Verify project structure matches TDD §1
+    - [x] Update `package.json` name/description for Little Alif
+    - [x] Verify `pnpm dev` starts without errors
 
-- [ ] Task: Configure Tailwind CSS v4 with design tokens
-    - [ ] Install Tailwind CSS v4 and dependencies
-    - [ ] Configure Tailwind in CSS with Cairo (Arabic) and Nunito (Latin) fonts
-    - [ ] Add design tokens: color palette, spacing scale, border-radius
-    - [ ] Create `app/lib/utils/cn.ts` — Tailwind class merging utility (clsx + tailwind-merge)
-    - [ ] Verify Tailwind classes apply on a test element
+- [x] Task: Configure Tailwind CSS v4 with design tokens (1e576fc)
+    - [x] Install Tailwind CSS v4 and dependencies
+    - [x] Configure Tailwind in CSS with Cairo (Arabic) and Nunito (Latin) fonts
+    - [x] Add design tokens: color palette, spacing scale, border-radius
+    - [x] Create `app/lib/utils/cn.ts` — Tailwind class merging utility (clsx + tailwind-merge)
+    - [x] Verify Tailwind classes apply on a test element
 
-- [ ] Task: Install UI primitives and icons
-    - [ ] Install Radix UI: `@radix-ui/react-switch`, `@radix-ui/react-dialog`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-radio-group`
-    - [ ] Install Lucide React icons
-    - [ ] Verify imports resolve correctly
+- [x] Task: Install UI primitives and icons (1e576fc)
+    - [x] Install Radix UI: `@radix-ui/react-switch`, `@radix-ui/react-dialog`, `@radix-ui/react-alert-dialog`, `@radix-ui/react-radio-group`
+    - [x] Install Lucide React icons
+    - [x] Verify imports resolve correctly
 
-- [ ] Task: Scaffold Zustand stores
-    - [ ] Install Zustand
-    - [ ] Create `app/stores/auth-store.ts` — auth + child mode state
-    - [ ] Create `app/stores/child-store.ts` — active child profile + letters
-    - [ ] Create `app/stores/ui-store.ts` — UI state: selected letter, loading, toasts
-    - [ ] Verify store creation compiles without errors
+- [x] Task: Scaffold Zustand stores (1e576fc)
+    - [x] Install Zustand
+    - [x] Create `app/stores/auth-store.ts` — auth + child mode state
+    - [x] Create `app/stores/child-store.ts` — active child profile + letters
+    - [x] Create `app/stores/ui-store.ts` — UI state: selected letter, loading, toasts
+    - [x] Verify store creation compiles without errors
 
-- [ ] Task: Create configuration files
-    - [ ] Create `app.config.ts` — TanStack Start config
-    - [ ] Update `tsconfig.json` with strict mode and path aliases
-    - [ ] Create `.env.example` with required environment variables (DATABASE_URL, BETTER_AUTH_SECRET)
-    - [ ] Verify TypeScript compiles without errors
+- [x] Task: Create configuration files (1e576fc)
+    - [x] Create `vite.config.ts` — TanStack Start config (TanStack Start v1.168+ uses Vite plugin directly, no separate app.config.ts)
+    - [x] Update `tsconfig.json` with strict mode and path aliases
+    - [x] Create `.env.example` with required environment variables (DATABASE_URL, BETTER_AUTH_SECRET)
+    - [x] Verify TypeScript compiles without errors
 
-- [ ] Task: Write tests for scaffolding verification
-    - [ ] Create test for `cn.ts` utility — verify class merging works correctly
-    - [ ] Create test for Zustand stores — verify initial state is correct
-    - [ ] Run all tests, confirm they pass
+- [x] Task: Write tests for scaffolding verification (1e576fc)
+    - [x] Create test for `cn.ts` utility — verify class merging works correctly
+    - [x] Create test for Zustand stores — verify initial state is correct
+    - [x] Run all tests, confirm they pass (21/21)
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
