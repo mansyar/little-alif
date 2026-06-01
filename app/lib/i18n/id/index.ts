@@ -34,8 +34,13 @@ const id = {
   PROFILE_NAME: 'Nama',
   PROFILE_AVATAR: 'Avatar',
   PROFILE_SAVE: 'Simpan',
+  PROFILE_CANCEL: 'Batal',
+  PROFILE_ADD_TITLE: 'Tambah Profil Anak',
+  PROFILE_EDIT_TITLE: 'Edit Profil Anak',
   PROFILE_DELETE: 'Hapus',
   PROFILE_DELETE_CONFIRM: 'Apakah Anda yakin ingin menghapus profil ini?',
+  PROFILE_MANAGE_LETTERS: 'Kelola Huruf',
+  PROFILE_LETTERS_LABEL: 'diperkenalkan',
 
   // Locale
   LOCALE_SWITCH: 'English',

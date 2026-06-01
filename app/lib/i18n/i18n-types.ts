@@ -111,6 +111,18 @@ type RootTranslation = {
 	 */
 	PROFILE_SAVE: string
 	/**
+	 * C​a​n​c​e​l
+	 */
+	PROFILE_CANCEL: string
+	/**
+	 * A​d​d​ ​C​h​i​l​d​ ​P​r​o​f​i​l​e
+	 */
+	PROFILE_ADD_TITLE: string
+	/**
+	 * E​d​i​t​ ​C​h​i​l​d​ ​P​r​o​f​i​l​e
+	 */
+	PROFILE_EDIT_TITLE: string
+	/**
 	 * D​e​l​e​t​e
 	 */
 	PROFILE_DELETE: string
@@ -118,6 +130,14 @@ type RootTranslation = {
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​p​r​o​f​i​l​e​?
 	 */
 	PROFILE_DELETE_CONFIRM: string
+	/**
+	 * M​a​n​a​g​e​ ​L​e​t​t​e​r​s
+	 */
+	PROFILE_MANAGE_LETTERS: string
+	/**
+	 * i​n​t​r​o​d​u​c​e​d
+	 */
+	PROFILE_LETTERS_LABEL: string
 	/**
 	 * B​a​h​a​s​a​ ​I​n​d​o​n​e​s​i​a
 	 */
@@ -234,6 +254,18 @@ export type TranslationFunctions = {
 	 */
 	PROFILE_SAVE: () => LocalizedString
 	/**
+	 * Cancel
+	 */
+	PROFILE_CANCEL: () => LocalizedString
+	/**
+	 * Add Child Profile
+	 */
+	PROFILE_ADD_TITLE: () => LocalizedString
+	/**
+	 * Edit Child Profile
+	 */
+	PROFILE_EDIT_TITLE: () => LocalizedString
+	/**
 	 * Delete
 	 */
 	PROFILE_DELETE: () => LocalizedString
@@ -241,6 +273,14 @@ export type TranslationFunctions = {
 	 * Are you sure you want to delete this profile?
 	 */
 	PROFILE_DELETE_CONFIRM: () => LocalizedString
+	/**
+	 * Manage Letters
+	 */
+	PROFILE_MANAGE_LETTERS: () => LocalizedString
+	/**
+	 * introduced
+	 */
+	PROFILE_LETTERS_LABEL: () => LocalizedString
 	/**
 	 * Bahasa Indonesia
 	 */

@@ -34,8 +34,13 @@ const en = {
   PROFILE_NAME: 'Name',
   PROFILE_AVATAR: 'Avatar',
   PROFILE_SAVE: 'Save',
+  PROFILE_CANCEL: 'Cancel',
+  PROFILE_ADD_TITLE: 'Add Child Profile',
+  PROFILE_EDIT_TITLE: 'Edit Child Profile',
   PROFILE_DELETE: 'Delete',
   PROFILE_DELETE_CONFIRM: 'Are you sure you want to delete this profile?',
+  PROFILE_MANAGE_LETTERS: 'Manage Letters',
+  PROFILE_LETTERS_LABEL: 'introduced',
 
   // Locale
   LOCALE_SWITCH: 'Bahasa Indonesia',
