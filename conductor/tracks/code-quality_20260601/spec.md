@@ -58,8 +58,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write",
-      "tsc --noEmit"
+      "prettier --write"
     ],
     "*.{json,md,css}": [
       "prettier --write"
@@ -67,7 +66,8 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
   }
   ```
 
-  - `tsc --noEmit` runs on the full project (TypeScript limitation); lint-staged still scopes ESLint/Prettier to staged files.
+  - lint-staged scopes ESLint and Prettier to staged files only, giving a fast feedback loop.
+  - `tsc --noEmit` is **not** in the per-file glob: TypeScript cannot meaningfully scope a type check to a single file (it always walks the project's import graph). The full-project type check lives in `.husky/pre-commit` (see FR-3) as a second step, after `pnpm lint-staged`. The `typecheck` script uses `tsc --noEmit --incremental` so warm runs reuse `tsconfig.tsbuildinfo` and stay fast.
   - All commands chained with `&&` semantics so any failure halts the chain.
 
 ### FR-5: Write Meta-Tests for Tooling Configuration

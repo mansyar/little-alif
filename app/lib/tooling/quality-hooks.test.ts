@@ -1,8 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
+
+// The ESLint config dynamically imports typescript-eslint, eslint-plugin-react,
+// eslint-plugin-react-hooks, and globals. Cold-loading that graph takes several
+// seconds on a typical machine, so we load it once in beforeAll and share the
+// result across the tests below instead of importing on every assertion.
+let eslintConfig: { default: { ignores?: string[] }[] };
 
 function readJson<T>(relativePath: string): T {
   const fullPath = path.join(PROJECT_ROOT, relativePath);
@@ -65,20 +71,18 @@ describe('Tooling: ESLint', () => {
     expect(existsSync(path.join(PROJECT_ROOT, 'eslint.config.js'))).toBe(true);
   });
 
-  it('eslint.config.js is loadable and exports an array', async () => {
+  beforeAll(async () => {
     const configPath = path.join(PROJECT_ROOT, 'eslint.config.js');
     const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
-    const mod = (await import(fileUrl.href)) as { default: unknown };
-    expect(Array.isArray(mod.default)).toBe(true);
+    eslintConfig = (await import(fileUrl.href)) as { default: { ignores?: string[] }[] };
+  }, 30_000);
+
+  it('eslint.config.js is loadable and exports an array', () => {
+    expect(Array.isArray(eslintConfig.default)).toBe(true);
   });
 
-  it('eslint.config.js ignores generated files and build artifacts', async () => {
-    const configPath = path.join(PROJECT_ROOT, 'eslint.config.js');
-    const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
-    const mod = (await import(fileUrl.href)) as {
-      default: { ignores?: string[] }[];
-    };
-    const ignoreConfig = mod.default.find((c) => Array.isArray(c.ignores));
+  it('eslint.config.js ignores generated files and build artifacts', () => {
+    const ignoreConfig = eslintConfig.default.find((c) => Array.isArray(c.ignores));
     const ignores = ignoreConfig?.ignores ?? [];
     for (const required of [
       'node_modules/**',
