@@ -9,15 +9,17 @@
 
 **Goal:** Set up the typesafe-i18n toolchain so the generator runs cleanly.
 
-- [ ] Task: Install `typesafe-i18n@^5.26.0` as a devDependency
-  - [ ] Run `pnpm add -D typesafe-i18n@^5.26.0`
-- [ ] Task: Create `.typesafe-i18n.json` configuration at project root
-  - [ ] Set `adapter: "react"`, `outputPath: "./app/lib/i18n"`, `baseLocale: "en"`, `locales: ["en", "id"]`
-- [ ] Task: Create the `app/lib/i18n/translations/` directory structure
-  - [ ] Create `app/lib/i18n/translations/en.ts` (placeholder stub)
-  - [ ] Create `app/lib/i18n/translations/id.ts` (placeholder stub)
-- [ ] Task: Run `pnpm i18n` to generate type files from stubs
-  - [ ] Verify `i18n-types.ts`, `i18n-util.ts`, `i18n-util.async.ts` are generated in `app/lib/i18n/`
+- [x] Task: Install `typesafe-i18n@^5.26.0` as a devDependency `6775a35`
+  - [x] Run `pnpm add -D typesafe-i18n@^5.26.0`
+- [x] Task: Create `.typesafe-i18n.json` configuration at project root `6775a35`
+  - [x] Set `adapter: "react"`, `outputPath: "./app/lib/i18n"`, `baseLocale: "en"`, `locales: ["en", "id"]`
+- [x] Task: Create the directory structure and translation files `6775a35`
+  - [x] Created `app/lib/i18n/en/index.ts` (English base locale with all keys)
+  - [x] Created `app/lib/i18n/id/index.ts` (Indonesian locale with all translations)
+- [x] Task: Run `pnpm i18n` to generate type files `6775a35`
+  - [x] Verify `i18n-types.ts` includes both `'en'` and `'id'` locales with 27 typed keys
+  - [x] Verify `i18n-util.ts` has `locales = ['en', 'id']`
+  - [x] Verify `i18n-util.async.ts` has locale loaders for both locales
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ---
