@@ -42,3 +42,6 @@ local.db
 
 # Husky internal directory
 .husky/_
+
+# TypeScript incremental build info
+*.tsbuildinfo

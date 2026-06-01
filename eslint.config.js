@@ -14,6 +14,7 @@ export default tseslint.config(
       '*.config.js',
       'app/db/migrations/**',
       'app/routeTree.gen.ts',
+      '*.tsbuildinfo',
     ],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({

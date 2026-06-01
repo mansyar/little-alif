@@ -103,18 +103,29 @@ describe('Tooling: Husky + lint-staged', () => {
     expect(raw).toContain('pnpm lint-staged');
   });
 
-  it('package.json lint-staged block maps *.{ts,tsx} to eslint+prettier+tsc', () => {
+  it('.husky/pre-commit also runs the project-wide typecheck after lint-staged', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'), 'utf-8');
+    // typecheck lives outside the per-file glob because tsc always runs on the full project.
+    expect(raw).toMatch(/pnpm\s+lint-staged[\s\S]*pnpm\s+typecheck/);
+  });
+
+  it('package.json lint-staged block maps *.{ts,tsx} to eslint+prettier (no tsc)', () => {
     const pkg = readJson<PackageJson>('package.json');
     const tsCommands = pkg['lint-staged']?.['*.{ts,tsx}'] ?? [];
     expect(tsCommands).toContain('eslint --fix');
     expect(tsCommands).toContain('prettier --write');
-    expect(tsCommands).toContain('tsc --noEmit');
+    expect(tsCommands).not.toContain('tsc --noEmit');
   });
 
   it('package.json lint-staged block maps *.{json,md,css} to prettier --write', () => {
     const pkg = readJson<PackageJson>('package.json');
     const textCommands = pkg['lint-staged']?.['*.{json,md,css}'] ?? [];
     expect(textCommands).toContain('prettier --write');
+  });
+
+  it('package.json typecheck script uses --incremental for fast pre-commit runs', () => {
+    const pkg = readJson<PackageJson>('package.json');
+    expect(pkg.scripts?.typecheck).toContain('--incremental');
   });
 
   it('package.json prepare script runs husky', () => {
