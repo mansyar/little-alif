@@ -128,7 +128,7 @@ describe('Tooling: package.json scripts', () => {
     ['format', 'prettier --write'],
     ['format:check', 'prettier --check'],
     ['lint', 'eslint'],
-    ['lint:fix', 'eslint --fix'],
+    ['lint:fix', 'eslint . --fix'],
   ])('script "%s" invokes "%s"', (scriptName, expectedSubstring) => {
     const pkg = readJson<PackageJson>('package.json');
     const script = pkg.scripts?.[scriptName] ?? '';
