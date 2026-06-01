@@ -53,6 +53,7 @@ This is a developer-experience / tooling track. It introduces no user-facing cha
 
 - Install `lint-staged` as a dev dependency.
 - Add `lint-staged` configuration block to `package.json`:
+
   ```json
   "lint-staged": {
     "*.{ts,tsx}": [
