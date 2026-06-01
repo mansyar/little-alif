@@ -45,7 +45,7 @@
     - [x] Create test for Zustand stores — verify initial state is correct
     - [x] Run all tests, confirm they pass (21/21)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (user-approved)
 
 ---
 
@@ -53,41 +53,41 @@
 
 **Goal:** Define Drizzle schema, apply migrations, and seed the 28-letter Arabic alphabet master table.
 
-- [ ] Task: Install database dependencies
-    - [ ] Install Drizzle ORM (`drizzle-orm`)
-    - [ ] Install libSQL driver (`@libsql/client`)
-    - [ ] Install Drizzle Kit (`drizzle-kit`) for migrations
-    - [ ] Configure `drizzle.config.ts` pointing to SQLite file
+- [x] Task: Install database dependencies (1e576fc)
+    - [x] Install Drizzle ORM (`drizzle-orm`)
+    - [x] Install libSQL driver (`@libsql/client`)
+    - [x] Install Drizzle Kit (`drizzle-kit`) for migrations
+    - [x] Configure `drizzle.config.ts` pointing to SQLite file
 
-- [ ] Task: Write Drizzle schema definitions
-    - [ ] Create `app/db/schema.ts` with:
+- [x] Task: Write Drizzle schema definitions (ce2f8e3)
+    - [x] Create `app/db/schema.ts` with:
         - `profiles` table: id, name, avatar, vowel_mode, created_at, updated_at
         - `letters` table: id (text enum), character, display_order, audio_files (text/JSON)
         - `letter_toggles` table: id, profile_id (FK → profiles), letter_id (FK → letters), is_visible (integer, default 0)
-    - [ ] Configure cascade deletes: profile deletion → cascades to letter_toggles
-    - [ ] Verify schema types are correct
+    - [x] Configure cascade deletes: profile deletion → cascades to letter_toggles
+    - [x] Verify schema types are correct
 
-- [ ] Task: Create DB client initialization
-    - [ ] Create `app/db/index.ts` — initialize libSQL client and drizzle instance
-    - [ ] Support both local SQLite file and Turso remote (via DATABASE_URL)
-    - [ ] Verify client connects successfully
+- [x] Task: Create DB client initialization (ce2f8e3)
+    - [x] Create `app/db/index.ts` — initialize libSQL client and drizzle instance
+    - [x] Support both local SQLite file and Turso remote (via DATABASE_URL)
+    - [x] Verify client connects successfully
 
-- [ ] Task: Create seed script for 28 letters
-    - [ ] Create `app/db/seed.ts` with:
+- [x] Task: Create seed script for 28 letters (ce2f8e3)
+    - [x] Create `app/db/seed.ts` with:
         - Idempotent insert (check for existing data before inserting)
         - All 28 Arabic letters: character, display_order (1–28), audio_files (JSON string mapping modes)
         - Correct letter order per roadmap T-02
-    - [ ] Run seed script, verify 28 letters inserted
+    - [x] Run seed script, verify 28 letters inserted
 
-- [ ] Task: Apply database migrations
-    - [ ] Run `pnpm drizzle-kit push` to create tables
-    - [ ] Verify all tables exist: profiles, letters, letter_toggles
-    - [ ] Verify seed data is correct (28 letters)
+- [x] Task: Apply database migrations (ce2f8e3)
+    - [x] Run `pnpm drizzle-kit push` to create tables
+    - [x] Verify all tables exist: profiles, letters, letter_toggles
+    - [x] Verify seed data is correct (28 letters)
 
-- [ ] Task: Write tests for database layer
-    - [ ] Create test for DB schema — verify table structure matches expectations
-    - [ ] Create test for seed script — verify idempotency and data integrity
-    - [ ] Run all tests, confirm they pass
+- [x] Task: Write tests for database layer (ce2f8e3)
+    - [x] Create test for DB schema — verify table structure matches expectations
+    - [x] Create test for seed script — verify idempotency and data integrity
+    - [x] Run all tests, confirm they pass (36/36)
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
