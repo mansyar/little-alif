@@ -89,7 +89,7 @@
     - [x] Create test for seed script — verify idempotency and data integrity
     - [x] Run all tests, confirm they pass (36/36)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ---
 
@@ -138,4 +138,4 @@
     - [x] Create test for Zod schemas — verify validation rules (8 tests pass)
     - [x] Run all tests, confirm they pass (59/59)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
