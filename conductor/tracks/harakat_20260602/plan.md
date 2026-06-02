@@ -59,9 +59,9 @@
   - [x] Read `currentHarakat` from `ui-store` and highlight the active button
   - [x] On click, call `ui-store.setHarakat(mode)` to update session-only state
   - [x] Style with Tailwind: large touch targets (≥44dp), clear active state
-- [ ] Task: Add i18n keys for harakat labels
-  - [ ] Add `HARAKAT_PLAIN`, `HARAKAT_FATHAH`, `HARAKAT_KASRAH`, `HARAKAT_DAMMAH` to English locale
-  - [ ] Add corresponding Indonesian translations
+- [x] Task: Add i18n keys for harakat labels (ac85df4)
+  - [x] Add `HARAKAT_PLAIN`, `HARAKAT_FATHAH`, `HARAKAT_KASRAH`, `HARAKAT_DAMMAH` to English locale
+  - [x] Add corresponding Indonesian translations
 - [ ] Task: Write tests for ChildHarakatBar
   - [ ] Test that all 4 buttons render
   - [ ] Test that clicking a button updates `ui-store.currentHarakat`
