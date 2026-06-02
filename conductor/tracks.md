@@ -8,5 +8,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: T-09 — Audio Service (Web Speech API)**
-      _Link: ./tracks/audio-service_20260602/_
+<!-- Track: T-09 — Audio Service (Web Speech API) archived to ./archive/audio-service_20260602/ -->
