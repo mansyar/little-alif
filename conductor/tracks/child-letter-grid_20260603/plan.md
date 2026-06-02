@@ -59,13 +59,13 @@
   - [ ] `aria-label` includes profile name for screen readers
   - [ ] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Write failing tests for EmptyState
-  - [ ] Create `app/components/child/EmptyState.test.tsx`
-  - [ ] Test: renders the empty-state icon (Lucide `BookOpen`)
-  - [ ] Test: does NOT render any text nodes (icon-only per PRD REQ-5.8)
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for EmptyState `3525861`
+  - [x] Create `app/components/child/EmptyState.test.tsx`
+  - [x] Test: renders the empty-state icon (Lucide `BookOpen`)
+  - [x] Test: does NOT render any text nodes (icon-only per PRD REQ-5.8)
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement EmptyState
+- [x] Task: Implement EmptyState `3525861`
   - [ ] Create `app/components/child/EmptyState.tsx`
   - [ ] Render a single large Lucide `BookOpen` icon (~96px), centered, with generous vertical padding
   - [ ] No text. No buttons. Just the icon.
