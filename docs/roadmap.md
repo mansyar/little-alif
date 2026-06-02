@@ -15,7 +15,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
 | T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
 | T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
-| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ⬜ Pending  |
+| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
 | T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
 | T-09 | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ⬜ Pending  |
 | T-10 | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
@@ -35,7 +35,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-04 | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)             |
 | T-05 | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/) |
 | T-06 | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)     |
-| T-07 | Vowel Mode (Harakat)                   | ⬜ Pending  | —                                                                              |
+| T-07 | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                   |
 | T-08 | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
 | T-09 | Audio Service (Web Speech API)         | ⬜ Pending  | —                                                                              |
 | T-10 | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
@@ -403,9 +403,10 @@ Implement the per-child letter toggle grid on the parent dashboard. Each letter 
 
 ---
 
-### T-07: Vowel Mode (Harakat)
+### T-07: Vowel Mode (Harakat) ✅
 
 **Dependencies:** T-02
+**Status:** ✅ Complete ([`harakat_20260602`](../conductor/archive/harakat_20260602/))
 
 **Description:**
 Implement Unicode combining diacritics for dynamic vowel rendering. Build `composeLetter()` with precomposed fallbacks for 7 non-connecting letters. Add parent harakat selector and child harakat bar.
@@ -413,13 +414,21 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 **PRD Ref:** §4 — Module 7 (Harakat), §6 — DD-1, DD-2, DD-4, DD-5, DD-6
 **TDD Ref:** §5 (Harakat Composer — `app/lib/utils/harakat.ts`)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/lib/utils/harakat.ts` — `composeLetter()` pure function with combining diacritics + 7 exceptions (ا و ي ر ز د ذ)
-- `app/components/parent/HarakatSelector.tsx` — Vowel mode dropdown/radio in the toggle screen
-- `app/components/child/ChildHarakatBar.tsx` — 4-button bar (Plain, Fathah, Kasrah, Dammah)
-- Font preloading: Cairo with `<link rel="preload">` + `font-display: block` in root layout
-- Update `updateProfileFn` to accept `vowelMode`
+- [x] `app/lib/utils/harakat.ts` — `composeLetter()` pure function, `VowelMode` type, `HARAKAT_COMBINING` map, `NON_CONNECTING` precomposed fallbacks (7 letters: ا و ي ر ز د ذ)
+- [x] `app/lib/utils/harakat.test.ts` — 14 unit tests covering all modes, connecting/non-connecting letters, and edge cases
+- [x] `app/stores/ui-store.ts` — `currentHarakat` state (default `'fathah'`) + `setHarakat()` action
+- [x] `app/stores/ui-store.test.ts` — 5 new tests for harakat state management
+- [x] `app/components/parent/HarakatSelector.tsx` — Radix radio group with 4 options, mutation with loading/error states, i18n labels
+- [x] `app/components/parent/HarakatSelector.test.tsx` — 4 tests covering rendering, active state, and mutation calls
+- [x] `app/components/child/ChildHarakatBar.tsx` — 4-button bar (44px touch targets), aria-pressed for accessibility, uses ui-store
+- [x] `app/components/child/ChildHarakatBar.test.tsx` — 4 tests covering rendering, click updates store, visual active state
+- [x] `app/components/parent/LetterToggleGrid.tsx` — Integrated HarakatSelector with `vowelMode` prop
+- [x] `app/components/parent/ProfileList.tsx` — Passes `vowelMode` from profile data to LetterToggleGrid
+- [x] `app/lib/i18n/en/index.ts` + `id/index.ts` + `i18n-types.ts` — Harakat label keys (HARAKAT_PLAIN, HARAKAT_FATHAH, HARAKAT_KASRAH, HARAKAT_DAMMAH)
+- [x] 205/205 tests passing, typecheck clean, lint clean
+- [x] Review fixes applied: Unicode combining order corrected (Alif+Kasrah), i18n integration completed
 
 **Key Decisions (from DD-1 through DD-6):**
 
@@ -429,18 +438,22 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 - DD-5: Sukun and tashdid are Phase 2 (out of scope).
 - DD-6: `composeLetter()` is a pure function returning a string, not a React component.
 
-**Edge Cases:**
+**Edge Cases (all covered):**
 
 - Font not loaded → diacritics may render as tofu (boxes). Mitigated by aggressive preload + `font-display: block`
 - Child changes vowel mode → grid re-renders all letter glyphs. Parent's global setting is preserved in DB
 - Vowel mode change on child side is temporary (session-only, does not update DB)
+- Mutation error → error banner with 5s auto-dismiss
+- Unicode combining mark ordering: Alif+Kasrah corrected to standard ordering
 
-**Verification:**
+**Verification (all passing):**
 
 - `composeLetter('ب', 'fathah')` returns `'بَ'` (Unicode combining)
 - `composeLetter('ر', 'kasrah')` returns `'رِ'` (precomposed fallback)
 - All 7 exception letters render correctly with all 3 harakat modes
 - Font preloads before paint (check Network tab)
+- 205/205 tests pass, 29 test files
+- `pnpm typecheck` clean, `pnpm lint` clean
 
 ---
 
@@ -700,7 +713,7 @@ T-01 (Scaffolding)  ── ✅
  │    │    │    │    └── T-11 (Child Mode) ⬜ ────────────┤
  │    │    │    └── T-11 (Child Mode) ⬜ ─────────────────┤
  │    │    └── T-11 (Child Mode) ⬜ ──────────────────────┤
- │    └── T-07 (Harakat) ⬜ ──────────────────────────────┤
+ │    └── T-07 (Harakat) ✅ ──────────────────────────────┤
  │                                                        │
 T-03b (Code Quality) ── ✅                                │
 T-04 (i18n — parallel to T-02/T-03) ✅                    │

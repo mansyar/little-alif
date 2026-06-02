@@ -32,7 +32,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Code Quality Tooling** | ✅ Complete | Prettier, ESLint v9 (flat config), Husky + lint-staged pre-commit hooks. See [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
 | **Parent Dashboard**     | ✅ Complete | Profile CRUD, avatar selection, child mode toggle. See [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)               |
 | **Letter Toggle Mgmt**   | ✅ Complete | ON/OFF switches per letter per child. See [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                |
-| **Vowel Mode (Harakat)** | ⬜ Pending  | Unicode diacritic rendering + non-connecting letter exceptions                                                                                      |
+| **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)        |
 | **Child Letter Grid**    | ⬜ Pending  | Touch grid with audio playback, empty state                                                                                                         |
 | **Audio Service**        | ⬜ Pending  | Web Speech API pronunciation                                                                                                                        |
 | **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                      |
