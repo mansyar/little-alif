@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Letter Toggle Management**
-      _Link: ./tracks/letter-toggles_20260602/_
+- [~] **Track: Letter Toggle Management**
+  _Link: ./tracks/letter-toggles_20260602/_
