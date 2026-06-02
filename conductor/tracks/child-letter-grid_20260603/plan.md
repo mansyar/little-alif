@@ -43,6 +43,8 @@
 
 ### Tasks
 
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) — pending user confirmation
+
 - [x] Task: Write failing tests for ProfileBadge `d7bd67d`
   - [x] Create `app/components/child/ProfileBadge.test.tsx`
   - [x] Test: renders the inline SVG avatar matching the active profile's `avatar` key
