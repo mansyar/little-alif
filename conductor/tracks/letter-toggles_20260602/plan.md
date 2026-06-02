@@ -37,7 +37,7 @@
 
 ---
 
-## Phase 2: LetterToggleGrid Component
+## Phase 2: LetterToggleGrid Component [checkpoint: 4607d0a]
 
 **Goal:** Build the parent-facing toggle grid UI with inline expand/collapse on the dashboard.
 
@@ -60,7 +60,7 @@
   - [x] Render 28 letters in display order (1–28), each as a row/card with:
     - Arabic character glyph (large, centered)
     - Radix UI Switch (`@radix-ui/react-switch`)
-  - [~] Wire toggle action: onChange → debounce 300ms → call `toggleLetterFn(profileId, letterId, !currentState)` (debounce deferred to Task 4)
+  - [x] Wire toggle action: onChange → debounce 300ms → call `toggleLetterFn(profileId, letterId, !currentState)` (debounce deferred to Task 4)
   - [x] Handle loading state: show spinner while initial data loads
   - [x] Handle in-flight state: disable switch while mutation is pending
   - [x] Handle error state: show mutation error banner with 5s auto-dismiss
@@ -84,7 +84,7 @@
   - [x] Apply debounce to individual switch toggle events (wrapped `toggleMutation.mutate` with 300ms debounce)
   - [x] Verify rapid clicks produce a single server call after 300ms (test: 3 rapid clicks → 1 call)
 
-- [ ] Task: Conductor — User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor — User Manual Verification 'Phase 2' (Protocol in workflow.md) `4607d0a`
 
 ---
 
