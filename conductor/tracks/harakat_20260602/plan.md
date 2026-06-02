@@ -78,4 +78,10 @@
 - [x] Task: Run lint (`pnpm lint`) — clean
 - [x] Task: Verify manually that composeLetter output is correct for all 28 letters (14 harakat tests pass)
 - [x] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+
+---
+
+## Phase 5: Review Fixes
+
+- [x] Task: Apply review suggestions (a734617)
       </protect>
