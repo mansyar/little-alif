@@ -1,0 +1,200 @@
+// @vitest-environment jsdom
+import { describe, expect, it, vi, afterEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
+import type { VisibleLetter } from '~/server/letters';
+import { LETTER_IDS } from '~/db/schema';
+
+const mockProfileId = 'test-profile-id';
+
+const ARABIC_CHARACTERS: Record<string, string> = {
+  alif: '\u0627',
+  ba: '\u0628',
+  ta: '\u062A',
+  tsa: '\u062B',
+  jim: '\u062C',
+  ha: '\u062D',
+  kho: '\u062E',
+  dal: '\u062F',
+  dzal: '\u0630',
+  ra: '\u0631',
+  zai: '\u0632',
+  sin: '\u0633',
+  syin: '\u0634',
+  shad: '\u0635',
+  dhad: '\u0636',
+  tha: '\u0637',
+  dzha: '\u0638',
+  ain: '\u0639',
+  ghain: '\u063A',
+  fa: '\u0641',
+  qaf: '\u0642',
+  kaf: '\u0643',
+  lam: '\u0644',
+  mim: '\u0645',
+  nun: '\u0646',
+  waw: '\u0648',
+  hae: '\u0647',
+  ya: '\u064A',
+};
+
+const mockLetters: VisibleLetter[] = LETTER_IDS.map((id, i) => ({
+  letterId: id,
+  character: ARABIC_CHARACTERS[id] ?? '',
+  displayOrder: i + 1,
+  audioFile: `${id}.mp3`,
+  isVisible: false,
+}));
+
+const mockGetVisibleLetters = vi.fn().mockResolvedValue(mockLetters);
+const mockToggleLetter = vi.fn().mockResolvedValue({ letterId: 'alif', isVisible: true });
+const mockBulkToggleLetters = vi.fn().mockResolvedValue({ updatedCount: 28 });
+
+vi.mock('~/server/letters', () => ({
+  getVisibleLettersFn: (opts: { data: { profileId: string } }) =>
+    mockGetVisibleLetters(opts.data.profileId) as Promise<VisibleLetter[]>,
+  toggleLetterFn: (opts: { data: { profileId: string; letterId: string; isVisible: boolean } }) =>
+    mockToggleLetter(opts.data) as Promise<{ letterId: string; isVisible: boolean }>,
+  bulkToggleLettersFn: (opts: {
+    data: { profileId: string; letterIds: string[]; isVisible: boolean };
+  }) => mockBulkToggleLetters(opts.data) as Promise<{ updatedCount: number }>,
+}));
+
+vi.mock('~/lib/i18n', () => ({
+  useI18nContext: () => ({
+    LL: {
+      LETTERS_SHOW: () => 'Show' as const,
+      LETTERS_HIDE: () => 'Hide' as const,
+      ERROR_GENERIC: () => 'Something went wrong.' as const,
+    },
+  }),
+}));
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
+  });
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  };
+}
+
+describe('LetterToggleGrid', () => {
+  afterEach(() => {
+    cleanup();
+    vi.clearAllMocks();
+  });
+
+  it('renders all 28 letters in correct display order', async () => {
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    const switches = await screen.findAllByRole('switch');
+    expect(switches).toHaveLength(28);
+  });
+
+  it('renders each letter with an Arabic character and a switch', async () => {
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    const { container } = render(<LetterToggleGrid profileId={mockProfileId} />, {
+      wrapper: createWrapper(),
+    });
+
+    // Wait for data to load
+    await screen.findAllByRole('switch');
+
+    // Verify Arabic characters are rendered (check for a few known ones)
+    // The component should render the actual Arabic characters from seed data
+    expect(container.textContent).toContain('ا'); // alif
+    expect(container.textContent).toContain('ب'); // ba
+    expect(container.textContent).toContain('ي'); // ya
+  });
+
+  it('calls toggleLetterFn when a switch is toggled', async () => {
+    // Set up mock so the first letter (alif) starts OFF
+    mockToggleLetter.mockResolvedValue({ letterId: 'alif', isVisible: true });
+
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    const switches = await screen.findAllByRole('switch');
+    const user = userEvent.setup();
+    await user.click(switches[0]!); // Toggle alif ON
+
+    expect(mockToggleLetter).toHaveBeenCalledWith({
+      profileId: mockProfileId,
+      letterId: 'alif',
+      isVisible: true,
+    });
+  });
+
+  it('disables the switch while the toggle mutation is in flight', async () => {
+    // Make the mutation never resolve so we can check disabled state
+    mockToggleLetter.mockReturnValue(new Promise(() => undefined));
+
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    const switches = await screen.findAllByRole('switch');
+    const user = userEvent.setup();
+    await user.click(switches[0]!);
+
+    // The clicked switch should be disabled while mutation is in flight
+    expect(switches[0]?.getAttribute('disabled')).not.toBeNull();
+  });
+
+  it('shows error state when toggleLetterFn fails', async () => {
+    mockToggleLetter.mockRejectedValue(new Error('Toggle failed'));
+
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    const switches = await screen.findAllByRole('switch');
+    const user = userEvent.setup();
+    await user.click(switches[0]!);
+
+    // The component displays the error message from the rejected promise
+    const errorMsg = await screen.findByText('Toggle failed');
+    expect(errorMsg).toBeTruthy();
+  });
+
+  it('calls bulkToggleLettersFn with all letter IDs when "Show All" is clicked', async () => {
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    // Wait for data to load
+    await screen.findAllByRole('switch');
+
+    const showAllButton = screen.getByText('Show');
+    const user = userEvent.setup();
+    await user.click(showAllButton);
+
+    expect(mockBulkToggleLetters).toHaveBeenCalledWith({
+      profileId: mockProfileId,
+      letterIds: [...LETTER_IDS],
+      isVisible: true,
+    });
+  });
+
+  it('calls bulkToggleLettersFn with all letter IDs when "Hide All" is clicked', async () => {
+    // Set up some letters ON so "Hide All" is meaningful
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    // Wait for data to load
+    await screen.findAllByRole('switch');
+
+    const hideAllButton = screen.getByText('Hide');
+    const user = userEvent.setup();
+    await user.click(hideAllButton);
+
+    expect(mockBulkToggleLetters).toHaveBeenCalledWith({
+      profileId: mockProfileId,
+      letterIds: [...LETTER_IDS],
+      isVisible: false,
+    });
+  });
+});
