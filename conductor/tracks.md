@@ -12,5 +12,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: T-09b — Audio Preloader (Idle Warm-up)**
+- [x] **Track: T-09b — Audio Preloader (Idle Warm-up)**
       _Link: ./tracks/audio-preloader_20260602/_
