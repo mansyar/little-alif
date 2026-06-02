@@ -4,5 +4,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Vowel Mode (Harakat)**
-      _Link: ./tracks/harakat_20260602/_
+<!-- Track: Vowel Mode (Harakat) archived to ./archive/harakat_20260602/ -->

@@ -1,0 +1,8 @@
+{
+  "track_id": "harakat_20260602",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-02T14:30:00Z",
+  "updated_at": "2026-06-02T14:30:00Z",
+  "description": "Implement Unicode combining diacritics for dynamic vowel rendering. Build composeLetter() with precomposed fallbacks for non-connecting letters. Add parent harakat selector and child harakat bar."
+}
