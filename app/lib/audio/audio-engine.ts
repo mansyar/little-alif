@@ -46,21 +46,27 @@ export function createBrowserAdapter(): SpeechSynthesisAdapter | null {
 // ---------------------------------------------------------------------------
 
 export class AudioEngine {
-  private _adapter: SpeechSynthesisAdapter | null = null;
+  private adapter: SpeechSynthesisAdapter | null = null;
   private selectedVoice: SpeechSynthesisVoice | null = null;
   private currentUtterance: SpeechSynthesisUtterance | null = null;
+  private currentResolve: (() => void) | null = null;
   private voiceScanComplete = false;
 
   /** Whether SpeechSynthesis is available and the engine is not disposed. */
   get isSupported(): boolean {
-    return this._adapter !== null;
+    return this.adapter !== null;
   }
 
   constructor(adapter?: SpeechSynthesisAdapter) {
     if (adapter) {
-      this._adapter = adapter;
+      this.adapter = adapter;
     } else {
-      this._adapter = createBrowserAdapter();
+      this.adapter = createBrowserAdapter();
+    }
+
+    // Re-scan voices when they become available (async loading in some browsers)
+    if (this.adapter) {
+      this.adapter.onvoiceschanged = () => this.resetVoiceScan();
     }
   }
 
@@ -73,10 +79,10 @@ export class AudioEngine {
    * only called once unless `resetVoiceScan()` is explicitly invoked.
    */
   private selectVoice(): SpeechSynthesisVoice | null {
-    if (!this._adapter) return null;
+    if (!this.adapter) return null;
     if (this.voiceScanComplete) return this.selectedVoice;
 
-    const voices = this._adapter.getVoices();
+    const voices = this.adapter.getVoices();
 
     const arSA = voices.find((v) => v.lang === 'ar-SA');
     if (arSA) {
@@ -116,17 +122,21 @@ export class AudioEngine {
    * If a previous utterance is still playing it is cancelled first.
    */
   speak(letterChar: string, vowelMode: VowelMode): Promise<void> {
-    if (!this._adapter) {
+    const adapter = this.adapter;
+    if (!adapter) {
       return Promise.resolve();
     }
 
-    const text = composeLetter(letterChar, vowelMode);
-    const utterance = this._adapter.createUtterance(text);
-
-    // Cancel any in-flight utterance before starting a new one (FR-2)
-    if (this.currentUtterance) {
-      this._adapter.cancel();
+    // Cancel any in-flight utterance before starting a new one (FR-2).
+    if (this.currentResolve) {
+      this.currentResolve();
+      this.currentResolve = null;
+      adapter.cancel();
+      this.currentUtterance = null;
     }
+
+    const text = composeLetter(letterChar, vowelMode);
+    const utterance = adapter.createUtterance(text);
 
     utterance.rate = 0.85;
     const voice = this.selectVoice();
@@ -137,23 +147,30 @@ export class AudioEngine {
     this.currentUtterance = utterance;
 
     return new Promise<void>((resolve) => {
+      this.currentResolve = resolve;
       utterance.onend = () => {
         this.currentUtterance = null;
+        this.currentResolve = null;
         resolve();
       };
       utterance.onerror = () => {
         this.currentUtterance = null;
+        this.currentResolve = null;
         resolve(); // resolve silently on error (FR-3)
       };
 
-      this._adapter!.speak(utterance);
+      adapter.speak(utterance);
     });
   }
 
   /** Cancel any ongoing utterance immediately. */
   cancel(): void {
-    if (this._adapter) {
-      this._adapter.cancel();
+    if (this.currentResolve) {
+      this.currentResolve();
+      this.currentResolve = null;
+    }
+    if (this.adapter) {
+      this.adapter.cancel();
     }
     this.currentUtterance = null;
   }
@@ -167,7 +184,7 @@ export class AudioEngine {
   /** Tear down the engine and release resources. */
   dispose(): void {
     this.cancel();
-    this._adapter = null;
+    this.adapter = null;
     this.selectedVoice = null;
     this.voiceScanComplete = false;
   }
