@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { listProfilesFn } from '~/server/profiles';
 import { AVATAR_MAP } from './avatars';
 import type { AvatarKey } from '~/db/schema';
+import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
 import { LetterToggleGrid } from './LetterToggleGrid';
 
@@ -9,6 +10,7 @@ interface ProfileCard {
   id: string;
   name: string;
   avatar: AvatarKey;
+  vowelMode: VowelMode;
   introducedCount: number;
 }
 
@@ -130,7 +132,7 @@ export function ProfileList({
 
             {expandedProfileId === profile.id && (
               <div className="border-t border-sand-light pt-4">
-                <LetterToggleGrid profileId={profile.id} />
+                <LetterToggleGrid profileId={profile.id} vowelMode={profile.vowelMode} />
               </div>
             )}
           </div>

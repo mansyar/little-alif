@@ -7,12 +7,15 @@ import type { LetterId } from '~/db/schema';
 import { useI18nContext } from '~/lib/i18n';
 import type { VisibleLetter } from '~/server/letters';
 import { useDebouncedCallback } from '~/lib/utils/useDebouncedCallback';
+import type { VowelMode } from '~/lib/utils/harakat';
+import { HarakatSelector } from './HarakatSelector';
 
 interface LetterToggleGridProps {
   profileId: string;
+  vowelMode: VowelMode;
 }
 
-export function LetterToggleGrid({ profileId }: LetterToggleGridProps) {
+export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps) {
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
   const [mutationError, setMutationError] = useState<string | null>(null);
@@ -95,6 +98,9 @@ export function LetterToggleGrid({ profileId }: LetterToggleGridProps) {
 
   return (
     <div>
+      {/* Vowel mode selector */}
+      <HarakatSelector profileId={profileId} currentVowelMode={vowelMode} />
+
       {/* Show All / Hide All toolbar */}
       <div className="mb-4 flex gap-2">
         <button

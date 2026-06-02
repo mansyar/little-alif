@@ -62,6 +62,18 @@ vi.mock('~/server/letters', () => ({
   }) => mockBulkToggleLetters(opts.data) as Promise<{ updatedCount: number }>,
 }));
 
+const mockUpdateProfile = vi.fn().mockResolvedValue({
+  id: mockProfileId,
+  name: 'Test',
+  avatar: 'ba-boat',
+  vowelMode: 'fathah',
+});
+
+vi.mock('~/server/profiles', () => ({
+  updateProfileFn: (opts: { data: { profileId: string; vowelMode: string } }) =>
+    mockUpdateProfile(opts.data) as Promise<unknown>,
+}));
+
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
@@ -91,7 +103,9 @@ describe('LetterToggleGrid', () => {
 
   it('renders all 28 letters in correct display order', async () => {
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     const switches = await screen.findAllByRole('switch');
     expect(switches).toHaveLength(28);
@@ -99,9 +113,12 @@ describe('LetterToggleGrid', () => {
 
   it('renders each letter with an Arabic character and a switch', async () => {
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    const { container } = render(<LetterToggleGrid profileId={mockProfileId} />, {
-      wrapper: createWrapper(),
-    });
+    const { container } = render(
+      <LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />,
+      {
+        wrapper: createWrapper(),
+      },
+    );
 
     // Wait for data to load
     await screen.findAllByRole('switch');
@@ -118,7 +135,9 @@ describe('LetterToggleGrid', () => {
     mockToggleLetter.mockResolvedValue({ letterId: 'alif', isVisible: true });
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     const switches = await screen.findAllByRole('switch');
     const user = userEvent.setup();
@@ -139,7 +158,9 @@ describe('LetterToggleGrid', () => {
     mockToggleLetter.mockReturnValue(new Promise(() => undefined));
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     const switches = await screen.findAllByRole('switch');
     const user = userEvent.setup();
@@ -155,7 +176,9 @@ describe('LetterToggleGrid', () => {
     mockToggleLetter.mockRejectedValue(new Error('Toggle failed'));
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     const switches = await screen.findAllByRole('switch');
     const user = userEvent.setup();
@@ -170,7 +193,9 @@ describe('LetterToggleGrid', () => {
     mockToggleLetter.mockResolvedValue({ letterId: 'alif', isVisible: true });
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     const switches = await screen.findAllByRole('switch');
     const user = userEvent.setup();
@@ -188,7 +213,9 @@ describe('LetterToggleGrid', () => {
 
   it('calls bulkToggleLettersFn with all letter IDs when "Show All" is clicked', async () => {
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     // Wait for data to load
     await screen.findAllByRole('switch');
@@ -207,7 +234,9 @@ describe('LetterToggleGrid', () => {
   it('calls bulkToggleLettersFn with all letter IDs when "Hide All" is clicked', async () => {
     // Set up some letters ON so "Hide All" is meaningful
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
-    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
 
     // Wait for data to load
     await screen.findAllByRole('switch');
