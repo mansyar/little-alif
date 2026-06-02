@@ -1,0 +1,8 @@
+{
+  "track_id": "child-letter-grid_20260603",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-03T05:52:54Z",
+  "updated_at": "2026-06-03T05:52:54Z",
+  "description": "T-08: Child Letter Grid — Build the child-facing letter grid at /learn with tap-to-pronounce cards, full-screen playback overlay, harakat re-render, and disabled Reading Practice button"
+}
