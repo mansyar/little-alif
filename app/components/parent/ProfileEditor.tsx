@@ -51,7 +51,7 @@ export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProp
         const result = updateProfileSchema.safeParse(payload);
         if (!result.success) {
           setFieldErrors(formatZodErrors(result.error));
-          throw new Error('Validation failed');
+          return;
         }
         setFieldErrors({});
         return updateProfileFn({ data: result.data });
@@ -63,7 +63,7 @@ export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProp
         const result = createProfileSchema.safeParse(payload);
         if (!result.success) {
           setFieldErrors(formatZodErrors(result.error));
-          throw new Error('Validation failed');
+          return;
         }
         setFieldErrors({});
         return createProfileFn({ data: result.data });
@@ -91,6 +91,11 @@ export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProp
         <Dialog.Overlay className="fixed inset-0 bg-black/40" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-large bg-white p-6 shadow-xl">
           <Dialog.Title className="text-lg font-semibold text-text-dark">{title}</Dialog.Title>
+          <Dialog.Description className="sr-only">
+            {isEdit
+              ? 'Edit the child profile name and avatar'
+              : 'Fill in the child profile name and select an avatar'}
+          </Dialog.Description>
 
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             <div>

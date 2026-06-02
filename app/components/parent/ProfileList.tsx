@@ -22,6 +22,7 @@ export function ProfileList({ onEdit, onDelete }: ProfileListProps) {
     data: profiles,
     isLoading,
     error,
+    refetch,
   } = useQuery<ProfileCard[]>({
     queryKey: ['profiles'],
     queryFn: () => listProfilesFn(),
@@ -43,7 +44,9 @@ export function ProfileList({ onEdit, onDelete }: ProfileListProps) {
         </p>
         <button
           type="button"
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            void refetch();
+          }}
           className="mt-3 text-sm font-semibold text-red-700 underline"
         >
           {LL.PROFILE_CANCEL()}
