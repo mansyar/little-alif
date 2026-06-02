@@ -39,12 +39,12 @@
   - [x] On change, call `updateProfileFn({ data: { profileId, vowelMode } })`
   - [x] Show which mode is currently active
   - [x] Handle loading/error states from the mutation
-- [ ] Task: Integrate HarakatSelector into `LetterToggleGrid.tsx`
-  - [ ] Render HarakatSelector above the bulk actions toolbar in the grid header
-  - [ ] Fetch current vowelMode from the profile data
-- [ ] Task: Write tests for HarakatSelector
-  - [ ] Test that all 4 option buttons render
-  - [ ] Test that changing mode calls `updateProfileFn`
+- [x] Task: Integrate HarakatSelector into `LetterToggleGrid.tsx` (6b592fc)
+  - [x] Render HarakatSelector above the bulk actions toolbar in the grid header
+  - [x] Fetch current vowelMode from the profile data
+- [x] Task: Write tests for HarakatSelector (73f8879)
+  - [x] Test that all 4 option buttons render
+  - [x] Test that changing mode calls `updateProfileFn`
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ---
