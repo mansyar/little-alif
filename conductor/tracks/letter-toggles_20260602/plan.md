@@ -79,10 +79,10 @@
   - [x] Only one profile's grid should be expanded at a time (accordion behavior — toggle logic toggles off if same profile clicked)
   - [x] Run tests and confirm they pass
 
-- [ ] Task: Implement 300ms debounce utility for toggle operations
-  - [ ] Create or extend a debounce hook/utility in `app/lib/utils/`
-  - [ ] Apply debounce to individual switch toggle events
-  - [ ] Verify rapid clicks produce a single server call after 300ms
+- [x] Task: Implement 300ms debounce utility for toggle operations `1c8efb0`
+  - [x] Create `app/lib/utils/useDebouncedCallback.ts` — generic debounce hook with stable identity
+  - [x] Apply debounce to individual switch toggle events (wrapped `toggleMutation.mutate` with 300ms debounce)
+  - [x] Verify rapid clicks produce a single server call after 300ms (test: 3 rapid clicks → 1 call)
 
 - [ ] Task: Conductor — User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
