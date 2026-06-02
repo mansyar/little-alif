@@ -29,10 +29,10 @@
 
 **Goal:** Add vowel mode selector to the parent's LetterToggleGrid header.
 
-- [ ] Task: Update `app/stores/ui-store.ts` to track `currentHarakat`
-  - [ ] Import `VowelMode` type from `~/lib/utils/harakat`
-  - [ ] Add `currentHarakat: VowelMode` field (default: `'fathah'`)
-  - [ ] Add `setHarakat(mode: VowelMode)` action
+- [x] Task: Update `app/stores/ui-store.ts` to track `currentHarakat` (a1c8fe6)
+  - [x] Import `VowelMode` type from `~/lib/utils/harakat`
+  - [x] Add `currentHarakat: VowelMode` field (default: `'fathah'`)
+  - [x] Add `setHarakat(mode: VowelMode)` action
 - [ ] Task: Create `app/components/parent/HarakatSelector.tsx`
   - [ ] Implement radio-style selector with 4 options: Plain, Fathah, Kasrah, Dammah
   - [ ] Accept `profileId` and `currentVowelMode` as props
