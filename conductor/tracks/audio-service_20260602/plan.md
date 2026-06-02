@@ -1,3 +1,4 @@
+<protect>
 # Implementation Plan — T-09: Audio Service (Web Speech API)
 
 ## Phase 1: SpeechSynthesis Adapter & AudioEngine Singleton
@@ -73,3 +74,4 @@
   - [ ] Verify Acceptance Criteria 1–9 from spec.md
 
 - [ ] Task: Conductor - Phase Completion Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md)
+      </protect>

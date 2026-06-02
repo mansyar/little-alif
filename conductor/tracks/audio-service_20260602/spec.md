@@ -1,3 +1,4 @@
+<protect>
 # T-09: Audio Service (Web Speech API)
 
 ## Overview
@@ -87,3 +88,4 @@ This track **replaces** the original pre-recorded MP3 approach from the TDD §7 
 - Volume/gain control (device volume handles this)
 - Audio visualizations or waveform display
 - Recording or speech recognition
+  </protect>
