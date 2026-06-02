@@ -64,7 +64,9 @@ The dashboard page shows an inline, expandable 28-letter grid under each child p
 
 ### FR-5: Profile Card Integration (Existing from T-05)
 
-The profile card already shows "X/28 introduced" summary (e.g., "5/28 introduced") as part of T-05. No changes needed to the profile card for this track.
+The profile card already shows "X/28 introduced" summary (e.g., "5/28 introduced") as part of T-05. The count is computed server-side by `listProfilesFn` via a `LEFT JOIN` on `letter_toggles` with a conditional `COUNT(CASE WHEN is_visible = 1 THEN 1 END)`.
+
+No changes needed to the profile card for this track, but after any toggle mutation (individual or bulk), the TanStack Query `['profiles']` cache must be invalidated so the `introducedCount` refreshes automatically on the dashboard.
 
 ## Non-Functional Requirements
 

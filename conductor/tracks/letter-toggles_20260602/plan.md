@@ -67,6 +67,7 @@
     - "Show All": calls `bulkToggleLettersFn(profileId, allLetterIds, true)`
     - "Hide All": calls `bulkToggleLettersFn(profileId, allLetterIds, false)`
   - [ ] Use existing grid/list styling patterns from the project (Tailwind CSS v4)
+  - [ ] After every toggle/bulk mutation, invalidate the TanStack Query `['profiles']` cache so the `introducedCount` on profile cards refreshes automatically
   - [ ] Run tests and confirm they pass (Green phase)
 
 - [ ] Task: Integrate toggle grid inline on the dashboard
@@ -100,10 +101,11 @@
   - [ ] Test: Toggle on another parent's profile is rejected
   - [ ] Run tests and confirm they pass
 
-- [ ] Task: Verify profile card letter count integration
-  - [ ] Check T-05 implementation to confirm profile card already shows "X/28 introduced" summary
-  - [ ] If not present (despite roadmap claiming it's done), add letter count display to profile cards
-  - [ ] The count should update in real-time after toggles
+- [ ] Task: Verify profile card letter count stays in sync
+  - [ ] Confirm the `['profiles']` query cache invalidation works after both individual and bulk toggles
+  - [ ] Test flow: toggle letter ON → navigate away → return → verify count incremented
+  - [ ] Test flow: bulk show all → verify count shows 28/28
+  - [ ] Test flow: bulk hide all → verify count shows 0/28
 
 - [ ] Task: Final code quality checks
   - [ ] Run full test suite: `pnpm test` — all tests pass
