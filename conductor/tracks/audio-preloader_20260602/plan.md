@@ -19,10 +19,10 @@
   - [x] **Implement graceful skipping** — Silent exit when: engine not supported, voice cache empty, or utterance active
   - [x] Run tests and verify they pass (Green phase) — All 234 tests pass (31 files)
 
-- [ ] **Task: Integrate preloader into `/learn` route**
-  - [ ] Import `preloadOnIdle` and `audioEngine` singleton in `app/routes/learn.tsx`
-  - [ ] Call `preloadOnIdle(audioEngine)` on route mount (in component's `useEffect` or `onMount`)
-  - [ ] Verify no side effects during active playback or navigation
+- [x] **Task: Integrate preloader into `/learn` route** `[979fce7]`
+  - [x] Import `preloadOnIdle` and `audioEngine` singleton in `app/routes/learn.tsx`
+  - [x] Call `preloadOnIdle(audioEngine)` on route mount (in component's `useEffect`)
+  - [x] Verified no side effects — route is minimal placeholder, preloader fires once on mount
 
 - [ ] **Task: Conductor - User Manual Verification 'Phase 1: Implement Audio Preloader Module' (Protocol in workflow.md)**
       </protect>
