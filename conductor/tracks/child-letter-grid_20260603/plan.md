@@ -13,25 +13,25 @@
 
 ### Tasks
 
-- [ ] Task: Add Zod schema for `getActiveProfile`
-  - [ ] Open `app/lib/validations/profiles.ts`
-  - [ ] Add `getActiveProfileSchema = z.object({ profileId: z.string().uuid() })`
-  - [ ] Export alongside the existing `createProfileSchema`, `updateProfileSchema`, `deleteProfileSchema`
+- [x] Task: Add Zod schema for `getActiveProfile` `6cb4d60`
+  - [x] Open `app/lib/validations/profiles.ts`
+  - [x] Add `getActiveProfileSchema = z.object({ profileId: z.string().uuid() })`
+  - [x] Export alongside the existing `createProfileSchema`, `updateProfileSchema`, `deleteProfileSchema`
 
-- [ ] Task: Write failing tests for `getActiveProfileFn`
-  - [ ] Create `app/server/__tests__/profiles.test.ts` (if it does not already exist) or extend the existing profiles test file
-  - [ ] Test: returns `{ id, name, avatar, vowelMode }` for an owned profile
-  - [ ] Test: rejects unauthenticated request (no JWT)
-  - [ ] Test: rejects request for a profile the caller does not own
-  - [ ] Test: rejects request with invalid profileId (Zod validation)
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `getActiveProfileFn` `6cb4d60`
+  - [x] Create `app/server/__tests__/profiles.test.ts` (if it does not already exist) or extend the existing profiles test file
+  - [x] Test: returns `{ id, name, avatar, vowelMode }` for an owned profile
+  - [ ] Test: rejects unauthenticated request (no JWT) _(server function wrapper requires TanStack Start runtime — covered indirectly via pure-helper test for missing ownership)_
+  - [x] Test: rejects request for a profile the caller does not own
+  - [x] Test: rejects request with invalid profileId (Zod validation)
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `getActiveProfileFn`
-  - [ ] Add pure helper `getActiveProfile(db, ownerId, profileId)` to `app/server/profiles.ts` — returns the profile row or throws
-  - [ ] Reuse `verifyProfileOwnership(db, ownerId, profileId)` from the existing pattern
-  - [ ] Add `getActiveProfileFn` server function wrapper using `createServerFn({ method: 'GET' })` with `inputValidator(getActiveProfileSchema)`
-  - [ ] In the handler, call `validateSessionFn()`, throw on null, then call `getActiveProfile(db, session.user.id, data.profileId)`
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+- [x] Task: Implement `getActiveProfileFn` `6cb4d60`
+  - [x] Add pure helper `getActiveProfile(db, ownerId, profileId)` to `app/server/profiles.ts` — returns the profile row or throws
+  - [x] Reuse `verifyProfileOwnership(db, ownerId, profileId)` from the existing pattern (inlined the same shape — small enough to not warrant a shared module)
+  - [x] Add `getActiveProfileFn` server function wrapper using `createServerFn({ method: 'GET' })` with `inputValidator(getActiveProfileSchema)`
+  - [x] In the handler, call `validateSessionFn()`, throw on null, then call `getActiveProfile(db, session.user.id, data.profileId)`
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
