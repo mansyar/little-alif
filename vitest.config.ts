@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     environment: 'node',
+    setupFiles: ['./vitest-setup.ts'],
     include: ['app/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       provider: 'v8',

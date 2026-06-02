@@ -1,9 +1,21 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logoutFn, validateSessionFn } from '~/server/auth-fns';
+import { deleteProfileFn } from '~/server/profiles';
 import { useI18nContext } from '~/lib/i18n';
 import { LanguageToggle } from '~/components/parent/LanguageToggle';
 import { ProfileList } from '~/components/parent/ProfileList';
+import { ProfileEditor } from '~/components/parent/ProfileEditor';
+import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
+import type { AvatarKey } from '~/db/schema';
+
+interface ProfileCard {
+  id: string;
+  name: string;
+  avatar: AvatarKey;
+  introducedCount: number;
+}
 
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: async () => {
@@ -19,7 +31,44 @@ export const Route = createFileRoute('/dashboard')({
 
 function DashboardPage() {
   const { LL } = useI18nContext();
+  const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
+
+  // ProfileEditor state
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editingProfile, setEditingProfile] = useState<ProfileCard | undefined>(undefined);
+
+  // ConfirmDialog state
+  const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
+  const deleteConfirmOpen = deleteProfileId !== null;
+
+  const deleteMutation = useMutation({
+    mutationFn: (profileId: string) => deleteProfileFn({ data: { profileId } }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      setDeleteProfileId(null);
+    },
+  });
+
+  function handleAddChild() {
+    setEditingProfile(undefined);
+    setEditorOpen(true);
+  }
+
+  function handleEdit(profile: ProfileCard) {
+    setEditingProfile(profile);
+    setEditorOpen(true);
+  }
+
+  function handleDelete(profileId: string) {
+    setDeleteProfileId(profileId);
+  }
+
+  function handleConfirmDelete() {
+    if (deleteProfileId) {
+      deleteMutation.mutate(deleteProfileId);
+    }
+  }
 
   async function handleLogout() {
     setSigningOut(true);
@@ -66,14 +115,32 @@ function DashboardPage() {
           <h2 className="text-xl font-semibold text-text-dark">{LL.PROFILE_NAME()}</h2>
           <button
             type="button"
+            onClick={handleAddChild}
             className="rounded-small bg-green px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-green/90"
           >
             {LL.DASHBOARD_ADD_CHILD()}
           </button>
         </header>
 
-        <ProfileList />
+        <ProfileList onEdit={handleEdit} onDelete={handleDelete} />
       </main>
+
+      {/* Profile Editor modal */}
+      <ProfileEditor open={editorOpen} onOpenChange={setEditorOpen} profile={editingProfile} />
+
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
+        open={deleteConfirmOpen}
+        onOpenChange={(open) => {
+          if (!open) setDeleteProfileId(null);
+        }}
+        title={LL.PROFILE_DELETE()}
+        message={LL.PROFILE_DELETE_CONFIRM()}
+        confirmLabel={LL.PROFILE_DELETE()}
+        cancelLabel={LL.PROFILE_CANCEL()}
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </div>
   );
 }

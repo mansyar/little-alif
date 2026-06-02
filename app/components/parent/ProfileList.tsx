@@ -11,7 +11,12 @@ interface ProfileCard {
   introducedCount: number;
 }
 
-export function ProfileList() {
+interface ProfileListProps {
+  onEdit: (profile: ProfileCard) => void;
+  onDelete: (profileId: string) => void;
+}
+
+export function ProfileList({ onEdit, onDelete }: ProfileListProps) {
   const { LL } = useI18nContext();
   const {
     data: profiles,
@@ -93,12 +98,14 @@ export function ProfileList() {
               </button>
               <button
                 type="button"
+                onClick={() => onEdit(profile)}
                 className="ml-auto rounded-small px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:bg-sand-light"
               >
                 {LL.PROFILE_EDIT()}
               </button>
               <button
                 type="button"
+                onClick={() => onDelete(profile.id)}
                 className="rounded-small px-3 py-1.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
               >
                 {LL.PROFILE_DELETE()}
