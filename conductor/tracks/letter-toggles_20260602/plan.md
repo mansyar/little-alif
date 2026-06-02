@@ -7,12 +7,12 @@
 
 ### Tasks
 
-- [ ] Task: Write Zod validation schemas for letter toggle operations
+- [x] Task: Write Zod validation schemas for letter toggle operations
   - [ ] Create `app/lib/validations/letters.ts` with `toggleLetterSchema`, `getVisibleLettersSchema`, and `bulkToggleLettersSchema`
   - [ ] Schema fields: `profileId` (uuid), `letterId` (z.enum of 28 letter IDs), `isVisible` (boolean), `letterIds` (array of enums for bulk)
   - [ ] Match the exact letter ID enum from TDD §4 (alif, ba, ta, tsa, jim, ha, kho, dal, dzal, ra, zai, sin, syin, shad, dhad, tha, dzha, ain, ghain, fa, qaf, kaf, lam, mim, nun, waw, hae, ya)
 
-- [ ] Task: Write failing tests for letter server functions
+- [x] Task: Write failing tests for letter server functions
   - [ ] Create `app/server/__tests__/letters.test.ts`
   - [ ] Test `getVisibleLettersFn` returns correct toggle states for owned profile
   - [ ] Test `getVisibleLettersFn` rejects unauthenticated requests
@@ -23,15 +23,15 @@
   - [ ] Test `bulkToggleLettersFn` rejects unauthorized access
   - [ ] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement letter server functions
-  - [ ] Create `app/server/letters.ts` with `getVisibleLettersFn`, `toggleLetterFn`, `bulkToggleLettersFn`
-  - [ ] `getVisibleLettersFn`: Query `letter_toggles` joined with `letters` table for the given profileId. Return all 28 letters with their isVisible state
-  - [ ] `toggleLetterFn`: Upsert into `letter_toggles` for the given profileId + letterId. Return the new state
-  - [ ] `bulkToggleLettersFn`: Batch upsert into `letter_toggles` for the given profileId + letterIds array. Return updatedCount
-  - [ ] All functions: validate session (parent JWT for mutations, JWT or child-mode cookie for reads)
-  - [ ] All functions: validate profile ownership (profile belongs to authenticated user / child-mode profile)
-  - [ ] Follow the existing pattern from `app/server/profiles.ts` (use pure helper functions + server function wrappers)
-  - [ ] Run tests and confirm they pass (Green phase)
+- [x] Task: Implement letter server functions `99d0f89`
+  - [x] Create `app/server/letters.ts` with `getVisibleLettersFn`, `toggleLetterFn`, `bulkToggleLettersFn`
+  - [x] `getVisibleLettersFn`: Query `letter_toggles` joined with `letters` table for the given profileId. Return all 28 letters with their isVisible state
+  - [x] `toggleLetterFn`: Upsert into `letter_toggles` for the given profileId + letterId. Return the new state
+  - [x] `bulkToggleLettersFn`: Batch upsert into `letter_toggles` for the given profileId + letterIds array. Return updatedCount
+  - [x] All functions: validate session (parent JWT for mutations, JWT or child-mode cookie for reads)
+  - [x] All functions: validate profile ownership (profile belongs to authenticated user / child-mode profile)
+  - [x] Follow the existing pattern from `app/server/profiles.ts` (use pure helper functions + server function wrappers)
+  - [x] Run tests and confirm they pass (Green phase)
 
 - [ ] Task: Conductor — User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
