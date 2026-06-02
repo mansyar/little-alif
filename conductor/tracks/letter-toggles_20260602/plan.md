@@ -88,7 +88,7 @@
 
 ---
 
-## Phase 3: End-to-End Integration & Final Verification
+## Phase 3: End-to-End Integration & Final Verification [checkpoint: ef582ed]
 
 **Goal:** Ensure everything works together end-to-end, verify edge cases, and clean up.
 
@@ -112,5 +112,5 @@
   - [x] Run formatter: `pnpm format:check` — all files use Prettier style
   - [x] Verify coverage for new code > 70% (overall 89.2% lines; all new files > 84%)
 
-- [~] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md)
-  </protect>
+- [x] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md) `ef582ed`
+      </protect>
