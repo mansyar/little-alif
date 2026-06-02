@@ -35,6 +35,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)        |
 | **Child Letter Grid**    | ⬜ Pending  | Touch grid with audio playback, empty state                                                                                                         |
 | **Audio Service**        | ✅ Complete | Web Speech API pronunciation. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                          |
+| **Audio Preloader**      | ✅ Complete | Idle-time voice warm-up via `requestIdleCallback`. See [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                 |
 | **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                      |
 | **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                   |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                            |

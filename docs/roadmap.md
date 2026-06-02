@@ -18,7 +18,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-07  | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
 | T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
 | T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
-| T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ⬜ Pending  |
+| T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
 | T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
 | T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
 | T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
@@ -39,7 +39,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                   |
 | T-08  | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
 | T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)       |
-| T-09b | Audio Preloader (Idle Warm-up)         | ⬜ Pending  | —                                                                              |
+| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)   |
 | T-10  | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
 | T-11  | Child Mode                             | ⬜ Pending  | —                                                                              |
 | T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                              |
@@ -557,10 +557,6 @@ Implement the audio service using the Web Speech API (`SpeechSynthesis`). A sing
 - No Arabic voice available → falls back to browser default
 - `resetVoiceScan()` allows re-scanning after `onvoiceschanged`
 
-**Known Gaps (Phase 2):**
-
-- Idle-time voice preloader (`app/lib/audio/preloader.ts`) not yet implemented — will warm up engine via `requestIdleCallback` for near-instant first utterance
-
 **Verification (all passing):**
 
 - `AudioEngine.speak('ب', 'fathah')` → pronounces "ba" using Arabic voice
@@ -570,13 +566,15 @@ Implement the audio service using the Web Speech API (`SpeechSynthesis`). A sing
 - Voice selection prefers `ar-SA` > `ar-XA` > any `ar` > default
 - `AudioEngine.isSupported` is `false` when SpeechSynthesis is unavailable
 - `speak()` resolves silently when SpeechSynthesis is unavailable
-- 22 unit tests pass, typecheck clean, lint clean
+- Idle preloader warms up engine on `/learn` route mount (see T-09b)
+- 29 audio tests pass (22 engine + 7 preloader), typecheck clean, lint clean
 
 ---
 
-### T-09b: Audio Preloader (Idle Warm-up)
+### T-09b: Audio Preloader (Idle Warm-up) ✅
 
 **Dependencies:** T-09
+**Status:** ✅ Complete ([`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/))
 
 **Description:**
 Implement idle-time voice preloading to warm up the SpeechSynthesis engine. On idle (via `requestIdleCallback`), call `speechSynthesis.speak()` with an empty/short utterance to reduce first-utterance latency from ~500ms to near-instant. This is Phase 2 of the original T-09 plan that was deferred.

@@ -16,7 +16,7 @@
 | 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/) |
 | 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                                                                         |
 | 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                                                                                                         |
+| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                                                           |
 | 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
 | 9   | Component Data Flow                  | ⬜ Pending                | —                                                                                                                                                                                                                                |
 | 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
@@ -720,19 +720,72 @@ Preference order: `ar-SA` > `ar-XA` > any voice with `lang` starting with `'ar'`
 - Components can check `audioEngine.isSupported` to conditionally render audio-related UI.
 - No audio fallback UI needed for Phase 1 — letters highlight visually but make no sound.
 
-### Idle Preloading (FR-4) — Phase 2 (Pending)
+### Idle Preloading (FR-4) — ✅ Implemented
 
-Idle-time voice preloading via `requestIdleCallback` is **planned** but not yet implemented. When completed, the preloader will call `speechSynthesis.speak()` with an empty utterance on idle to warm up the SpeechSynthesis engine, reducing first-utterance latency from ~500ms to near-instant.
+Idle-time voice preloading via `requestIdleCallback` warms up the SpeechSynthesis engine, reducing first-utterance latency from ~500ms to near-instant. The preloader runs on mount of the `/learn` route.
 
-**File:** `app/lib/audio/preloader.ts` (not yet created)
+**File:** `app/lib/audio/preloader.ts`
+
+```typescript
+import { AudioEngine } from './audio-engine';
+
+let preloaded = false;
+
+/**
+ * Warm up the SpeechSynthesis engine during browser idle time.
+ * - Fire-and-forget: returns `void`, no Promise or async state.
+ * - Idempotent: only the first call triggers warm-up.
+ * - Graceful: silently exits when SpeechSynthesis is unavailable, voices
+ *   haven't been scanned yet, or an utterance is actively playing.
+ */
+export function preloadOnIdle(engine: AudioEngine): void {
+  if (preloaded) return;
+  if (!engine.isSupported) return;
+
+  const adapter = engine.adapter;
+  if (!adapter) return;
+  if (adapter.speaking) return;
+
+  const voice = engine.voice;
+  if (!voice) return;
+
+  preloaded = true;
+
+  const schedule =
+    typeof requestIdleCallback !== 'undefined'
+      ? (cb: () => void) => requestIdleCallback(cb)
+      : (cb: () => void) => setTimeout(cb, 1000);
+
+  schedule(() => {
+    const utterance = adapter.createUtterance('');
+    utterance.voice = voice;
+    adapter.speak(utterance);
+  });
+}
+
+export function resetPreloader(): void {
+  preloaded = false;
+}
+```
+
+**Integration:** Called on mount of `/learn` route via `useEffect`:
+
+```typescript
+useEffect(() => {
+  preloadOnIdle(audioEngine);
+}, []);
+```
+
+**Tests:** `app/lib/audio/preloader.test.ts` — 7 tests covering idempotency, graceful skipping, voice caching, active playback guard.
 
 ### Test Architecture
 
 - Test file: `app/lib/audio/audio-engine.test.ts` (22 tests)
+- Test file: `app/lib/audio/preloader.test.ts` (7 tests)
 - Mock adapter (`createMockAdapter()`) provides controllable `getVoices`, `speak`, `cancel`.
 - Mock utterances capture `onend`/`onerror` callbacks for Promise lifecycle testing.
-- Tests cover: voice selection (7), speak behavior (6), graceful degradation (3), cancel (2), dispose (2), adapter mock (3).
-- All 22 tests pass in jsdom environment (Node.js, no browser needed).
+- Tests cover: voice selection (7), speak behavior (6), graceful degradation (3), cancel (2), dispose (2), adapter mock (3), preloader idempotency (2), preloader graceful skipping (3), preloader voice caching (1), preloader active playback guard (1).
+- All 29 audio tests pass in jsdom environment (Node.js, no browser needed).
 
 ### Key Decisions
 
