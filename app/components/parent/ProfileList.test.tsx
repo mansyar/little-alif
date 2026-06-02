@@ -31,6 +31,10 @@ vi.mock('~/lib/i18n', () => ({
   }),
 }));
 
+const noop = () => {
+  /* noop */
+};
+
 function createWrapper() {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -55,14 +59,16 @@ describe('ProfileList', () => {
       }),
     );
     const { ProfileList } = await import('./ProfileList');
-    const { container } = render(<ProfileList />, { wrapper: createWrapper() });
+    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
+      wrapper: createWrapper(),
+    });
     expect(container.querySelector('.animate-spin')).toBeTruthy();
   });
 
   it('shows empty state when no profiles exist', async () => {
     mockListProfiles.mockResolvedValue([]);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList />, { wrapper: createWrapper() });
+    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
 
     const message = await screen.findByText('No child profiles yet. Add one to get started.');
     expect(message).toBeTruthy();
@@ -85,7 +91,7 @@ describe('ProfileList', () => {
     ]);
 
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList />, { wrapper: createWrapper() });
+    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('Aisyah')).toBeTruthy();
     expect(screen.getByText('Bilal')).toBeTruthy();
@@ -104,7 +110,7 @@ describe('ProfileList', () => {
     ]);
 
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList />, { wrapper: createWrapper() });
+    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('Manage Letters')).toBeTruthy();
     expect(screen.getByText('Edit')).toBeTruthy();
@@ -115,7 +121,7 @@ describe('ProfileList', () => {
     mockListProfiles.mockRejectedValue(new Error('Failed to fetch'));
 
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList />, { wrapper: createWrapper() });
+    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
 
     const errorMsg = await screen.findByText('Failed to fetch');
     expect(errorMsg).toBeTruthy();
