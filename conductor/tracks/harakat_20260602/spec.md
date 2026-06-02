@@ -1,3 +1,4 @@
+<protect>
 # Specification: Vowel Mode (Harakat)
 
 **Track ID:** `harakat_20260602`
@@ -74,3 +75,4 @@ Implement Unicode combining diacritics for dynamic Arabic vowel (harakat) render
 - Letter preview in HarakatSelector (REQ-7.9 — P1, deferred)
 - Label showing current vowel mode above child grid (REQ-7.8 — P1, part of T-08)
 - Audio playback integration with harakat modes (handled in T-08/T-09)
+  </protect>

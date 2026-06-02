@@ -1,3 +1,4 @@
+<protect>
 # Implementation Plan: Vowel Mode (Harakat)
 
 **Track ID:** `harakat_20260602`
@@ -77,3 +78,4 @@
 - [ ] Task: Run lint (`pnpm lint`) — confirm clean
 - [ ] Task: Verify manually that composeLetter output is correct for all 28 letters
 - [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+      </protect>
