@@ -82,7 +82,7 @@ Full-screen grid showing only parent-introduced letters. Large tappable cards (â
 
 ### Module 6: Audio Engine
 
-Audio playback via Web Audio API / Web Speech API. Preloads during idle time for instant playback (< 150ms latency).
+Audio playback via Web Speech API (SpeechSynthesis) with singleton AudioEngine. TTS-based pronunciation â€” no audio file management needed. Idle preloading (Phase 2) reduces first-utterance latency.
 
 ### Module 7: Harakat (Vowel Modes)
 
