@@ -1,0 +1,8 @@
+{
+  "track_id": "audio-service_20260602",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-02T17:32:00Z",
+  "updated_at": "2026-06-02T17:32:00Z",
+  "description": "T-09: Audio Service (Web Speech API) — Implement SpeechSynthesis-based pronunciation engine with voice selection, idle preloader, and graceful degradation."
+}
