@@ -1,3 +1,4 @@
+<protect>
 # Implementation Plan — T-06: Letter Toggle Management
 
 ## Phase 1: Server Functions & Zod Schemas
@@ -115,3 +116,4 @@
   - [ ] Verify coverage for new code > 70%
 
 - [ ] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md)
+      </protect>

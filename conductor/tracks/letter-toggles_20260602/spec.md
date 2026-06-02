@@ -1,3 +1,4 @@
+<protect>
 # T-06: Letter Toggle Management — Specification
 
 ## Overview
@@ -95,3 +96,4 @@ No changes needed to the profile card for this track, but after any toggle mutat
 - Vowel mode / harakat integration (handled in T-07)
 - Child letter grid rendering (handled in T-08)
 - Profile CRUD (handled in T-05)
+  </protect>
