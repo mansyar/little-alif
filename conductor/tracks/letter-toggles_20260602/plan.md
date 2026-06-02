@@ -105,12 +105,12 @@
   - [x] Integration test confirms `listProfiles` returns correct `introducedCount` after individual toggle (0→1), bulk all ON (1→28), and bulk all OFF (28→0)
   - [x] Cache invalidation tested via component tests (LetterToggleGrid invalidates `['profiles']` on completed mutations)
 
-- [ ] Task: Final code quality checks
-  - [ ] Run full test suite: `pnpm test` — all tests pass
-  - [ ] Run type checker: `pnpm typecheck` — no errors
-  - [ ] Run linter: `pnpm lint` — no errors
-  - [ ] Run formatter: `pnpm format:check` — no formatting issues
-  - [ ] Verify coverage for new code > 70%
+- [x] Task: Final code quality checks
+  - [x] Run full test suite: `pnpm test` — all tests pass (178/178)
+  - [x] Run type checker: `pnpm typecheck` — no errors
+  - [x] Run linter: `pnpm lint` — no errors
+  - [x] Run formatter: `pnpm format:check` — all files use Prettier style
+  - [x] Verify coverage for new code > 70% (overall 89.2% lines; all new files > 84%)
 
-- [ ] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md)
-      </protect>
+- [~] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md)
+  </protect>
