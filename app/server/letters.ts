@@ -25,16 +25,14 @@ export interface VisibleLetter {
 }
 
 /**
- * Get all 28 letters with their toggle state for a given profile.
- * Letters are returned in display order (1–28).
- * Validates that the profile belongs to the authenticated user.
+ * Verify that the given profile belongs to the given user.
+ * Throws if not found or not owned.
  */
-export async function getVisibleLetters(
+async function verifyProfileOwnership(
   db: DbClient,
   userId: string,
   profileId: string,
-): Promise<VisibleLetter[]> {
-  // Verify profile ownership
+): Promise<void> {
   const profile = await db
     .select()
     .from(profiles)
@@ -44,6 +42,19 @@ export async function getVisibleLetters(
   if (!profile) {
     throw new Error('Profile not found or does not belong to you.');
   }
+}
+
+/**
+ * Get all 28 letters with their toggle state for a given profile.
+ * Letters are returned in display order (1–28).
+ * Validates that the profile belongs to the authenticated user.
+ */
+export async function getVisibleLetters(
+  db: DbClient,
+  userId: string,
+  profileId: string,
+): Promise<VisibleLetter[]> {
+  await verifyProfileOwnership(db, userId, profileId);
 
   const rows = await db
     .select({
@@ -75,16 +86,7 @@ export async function getVisibleLetters(
  * Validates that the profile belongs to the authenticated user.
  */
 export async function toggleLetter(db: DbClient, userId: string, data: ToggleLetterInput) {
-  // Verify profile ownership
-  const profile = await db
-    .select()
-    .from(profiles)
-    .where(and(eq(profiles.id, data.profileId), eq(profiles.userId, userId)))
-    .then((rows) => rows[0] ?? null);
-
-  if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
-  }
+  await verifyProfileOwnership(db, userId, data.profileId);
 
   // Upsert: insert or update on conflict (unique on profileId + letterId)
   await db
@@ -117,34 +119,24 @@ export async function bulkToggleLetters(
   userId: string,
   data: BulkToggleLettersInput,
 ) {
-  // Verify profile ownership
-  const profile = await db
-    .select()
-    .from(profiles)
-    .where(and(eq(profiles.id, data.profileId), eq(profiles.userId, userId)))
-    .then((rows) => rows[0] ?? null);
+  await verifyProfileOwnership(db, userId, data.profileId);
 
-  if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
-  }
-
-  for (const letterId of data.letterIds) {
-    // Use raw SQL for batch upsert since Drizzle's batch API varies by dialect
-    await db
-      .insert(letterToggles)
-      .values({
+  await db
+    .insert(letterToggles)
+    .values(
+      data.letterIds.map((letterId) => ({
         profileId: data.profileId,
         letterId: sql`${letterId}`,
         isVisible: data.isVisible,
-      })
-      .onConflictDoUpdate({
-        target: [letterToggles.profileId, letterToggles.letterId],
-        set: {
-          isVisible: data.isVisible,
-          toggledAt: sql`(datetime('now'))`,
-        },
-      });
-  }
+      })),
+    )
+    .onConflictDoUpdate({
+      target: [letterToggles.profileId, letterToggles.letterId],
+      set: {
+        isVisible: data.isVisible,
+        toggledAt: sql`(datetime('now'))`,
+      },
+    });
 
   return {
     updatedCount: data.letterIds.length,
