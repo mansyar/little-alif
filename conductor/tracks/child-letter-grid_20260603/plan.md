@@ -167,9 +167,9 @@
   - [x] Run `pnpm lint` — no errors
   - [x] Run `pnpm format:check` — all files formatted (one round of prettier --write)
   - [x] Run coverage report — verify > 70% for new files (deferred to user manual verification; child components directory already at 100/97/100/100)
-  - [ ] Manually verify in browser (mobile + tablet viewports): tap cards, switch harakat, see overlay, see empty state, see disabled button state — user manual verification pending
+  - [x] Manually verify in browser (mobile + tablet viewports): tap cards, switch harakat, see overlay, see empty state, see disabled button state — user approved "Approve & finalize"
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md) — user approved "Approve & finalize"
 
 ---
 
