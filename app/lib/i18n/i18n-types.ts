@@ -95,6 +95,22 @@ type RootTranslation = {
 	 */
 	LETTERS_HIDE: string
 	/**
+	 * P​l​a​i​n
+	 */
+	HARAKAT_PLAIN: string
+	/**
+	 * F​a​t​h​a​h
+	 */
+	HARAKAT_FATHAH: string
+	/**
+	 * K​a​s​r​a​h
+	 */
+	HARAKAT_KASRAH: string
+	/**
+	 * D​a​m​m​a​h
+	 */
+	HARAKAT_DAMMAH: string
+	/**
 	 * E​n​a​b​l​e​ ​C​h​i​l​d​ ​M​o​d​e
 	 */
 	CHILDMODE_ENABLE: string
@@ -249,6 +265,22 @@ export type TranslationFunctions = {
 	 * Hide
 	 */
 	LETTERS_HIDE: () => LocalizedString
+	/**
+	 * Plain
+	 */
+	HARAKAT_PLAIN: () => LocalizedString
+	/**
+	 * Fathah
+	 */
+	HARAKAT_FATHAH: () => LocalizedString
+	/**
+	 * Kasrah
+	 */
+	HARAKAT_KASRAH: () => LocalizedString
+	/**
+	 * Dammah
+	 */
+	HARAKAT_DAMMAH: () => LocalizedString
 	/**
 	 * Enable Child Mode
 	 */

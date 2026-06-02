@@ -27,6 +27,12 @@ const id = {
   LETTERS_SHOW: 'Tampilkan',
   LETTERS_HIDE: 'Sembunyikan',
 
+  // Harakat
+  HARAKAT_PLAIN: 'Polos',
+  HARAKAT_FATHAH: 'Fathah',
+  HARAKAT_KASRAH: 'Kasrah',
+  HARAKAT_DAMMAH: 'Dammah',
+
   // Child Mode
   CHILDMODE_ENABLE: 'Aktifkan Mode Anak',
   CHILDMODE_DISABLE: 'Nonaktifkan Mode Anak',

@@ -27,6 +27,12 @@ const en = {
   LETTERS_SHOW: 'Show',
   LETTERS_HIDE: 'Hide',
 
+  // Harakat
+  HARAKAT_PLAIN: 'Plain',
+  HARAKAT_FATHAH: 'Fathah',
+  HARAKAT_KASRAH: 'Kasrah',
+  HARAKAT_DAMMAH: 'Dammah',
+
   // Child Mode
   CHILDMODE_ENABLE: 'Enable Child Mode',
   CHILDMODE_DISABLE: 'Disable Child Mode',
