@@ -30,7 +30,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Database Schema**      | ✅ Complete | Drizzle ORM + SQLite — `profiles`, `letters`, `letter_toggles` tables. 28 letters seeded.                                                           |
 | **Authentication**       | ✅ Complete | Better Auth — register, login, logout, session management, CSRF, route protection.                                                                  |
 | **Code Quality Tooling** | ✅ Complete | Prettier, ESLint v9 (flat config), Husky + lint-staged pre-commit hooks. See [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
-| **Parent Dashboard**     | ⬜ Pending  | Profile CRUD, avatar selection, child mode toggle                                                                                                   |
+| **Parent Dashboard**     | ✅ Complete | Profile CRUD, avatar selection, child mode toggle. See [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)               |
 | **Letter Toggle Mgmt**   | ⬜ Pending  | ON/OFF switches per letter per child                                                                                                                |
 | **Vowel Mode (Harakat)** | ⬜ Pending  | Unicode diacritic rendering + non-connecting letter exceptions                                                                                      |
 | **Child Letter Grid**    | ⬜ Pending  | Touch grid with audio playback, empty state                                                                                                         |

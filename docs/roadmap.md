@@ -13,7 +13,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
 | —    | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
 | T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ⬜ Pending  |
+| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
 | T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ⬜ Pending  |
 | T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ⬜ Pending  |
 | T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
@@ -26,21 +26,21 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ### Implementation Status
 
-| ID   | Title                                  | Status      | Archived Track                                                         |
-| ---- | -------------------------------------- | ----------- | ---------------------------------------------------------------------- |
-| T-01 | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
-| T-02 | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
-| T-03 | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)   |
-| —    | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/) |
-| T-04 | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)     |
-| T-05 | Parent Dashboard & Child Profiles      | ⬜ Pending  | —                                                                      |
-| T-06 | Letter Toggle Management               | ⬜ Pending  | —                                                                      |
-| T-07 | Vowel Mode (Harakat)                   | ⬜ Pending  | —                                                                      |
-| T-08 | Child Letter Grid                      | ⬜ Pending  | —                                                                      |
-| T-09 | Audio Service (Web Speech API)         | ⬜ Pending  | —                                                                      |
-| T-10 | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                      |
-| T-11 | Child Mode                             | ⬜ Pending  | —                                                                      |
-| T-12 | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                      |
+| ID   | Title                                  | Status      | Archived Track                                                                 |
+| ---- | -------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| T-01 | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| T-02 | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| T-03 | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| —    | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)         |
+| T-04 | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)             |
+| T-05 | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/) |
+| T-06 | Letter Toggle Management               | ⬜ Pending  | —                                                                              |
+| T-07 | Vowel Mode (Harakat)                   | ⬜ Pending  | —                                                                              |
+| T-08 | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
+| T-09 | Audio Service (Web Speech API)         | ⬜ Pending  | —                                                                              |
+| T-10 | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
+| T-11 | Child Mode                             | ⬜ Pending  | —                                                                              |
+| T-12 | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                              |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -285,9 +285,10 @@ Initialize typesafe-i18n v5 with English and Indonesian locales. Generate TypeSc
 
 ---
 
-### T-05: Parent Dashboard & Child Profiles
+### T-05: Parent Dashboard & Child Profiles ✅
 
 **Dependencies:** T-02, T-03
+**Status:** ✅ Complete ([`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/))
 
 **Description:**
 Build the parent dashboard showing child profile cards. Implement profile CRUD (add, edit, delete) with avatar selection, validated via Zod schemas.
@@ -295,39 +296,52 @@ Build the parent dashboard showing child profile cards. Implement profile CRUD (
 **PRD Ref:** §4 — Module 2 (Child Profiles), REQ-4.1 (Dashboard)
 **TDD Ref:** §2 (Route Design — `/dashboard`), §3 (Profile Server Functions), §4 (Profile Zod Schemas)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/routes/dashboard.tsx` — Authenticated dashboard page
-- `app/components/parent/ProfileList.tsx` — Profile cards with avatar + name + letter count
-- `app/components/parent/ProfileEditor.tsx` — Add/edit profile (Radix Dialog)
-- `app/components/parent/AvatarPicker.tsx` — Avatar selection grid (themed SVGs)
-- `app/server/profiles.ts` — `listProfilesFn`, `createProfileFn`, `updateProfileFn`, `deleteProfileFn`
-- Profile CRUD validation via `createProfileSchema`, `updateProfileSchema`, `deleteProfileSchema`
-- Zod schema for max 4 profiles (server-side check)
-- Avatar SVGs in `public/images/avatars/`
+- `app/routes/dashboard.tsx` — Authenticated dashboard page with sidebar layout, locale toggle, logout, and profile CRUD
+- `app/components/parent/ProfileList.tsx` — Profile cards with inline avatar SVGs + name + "X/28 introduced" count + action buttons
+- `app/components/parent/ProfileEditor.tsx` — Add/edit profile (Radix Dialog) with name input, AvatarPicker, client-side Zod validation
+- `app/components/parent/AvatarPicker.tsx` — Avatar selection grid (Radix Radio Group) with 8 themed inline SVG avatars
+- `app/components/ui/ConfirmDialog.tsx` — Reusable delete confirmation (Radix AlertDialog) with danger/default variants
+- `app/components/parent/avatars.tsx` — 8 inline SVG components (AlifLamp, BaBoat, TaTable, TsaButterfly, JimMountain, HaJar, KhoHat, DalBook) + AVATAR_MAP lookup
+- `app/server/profiles.ts` — `listProfilesFn`, `createProfileFn`, `updateProfileFn`, `deleteProfileFn` — pure functions + server function wrappers
+- `app/lib/validations/profiles.ts` — `createProfileSchema`, `updateProfileSchema`, `deleteProfileSchema`
+- `__root.tsx` — Wrapped with `QueryClientProvider` for TanStack Query
+- `vitest-setup.ts` — ResizeObserver polyfill for Radix Dialog jsdom tests
+- Profile CRUD tests: 6 test files with 44 new tests covering all CRUD operations, accessibility, and edge cases
+- i18n keys added: `DASHBOARD_SIGN_OUT`, `DASHBOARD_SIGNING_OUT`, `PROFILE_EDIT`, `PROFILE_CANCEL`, `PROFILE_ADD_TITLE`, `PROFILE_EDIT_TITLE`, `PROFILE_MANAGE_LETTERS`, `PROFILE_LETTERS_LABEL`
 
 **TDD Ref:** §3 (Server Functions — full signatures), §4 (Zod Schemas)
 
 **Key Decisions:**
 
-- 8 themed avatars: Alif-lamp, Ba-boat, Ta-table, Tsa-butterfly, Jim-mountain, Ha-jar, Kho-hat, Dal-book
-- Avatar images as inline SVGs (no external dependencies)
+- 8 themed avatars as inline SVG components (no network requests)
 - Profile creation auto-seeds 28 `letter_toggles` rows (all OFF)
-- Max 4 profiles enforced server-side (Zod + DB query)
+- Max 4 profiles enforced server-side (Zod + DB count query)
+- Pure helper functions (`listProfiles`, `createProfile`, `updateProfile`, `deleteProfile`) accept `db` parameter for testability
+- Server function wrappers handle session validation + error handling
+- TanStack Query for client-side data fetching (loading, error, success states)
+- Avatar SVGs set `viewBox="0 0 64 64"` for consistent sizing
 
 **Edge Cases:**
 
-- Attempt to create 5th profile → return error with i18n message
-- Delete profile → confirm dialog (Radix Dialog)
-- Edit with no changes → no-op (detect via comparison)
+- Attempt to create 5th profile → throws error with i18n message
+- Delete profile → confirm dialog with danger variant (Radix AlertDialog)
+- Edit with no changes → returns existing profile as-is
+- Missing avatar in AVATAR_MAP → renders `?` fallback
+- Server error → error state with retry button using `refetch()`
+- Loading state → spinner animation
 
-**Verification:**
+**Verification (all passing):**
 
+- 152 tests passing across 22 test files
 - Can create, view, edit, and delete child profiles
-- Avatar selection shows correct images
-- Max 4 profiles enforced
+- Avatar selection shows correct inline SVGs
+- Max 4 profiles enforced server-side
 - Deleted profile cascades to letter_toggles
 - Server functions reject unauthenticated requests
+- ProfileEditor shows field-level Zod validation errors
+- Pre-commit pipeline passes: ESLint, Prettier, TypeScript all clean
 
 ---
 
@@ -664,7 +678,7 @@ Final polish: error handling, responsive testing, performance optimization. Pack
 T-01 (Scaffolding)  ── ✅
  ├── T-02 (Database) ── ✅
  │    ├── T-03 (Auth) ── ✅
- │    │    ├── T-05 (Dashboard & Profiles) ⬜
+ │    │    ├── T-05 (Dashboard & Profiles) ✅
  │    │    │    ├── T-06 (Letter Toggles) ⬜
  │    │    │    │    ├── T-08 (Child Grid) ⬜
  │    │    │    │    │    └── T-10 (Reading Practice) ⬜ ─┐
@@ -676,8 +690,8 @@ T-01 (Scaffolding)  ── ✅
 T-03b (Code Quality) ── ✅                                │
 T-04 (i18n — parallel to T-02/T-03) ✅                    │
 T-09 (Audio — parallel to T-02/T-03) ⬜                   │
-                                                          ▼
-                                                   T-12 (Polish & Deploy) ⬜
+                                                           ▼
+                                                    T-12 (Polish & Deploy) ⬜
 ```
 
 ## Track Format
