@@ -71,19 +71,19 @@ type RootTranslation = {
 	 */
 	DASHBOARD_TITLE: string
 	/**
-	 * Add Child
+	 * A​d​d​ ​C​h​i​l​d
 	 */
 	DASHBOARD_ADD_CHILD: string
 	/**
-	 * No child profiles yet. Add one to get started.
+	 * N​o​ ​c​h​i​l​d​ ​p​r​o​f​i​l​e​s​ ​y​e​t​.​ ​A​d​d​ ​o​n​e​ ​t​o​ ​g​e​t​ ​s​t​a​r​t​e​d​.
 	 */
 	DASHBOARD_NO_CHILDREN: string
 	/**
-	 * Sign out
+	 * S​i​g​n​ ​o​u​t
 	 */
 	DASHBOARD_SIGN_OUT: string
 	/**
-	 * Signing out…
+	 * S​i​g​n​i​n​g​ ​o​u​t​…
 	 */
 	DASHBOARD_SIGNING_OUT: string
 	/**
@@ -111,15 +111,15 @@ type RootTranslation = {
 	 */
 	PROFILE_NAME: string
 	/**
-	 * Avatar
+	 * A​v​a​t​a​r
 	 */
 	PROFILE_AVATAR: string
 	/**
-	 * Edit
+	 * E​d​i​t
 	 */
 	PROFILE_EDIT: string
 	/**
-	 * Save
+	 * S​a​v​e
 	 */
 	PROFILE_SAVE: string
 	/**
