@@ -50,7 +50,7 @@
   - [ ] Wire up i18n for all dashboard strings
 - [x] Task: Conductor - User Manual Verification 'Dashboard Route & Profile Components' (Protocol in workflow.md) [5c0dd4f]
 
-## Phase 4: Profile Editor, Avatar Picker & Delete Confirmation
+## Phase 4: Profile Editor, Avatar Picker & Delete Confirmation [checkpoint: 2d57935]
 
 **Goal:** Build the interactive profile CRUD UI with modals and confirmations.
 
@@ -74,5 +74,5 @@
   - [x] "Add Child" button opens ProfileEditor in add mode
   - [x] Edit button opens ProfileEditor in edit mode
   - [x] Delete button opens ConfirmDialog → confirms → calls deleteProfileFn → refreshes list
-- [ ] Task: Conductor - User Manual Verification 'Profile Editor & Delete Confirmation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Profile Editor & Delete Confirmation' (Protocol in workflow.md) [2d57935]
       </protect>
