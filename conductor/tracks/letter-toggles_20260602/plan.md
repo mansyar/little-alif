@@ -43,33 +43,33 @@
 
 ### Tasks
 
-- [ ] Task: Write failing tests for LetterToggleGrid component
-  - [ ] Create `app/components/parent/__tests__/LetterToggleGrid.test.tsx`
-  - [ ] Test grid renders all 28 letters in correct order
-  - [ ] Test each letter shows Arabic glyph and a Radix Switch
-  - [ ] Test toggling a switch triggers the toggleLetterFn server function
-  - [ ] Test switch is disabled while server function is in flight
-  - [ ] Test network error reverts switch and shows error state
-  - [ ] Test "Show All" button calls bulkToggleLettersFn with all letter IDs
-  - [ ] Test "Hide All" button calls bulkToggleLettersFn with all letter IDs
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for LetterToggleGrid component
+  - [x] Create `app/components/parent/LetterToggleGrid.test.tsx`
+  - [x] Test grid renders all 28 letters in correct order
+  - [x] Test each letter shows Arabic glyph and a Radix Switch
+  - [x] Test toggling a switch triggers the toggleLetterFn server function
+  - [x] Test switch is disabled while server function is in flight
+  - [x] Test network error reverts switch and shows error state
+  - [x] Test "Show All" button calls bulkToggleLettersFn with all letter IDs
+  - [x] Test "Hide All" button calls bulkToggleLettersFn with all letter IDs
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement LetterToggleGrid component
-  - [ ] Create `app/components/parent/LetterToggleGrid.tsx`
-  - [ ] Fetch toggle states via `getVisibleLettersFn(profileId)` on mount/expand
-  - [ ] Render 28 letters in display order (1–28), each as a row/card with:
+- [x] Task: Implement LetterToggleGrid component `e5995e7`
+  - [x] Create `app/components/parent/LetterToggleGrid.tsx`
+  - [x] Fetch toggle states via `getVisibleLettersFn(profileId)` on mount/expand (via useQuery)
+  - [x] Render 28 letters in display order (1–28), each as a row/card with:
     - Arabic character glyph (large, centered)
     - Radix UI Switch (`@radix-ui/react-switch`)
-  - [ ] Wire toggle action: onChange → debounce 300ms → call `toggleLetterFn(profileId, letterId, !currentState)`
-  - [ ] Handle loading state: show spinner while initial data loads
-  - [ ] Handle in-flight state: disable switch while mutation is pending
-  - [ ] Handle error state: revert switch to previous state, show error toast
-  - [ ] Implement "Show All" / "Hide All" buttons above the grid
+  - [~] Wire toggle action: onChange → debounce 300ms → call `toggleLetterFn(profileId, letterId, !currentState)` (debounce deferred to Task 4)
+  - [x] Handle loading state: show spinner while initial data loads
+  - [x] Handle in-flight state: disable switch while mutation is pending
+  - [x] Handle error state: show mutation error banner with 5s auto-dismiss
+  - [x] Implement "Show All" / "Hide All" buttons above the grid
     - "Show All": calls `bulkToggleLettersFn(profileId, allLetterIds, true)`
     - "Hide All": calls `bulkToggleLettersFn(profileId, allLetterIds, false)`
-  - [ ] Use existing grid/list styling patterns from the project (Tailwind CSS v4)
-  - [ ] After every toggle/bulk mutation, invalidate the TanStack Query `['profiles']` cache so the `introducedCount` on profile cards refreshes automatically
-  - [ ] Run tests and confirm they pass (Green phase)
+  - [x] Use existing grid/list styling patterns from the project (Tailwind CSS v4)
+  - [x] After every toggle/bulk mutation, invalidate the TanStack Query `['profiles']` cache so the `introducedCount` on profile cards refreshes automatically
+  - [x] Run tests and confirm they pass (Green phase)
 
 - [ ] Task: Integrate toggle grid inline on the dashboard
   - [ ] Open `app/routes/dashboard.tsx`
