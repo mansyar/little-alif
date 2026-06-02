@@ -9,7 +9,7 @@
 
 **Goal:** Create the pure core utility and verify it with unit tests.
 
-- [ ] Task: Create `app/lib/utils/harakat.ts` with `composeLetter()` and `VowelMode` type
+- [x] Task: Create `app/lib/utils/harakat.ts` with `composeLetter()` and `VowelMode` type (4e0d384)
   - [ ] Define `HARAKAT_COMBINING` map (Unicode diacritics: fathah `\u064E`, kasrah `\u0650`, dammah `\u064F`)
   - [ ] Define `VOWEL_MODES` constant and `VowelMode` type (`'none' | 'fathah' | 'kasrah' | 'dammah'`)
   - [ ] Define `NON_CONNECTING` precomposed fallback map (7 letters: ا, و, ي, ر, ز, د, ذ)
