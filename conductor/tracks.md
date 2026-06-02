@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Parent Dashboard & Child Profiles**
-  _Link: ./tracks/parent-dashboard_20260602/_
+- [x] **Track: Parent Dashboard & Child Profiles**
+      _Link: ./tracks/parent-dashboard_20260602/_
