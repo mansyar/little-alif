@@ -113,4 +113,9 @@
   - [x] Verify coverage for new code > 70% (overall 89.2% lines; all new files > 84%)
 
 - [x] Task: Conductor — User Manual Verification 'Phase 3' (Protocol in workflow.md) `ef582ed`
-      </protect>
+
+---
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions `1a5f775`
