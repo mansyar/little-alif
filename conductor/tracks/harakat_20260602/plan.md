@@ -62,9 +62,9 @@
 - [x] Task: Add i18n keys for harakat labels (ac85df4)
   - [x] Add `HARAKAT_PLAIN`, `HARAKAT_FATHAH`, `HARAKAT_KASRAH`, `HARAKAT_DAMMAH` to English locale
   - [x] Add corresponding Indonesian translations
-- [ ] Task: Write tests for ChildHarakatBar
-  - [ ] Test that all 4 buttons render
-  - [ ] Test that clicking a button updates `ui-store.currentHarakat`
+- [x] Task: Write tests for ChildHarakatBar (7157c01)
+  - [x] Test that all 4 buttons render
+  - [x] Test that clicking a button updates `ui-store.currentHarakat`
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ---
