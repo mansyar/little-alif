@@ -34,7 +34,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Letter Toggle Mgmt**   | ✅ Complete | ON/OFF switches per letter per child. See [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                |
 | **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)        |
 | **Child Letter Grid**    | ⬜ Pending  | Touch grid with audio playback, empty state                                                                                                         |
-| **Audio Service**        | ⬜ Pending  | Web Speech API pronunciation                                                                                                                        |
+| **Audio Service**        | ✅ Complete | Web Speech API pronunciation. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                          |
 | **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                      |
 | **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                   |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                            |
@@ -100,7 +100,7 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 - **Radix UI for accessible primitives.** Unstyled, accessible components for the parent dashboard: Switch (letter toggles), Dialog (profile editor), and future interactive elements.
 - **Lucide for icons.** Lightweight, consistent icon library for UI affordances (speaker, lock, edit, toggle indicators).
 - **SQLite.** Single-file database, mounted as a Docker volume. No database service needed.
-- **Audio as static assets.** Preloaded on idle for instant playback.
+- **Web Speech API for pronunciation.** TTS-based audio with singleton `AudioEngine` — no audio file management needed. Voice selection prefers Arabic (`ar-SA` > `ar-XA`) with graceful degradation.
 
 ---
 
@@ -161,12 +161,14 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 
 ### Module 6: Audio Engine (Client-Side)
 
-| ID      | Requirement                                                                                              | Priority |
-| ------- | -------------------------------------------------------------------------------------------------------- | -------- |
-| REQ-6.1 | Audio files preloaded during idle time (requestIdleCallback) for instant playback.                       | P0       |
-| REQ-6.2 | Preload priority: letters currently visible on the grid first, then remaining letters in the background. | P1       |
-| REQ-6.3 | Audio preload progress communicated if needed (no UI clutter — stored for readiness).                    | P2       |
-| REQ-6.4 | Fallback to `<audio>` element if Web Audio API unavailable.                                              | P1       |
+| ID      | Requirement                                                                                                             | Priority |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- | -------- |
+| REQ-6.1 | Audio playback via `AudioEngine.speak(letterChar, vowelMode)` using Web Speech API (SpeechSynthesis).                   | P0       |
+| REQ-6.2 | Pronunciation text built via `composeLetter()` — matches the harakat currently displayed.                               | P0       |
+| REQ-6.3 | Voice selection prefers Arabic (`ar-SA` > `ar-XA` > any `ar-*` > browser default).                                      | P0       |
+| REQ-6.4 | Speaking rate set to 0.85 (slower for children). Rapid successive `speak()` calls cancel the previous utterance first.  | P0       |
+| REQ-6.5 | Graceful degradation: if `SpeechSynthesis` is unavailable, `speak()` resolves silently — no error state, no UI clutter. | P0       |
+| REQ-6.6 | Idle-time voice preloading (via `requestIdleCallback`) warms up the SpeechSynthesis engine for near-instant playback.   | P1       |
 
 ### Module 7: Harakat (Vowel Modes)
 
@@ -211,7 +213,7 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 - Child can change vowel mode independently from their grid view
 - Unicode combining diacritics for dynamic vowel rendering (no separate glyphs)
 - Reading Practice (Iqra' Mode): dynamic groups of 3 letters from toggled-on set, 6-row grid (1 systematic + 5 randomized)
-- Web Audio API pronunciation playback (112 audio files: 28 letters × 4 vowel modes)
+- Web Speech API pronunciation playback via singleton AudioEngine (TTS-based, no audio files)
 - Child Mode for one profile per device
 - Bilingual parent UI (English + Indonesian)
 

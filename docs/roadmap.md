@@ -6,41 +6,43 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ## Track Overview
 
-| ID   | Title                             | Depends On             | Complexity | Est. Effort | Status      |
-| ---- | --------------------------------- | ---------------------- | ---------- | ----------- | ----------- |
-| T-01 | Project Scaffolding & Config      | —                      | Low        | 1–2h        | ✅ Complete |
-| T-02 | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        | ✅ Complete |
-| T-03 | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
-| —    | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-04 | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-05 | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
-| T-06 | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
-| T-07 | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
-| T-08 | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
-| T-09 | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ⬜ Pending  |
-| T-10 | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
-| T-11 | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
-| T-12 | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
+| ID    | Title                             | Depends On             | Complexity | Est. Effort | Status      |
+| ----- | --------------------------------- | ---------------------- | ---------- | ----------- | ----------- |
+| T-01  | Project Scaffolding & Config      | —                      | Low        | 1–2h        | ✅ Complete |
+| T-02  | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        | ✅ Complete |
+| T-03  | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
+| —     | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
+| T-04  | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
+| T-05  | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
+| T-06  | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
+| T-07  | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
+| T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
+| T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
+| T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ⬜ Pending  |
+| T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
+| T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
+| T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
 
 **Total estimated effort: ~32–52 hours**
 
 ### Implementation Status
 
-| ID   | Title                                  | Status      | Archived Track                                                                 |
-| ---- | -------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
-| T-01 | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| T-02 | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| T-03 | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| —    | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)         |
-| T-04 | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)             |
-| T-05 | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/) |
-| T-06 | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)     |
-| T-07 | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                   |
-| T-08 | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
-| T-09 | Audio Service (Web Speech API)         | ⬜ Pending  | —                                                                              |
-| T-10 | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
-| T-11 | Child Mode                             | ⬜ Pending  | —                                                                              |
-| T-12 | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                              |
+| ID    | Title                                  | Status      | Archived Track                                                                 |
+| ----- | -------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
+| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)         |
+| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)             |
+| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/) |
+| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)     |
+| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                   |
+| T-08  | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
+| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)       |
+| T-09b | Audio Preloader (Idle Warm-up)         | ⬜ Pending  | —                                                                              |
+| T-10  | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
+| T-11  | Child Mode                             | ⬜ Pending  | —                                                                              |
+| T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                              |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -506,55 +508,118 @@ Build the child-facing letter grid showing only parent-introduced letters with d
 
 ---
 
-### T-09: Audio Service (Web Speech API)
+### T-09: Audio Service (Web Speech API) ✅
 
 **Dependencies:** T-01
+**Status:** ✅ Complete ([`audio-service_20260602`](../conductor/archive/audio-service_20260602/))
 
 **Description:**
-Implement the audio service using the Web Speech API. Handle voice loading, playback, and error fallbacks. Preload voices on idle for instant response.
+Implement the audio service using the Web Speech API (`SpeechSynthesis`). A singleton `AudioEngine` class manages voice selection (prefers Arabic `ar-SA` > `ar-XA` > any `ar-*` > default), utterance lifecycle (cancel-on-new-speak, Promise-based completion), and graceful degradation (silent no-op when SpeechSynthesis is unavailable).
 
-**PRD Ref:** §4 — Module 6 (Audio Engine), REQ-6.1 through REQ-6.4
-**TDD Ref:** §1 (Project Structure — `app/lib/audio/`)
+**PRD Ref:** §4 — Module 6 (Audio Engine), REQ-6.1 through REQ-6.5
+**TDD Ref:** §7 (Audio Architecture — updated for Web Speech API)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/lib/audio/AudioEngine.ts` — Singleton managing `SpeechSynthesis` lifecycle
-- `app/lib/audio/preloader.ts` — Idle-time voice preloading via `requestIdleCallback`
-- Audio playback function: `speak(letterChar, vowelMode)` → builds text via `composeLetter()` → calls `speechSynthesis.speak()`
-- Voice selection: prefers Arabic voice (`ar-SA`, `ar-XA`, or first available)
-- `speakingRate: 0.85` (slower for children)
-- Error handling: if `SpeechSynthesis` unavailable → silent no-op (no audio fallback needed for Phase 1)
-- Idle preload: call `speechSynthesis.speak()` with empty utterance to warm up the engine
-
-**TDD Ref:** §1 (`app/lib/audio/AudioEngine.ts`, `preloader.ts`)
+- `app/lib/audio/audio-engine.ts` — Singleton class with adapter pattern, 183 lines
+- `app/lib/audio/audio-engine.test.ts` — 22 unit tests covering voice selection, speak behavior, cancel, graceful degradation, dispose
+- `SpeechSynthesisAdapter` interface — injectable/mockable for unit tests in Node.js
+- `createBrowserAdapter()` factory — wraps `window.speechSynthesis`
+- `audioEngine` singleton instance — module-level export, no React context needed
+- Voice selection: `ar-SA` > `ar-XA` > any `ar-*` > browser default (cached after first scan)
+- `speak(letterChar, vowelMode): Promise<void>` — uses `composeLetter()` for pronunciation text
+- `utterance.rate = 0.85` — slower for children
+- Cancel-on-new-speak — previous utterance cancelled before new one starts
+- `onvoiceschanged` wired to `resetVoiceScan()` — handles async voice loading in Chrome
+- `resetVoiceScan()` — allows re-scanning available voices
+- `cancel()` — stops current utterance, resolves pending promise
+- `dispose()` — tears down engine, sets `isSupported = false`
+- All 227 project tests pass, typecheck clean, lint clean
 
 **Key Decisions:**
 
-- Web Speech API chosen over pre-recorded files (TTS quality for isolated letters is acceptable; zero file management; instant setup)
-- No MP3 file generation needed (previous Google TTS approach abandoned)
-- `SpeechSynthesis.speak()` is async — returns immediately, plays in background
-- `speakingRate: 0.85` makes pronunciation clearer for children
-- Voice availability checked on first call — cache result
-- Future upgrade path: swap to pre-recorded MP3 files by dropping them into `public/audio/` and updating `AudioEngine`
+- Web Speech API chosen over pre-recorded MP3 files (TTS quality for isolated letters is acceptable; zero file management; instant setup)
+- Singleton pattern (not React context) — matches existing functional pattern used by `harakat.ts`
+- Adapter pattern enables full unit test coverage without a browser
+- Promise-based `speak()` resolves on `onend` event — enables sequential playback
+- No `init()` call needed — constructor handles initialization (SpeechSynthesis has no autoplay restrictions)
+- Voice cache on first call avoids re-scanning `getVoices()` on every tap
+- `onvoiceschanged` handler set in constructor — handles async voice loading in Chrome
+- Style guide fixes applied: `_adapter` renamed to `adapter`, `currentResolve` tracks pending promises (no leak)
 
-**Edge Cases:**
+**Edge Cases (all covered by tests):**
 
-- Voice not loaded yet → delay first utterance by 100ms, show subtle loading indicator on the first card tap
-- Browser doesn't support SpeechSynthesis (very rare) → graceful degradation (letter highlights but no audio)
-- Multiple rapid taps → cancel previous utterance before starting new one
-- Page visibility change → pause/resume not needed (utterances are short)
+- SpeechSynthesis unavailable → `speak()` resolves silently, `isSupported` returns `false`
+- Rapid successive speak calls → previous utterance cancelled, Promise resolves (no hanging promises)
+- `onerror` fires → Promise resolves silently (no throw)
+- `cancel()` called mid-utterance → utterance stops, Promise resolves
+- `dispose()` called → subsequent `speak()` resolves silently
+- No Arabic voice available → falls back to browser default
+- `resetVoiceScan()` allows re-scanning after `onvoiceschanged`
 
-**Verification:**
+**Known Gaps (Phase 2):**
 
-- Tapping a letter card plays pronunciation
-- Pronunciation uses correct vowel mode (fathah → "ba", kasrah → "bi", dammah → "bu")
-- Rapid taps cancel previous audio correctly
-- Voice loads within reasonable time on Chrome, Safari, Edge
-- Error is handled silently when SpeechSynthesis unavailable
+- Idle-time voice preloader (`app/lib/audio/preloader.ts`) not yet implemented — will warm up engine via `requestIdleCallback` for near-instant first utterance
+
+**Verification (all passing):**
+
+- `AudioEngine.speak('ب', 'fathah')` → pronounces "ba" using Arabic voice
+- `AudioEngine.speak('ب', 'kasrah')` → pronounces "bi" using Arabic voice
+- `AudioEngine.speak('ب', 'dammah')` → pronounces "bu" using Arabic voice
+- Rapid successive `speak()` calls → previous utterance cancelled, last one plays
+- Voice selection prefers `ar-SA` > `ar-XA` > any `ar` > default
+- `AudioEngine.isSupported` is `false` when SpeechSynthesis is unavailable
+- `speak()` resolves silently when SpeechSynthesis is unavailable
+- 22 unit tests pass, typecheck clean, lint clean
 
 ---
 
-### T-10: Reading Practice (Iqra' Mode)
+### T-09b: Audio Preloader (Idle Warm-up)
+
+**Dependencies:** T-09
+
+**Description:**
+Implement idle-time voice preloading to warm up the SpeechSynthesis engine. On idle (via `requestIdleCallback`), call `speechSynthesis.speak()` with an empty/short utterance to reduce first-utterance latency from ~500ms to near-instant. This is Phase 2 of the original T-09 plan that was deferred.
+
+**PRD Ref:** §4 — Module 6 (Audio Engine), REQ-6.6
+**TDD Ref:** §7 (Audio Architecture — Idle Preloading)
+
+**Key Deliverables:**
+
+- `app/lib/audio/preloader.ts` — Preloader module
+- `preloadOnIdle(audioEngine)` — Uses `requestIdleCallback` with `setTimeout` fallback
+- Empty utterance with cached voice to warm up the engine
+- Idempotent guard — prevents double warm-up
+- Non-blocking — returns immediately, no hanging promises
+- `app/lib/audio/__tests__/preloader.test.ts` — Unit tests:
+  - Calls `speechSynthesis.speak()` with empty utterance
+  - Idempotent (calling twice does not trigger double warm-up)
+  - Non-blocking (returns immediately)
+
+**Key Decisions:**
+
+- Uses `requestIdleCallback` with `setTimeout(..., 1000)` fallback for browsers that don't support it
+- Single empty utterance is sufficient to warm up the engine — no need for multiple utterances
+- Internal guard boolean prevents double warm-up even if called multiple times
+- Non-blocking by design — the preloader does not return a promise
+- Voice should already be cached by AudioEngine before preloader runs
+
+**Edge Cases:**
+
+- `requestIdleCallback` not supported → `setTimeout(..., 1000)` fallback
+- `AudioEngine` not yet initialized → preloader silently skips
+- Preloader called while utterance is playing → guard prevents interference
+- Preloader called multiple times → second call is a no-op
+
+**Verification:**
+
+- `preloadOnIdle(engine)` triggers `speechSynthesis.speak()` with empty utterance
+- Calling `preloadOnIdle()` twice only triggers one warm-up
+- Function returns immediately (no async/await)
+- First utterance latency after preload < 150ms
+- No side effects during normal playback
+
+---
 
 **Dependencies:** T-06, T-07, T-08, T-09
 
@@ -717,7 +782,7 @@ T-01 (Scaffolding)  ── ✅
  │                                                        │
 T-03b (Code Quality) ── ✅                                │
 T-04 (i18n — parallel to T-02/T-03) ✅                    │
-T-09 (Audio — parallel to T-02/T-03) ⬜                   │
+T-09 (Audio — parallel to T-02/T-03) ✅                   │
                                                            ▼
                                                     T-12 (Polish & Deploy) ⬜
 ```

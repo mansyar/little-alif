@@ -16,7 +16,7 @@
 | 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/) |
 | 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                                                                         |
 | 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 7   | Audio Architecture                   | ⬜ Pending                | —                                                                                                                                                                                                                                |
+| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                                                                                                         |
 | 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
 | 9   | Component Data Flow                  | ⬜ Pending                | —                                                                                                                                                                                                                                |
 | 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
@@ -74,7 +74,7 @@ little-alif/
 │   │       └── ConfirmDialog.tsx    # Confirm destructive actions (Radix Dialog)
 │   ├── lib/
 │   │   ├── audio/
-│   │   │   ├── AudioEngine.ts       # Web Audio API manager
+│   │   │   ├── audio-engine.ts      # Web Speech API AudioEngine singleton
 │   │   │   └── preloader.ts         # Idle-time audio preloading
 │   │   ├── i18n/
 │   │   │   ├── index.ts             # i18n init + locale detection (SSR + client)
@@ -647,72 +647,110 @@ interface UIState {
 
 ## 7. Audio Architecture
 
-### Preloading Strategy
+### Overview
+
+T-09 implemented a **Web Speech API (SpeechSynthesis)** pronunciation engine that replaces the original pre-recorded MP3 approach from earlier design discussions. TTS-based pronunciation was chosen over file-based audio for Phase 1 — zero file management, instant setup, and acceptable quality for isolated letter pronunciation.
+
+### AudioEngine (`app/lib/audio/audio-engine.ts`)
+
+`AudioEngine` is a singleton class with an **adapter pattern** for testability:
 
 ```
-App Mount (Child Mode) →
-  1. Determine which letters are visible for this child
-  2. Preload visible letters' audio immediately
-  3. On idle → preload remaining letters (round-robin)
-  4. Store decoded AudioBuffer in Map<string, AudioBuffer>
-
-On Letter Tap →
-  1. If buffer exists → play instantly (< 10ms latency)
-  2. If not loaded → fallback to <audio> element with preload="auto"
-```
-
-### AudioEngine (`app/lib/audio/AudioEngine.ts`)
-
-```typescript
-class AudioEngine {
-  private context: AudioContext | null = null;
-  private buffers: Map<string, AudioBuffer> = new Map();
-  private gainNode: GainNode | null = null;
-  private preloadQueue: string[] = [];
-  private isPreloading: boolean = false;
-
-  // Must be called from user gesture (browser autoplay policy)
-  async init(): Promise<void>;
-
-  // Preload a single letter+vowel combination
-  // audioKey: "{letterId}_{vowelMode}" e.g., "alif_fathah"
-  async preload(audioKey: string): Promise<void>;
-
-  // Preload a batch — used on idle
-  async preloadBatch(audioKeys: string[]): Promise<void>;
-
-  // Play letter+vowel pronunciation. Returns a promise that resolves when done.
-  // audioKey: "{letterId}_{vowelMode}"
-  async play(audioKey: string): Promise<void>;
-
-  // Preload all 4 vowel modes for a set of letter IDs
-  async preloadAllModes(letterIds: string[]): Promise<void>;
-
-  // Get preload progress
-  getProgress(): { loaded: number; total: number };
-
-  // Cleanup
-  dispose(): void;
+export interface SpeechSynthesisAdapter {
+  getVoices(): SpeechSynthesisVoice[];
+  createUtterance(text: string): SpeechSynthesisUtterance;
+  speak(utterance: SpeechSynthesisUtterance): void;
+  cancel(): void;
+  readonly speaking: boolean;
+  readonly paused: boolean;
+  onvoiceschanged: ((this: SpeechSynthesis, ev: Event) => void) | null;
 }
 ```
 
-**Harakat-Aware Preloading:**
+The browser adapter wraps `window.speechSynthesis`. In Node.js tests, a mock adapter is injected instead.
 
+### AudioEngine API
+
+```typescript
+class AudioEngine {
+  // Properties
+  get isSupported(): boolean; // true when SpeechSynthesis is available
+
+  // Constructor — accepts optional adapter for testing
+  constructor(adapter?: SpeechSynthesisAdapter);
+
+  // Speak a letter with a vowel mode — returns Promise that resolves on playback end
+  speak(letterChar: string, vowelMode: VowelMode): Promise<void>;
+
+  // Cancel any ongoing utterance immediately
+  cancel(): void;
+
+  // Reset voice cache to re-scan available voices (e.g., if onvoiceschanged fires)
+  resetVoiceScan(): void;
+
+  // Tear down engine, release resources
+  dispose(): void;
+}
+
+// Singleton convenience instance
+export const audioEngine = new AudioEngine();
 ```
-App Mount (Child Mode) →
-  1. Determine visible letters + current vowel mode
-  2. Preload visible letters' audio for the current vowel mode only
-  3. When child switches vowel mode → preload new mode's files
-  4. On idle → preload remaining vowel modes for visible letters
-```
 
-**Audio File Requirements:**
+### Voice Selection (FR-1)
 
-- Format: MP3 (128kbps CBR, 44.1kHz, mono)
-- Duration: 1–2 seconds per letter+vowel combination
-- Total files: **112** (28 letters × 4 vowel modes: plain, fathah, kasrah, dammah)
-- Naming: `{letterId}_{vowelMode}.mp3` (e.g., `alif_fathah.mp3`, `ba_kasrah.mp3`). Plain mode files may omit the suffix: `alif.mp3`
-- Source: Public domain / open-source Hijaiyah audio recordings
+Preference order: `ar-SA` > `ar-XA` > any voice with `lang` starting with `'ar'` > browser default voice.
+
+- Voice scan runs once on first `speak()` call — result is cached (`voiceScanComplete` flag).
+- `resetVoiceScan()` allows re-scanning (e.g., when `onvoiceschanged` fires — voices may load asynchronously in Chrome).
+- If no voice is found, `speak()` uses the browser's default voice with no Arabic priority.
+
+### Pronunciation Playback (FR-2)
+
+1. `speak(letterChar, vowelMode)` builds pronunciation text via `composeLetter()` from `app/lib/utils/harakat.ts`.
+2. Creates a `SpeechSynthesisUtterance` with the composed text.
+3. Sets `utterance.rate = 0.85` (slower, clearer for children).
+4. Sets `utterance.voice` to the cached Arabic voice (if found).
+5. Calls `speechSynthesis.speak(utterance)`.
+6. Returns a Promise that resolves when the utterance's `onend` event fires.
+7. If a previous utterance is still playing, it is cancelled first — the old Promise resolves immediately (no hanging promises).
+
+### Graceful Degradation (FR-3)
+
+- If `SpeechSynthesis` is unavailable: constructor returns `null` adapter → `isSupported` returns `false` → `speak()` resolves silently.
+- Components can check `audioEngine.isSupported` to conditionally render audio-related UI.
+- No audio fallback UI needed for Phase 1 — letters highlight visually but make no sound.
+
+### Idle Preloading (FR-4) — Phase 2 (Pending)
+
+Idle-time voice preloading via `requestIdleCallback` is **planned** but not yet implemented. When completed, the preloader will call `speechSynthesis.speak()` with an empty utterance on idle to warm up the SpeechSynthesis engine, reducing first-utterance latency from ~500ms to near-instant.
+
+**File:** `app/lib/audio/preloader.ts` (not yet created)
+
+### Test Architecture
+
+- Test file: `app/lib/audio/audio-engine.test.ts` (22 tests)
+- Mock adapter (`createMockAdapter()`) provides controllable `getVoices`, `speak`, `cancel`.
+- Mock utterances capture `onend`/`onerror` callbacks for Promise lifecycle testing.
+- Tests cover: voice selection (7), speak behavior (6), graceful degradation (3), cancel (2), dispose (2), adapter mock (3).
+- All 22 tests pass in jsdom environment (Node.js, no browser needed).
+
+### Key Decisions
+
+1. **Web Speech API** chosen over pre-recorded MP3 files (zero file management, TTS quality acceptable for isolated letters).
+2. **Singleton pattern** (not React context) — matches the existing functional pattern used by `harakat.ts`.
+3. **Adapter pattern** — thin abstraction over `window.speechSynthesis` enables full unit test coverage without a browser.
+4. **Promise-based `speak()`** — resolves on `onend` event, enabling sequential playback and composable async patterns.
+5. **No init() call** — constructor handles initialization. No user gesture required (SpeechSynthesis is not subject to autoplay restrictions like Web Audio).
+6. **Cache voice on first call** — avoids re-scanning `getVoices()` on every tap.
+7. **`onvoiceschanged` wired** to `resetVoiceScan()` — handles async voice loading in Chrome.
+
+### Future Upgrade Path
+
+If TTS quality proves insufficient, swap to pre-recorded MP3 files by:
+
+1. Dropping `.mp3` files into `public/audio/`.
+2. Replacing the Web Speech API `speak()` implementation with `HTMLAudioElement` or Web Audio API.
+3. The `AudioEngine` API surface (`speak()`, `cancel()`, `isSupported`) remains unchanged — components don't need updating.
 
 ---
 
