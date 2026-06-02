@@ -7,14 +7,16 @@ describe('useUiStore', () => {
       selectedLetterId: null,
       isLoading: false,
       toasts: [],
+      currentHarakat: 'fathah',
     });
   });
 
-  it('starts with no selection, not loading, and no toasts', () => {
+  it('starts with no selection, not loading, no toasts, and default harakat', () => {
     const state = useUiStore.getState();
     expect(state.selectedLetterId).toBeNull();
     expect(state.isLoading).toBe(false);
     expect(state.toasts).toEqual([]);
+    expect(state.currentHarakat).toBe('fathah');
   });
 
   it('setSelectedLetter stores the active letter id', () => {
@@ -49,5 +51,34 @@ describe('useUiStore', () => {
     expect(useUiStore.getState().toasts).toHaveLength(2);
     const ids = useUiStore.getState().toasts.map((t) => t.id);
     expect(new Set(ids).size).toBe(2);
+  });
+
+  describe('currentHarakat', () => {
+    it('starts with default fathah', () => {
+      expect(useUiStore.getState().currentHarakat).toBe('fathah');
+    });
+
+    it('setHarakat updates the vowel mode to kasrah', () => {
+      useUiStore.getState().setHarakat('kasrah');
+      expect(useUiStore.getState().currentHarakat).toBe('kasrah');
+    });
+
+    it('setHarakat updates the vowel mode to dammah', () => {
+      useUiStore.getState().setHarakat('dammah');
+      expect(useUiStore.getState().currentHarakat).toBe('dammah');
+    });
+
+    it('setHarakat updates the vowel mode to none', () => {
+      useUiStore.getState().setHarakat('none');
+      expect(useUiStore.getState().currentHarakat).toBe('none');
+    });
+
+    it('setHarakat can cycle through all 4 vowel modes', () => {
+      const modes = ['none', 'fathah', 'kasrah', 'dammah'] as const;
+      for (const mode of modes) {
+        useUiStore.getState().setHarakat(mode);
+        expect(useUiStore.getState().currentHarakat).toBe(mode);
+      }
+    });
   });
 });
