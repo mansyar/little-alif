@@ -1,7 +1,7 @@
 <protect>
 # Implementation Plan — T-06: Letter Toggle Management
 
-## Phase 1: Server Functions & Zod Schemas
+## Phase 1: Server Functions & Zod Schemas [checkpoint: 230a9b8]
 
 **Goal:** Implement the server-side data layer for letter toggle operations.
 
@@ -33,7 +33,7 @@
   - [x] Follow the existing pattern from `app/server/profiles.ts` (use pure helper functions + server function wrappers)
   - [x] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Conductor — User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor — User Manual Verification 'Phase 1' (Protocol in workflow.md) `230a9b8`
 
 ---
 
