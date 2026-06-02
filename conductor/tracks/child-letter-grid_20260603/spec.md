@@ -135,4 +135,5 @@ Implementation: add pure helper `getActiveProfile(db, ownerId, profileId)` and s
 - **KD-4**: `LetterDetail` listens to the `audioEngine.speak()` Promise resolution (not a separate timeout). Auto-dismiss timing is honest — it matches real playback end, including cancellation.
 - **KD-5**: Tapping the same letter during playback is allowed and restarts the utterance (T-09 `cancel-on-new-speak` handles audio; the overlay continues to show the same letter).
 - **KD-6**: `useUiStore.selectedLetterId` (already exists in the store, previously unused in the child grid) is the open/closed flag for the `LetterDetail` overlay. No new state needed.
-  </protect>
+
+</protect>
