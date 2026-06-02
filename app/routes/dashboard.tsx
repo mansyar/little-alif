@@ -38,6 +38,9 @@ function DashboardPage() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingProfile, setEditingProfile] = useState<ProfileCard | undefined>(undefined);
 
+  // Letter toggle grid expand/collapse (accordion)
+  const [expandedProfileId, setExpandedProfileId] = useState<string | null>(null);
+
   // ConfirmDialog state
   const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
   const deleteConfirmOpen = deleteProfileId !== null;
@@ -122,7 +125,14 @@ function DashboardPage() {
           </button>
         </header>
 
-        <ProfileList onEdit={handleEdit} onDelete={handleDelete} />
+        <ProfileList
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          expandedProfileId={expandedProfileId}
+          onToggleLetters={(profileId) =>
+            setExpandedProfileId((prev) => (prev === profileId ? null : profileId))
+          }
+        />
       </main>
 
       {/* Profile Editor modal */}

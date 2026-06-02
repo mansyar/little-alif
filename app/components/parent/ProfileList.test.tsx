@@ -17,6 +17,12 @@ vi.mock('~/server/profiles', () => ({
   listProfilesFn: () => mockListProfiles() as Promise<typeof mockProfiles>,
 }));
 
+vi.mock('~/server/letters', () => ({
+  getVisibleLettersFn: () => Promise.resolve([]),
+  toggleLetterFn: () => Promise.resolve({ letterId: 'alif', isVisible: true }),
+  bulkToggleLettersFn: () => Promise.resolve({ updatedCount: 0 }),
+}));
+
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
