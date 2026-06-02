@@ -25,7 +25,7 @@
 
 ---
 
-## Phase 2: Parent UI — HarakatSelector
+## Phase 2: Parent UI — HarakatSelector [checkpoint: 4e89ce4]
 
 **Goal:** Add vowel mode selector to the parent's LetterToggleGrid header.
 
@@ -45,7 +45,7 @@
 - [x] Task: Write tests for HarakatSelector (73f8879)
   - [x] Test that all 4 option buttons render
   - [x] Test that changing mode calls `updateProfileFn`
-- [~] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ---
 
