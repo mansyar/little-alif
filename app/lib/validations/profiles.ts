@@ -38,3 +38,13 @@ export const deleteProfileSchema = z.object({
   profileId: z.string().uuid({ message: 'Invalid profile ID.' }),
 });
 export type DeleteProfileInput = z.infer<typeof deleteProfileSchema>;
+
+/**
+ * Schema for fetching the active child profile (used by the /learn route).
+ * Both parent JWT and child-mode cookie are accepted; the caller does not
+ * need to specify which — that decision lives in the auth middleware.
+ */
+export const getActiveProfileSchema = z.object({
+  profileId: z.string().uuid({ message: 'Invalid profile ID.' }),
+});
+export type GetActiveProfileInput = z.infer<typeof getActiveProfileSchema>;

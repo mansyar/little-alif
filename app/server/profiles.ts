@@ -7,6 +7,7 @@ import {
   createProfileSchema,
   updateProfileSchema,
   deleteProfileSchema,
+  getActiveProfileSchema,
 } from '~/lib/validations/profiles';
 import type { CreateProfileInput, UpdateProfileInput } from '~/lib/validations/profiles';
 import { validateSessionFn } from './auth-fns';
@@ -131,6 +132,32 @@ export async function deleteProfile(db: DbClient, userId: string, profileId: str
   return { success: true };
 }
 
+/**
+ * Fetch the active child profile's identifying fields.
+ *
+ * Returns the public-safe shape `{ id, name, avatar, vowelMode }` used by
+ * the `/learn` route's `ProfileBadge`. Throws if the profile is missing
+ * or not owned by `userId`.
+ */
+export async function getActiveProfile(db: DbClient, userId: string, profileId: string) {
+  const profile = await db
+    .select({
+      id: profiles.id,
+      name: profiles.name,
+      avatar: profiles.avatar,
+      vowelMode: profiles.vowelMode,
+    })
+    .from(profiles)
+    .where(and(eq(profiles.id, profileId), eq(profiles.userId, userId)))
+    .then((rows) => rows[0] ?? null);
+
+  if (!profile) {
+    throw new Error('Profile not found or does not belong to you.');
+  }
+
+  return profile;
+}
+
 // ─── Server Function Wrappers ─────────────────────────────────────────
 
 /**
@@ -187,4 +214,20 @@ export const deleteProfileFn = createServerFn({ method: 'POST' })
     }
     const db = getDb();
     return deleteProfile(db, session.user.id, data.profileId);
+  });
+
+/**
+ * Server function: get the active child profile's public fields.
+ * Used by the `/learn` route to populate `ProfileBadge` without
+ * embedding PII in the child-mode cookie.
+ */
+export const getActiveProfileFn = createServerFn({ method: 'GET' })
+  .inputValidator(getActiveProfileSchema)
+  .handler(async ({ data }) => {
+    const session = await validateSessionFn();
+    if (session === null) {
+      throw new Error('Unauthenticated.');
+    }
+    const db = getDb();
+    return getActiveProfile(db, session.user.id, data.profileId);
   });

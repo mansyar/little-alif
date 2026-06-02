@@ -5,7 +5,14 @@ import { eq } from 'drizzle-orm';
 import { profiles, letterToggles, LETTER_IDS } from '~/db/schema';
 import * as authSchema from '~/db/auth-schema';
 import type { DbClient } from '~/db';
-import { listProfiles, createProfile, updateProfile, deleteProfile } from './profiles';
+import {
+  listProfiles,
+  createProfile,
+  updateProfile,
+  deleteProfile,
+  getActiveProfile,
+} from './profiles';
+import { getActiveProfileSchema } from '~/lib/validations/profiles';
 
 // ─── Setup ────────────────────────────────────────────────────────────
 
@@ -298,3 +305,81 @@ describe('deleteProfile', () => {
     );
   });
 });
+
+// ─── getActiveProfile (T-08) ───────────────────────────────────────────
+
+describe('getActiveProfile (pure helper)', () => {
+  const userId = 'active-profile-test-user';
+
+  beforeEach(async () => {
+    await db.delete(profiles).where(eq(profiles.userId, userId));
+  });
+
+  it('returns { id, name, avatar, vowelMode } for an owned profile', async () => {
+    const profile = await createProfile(db, userId, {
+      name: 'Aisyah',
+      avatar: 'alif-lamp',
+    });
+
+    const result = await getActiveProfile(db, userId, profile.id);
+
+    expect(result).toEqual({
+      id: profile.id,
+      name: 'Aisyah',
+      avatar: 'alif-lamp',
+      vowelMode: 'fathah',
+    });
+  });
+
+  it('throws when the profile is owned by a different user', async () => {
+    const profile = await createProfile(db, userId, {
+      name: 'OwnedByUser',
+      avatar: 'ba-boat',
+    });
+
+    await expect(getActiveProfile(db, 'someone-else', profile.id)).rejects.toThrow(
+      'Profile not found or does not belong to you.',
+    );
+  });
+
+  it('throws when the profile id does not exist', async () => {
+    const fakeId = '123e4567-e89b-12d3-a456-426614174000';
+    await expect(getActiveProfile(db, userId, fakeId)).rejects.toThrow(
+      'Profile not found or does not belong to you.',
+    );
+  });
+
+  it('returns the updated vowelMode when set via updateProfile', async () => {
+    const profile = await createProfile(db, userId, {
+      name: 'VowelChange',
+      avatar: 'dal-book',
+    });
+    await updateProfile(db, userId, { profileId: profile.id, vowelMode: 'kasrah' });
+
+    const result = await getActiveProfile(db, userId, profile.id);
+    expect(result.vowelMode).toBe('kasrah');
+  });
+});
+
+describe('getActiveProfileSchema', () => {
+  it('accepts a valid uuid', () => {
+    const parsed = getActiveProfileSchema.parse({
+      profileId: '123e4567-e89b-12d3-a456-426614174000',
+    });
+    expect(parsed.profileId).toBe('123e4567-e89b-12d3-a456-426614174000');
+  });
+
+  it('rejects a malformed profileId', () => {
+    expect(() => getActiveProfileSchema.parse({ profileId: 'not-a-uuid' })).toThrow();
+  });
+
+  it('rejects a missing profileId', () => {
+    expect(() => getActiveProfileSchema.parse({})).toThrow();
+  });
+});
+
+// Note: the `getActiveProfileFn` server function wrapper itself is not
+// unit-tested here — like the other profile server functions in this file
+// (createProfileFn, updateProfileFn, deleteProfileFn), it is a thin
+// createServerFn wrapper that delegates to the pure helper and would
+// require the TanStack Start server runtime context to invoke directly.
