@@ -71,17 +71,17 @@
   - [ ] No text. No buttons. Just the icon.
   - [ ] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Write failing tests for LetterCard
-  - [ ] Create `app/components/child/LetterCard.test.tsx`
-  - [ ] Test: renders the composed glyph using `composeLetter(letter.character, currentHarakat)`
-  - [ ] Test: tap calls `audioEngine.speak(letter.character, currentHarakat)`
-  - [ ] Test: tap sets `selectedLetterId` in `useUiStore` (opens the LetterDetail overlay)
-  - [ ] Test: tap resolves the `speak()` promise, then clears `selectedLetterId` (auto-dismisses the overlay)
-  - [ ] Test: glyph re-renders with new `composeLetter` result when `currentHarakat` prop changes
-  - [ ] Test: card has minimum touch target ≥64×64dp (`min-h-[64px] min-w-[64px]`)
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for LetterCard `656dc06`
+  - [x] Create `app/components/child/LetterCard.test.tsx`
+  - [x] Test: renders the composed glyph using `composeLetter(letter.character, currentHarakat)`
+  - [x] Test: tap calls `audioEngine.speak(letter.character, currentHarakat)`
+  - [x] Test: tap sets `selectedLetterId` in `useUiStore` (opens the LetterDetail overlay)
+  - [x] Test: tap resolves the `speak()` promise, then clears `selectedLetterId` (auto-dismisses the overlay)
+  - [x] Test: glyph re-renders with new `composeLetter` result when `currentHarakat` prop changes
+  - [x] Test: card has minimum touch target ≥64×64dp (`min-h-[64px] min-w-[64px]`)
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement LetterCard
+- [x] Task: Implement LetterCard `656dc06`
   - [ ] Create `app/components/child/LetterCard.tsx`
   - [ ] Define inline `LETTER_BG: Record<LetterId, string>` — 28 deterministic soft pastel colors keyed by `letterId`
   - [ ] Render a `<button>` containing the composed glyph (centered, large) on the `LETTER_BG[letterId]` background
