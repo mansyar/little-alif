@@ -53,7 +53,7 @@
 
 **Goal:** Add session-only vowel mode bar for the child grid and add i18n label keys.
 
-- [ ] Task: Create `app/components/child/ChildHarakatBar.tsx`
+- [~] Task: Create `app/components/child/ChildHarakatBar.tsx`
   - [ ] Create `app/components/child/` directory
   - [ ] Implement 4-button bar (Plain, Fathah, Kasrah, Dammah)
   - [ ] Read `currentHarakat` from `ui-store` and highlight the active button
