@@ -1,3 +1,4 @@
+<protect>
 # Plan: Audio Preloader (Idle Warm-up)
 
 **Track:** audio-preloader_20260602
@@ -35,3 +36,4 @@
   - [ ] Verify no side effects during active playback or navigation
 
 - [ ] **Task: Conductor - User Manual Verification 'Phase 1: Implement Audio Preloader Module' (Protocol in workflow.md)**
+      </protect>

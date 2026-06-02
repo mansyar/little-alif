@@ -1,3 +1,4 @@
+<protect>
 # Spec: Audio Preloader (Idle Warm-up)
 
 ## Overview
@@ -72,3 +73,4 @@ Implement idle-time voice preloading to warm up the SpeechSynthesis engine, redu
 - Multiple preload utterances or progressive warming.
 - Preloading audio files or pre-recorded MP3s.
 - Progress indicators or UI feedback for preload state.
+  </protect>
