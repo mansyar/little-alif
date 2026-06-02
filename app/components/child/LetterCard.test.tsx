@@ -102,7 +102,7 @@ describe('LetterCard', () => {
     expect(useUiStore.getState().selectedLetterId).toBeNull();
   });
 
-  it('clears selectedLetterId in .finally() so cancellation also dismisses the overlay', async () => {
+  it('clears selectedLetterId in .finally() when speak() resolves (symmetric for reject)', async () => {
     render(<LetterCard letter={letter} />);
 
     const user = userEvent.setup();
@@ -110,11 +110,10 @@ describe('LetterCard', () => {
 
     expect(useUiStore.getState().selectedLetterId).toBe('alif');
 
-    // Reject the speak promise (simulates audio engine cancellation).
+    // The component uses .finally(...), which runs on both fulfill and reject,
+    // so a normal resolve exercises the same code path as a cancellation. A
+    // normal resolve is sufficient to assert the .finally contract.
     await act(async () => {
-      // Override resolveSpeak to reject by replacing the promise.
-      // Easiest: resolve with no-op (the component uses .finally which runs
-      // for both fulfill and reject, so a normal resolve exercises the path).
       resolveSpeak?.();
       if (speakPromise) await speakPromise;
     });

@@ -1,6 +1,6 @@
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { composeLetter } from '~/lib/utils/harakat';
-import { LETTER_IDS, type LetterId } from '~/db/schema';
+import { type LetterId } from '~/db/schema';
 import { useUiStore } from '~/stores/ui-store';
 import type { VisibleLetter } from '~/server/letters';
 
@@ -45,13 +45,6 @@ const LETTER_BG: Record<LetterId, string> = {
   hae: 'bg-blue-200',
   ya: 'bg-indigo-200',
 };
-
-// Compile-time exhaustiveness guard: if a new LetterId is added, this will
-// fail to typecheck until LETTER_BG is updated.
-const _letterBgExhaustive: Record<LetterId, string> = LETTER_BG;
-const _allIdsPresent: readonly LetterId[] = LETTER_IDS;
-void _letterBgExhaustive;
-void _allIdsPresent;
 
 /**
  * A single tappable letter card on the /learn grid.
