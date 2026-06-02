@@ -105,14 +105,14 @@
   - [ ] No manual dismiss handler (auto-dismiss is driven by LetterCard's `.finally()`)
   - [ ] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Write failing tests for LetterGrid
-  - [ ] Create `app/components/child/LetterGrid.test.tsx`
-  - [ ] Test: renders one LetterCard per letter in `visibleLetters` prop, in the order given
-  - [ ] Test: renders EmptyState when `visibleLetters` is empty array
-  - [ ] Test: renders LetterDetail (the overlay) regardless of `visibleLetters.length`
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for LetterGrid `0e57fce`
+  - [x] Create `app/components/child/LetterGrid.test.tsx`
+  - [x] Test: renders one LetterCard per letter in `visibleLetters` prop, in the order given
+  - [x] Test: renders EmptyState when `visibleLetters` is empty array
+  - [x] Test: renders LetterDetail (the overlay) regardless of `visibleLetters.length`
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement LetterGrid
+- [x] Task: Implement LetterGrid `0e57fce`
   - [ ] Create `app/components/child/LetterGrid.tsx`
   - [ ] Accept `visibleLetters: VisibleLetter[]` and `currentHarakat: VowelMode` as props
   - [ ] If `visibleLetters.length === 0`, render `<EmptyState />` and return
