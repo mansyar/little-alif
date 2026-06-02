@@ -24,6 +24,7 @@
 
 ## State Management
 
+- **Client Data Fetching:** TanStack React Query (useMutation, useQuery for server functions)
 - **Global State:** Zustand (auth-store, child-store, ui-store)
 
 ## Authentication
@@ -73,4 +74,4 @@
 - **Formatting:** Prettier 3 with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: 'all'`. Ignored: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`, `.husky`, `*.tsbuildinfo`, `app/routeTree.gen.ts`, `app/db/migrations`.
 - **Git Hooks:** Husky 9 (`.husky/pre-commit` invokes `pnpm lint-staged && pnpm typecheck`)
 - **Staged-File Runner:** lint-staged 17 (runs ESLint/Prettier on staged files only; tsc is intentionally outside the per-file glob — see [Workflow — Pre-Commit Quality Gates](./workflow.md#pre-commit-quality-gates))
-- **Testing:** Vitest 3 (planned for follow-up tracks)
+- **Testing:** Vitest 3 (unit + integration tests, jsdom environment for Radix UI)
