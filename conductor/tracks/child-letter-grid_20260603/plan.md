@@ -90,14 +90,14 @@
   - [ ] `aria-label={letter.letterId}` for accessibility; `aria-hidden="true"` on the glyph span
   - [ ] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Write failing tests for LetterDetail
-  - [ ] Create `app/components/child/LetterDetail.test.tsx`
-  - [ ] Test: renders nothing when `useUiStore.selectedLetterId` is null
-  - [ ] Test: when `selectedLetterId` is set, renders the composed glyph at large size (≥ `text-8xl`)
-  - [ ] Test: full-screen overlay positioning (`fixed inset-0` or equivalent class)
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for LetterDetail `6378497`
+  - [x] Create `app/components/child/LetterDetail.test.tsx`
+  - [x] Test: renders nothing when `useUiStore.selectedLetterId` is null
+  - [x] Test: when `selectedLetterId` is set, renders the composed glyph at large size (≥ `text-8xl`)
+  - [x] Test: full-screen overlay positioning (`fixed inset-0` or equivalent class)
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement LetterDetail
+- [x] Task: Implement LetterDetail `6378497`
   - [ ] Create `app/components/child/LetterDetail.tsx`
   - [ ] Read `selectedLetterId` from `useUiStore`
   - [ ] When `selectedLetterId !== null`, render a `fixed inset-0 z-50 bg-background-warm/95` overlay with the composed glyph at `text-9xl`, centered
