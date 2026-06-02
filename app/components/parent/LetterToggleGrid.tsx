@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Switch from '@radix-ui/react-switch';
 import { getVisibleLettersFn, toggleLetterFn, bulkToggleLettersFn } from '~/server/letters';
@@ -6,6 +6,7 @@ import { LETTER_IDS } from '~/db/schema';
 import type { LetterId } from '~/db/schema';
 import { useI18nContext } from '~/lib/i18n';
 import type { VisibleLetter } from '~/server/letters';
+import { useDebouncedCallback } from '~/lib/utils/useDebouncedCallback';
 
 interface LetterToggleGridProps {
   profileId: string;
@@ -46,6 +47,18 @@ export function LetterToggleGrid({ profileId }: LetterToggleGridProps) {
       setMutationError(err.message ?? LL.ERROR_GENERIC());
     },
   });
+
+  // Debounce individual toggles: rapid clicks produce a single server call after 300ms
+  const debouncedToggle = useDebouncedCallback(
+    useCallback(
+      (letterId: LetterId, isVisible: boolean) => {
+        toggleMutation.mutate({ letterId, isVisible });
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- toggleMutation.mutate is stable
+      [toggleMutation.mutate],
+    ),
+    300,
+  );
 
   const bulkMutation = useMutation({
     mutationFn: ({ isVisible }: { isVisible: boolean }) =>
@@ -120,10 +133,7 @@ export function LetterToggleGrid({ profileId }: LetterToggleGridProps) {
             <Switch.Root
               checked={letter.isVisible}
               onCheckedChange={(checked) => {
-                toggleMutation.mutate({
-                  letterId: letter.letterId as LetterId,
-                  isVisible: checked,
-                });
+                debouncedToggle(letter.letterId as LetterId, checked);
               }}
               disabled={anyPending}
               className="relative h-5 w-9 rounded-full bg-sand-dark data-[state=checked]:bg-green"

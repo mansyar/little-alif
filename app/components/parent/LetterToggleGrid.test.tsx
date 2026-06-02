@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
@@ -124,10 +124,13 @@ describe('LetterToggleGrid', () => {
     const user = userEvent.setup();
     await user.click(switches[0]!); // Toggle alif ON
 
-    expect(mockToggleLetter).toHaveBeenCalledWith({
-      profileId: mockProfileId,
-      letterId: 'alif',
-      isVisible: true,
+    // Debounce delays the mutation call by 300ms, so wait for it
+    await waitFor(() => {
+      expect(mockToggleLetter).toHaveBeenCalledWith({
+        profileId: mockProfileId,
+        letterId: 'alif',
+        isVisible: true,
+      });
     });
   });
 
@@ -142,8 +145,10 @@ describe('LetterToggleGrid', () => {
     const user = userEvent.setup();
     await user.click(switches[0]!);
 
-    // The clicked switch should be disabled while mutation is in flight
-    expect(switches[0]?.getAttribute('disabled')).not.toBeNull();
+    // Wait for debounce to trigger the mutation, then all switches should be disabled
+    await waitFor(() => {
+      expect(switches[0]?.getAttribute('disabled')).not.toBeNull();
+    });
   });
 
   it('shows error state when toggleLetterFn fails', async () => {
@@ -156,9 +161,29 @@ describe('LetterToggleGrid', () => {
     const user = userEvent.setup();
     await user.click(switches[0]!);
 
-    // The component displays the error message from the rejected promise
+    // Wait for debounce to trigger the mutation and error to display
     const errorMsg = await screen.findByText('Toggle failed');
     expect(errorMsg).toBeTruthy();
+  });
+
+  it('debounces rapid toggle clicks: only one server call after multiple clicks within 300ms', async () => {
+    mockToggleLetter.mockResolvedValue({ letterId: 'alif', isVisible: true });
+
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} />, { wrapper: createWrapper() });
+
+    const switches = await screen.findAllByRole('switch');
+    const user = userEvent.setup();
+
+    // Rapidly click the same switch 3 times
+    await user.click(switches[0]!);
+    await user.click(switches[0]!);
+    await user.click(switches[0]!);
+
+    // Wait for the debounced call to fire once
+    await waitFor(() => {
+      expect(mockToggleLetter).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('calls bulkToggleLettersFn with all letter IDs when "Show All" is clicked', async () => {
