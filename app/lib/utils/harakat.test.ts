@@ -20,7 +20,7 @@ describe('VOWEL_MODES', () => {
 describe('NON_CONNECTING', () => {
   it('contains the 7 non-connecting letters', () => {
     expect(NON_CONNECTING).toEqual({
-      '\u0627': { fathah: '\u0627\u064E', kasrah: '\u0650\u0627', dammah: '\u0627\u064F' }, // ا
+      '\u0627': { fathah: '\u0627\u064E', kasrah: '\u0627\u0650', dammah: '\u0627\u064F' }, // ا
       '\u0648': { fathah: '\u0648\u064E', kasrah: '\u0648\u0650', dammah: '\u0648\u064F' }, // و
       '\u064A': { fathah: '\u064A\u064E', kasrah: '\u064A\u0650', dammah: '\u064A\u064F' }, // ي
       '\u0631': { fathah: '\u0631\u064E', kasrah: '\u0631\u0650', dammah: '\u0631\u064F' }, // ر

@@ -77,9 +77,13 @@ vi.mock('~/server/profiles', () => ({
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
-      LETTERS_SHOW: () => 'Show' as const,
-      LETTERS_HIDE: () => 'Hide' as const,
-      ERROR_GENERIC: () => 'Something went wrong.' as const,
+      LETTERS_SHOW: () => 'Show',
+      LETTERS_HIDE: () => 'Hide',
+      LETTERS_TITLE: () => 'Letters',
+      HARAKAT_PLAIN: () => 'Plain',
+      HARAKAT_FATHAH: () => 'Fathah',
+      HARAKAT_KASRAH: () => 'Kasrah',
+      HARAKAT_DAMMAH: () => 'Dammah',
     },
   }),
 }));

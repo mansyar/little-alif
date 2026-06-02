@@ -20,6 +20,17 @@ vi.mock('~/server/profiles', () => ({
     mockUpdateProfile(opts.data) as Promise<unknown>,
 }));
 
+vi.mock('~/lib/i18n', () => ({
+  useI18nContext: () => ({
+    LL: {
+      HARAKAT_PLAIN: () => 'Plain',
+      HARAKAT_FATHAH: () => 'Fathah',
+      HARAKAT_KASRAH: () => 'Kasrah',
+      HARAKAT_DAMMAH: () => 'Dammah',
+    },
+  }),
+}));
+
 function createWrapper() {
   const queryClient = new QueryClient({
     defaultOptions: {

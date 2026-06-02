@@ -4,21 +4,23 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateProfileFn } from '~/server/profiles';
 import { VOWEL_MODES } from '~/lib/utils/harakat';
 import type { VowelMode } from '~/lib/utils/harakat';
+import { useI18nContext } from '~/lib/i18n';
 
 interface HarakatSelectorProps {
   profileId: string;
   currentVowelMode: VowelMode;
 }
 
-const LABELS: Record<VowelMode, string> = {
-  none: 'Plain',
-  fathah: 'Fathah',
-  kasrah: 'Kasrah',
-  dammah: 'Dammah',
-};
-
 export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelectorProps) {
   const queryClient = useQueryClient();
+  const { LL } = useI18nContext();
+
+  const LABELS: Record<VowelMode, string> = {
+    none: LL.HARAKAT_PLAIN(),
+    fathah: LL.HARAKAT_FATHAH(),
+    kasrah: LL.HARAKAT_KASRAH(),
+    dammah: LL.HARAKAT_DAMMAH(),
+  };
   const [mutationError, setMutationError] = useState<string | null>(null);
 
   // Auto-clear mutation error after 5 seconds

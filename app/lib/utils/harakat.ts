@@ -32,7 +32,7 @@ export const NON_CONNECTING: Record<string, { fathah: string; kasrah: string; da
   // ا (alif)
   '\u0627': {
     fathah: '\u0627\u064E',
-    kasrah: '\u0650\u0627',
+    kasrah: '\u0627\u0650',
     dammah: '\u0627\u064F',
   },
   // و (waw)
