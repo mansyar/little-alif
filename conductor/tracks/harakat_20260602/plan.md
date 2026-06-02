@@ -53,12 +53,12 @@
 
 **Goal:** Add session-only vowel mode bar for the child grid and add i18n label keys.
 
-- [~] Task: Create `app/components/child/ChildHarakatBar.tsx`
-  - [ ] Create `app/components/child/` directory
-  - [ ] Implement 4-button bar (Plain, Fathah, Kasrah, Dammah)
-  - [ ] Read `currentHarakat` from `ui-store` and highlight the active button
-  - [ ] On click, call `ui-store.setHarakat(mode)` to update session-only state
-  - [ ] Style with Tailwind: large touch targets (≥44dp), clear active state
+- [x] Task: Create `app/components/child/ChildHarakatBar.tsx` (9bfaac8)
+  - [x] Create `app/components/child/` directory
+  - [x] Implement 4-button bar (Plain, Fathah, Kasrah, Dammah)
+  - [x] Read `currentHarakat` from `ui-store` and highlight the active button
+  - [x] On click, call `ui-store.setHarakat(mode)` to update session-only state
+  - [x] Style with Tailwind: large touch targets (≥44dp), clear active state
 - [ ] Task: Add i18n keys for harakat labels
   - [ ] Add `HARAKAT_PLAIN`, `HARAKAT_FATHAH`, `HARAKAT_KASRAH`, `HARAKAT_DAMMAH` to English locale
   - [ ] Add corresponding Indonesian translations
