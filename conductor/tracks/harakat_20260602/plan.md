@@ -5,23 +5,23 @@
 
 ---
 
-## Phase 1: Harakat Utility (`composeLetter`) & Tests
+## Phase 1: Harakat Utility (`composeLetter`) & Tests [checkpoint: 6c5a30e]
 
 **Goal:** Create the pure core utility and verify it with unit tests.
 
 - [x] Task: Create `app/lib/utils/harakat.ts` with `composeLetter()` and `VowelMode` type (4e0d384)
-  - [ ] Define `HARAKAT_COMBINING` map (Unicode diacritics: fathah `\u064E`, kasrah `\u0650`, dammah `\u064F`)
-  - [ ] Define `VOWEL_MODES` constant and `VowelMode` type (`'none' | 'fathah' | 'kasrah' | 'dammah'`)
-  - [ ] Define `NON_CONNECTING` precomposed fallback map (7 letters: ا, و, ي, ر, ز, د, ذ)
-  - [ ] Implement `composeLetter(baseChar, harakat)` pure function with combining diacritic + fallback logic
-  - [ ] Export `composeLetter`, `VowelMode`, `VOWEL_MODES`, `HARAKAT_COMBINING`
+  - [x] Define `HARAKAT_COMBINING` map (Unicode diacritics: fathah `\u064E`, kasrah `\u0650`, dammah `\u064F`)
+  - [x] Define `VOWEL_MODES` constant and `VowelMode` type (`'none' | 'fathah' | 'kasrah' | 'dammah'`)
+  - [x] Define `NON_CONNECTING` precomposed fallback map (7 letters: ا, و, ي, ر, ز, د, ذ)
+  - [x] Implement `composeLetter(baseChar, harakat)` pure function with combining diacritic + fallback logic
+  - [x] Export `composeLetter`, `VowelMode`, `VOWEL_MODES`, `HARAKAT_COMBINING`
 - [x] Task: Write unit tests for `harakat.ts` (4e0d384)
   - [x] Test: `composeLetter('ب', 'fathah')` returns `'بَ'` (Unicode combining for connecting letters)
   - [x] Test: `composeLetter('ر', 'kasrah')` returns `'رِ'` (precomposed fallback for non-connecting)
   - [x] Test: All 7 exception letters render correctly with all 3 harakat modes
   - [x] Test: `'none'` returns the base character unchanged
   - [x] Test: `composeLetter('ا', 'fathah')` returns `'اَ'` (DD-1: no special treatment for Alif)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ---
 
