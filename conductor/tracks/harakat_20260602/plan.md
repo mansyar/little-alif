@@ -33,12 +33,12 @@
   - [x] Import `VowelMode` type from `~/lib/utils/harakat`
   - [x] Add `currentHarakat: VowelMode` field (default: `'fathah'`)
   - [x] Add `setHarakat(mode: VowelMode)` action
-- [ ] Task: Create `app/components/parent/HarakatSelector.tsx`
-  - [ ] Implement radio-style selector with 4 options: Plain, Fathah, Kasrah, Dammah
-  - [ ] Accept `profileId` and `currentVowelMode` as props
-  - [ ] On change, call `updateProfileFn({ data: { profileId, vowelMode } })`
-  - [ ] Show which mode is currently active
-  - [ ] Handle loading/error states from the mutation
+- [x] Task: Create `app/components/parent/HarakatSelector.tsx` (73f8879)
+  - [x] Implement radio-style selector with 4 options: Plain, Fathah, Kasrah, Dammah
+  - [x] Accept `profileId` and `currentVowelMode` as props
+  - [x] On change, call `updateProfileFn({ data: { profileId, vowelMode } })`
+  - [x] Show which mode is currently active
+  - [x] Handle loading/error states from the mutation
 - [ ] Task: Integrate HarakatSelector into `LetterToggleGrid.tsx`
   - [ ] Render HarakatSelector above the bulk actions toolbar in the grid header
   - [ ] Fetch current vowelMode from the profile data
