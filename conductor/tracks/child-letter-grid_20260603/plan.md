@@ -33,7 +33,7 @@
   - [x] In the handler, call `validateSessionFn()`, throw on null, then call `getActiveProfile(db, session.user.id, data.profileId)`
   - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) `a6f3266`
 
 ---
 
@@ -123,7 +123,7 @@
   - [ ] Render `<LetterDetail visibleLetters={visibleLetters} currentHarakat={currentHarakat} />` at the end (it is a fixed overlay, not grid-positioned)
   - [ ] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) `0e57fce` (latest Phase 2 work) → user approved "Approve & continue"
 
 ---
 
