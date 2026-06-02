@@ -71,13 +71,13 @@
   - [x] After every toggle/bulk mutation, invalidate the TanStack Query `['profiles']` cache so the `introducedCount` on profile cards refreshes automatically
   - [x] Run tests and confirm they pass (Green phase)
 
-- [ ] Task: Integrate toggle grid inline on the dashboard
-  - [ ] Open `app/routes/dashboard.tsx`
-  - [ ] Add expand/collapse state management per profile card
-  - [ ] Add "Manage Letters" button to each profile card (if not already present from T-05)
-  - [ ] On expand: render `LetterToggleGrid` below the profile card
-  - [ ] Only one profile's grid should be expanded at a time (accordion behavior)
-  - [ ] Run tests and confirm they pass
+- [x] Task: Integrate toggle grid inline on the dashboard `ef53a7a`
+  - [x] Open `app/routes/dashboard.tsx` — added expandedProfileId state and onToggleLetters handler
+  - [x] Add expand/collapse state management per profile card (useState in DashboardPage)
+  - [x] "Manage Letters" button already present from T-05 — wired onClick handler
+  - [x] On expand: render `LetterToggleGrid` below the profile card
+  - [x] Only one profile's grid should be expanded at a time (accordion behavior — toggle logic toggles off if same profile clicked)
+  - [x] Run tests and confirm they pass
 
 - [ ] Task: Implement 300ms debounce utility for toggle operations
   - [ ] Create or extend a debounce hook/utility in `app/lib/utils/`
