@@ -43,14 +43,14 @@
 
 ### Tasks
 
-- [ ] Task: Write failing tests for ProfileBadge
-  - [ ] Create `app/components/child/ProfileBadge.test.tsx`
-  - [ ] Test: renders the inline SVG avatar matching the active profile's `avatar` key
-  - [ ] Test: renders the profile name next to the avatar
-  - [ ] Test: falls back to default Lucide `User` icon when avatar key is unknown or profile is null
-  - [ ] Run tests and confirm they fail (Red phase)
+- [x] Task: Write failing tests for ProfileBadge `d7bd67d`
+  - [x] Create `app/components/child/ProfileBadge.test.tsx`
+  - [x] Test: renders the inline SVG avatar matching the active profile's `avatar` key
+  - [x] Test: renders the profile name next to the avatar
+  - [x] Test: falls back to default Lucide `User` icon when avatar key is unknown or profile is null
+  - [x] Run tests and confirm they fail (Red phase)
 
-- [ ] Task: Implement ProfileBadge
+- [x] Task: Implement ProfileBadge `d7bd67d`
   - [ ] Create `app/components/child/ProfileBadge.tsx`
   - [ ] Accept `profile: { name: string; avatar: string } | null` prop
   - [ ] Use the existing `AVATAR_MAP` from `~/components/parent/avatars` to render the inline SVG
