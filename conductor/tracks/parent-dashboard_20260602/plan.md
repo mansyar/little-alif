@@ -48,31 +48,31 @@
   - [ ] Add "Add Child" button that opens ProfileEditor (placeholder for Phase 4)
   - [ ] Replace placeholder text with full profile management UI
   - [ ] Wire up i18n for all dashboard strings
-- [ ] Task: Conductor - User Manual Verification 'Dashboard Route & Profile Components' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Dashboard Route & Profile Components' (Protocol in workflow.md) [5c0dd4f]
 
 ## Phase 4: Profile Editor, Avatar Picker & Delete Confirmation
 
 **Goal:** Build the interactive profile CRUD UI with modals and confirmations.
 
-- [ ] Task: Write tests for editor components
-  - [ ] Test `AvatarPicker` — renders 8 avatars, single-select, selection updates correctly
-  - [ ] Test `ProfileEditor` — add mode renders empty form, edit mode pre-fills, save calls createFn/updateFn, cancel closes dialog
-  - [ ] Test `ConfirmDialog` — shows title/message, confirm triggers action, cancel dismisses
-- [ ] Task: Create `app/components/parent/AvatarPicker.tsx`
-  - [ ] Radix Radio Group grid layout
-  - [ ] Each avatar renders inline SVG component, highlights on selection
-- [ ] Task: Create `app/components/parent/ProfileEditor.tsx`
-  - [ ] Radix Dialog modal
-  - [ ] Add mode: empty name input + AvatarPicker + Save button
-  - [ ] Edit mode: pre-filled name + current avatar selected + Save/Cancel
-  - [ ] Client-side validation on submit, show Zod errors
-  - [ ] On success: close dialog, refresh profile list
-- [ ] Task: Create or use existing `app/components/ui/ConfirmDialog.tsx`
-  - [ ] Radix AlertDialog for destructive action confirmation
-  - [ ] Reusable with customizable title, message, confirm/cancel labels
-- [ ] Task: Wire up ProfileEditor + delete flow in ProfileList
-  - [ ] "Add Child" button opens ProfileEditor in add mode
-  - [ ] Edit button opens ProfileEditor in edit mode
-  - [ ] Delete button opens ConfirmDialog → confirms → calls deleteProfileFn → refreshes list
+- [x] Task: Write tests for editor components [e3b0a04]
+  - [x] Test `AvatarPicker` — renders 8 avatars, single-select, selection updates correctly
+  - [x] Test `ProfileEditor` — add mode renders empty form, edit mode pre-fills, save calls createFn/updateFn, cancel closes dialog
+  - [x] Test `ConfirmDialog` — shows title/message, confirm triggers action, cancel dismisses
+- [x] Task: Create `app/components/parent/AvatarPicker.tsx` [e3b0a04]
+  - [x] Radix Radio Group grid layout
+  - [x] Each avatar renders inline SVG component, highlights on selection
+- [x] Task: Create `app/components/parent/ProfileEditor.tsx` [e3b0a04]
+  - [x] Radix Dialog modal
+  - [x] Add mode: empty name input + AvatarPicker + Save button
+  - [x] Edit mode: pre-filled name + current avatar selected + Save/Cancel
+  - [x] Client-side validation on submit, show Zod errors
+  - [x] On success: close dialog, refresh profile list
+- [x] Task: Create or use existing `app/components/ui/ConfirmDialog.tsx` [e3b0a04]
+  - [x] Radix AlertDialog for destructive action confirmation
+  - [x] Reusable with customizable title, message, confirm/cancel labels
+- [x] Task: Wire up ProfileEditor + delete flow in ProfileList [e3b0a04]
+  - [x] "Add Child" button opens ProfileEditor in add mode
+  - [x] Edit button opens ProfileEditor in edit mode
+  - [x] Delete button opens ConfirmDialog → confirms → calls deleteProfileFn → refreshes list
 - [ ] Task: Conductor - User Manual Verification 'Profile Editor & Delete Confirmation' (Protocol in workflow.md)
       </protect>
