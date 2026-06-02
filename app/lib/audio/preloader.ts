@@ -23,7 +23,8 @@ export function preloadOnIdle(engine: AudioEngine): void {
   if (preloaded) return;
   if (!engine.isSupported) return;
 
-  const adapter = engine.adapter!;
+  const adapter = engine.adapter;
+  if (!adapter) return;
   // Don't interfere with active playback
   if (adapter.speaking) return;
 

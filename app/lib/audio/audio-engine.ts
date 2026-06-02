@@ -46,7 +46,7 @@ export function createBrowserAdapter(): SpeechSynthesisAdapter | null {
 // ---------------------------------------------------------------------------
 
 export class AudioEngine {
-  private _adapter: SpeechSynthesisAdapter | null = null;
+  private adapterInstance: SpeechSynthesisAdapter | null = null;
   private selectedVoice: SpeechSynthesisVoice | null = null;
   private currentUtterance: SpeechSynthesisUtterance | null = null;
   private currentResolve: (() => void) | null = null;
@@ -54,12 +54,12 @@ export class AudioEngine {
 
   /** Whether SpeechSynthesis is available and the engine is not disposed. */
   get isSupported(): boolean {
-    return this._adapter !== null;
+    return this.adapterInstance !== null;
   }
 
   /** The underlying SpeechSynthesis adapter (for advanced use, e.g. preloader). */
   get adapter(): SpeechSynthesisAdapter | null {
-    return this._adapter;
+    return this.adapterInstance;
   }
 
   /** The cached voice, or null if voice scan hasn't completed yet. */
@@ -69,14 +69,14 @@ export class AudioEngine {
 
   constructor(adapter?: SpeechSynthesisAdapter) {
     if (adapter) {
-      this._adapter = adapter;
+      this.adapterInstance = adapter;
     } else {
-      this._adapter = createBrowserAdapter();
+      this.adapterInstance = createBrowserAdapter();
     }
 
     // Re-scan voices when they become available (async loading in some browsers)
-    if (this._adapter) {
-      this._adapter.onvoiceschanged = () => this.resetVoiceScan();
+    if (this.adapterInstance) {
+      this.adapterInstance.onvoiceschanged = () => this.resetVoiceScan();
     }
   }
 
@@ -89,10 +89,10 @@ export class AudioEngine {
    * only called once unless `resetVoiceScan()` is explicitly invoked.
    */
   private selectVoice(): SpeechSynthesisVoice | null {
-    if (!this._adapter) return null;
+    if (!this.adapterInstance) return null;
     if (this.voiceScanComplete) return this.selectedVoice;
 
-    const voices = this._adapter.getVoices();
+    const voices = this.adapterInstance.getVoices();
 
     const arSA = voices.find((v) => v.lang === 'ar-SA');
     if (arSA) {
@@ -194,7 +194,7 @@ export class AudioEngine {
   /** Tear down the engine and release resources. */
   dispose(): void {
     this.cancel();
-    this._adapter = null;
+    this.adapterInstance = null;
     this.selectedVoice = null;
     this.voiceScanComplete = false;
   }
