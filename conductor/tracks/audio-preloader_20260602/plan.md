@@ -25,4 +25,8 @@
   - [x] Verified no side effects — route is minimal placeholder, preloader fires once on mount
 
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Implement Audio Preloader Module' (Protocol in workflow.md)** `[26c64ce]`
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions `cef1f11`
       </protect>
