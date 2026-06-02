@@ -75,4 +75,8 @@
   - [x] Edit button opens ProfileEditor in edit mode
   - [x] Delete button opens ConfirmDialog → confirms → calls deleteProfileFn → refreshes list
 - [x] Task: Conductor - User Manual Verification 'Profile Editor & Delete Confirmation' (Protocol in workflow.md) [2d57935]
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions [8fa8f04]
       </protect>
