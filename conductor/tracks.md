@@ -16,5 +16,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: T-08 — Child Letter Grid**
-      _Link: [./tracks/child-letter-grid_20260603/](./tracks/child-letter-grid_20260603/)_
+<!-- Track: T-08 — Child Letter Grid archived to ./archive/child-letter-grid_20260603/ -->
