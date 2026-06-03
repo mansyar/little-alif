@@ -1,8 +1,0 @@
-{
-  "track_id": "reading-practice_20260603",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-06-03T01:42:54Z",
-  "updated_at": "2026-06-03T01:42:54Z",
-  "description": "T-10: Reading Practice (Iqra' Mode) — implement the /learn/reading screen with grouped letter display, systematic + mixed practice rows, cell-tap audio, and harakat-reactive re-rendering"
-}
