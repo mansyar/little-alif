@@ -20,5 +20,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: T-10 — Reading Practice (Iqra' Mode)**
-      _Link: [./tracks/reading-practice_20260603/](./tracks/reading-practice_20260603/)_
+<!-- Track: T-10 - Reading Practice (Iqra' Mode) archived to ./archive/reading-practice_20260603/ -->
