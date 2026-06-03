@@ -17,3 +17,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 <!-- Track: T-08 — Child Letter Grid archived to ./archive/child-letter-grid_20260603/ -->
+
+---
+
+- [ ] **Track: T-10 — Reading Practice (Iqra' Mode)**
+      _Link: [./tracks/reading-practice_20260603/](./tracks/reading-practice_20260603/)_
