@@ -207,7 +207,7 @@
 
 ---
 
-## Phase 3: /learn/reading Route & Final Integration [checkpoint: 01c80f5]
+## Phase 3: /learn/reading Route & Final Integration [checkpoint: 93ca066]
 
 **Goal:** Wire up the `/learn/reading` route that composes the new components, replaces the disabled Reading Practice button on `/learn` with a working `<Link>`, and verifies the full end-to-end flow. After this phase, the T-10 track is done.
 
@@ -258,7 +258,11 @@
   - [x] Run `pnpm lint` — no errors (removed unused `useNavigate`/`navigate`)
   - [x] Manually verify in browser — see manual verification plan below
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+  - [x] Dashboard-to-learn connection verified: profile card click → /learn (setChildMode + navigate)
+  - [x] /learn Back link now points to /dashboard (not /)
+  - [x] All 359 automated tests pass
+  - [x] Typecheck and lint clean
 
 ---
 
