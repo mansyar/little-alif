@@ -5,6 +5,7 @@ import { audioEngine } from '~/lib/audio/audio-engine';
 import { preloadOnIdle } from '~/lib/audio/preloader';
 import { getReadingDataFn } from '~/server/reading';
 import { generateReadingGroups } from '~/lib/utils/reading';
+import type { VowelMode } from '~/lib/utils/harakat';
 import { useAuthStore } from '~/stores/auth-store';
 import { useUiStore } from '~/stores/ui-store';
 import { ProfileBadge } from '~/components/child/ProfileBadge';
@@ -60,6 +61,17 @@ function ReadingContent({ profileId }: ReadingContentProps) {
 
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [shuffleSeed, setShuffleSeed] = useState(0);
+  const [randomHarakats, setRandomHarakats] = useState<VowelMode[][] | null>(null);
+
+  // Wrap group index setters to clear random harakat mode on group switch
+  const handleGroupSelect = (index: number) => {
+    setCurrentGroupIndex(index);
+    setRandomHarakats(null);
+  };
+  const handleNextGroup = () => {
+    setCurrentGroupIndex((i) => (i + 1) % groups.length);
+    setRandomHarakats(null);
+  };
 
   const readingQuery = useQuery({
     queryKey: ['readingData', profileId],
@@ -90,6 +102,12 @@ function ReadingContent({ profileId }: ReadingContentProps) {
       setHarakat(readingQuery.data.vowelMode);
     }
   }, [readingQuery.data, setHarakat]);
+
+  // Clear random harakat mode when user manually picks a vowel from the bar
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => {
+    setRandomHarakats(null);
+  }, [currentHarakat]);
 
   // Redirect to /learn if fewer than 3 letters
   useEffect(() => {
@@ -160,22 +178,36 @@ function ReadingContent({ profileId }: ReadingContentProps) {
           <GroupPills
             groups={groups}
             activeIndex={currentGroupIndex}
-            onSelect={setCurrentGroupIndex}
+            onSelect={handleGroupSelect}
           />
         )}
 
         <ReadingGrid
           group={activeGroup}
           letterChars={letterChars}
+          randomHarakats={randomHarakats}
           key={`grid-${shuffleSeed}-${currentGroupIndex}`}
         />
 
         <ReadingActions
           groups={groups}
           onShuffle={() => setShuffleSeed((s) => s + 1)}
-          onNext={() => setCurrentGroupIndex((i) => (i + 1) % groups.length)}
+          onNext={handleNextGroup}
           onDone={() => {
             void navigate({ to: '/learn' });
+          }}
+          onRandomizeHarakat={() => {
+            const harakatOpts: VowelMode[] = ['fathah', 'kasrah', 'dammah'];
+            const newRows: VowelMode[][] = [];
+            const letterCount = activeGroup.letters.length;
+            for (let r = 0; r < 6; r++) {
+              const row: VowelMode[] = [];
+              for (let c = 0; c < letterCount; c++) {
+                row.push(harakatOpts[Math.floor(Math.random() * harakatOpts.length)]!);
+              }
+              newRows.push(row);
+            }
+            setRandomHarakats(newRows);
           }}
         />
       </div>

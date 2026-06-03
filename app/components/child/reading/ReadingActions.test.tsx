@@ -7,6 +7,7 @@ import type { ReadingGroup } from '~/lib/utils/reading';
 const mockOnShuffle = vi.fn();
 const mockOnNext = vi.fn();
 const mockOnDone = vi.fn();
+const mockOnRandomizeHarakat = vi.fn();
 
 const TWO_GROUPS: ReadingGroup[] = [
   { id: 1, letters: ['alif', 'ba', 'ta'], label: 'ا ب ت', isComplete: true },
@@ -23,7 +24,7 @@ describe('ReadingActions', () => {
     vi.clearAllMocks();
   });
 
-  it('renders 3 buttons for multiple groups: Shuffle, Next Group, Done', async () => {
+  it('renders Random, Shuffle, Next Group, Done buttons for multiple groups', async () => {
     const { ReadingActions } = await import('./ReadingActions');
     render(
       <ReadingActions
@@ -31,15 +32,17 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
+    expect(screen.getByRole('button', { name: 'Randomize vowel' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Next group' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
   });
 
-  it('renders 2 buttons for single group: Shuffle and Done only', async () => {
+  it('renders Random + Shuffle + Done for single group (no Next Group)', async () => {
     const { ReadingActions } = await import('./ReadingActions');
     render(
       <ReadingActions
@@ -47,9 +50,11 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
+    expect(screen.getByRole('button', { name: 'Randomize vowel' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Next group' })).toBeNull();
     expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
@@ -64,6 +69,7 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
@@ -80,6 +86,7 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
@@ -96,11 +103,29 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
     await user.click(screen.getByRole('button', { name: 'Done reading practice' }));
     expect(mockOnDone).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Randomize vowel calls onRandomizeHarakat once', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    const user = userEvent.setup();
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Randomize vowel' }));
+    expect(mockOnRandomizeHarakat).toHaveBeenCalledTimes(1);
   });
 
   it('all buttons have min-h-[56px]', async () => {
@@ -111,6 +136,7 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
@@ -120,7 +146,7 @@ describe('ReadingActions', () => {
     }
   });
 
-  it('Lucide icons Shuffle, ChevronRight, Check are rendered inside buttons', async () => {
+  it('Lucide icons Dices, Shuffle, ChevronRight, Check are rendered inside buttons', async () => {
     const { ReadingActions } = await import('./ReadingActions');
     const { container } = render(
       <ReadingActions
@@ -128,11 +154,12 @@ describe('ReadingActions', () => {
         onShuffle={mockOnShuffle}
         onNext={mockOnNext}
         onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
       />,
     );
 
     // Icons are rendered as SVG elements inside each button
     const svgs = container.querySelectorAll('button svg');
-    expect(svgs.length).toBe(3);
+    expect(svgs.length).toBe(4); // Dices + Shuffle + ChevronRight + Check
   });
 });

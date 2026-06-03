@@ -268,7 +268,12 @@
 
 ## Phase: Review Fixes
 
-- [ ] Task: Apply review suggestions
-  - [ ] Address any feedback from the code review at the end of Phase 3
+- [x] Task: Apply review suggestions
+  - [x] Fix: /learn/reading child route not rendering — parent /learn route was missing `<Outlet />`, causing child component to never mount. Fixed by detecting child route with `useMatchRoute()` and rendering `<Outlet />` instead of /learn page content. [7ba98a5]
+  - [x] Fix: `Dice` icon doesn't exist in lucide-react (v0.469.0) — changed to `Dices`
+  - [x] Fix: `onRandomizeHarakat` not wired from route to `ReadingActions` — added callback that picks random harakat
+  - [x] Fix: Several `ReadingActions.test.tsx` tests missing required `onRandomizeHarakat` prop
+  - [x] Add: Test for Randomize vowel button click in `ReadingActions.test.tsx`
+  - [x] Fix: Randomize button set all cells to same random harakat — changed to per-cell random harakat (each cell independently gets random fathah/kasrah/dammah). Added `randomHarakats` state + `VowelMode` to `CellData` in `ReadingGrid`. Random mode clears on harakat bar click or group switch.
 
 </protect>

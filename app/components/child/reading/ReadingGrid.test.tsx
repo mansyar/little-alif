@@ -108,18 +108,18 @@ describe('ReadingGrid', () => {
     render(<ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />);
 
     const cells = screen.getAllByTestId('reading-cell');
-    expect(cells).toHaveLength(54); // 6 rows × 9 cells
+    expect(cells).toHaveLength(18); // 6 rows × 3 cells (1 per letter, composed with currentHarakat)
   });
 
-  it('incomplete group (2 letters) renders 6 cells per row instead of 9', async () => {
+  it('incomplete group (2 letters) renders 2 cells per row', async () => {
     const { ReadingGrid } = await import('./ReadingGrid');
     render(<ReadingGrid group={TWO_LETTER_GROUP} letterChars={LETTER_CHARS} />);
 
     const cells = screen.getAllByTestId('reading-cell');
-    expect(cells).toHaveLength(36); // 6 rows × 6 cells
+    expect(cells).toHaveLength(12); // 6 rows × 2 cells
   });
 
-  it('currentHarakat change re-renders cells with new vowelMode', async () => {
+  it('currentHarakat change re-renders cells with new vowelMode and new glyph', async () => {
     const { ReadingGrid } = await import('./ReadingGrid');
     const { rerender } = render(
       <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
@@ -137,7 +137,7 @@ describe('ReadingGrid', () => {
 
     // After re-render, the last batch of calls should have vowelMode='kasrah'
     const callsAfter = mockCell.mock.calls;
-    const lastBatchIndex = callsAfter.length - 54; // last 54 calls are from rerender
+    const lastBatchIndex = callsAfter.length - 18; // last 18 calls are from rerender
     expect(callsAfter[lastBatchIndex]![0].vowelMode).toBe('kasrah');
   });
 
@@ -149,5 +149,94 @@ describe('ReadingGrid', () => {
 
     const pattern = container.querySelector('[aria-hidden="true"]');
     expect(pattern?.textContent).toBe('Pattern');
+  });
+
+  it('randomHarakats applies per-cell random vowels instead of currentHarakat', async () => {
+    useUiStore.setState({ currentHarakat: 'fathah' });
+    mockCell.mockClear();
+
+    const { ReadingGrid } = await import('./ReadingGrid');
+
+    // Provide random harakat: row 0 = all kasrah, row 1 = all dammah
+    const randomHarakats: ('fathah' | 'kasrah' | 'dammah')[][] = [
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['dammah', 'dammah', 'dammah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['dammah', 'dammah', 'dammah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['dammah', 'dammah', 'dammah'],
+    ];
+
+    render(
+      <ReadingGrid
+        group={THREE_LETTER_GROUP}
+        letterChars={LETTER_CHARS}
+        randomHarakats={randomHarakats}
+      />,
+    );
+
+    // Row 0 cells should use 'kasrah' not 'fathah'
+    const cells = screen.getAllByTestId('reading-cell');
+    expect(cells).toHaveLength(18);
+
+    // First 3 cells (row 0) should have vowelMode='kasrah'
+    const calls = mockCell.mock.calls;
+    expect(calls[0]![0].vowelMode).toBe('kasrah');
+    expect(calls[1]![0].vowelMode).toBe('kasrah');
+    expect(calls[2]![0].vowelMode).toBe('kasrah');
+
+    // Next 3 cells (row 1) should have vowelMode='dammah'
+    expect(calls[3]![0].vowelMode).toBe('dammah');
+    expect(calls[4]![0].vowelMode).toBe('dammah');
+    expect(calls[5]![0].vowelMode).toBe('dammah');
+  });
+
+  it('randomHarakats re-renders when seed changes', async () => {
+    useUiStore.setState({ currentHarakat: 'fathah' });
+    mockCell.mockClear();
+
+    const { ReadingGrid } = await import('./ReadingGrid');
+
+    const firstHarakats: ('fathah' | 'kasrah' | 'dammah')[][] = [
+      ['fathah', 'fathah', 'fathah'],
+      ['fathah', 'fathah', 'fathah'],
+      ['fathah', 'fathah', 'fathah'],
+      ['fathah', 'fathah', 'fathah'],
+      ['fathah', 'fathah', 'fathah'],
+      ['fathah', 'fathah', 'fathah'],
+    ];
+
+    const secondHarakats: ('fathah' | 'kasrah' | 'dammah')[][] = [
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+      ['kasrah', 'kasrah', 'kasrah'],
+    ];
+
+    const { rerender } = render(
+      <ReadingGrid
+        group={THREE_LETTER_GROUP}
+        letterChars={LETTER_CHARS}
+        randomHarakats={firstHarakats}
+      />,
+    );
+
+    const callsAfterFirst = mockCell.mock.calls.length;
+    expect(callsAfterFirst).toBe(18);
+
+    rerender(
+      <ReadingGrid
+        group={THREE_LETTER_GROUP}
+        letterChars={LETTER_CHARS}
+        randomHarakats={secondHarakats}
+      />,
+    );
+
+    // After re-render, all cells should show kasrah
+    const callsAfterSecond = mockCell.mock.calls;
+    const lastBatchStart = callsAfterSecond.length - 18;
+    expect(callsAfterSecond[lastBatchStart]![0].vowelMode).toBe('kasrah');
   });
 });
