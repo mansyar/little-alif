@@ -46,30 +46,27 @@
   - [x] Implement `generatePracticeGrid(groupLetters, composeFn, getCharById)` — calls `generatePracticeRow` 6 times: 1 systematic + 5 mixed
   - [x] Run `pnpm test` and confirm new tests pass (Green phase)
 
-- [ ] Task: Write failing tests for `getReadingData` pure helper
-  - [ ] Create `app/server/__tests__/reading.test.ts`
-  - [ ] Use a temporary in-memory SQLite DB (better-sqlite3 or the existing test fixture from `letters.test.ts` / `profiles.test.ts`)
-  - [ ] Seed: 1 user, 1 profile, 28 letters (alif..ya), letter_toggles with a known set of visible/invisible flags
-  - [ ] Test: returns the toggled-ON letters only, in `displayOrder` (1..28), each with `{ letterId, character }`
-  - [ ] Test: returns the profile's persisted `vowelMode` in the result
-  - [ ] Test: zero visible letters → returns `{ letters: [], vowelMode }` (does not throw)
-  - [ ] Test: throws when the profile does not belong to the calling user (mirrors `verifyProfileOwnership` failure mode)
-  - [ ] Test: throws when the profile does not exist
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `getReadingData` pure helper [627f6af]
+  - [x] Create `app/server/__tests__/reading.test.ts`
+  - [x] Use a temporary in-memory SQLite DB (better-sqlite3 or the existing test fixture from `letters.test.ts` / `profiles.test.ts`)
+  - [x] Seed: 1 user, 1 profile, 28 letters (alif..ya), letter_toggles with a known set of visible/invisible flags
+  - [x] Test: returns the toggled-ON letters only, in `displayOrder` (1..28), each with `{ letterId, character }`
+  - [x] Test: returns the profile's persisted `vowelMode` in the result
+  - [x] Test: zero visible letters → returns `{ letters: [], vowelMode }` (does not throw)
+  - [x] Test: throws when the profile does not belong to the calling user (mirrors `verifyProfileOwnership` failure mode)
+  - [x] Test: throws when the profile does not exist
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `getReadingData` pure helper
-  - [ ] Create `app/server/reading.ts` (new file)
-  - [ ] Add the `ReadingData` type and the `getReadingData(db, ownerId, profileId)` pure helper
-  - [ ] Internally call `verifyProfileOwnership` (inline the same shape as in `letters.ts` — no shared module, matches T-08's choice)
-  - [ ] Join `letters` LEFT JOIN `letter_toggles` filtered `profileId = ? AND isVisible = 1`, ordered by `displayOrder`
-  - [ ] Read `vowelMode` from the `profiles` row in the same query
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
-
-- [ ] Task: Implement `getReadingDataFn` server function wrapper
-  - [ ] In `app/server/reading.ts`, add `getReadingDataFn` using `createServerFn({ method: 'GET' }).inputValidator(getReadingDataSchema).handler(...)`
-  - [ ] In the handler, call `validateSessionFn()` — accept either parent JWT or child-mode cookie (the existing `validateSessionFn` returns `user.id` for either; for child-mode the `user` is a synthetic user; verify by reading `auth-fns.ts` to confirm the existing pattern is sufficient)
-  - [ ] Call `getReadingData(db, session.user.id, data.profileId)` and return the result
-  - [ ] Add a thin integration test that exercises the wrapper (mock the underlying helper) — confirm the validation, the auth gate, and the result shape
+- [x] Task: Implement `getReadingData` pure helper + server function wrapper [da9b400]
+  - [x] Create `app/server/reading.ts` (new file)
+  - [x] Add the `ReadingData` type and the `getReadingData(db, ownerId, profileId)` pure helper
+  - [x] Internally call `verifyProfileOwnership` (inline the same shape as in `letters.ts` — no shared module, matches T-08's choice)
+  - [x] Join `letters` JOIN `letter_toggles` filtered `profileId = ? AND isVisible = 1`, ordered by `displayOrder`
+  - [x] Read `vowelMode` from the `profiles` row in the same query
+  - [x] Add `getReadingDataFn` server function wrapper using `createServerFn({ method: 'GET' }).inputValidator(getReadingDataSchema).handler(...)`
+  - [x] In the handler, call `validateSessionFn()` — accept either parent JWT or child-mode cookie
+  - [x] Call `getReadingData(db, session.user.id, data.profileId)` and return the result
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
 - [ ] Task: Run quality checks for Phase 1
   - [ ] Run `pnpm test` — all reading utility + server function tests pass
