@@ -78,7 +78,7 @@
 
 ---
 
-## Phase 2: Reading UI Components [checkpoint: b2efdef]
+## Phase 2: Reading UI Components [checkpoint: 3cac0cc]
 
 **Goal:** Build the five reading-screen components — `GroupPills`, `GroupHeader`, `ReadingCell`, `ReadingGrid`, `ReadingActions` — with full TDD coverage. After this phase, the components exist and render correctly in isolation; the route (Phase 3) wires them together.
 
