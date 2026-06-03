@@ -78,130 +78,130 @@
 
 ---
 
-## Phase 2: Reading UI Components [checkpoint: <sha>]
+## Phase 2: Reading UI Components [checkpoint: b2efdef]
 
 **Goal:** Build the five reading-screen components — `GroupPills`, `GroupHeader`, `ReadingCell`, `ReadingGrid`, `ReadingActions` — with full TDD coverage. After this phase, the components exist and render correctly in isolation; the route (Phase 3) wires them together.
 
 ### Tasks
 
-- [ ] Task: Write failing tests for `GroupPills`
-  - [ ] Create `app/components/child/reading/GroupPills.test.tsx`
-  - [ ] Test: renders one button per group in `groups` prop
-  - [ ] Test: the active group (matching `activeIndex`) gets the active styling class (e.g., `bg-emerald-500`)
-  - [ ] Test: complete inactive groups (`isComplete: true`) are enabled buttons with the outline style
-  - [ ] Test: incomplete inactive groups (`isComplete: false`) are disabled, with `title="Needs 3 letters"`, `aria-disabled="true"`, and the muted style
-  - [ ] Test: clicking an active group pill does NOT call `onSelect` (or calls with the same index — confirm the implementation choice and assert the no-op case)
-  - [ ] Test: clicking a complete inactive group pill calls `onSelect(index)`
-  - [ ] Test: clicking an incomplete group pill is a no-op (does not call `onSelect`)
-  - [ ] Test: each pill has `aria-label` containing the group label and (for active) `aria-current="true"`
-  - [ ] Test: container has `overflow-x-auto` (so many groups stay scrollable)
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `GroupPills`
+  - [x] Create `app/components/child/reading/GroupPills.test.tsx`
+  - [x] Test: renders one button per group in `groups` prop
+  - [x] Test: the active group (matching `activeIndex`) gets the active styling class (e.g., `bg-emerald-500`)
+  - [x] Test: complete inactive groups (`isComplete: true`) are enabled buttons with the outline style
+  - [x] Test: incomplete inactive groups (`isComplete: false`) are disabled, with `title="Needs 3 letters"`, `aria-disabled="true"`, and the muted style
+  - [x] Test: clicking an active group pill does NOT call `onSelect` (or calls with the same index — confirm the implementation choice and assert the no-op case)
+  - [x] Test: clicking a complete inactive group pill calls `onSelect(index)`
+  - [x] Test: clicking an incomplete group pill is a no-op (does not call `onSelect`)
+  - [x] Test: each pill has `aria-label` containing the group label and (for active) `aria-current="true"`
+  - [x] Test: container has `overflow-x-auto` (so many groups stay scrollable)
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `GroupPills`
-  - [ ] Create `app/components/child/reading/GroupPills.tsx`
-  - [ ] Render a horizontal `<div role="tablist" className="flex gap-2 overflow-x-auto">` containing one `<button>` per group
-  - [ ] Active pill: `bg-emerald-500 text-white`
-  - [ ] Complete inactive pill: `border border-emerald-500 text-emerald-700 bg-white`
-  - [ ] Incomplete inactive pill: `border border-gray-300 text-gray-400 bg-gray-50`, `disabled`, `aria-disabled="true"`, `title="Needs 3 letters"`, `cursor-not-allowed`
-  - [ ] Each pill: `min-h-[44px] px-4 rounded-full text-sm font-medium`
-  - [ ] `onClick` of complete pills calls `onSelect(index)`
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+- [x] Task: Implement `GroupPills`
+  - [x] Create `app/components/child/reading/GroupPills.tsx`
+  - [x] Render a horizontal `<div role="tablist" className="flex gap-2 overflow-x-auto">` containing one `<button>` per group
+  - [x] Active pill: `bg-emerald-500 text-white`
+  - [x] Complete inactive pill: `border border-emerald-500 text-emerald-700 bg-white`
+  - [x] Incomplete inactive pill: `border border-gray-300 text-gray-400 bg-gray-50`, `disabled`, `aria-disabled="true"`, `title="Needs 3 letters"`, `cursor-not-allowed`
+  - [x] Each pill: `min-h-[44px] px-4 rounded-full text-sm font-medium`
+  - [x] `onClick` of complete pills calls `onSelect(index)`
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Write failing tests for `GroupHeader`
-  - [ ] Create `app/components/child/reading/GroupHeader.test.tsx`
-  - [ ] Test: renders 1–3 Arabic glyphs (composed via `composeLetter(char, vowelMode)`) for the group's letters
-  - [ ] Test: the rendered glyphs match the `composeLetter` output for the current `vowelMode`
-  - [ ] Test: re-renders with new glyphs when `vowelMode` prop changes
-  - [ ] Test: incomplete group (length 1 or 2) renders the `(N/3)` hint below the glyphs
-  - [ ] Test: complete group (length 3) does NOT render the `(N/3)` hint
-  - [ ] Test: container has `aria-label="Current group: {label}"`
-  - [ ] Test: each glyph is wrapped in `aria-hidden="true"`
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `GroupHeader`
+  - [x] Create `app/components/child/reading/GroupHeader.test.tsx`
+  - [x] Test: renders 1–3 Arabic glyphs (composed via `composeLetter(char, vowelMode)`) for the group's letters
+  - [x] Test: the rendered glyphs match the `composeLetter` output for the current `vowelMode`
+  - [x] Test: re-renders with new glyphs when `vowelMode` prop changes
+  - [x] Test: incomplete group (length 1 or 2) renders the `(N/3)` hint below the glyphs
+  - [x] Test: complete group (length 3) does NOT render the `(N/3)` hint
+  - [x] Test: container has `aria-label="Current group: {label}"`
+  - [x] Test: each glyph is wrapped in `aria-hidden="true"`
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `GroupHeader`
-  - [ ] Create `app/components/child/reading/GroupHeader.tsx`
-  - [ ] Accept `group: ReadingGroup` and `vowelMode: VowelMode` props
-  - [ ] Render a centered `<div>` with `gap-6` containing each letter composed via `composeLetter`
-  - [ ] If `!group.isComplete`, append a small `<span className="text-sm text-gray-500 mt-2">({group.letters.length}/3)</span>` below the glyphs
-  - [ ] Apply `text-5xl` (or `text-6xl`) to the glyphs and `font-arabic` for the correct font
-  - [ ] `aria-label` on the container; `aria-hidden="true"` on each glyph
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+- [x] Task: Implement `GroupHeader`
+  - [x] Create `app/components/child/reading/GroupHeader.tsx`
+  - [x] Accept `group: ReadingGroup` and `vowelMode: VowelMode` props
+  - [x] Render a centered `<div>` with `gap-6` containing each letter composed via `composeLetter`
+  - [x] If `!group.isComplete`, append a small `<span className="text-sm text-gray-500 mt-2">({group.letters.length}/3)</span>` below the glyphs
+  - [x] Apply `text-5xl` (or `text-6xl`) to the glyphs and `font-arabic` for the correct font
+  - [x] `aria-label` on the container; `aria-hidden="true"` on each glyph
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Write failing tests for `ReadingCell`
-  - [ ] Create `app/components/child/reading/ReadingCell.test.tsx`
-  - [ ] Test: renders the `glyph` prop in the cell
-  - [ ] Test: tap calls `audioEngine.speak(letterChar, vowelMode)` (mock the engine)
-  - [ ] Test: tap sets the local `flashed` state to `true` (verifiable via the `data-flashed` attribute)
-  - [ ] Test: when the `speak()` promise resolves, `flashed` returns to `false`
-  - [ ] Test: when the `speak()` promise rejects, `flashed` still returns to `false` (uses `.finally()`)
-  - [ ] Test: tap on a cell while another is flashing: the new cell flashes, the old cell's `flashed` state is not affected (each cell is local)
-  - [ ] Test: cell has `min-h-[56px] min-w-[56px]` and `aspect-square`
-  - [ ] Test: `aria-label="{letterId} {vowelMode}"` (e.g., `"alif fathah"`)
-  - [ ] Test: glyph span has `aria-hidden="true"`
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `ReadingCell`
+  - [x] Create `app/components/child/reading/ReadingCell.test.tsx`
+  - [x] Test: renders the `glyph` prop in the cell
+  - [x] Test: tap calls `audioEngine.speak(letterChar, vowelMode)` (mock the engine)
+  - [x] Test: tap sets the local `flashed` state to `true` (verifiable via the `data-flashed` attribute)
+  - [x] Test: when the `speak()` promise resolves, `flashed` returns to `false`
+  - [x] Test: when the `speak()` promise rejects, `flashed` still returns to `false` (uses `.finally()`)
+  - [x] Test: tap on a cell while another is flashing: the new cell flashes, the old cell's `flashed` state is not affected (each cell is local)
+  - [x] Test: cell has `min-h-[56px] min-w-[56px]` and `aspect-square`
+  - [x] Test: `aria-label="{letterId} {vowelMode}"` (e.g., `"alif fathah"`)
+  - [x] Test: glyph span has `aria-hidden="true"`
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `ReadingCell`
-  - [ ] Create `app/components/child/reading/ReadingCell.tsx`
-  - [ ] Accept `glyph: string`, `letterId: string`, `vowelMode: VowelMode`, `letterChar: string` props (the `letterChar` is the un-composed character passed in from the route so the cell can call `speak` correctly)
-  - [ ] Local `useState(false)` for `flashed`
-  - [ ] `<button type="button" data-flashed={flashed}>` with `className="aspect-square min-h-[56px] min-w-[56px] rounded-lg bg-gray-50 data-[flashed=true]:bg-emerald-200 transition-colors duration-200"`
-  - [ ] `onClick` handler:
+- [x] Task: Implement `ReadingCell`
+  - [x] Create `app/components/child/reading/ReadingCell.tsx`
+  - [x] Accept `glyph: string`, `letterId: string`, `vowelMode: VowelMode`, `letterChar: string` props (the `letterChar` is the un-composed character passed in from the route so the cell can call `speak` correctly)
+  - [x] Local `useState(false)` for `flashed`
+  - [x] `<button type="button" data-flashed={flashed}>` with `className="aspect-square min-h-[56px] min-w-[56px] rounded-lg bg-gray-50 data-[flashed=true]:bg-emerald-200 transition-colors duration-200"`
+  - [x] `onClick` handler:
     ```ts
     setFlashed(true);
     audioEngine.speak(letterChar, vowelMode).finally(() => setFlashed(false));
     ```
-  - [ ] Glyph in a `<span aria-hidden="true" className="text-3xl font-arabic">{glyph}</span>`
-  - [ ] `aria-label` on the button: `` `${letterId} ${vowelMode}` ``
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+  - [x] Glyph in a `<span aria-hidden="true" className="text-3xl font-arabic">{glyph}</span>`
+  - [x] `aria-label` on the button: `` `${letterId} ${vowelMode}` ``
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Write failing tests for `ReadingGrid`
-  - [ ] Create `app/components/child/reading/ReadingGrid.test.tsx`
-  - [ ] Test: renders 6 rows (1 systematic + 5 mixed) by default
-  - [ ] Test: row 0 has the "Pattern" label above it (text content "Pattern"); rows 1–5 do not
-  - [ ] Test: each row contains the expected number of `<ReadingCell>` elements
-  - [ ] Test: the container has `role="grid"` with `aria-rowcount={6}`
-  - [ ] Test: harakat prop change → all cells re-render with the new composed glyphs (mock `composeLetter` or use real letters with different vowel modes; verify the glyph strings change)
-  - [ ] Test: incomplete group (1–2 letters) → all rows render with fewer cells (3 or 6 cells per row, not 9)
-  - [ ] Test: the "Pattern" label is `aria-hidden="true"`
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `ReadingGrid`
+  - [x] Create `app/components/child/reading/ReadingGrid.test.tsx`
+  - [x] Test: renders 6 rows (1 systematic + 5 mixed) by default
+  - [x] Test: row 0 has the "Pattern" label above it (text content "Pattern"); rows 1–5 do not
+  - [x] Test: each row contains the expected number of `<ReadingCell>` elements
+  - [x] Test: the container has `role="grid"` with `aria-rowcount={6}`
+  - [x] Test: harakat prop change → all cells re-render with the new composed glyphs (mock `composeLetter` or use real letters with different vowel modes; verify the glyph strings change)
+  - [x] Test: incomplete group (1–2 letters) → all rows render with fewer cells (3 or 6 cells per row, not 9)
+  - [x] Test: the "Pattern" label is `aria-hidden="true"`
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `ReadingGrid`
-  - [ ] Create `app/components/child/reading/ReadingGrid.tsx`
-  - [ ] Accept `group: ReadingGroup`, `vowelMode: VowelMode`, `letterChars: Record<LetterId, string>` props (the route supplies the lookup; the cell receives its char)
-  - [ ] Read `currentHarakat` from `useUiStore` for re-render reactivity
-  - [ ] `useMemo` over `[group, currentHarakat]` that returns `generatePracticeGrid(group.letters, composeLetter, (id) => letterChars[id])`
-  - [ ] Render `<div role="grid" aria-rowcount={6} className="flex flex-col gap-2">`
-  - [ ] For row 0 only: render the "Pattern" label (`<div aria-hidden="true" className="text-sm text-gray-500">Pattern</div>`) above the row
-  - [ ] Each row: `<div role="row" className="flex flex-wrap gap-2" aria-rowindex={i + 1}>` mapping each `cell` (precomposed glyph) and `letterId` (the source letter) to a `<ReadingCell glyph={cell} letterId={letterId} vowelMode={currentHarakat} letterChar={letterChars[letterId]} />`
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+- [x] Task: Implement `ReadingGrid`
+  - [x] Create `app/components/child/reading/ReadingGrid.tsx`
+  - [x] Accept `group: ReadingGroup`, `vowelMode: VowelMode`, `letterChars: Record<LetterId, string>` props (the route supplies the lookup; the cell receives its char)
+  - [x] Read `currentHarakat` from `useUiStore` for re-render reactivity
+  - [x] `useMemo` over `[group, currentHarakat]` that returns `generatePracticeGrid(group.letters, composeLetter, (id) => letterChars[id])`
+  - [x] Render `<div role="grid" aria-rowcount={6} className="flex flex-col gap-2">`
+  - [x] For row 0 only: render the "Pattern" label (`<div aria-hidden="true" className="text-sm text-gray-500">Pattern</div>`) above the row
+  - [x] Each row: `<div role="row" className="flex flex-wrap gap-2" aria-rowindex={i + 1}>` mapping each `cell` (precomposed glyph) and `letterId` (the source letter) to a `<ReadingCell glyph={cell} letterId={letterId} vowelMode={currentHarakat} letterChar={letterChars[letterId]} />`
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Write failing tests for `ReadingActions`
-  - [ ] Create `app/components/child/reading/ReadingActions.test.tsx`
-  - [ ] Test: renders 3 buttons — "Shuffle", "Next Group", "Done"
-  - [ ] Test: each button has the corresponding `aria-label`
-  - [ ] Test: clicking Shuffle calls `onShuffle` exactly once
-  - [ ] Test: clicking Next Group calls `onNext` exactly once
-  - [ ] Test: clicking Done calls `onDone` exactly once
-  - [ ] Test: when `groups.length === 1`, the Next Group button is NOT in the document
-  - [ ] Test: each button has `min-h-[56px]`
-  - [ ] Test: Lucide icons (`Shuffle`, `ChevronRight`, `Check`) are rendered inside their respective buttons
-  - [ ] Run `pnpm test` and confirm tests fail (Red phase)
+- [x] Task: Write failing tests for `ReadingActions`
+  - [x] Create `app/components/child/reading/ReadingActions.test.tsx`
+  - [x] Test: renders 3 buttons — "Shuffle", "Next Group", "Done"
+  - [x] Test: each button has the corresponding `aria-label`
+  - [x] Test: clicking Shuffle calls `onShuffle` exactly once
+  - [x] Test: clicking Next Group calls `onNext` exactly once
+  - [x] Test: clicking Done calls `onDone` exactly once
+  - [x] Test: when `groups.length === 1`, the Next Group button is NOT in the document
+  - [x] Test: each button has `min-h-[56px]`
+  - [x] Test: Lucide icons (`Shuffle`, `ChevronRight`, `Check`) are rendered inside their respective buttons
+  - [x] Run `pnpm test` and confirm tests fail (Red phase)
 
-- [ ] Task: Implement `ReadingActions`
-  - [ ] Create `app/components/child/reading/ReadingActions.tsx`
-  - [ ] Accept `groups: ReadingGroup[]`, `currentIndex: number`, `onShuffle`, `onNext`, `onDone` props
-  - [ ] Render a horizontal `<div className="flex gap-3 justify-center">` of `<button>` elements
-  - [ ] Shuffle button: Lucide `Shuffle` icon + "Shuffle" text, `aria-label="Shuffle rows"`, `onClick={onShuffle}`
-  - [ ] Next Group button: Lucide `ChevronRight` icon + "Next Group" text, `aria-label="Next group"`, `onClick={onNext}`; only render if `groups.length > 1`
-  - [ ] Done button: Lucide `Check` icon + "Done" text, `aria-label="Done reading practice"`, `onClick={onDone}`
-  - [ ] All buttons: `min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform`
-  - [ ] Run `pnpm test` and confirm tests pass (Green phase)
+- [x] Task: Implement `ReadingActions`
+  - [x] Create `app/components/child/reading/ReadingActions.tsx`
+  - [x] Accept `groups: ReadingGroup[]`, `currentIndex: number`, `onShuffle`, `onNext`, `onDone` props
+  - [x] Render a horizontal `<div className="flex gap-3 justify-center">` of `<button>` elements
+  - [x] Shuffle button: Lucide `Shuffle` icon + "Shuffle" text, `aria-label="Shuffle rows"`, `onClick={onShuffle}`
+  - [x] Next Group button: Lucide `ChevronRight` icon + "Next Group" text, `aria-label="Next group"`, `onClick={onNext}`; only render if `groups.length > 1`
+  - [x] Done button: Lucide `Check` icon + "Done" text, `aria-label="Done reading practice"`, `onClick={onDone}`
+  - [x] All buttons: `min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform`
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Run quality checks for Phase 2
-  - [ ] Run `pnpm test` — all reading component tests pass
-  - [ ] Run `pnpm typecheck` — no errors
-  - [ ] Run `pnpm lint` — no errors
-  - [ ] Verify coverage on the new component files (target > 70%)
+- [x] Task: Run quality checks for Phase 2
+  - [x] Run `pnpm test` — all reading component tests pass
+  - [x] Run `pnpm typecheck` — no errors
+  - [x] Run `pnpm lint` — no errors
+  - [x] Verify coverage on the new component files (target > 70%)
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
