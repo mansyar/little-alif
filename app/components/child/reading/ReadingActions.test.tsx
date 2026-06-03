@@ -1,0 +1,138 @@
+// @vitest-environment jsdom
+import { describe, expect, it, vi, afterEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import type { ReadingGroup } from '~/lib/utils/reading';
+
+const mockOnShuffle = vi.fn();
+const mockOnNext = vi.fn();
+const mockOnDone = vi.fn();
+
+const TWO_GROUPS: ReadingGroup[] = [
+  { id: 1, letters: ['alif', 'ba', 'ta'], label: 'ا ب ت', isComplete: true },
+  { id: 2, letters: ['jim', 'ha', 'kho'], label: 'ج ح خ', isComplete: true },
+];
+
+const SINGLE_GROUP: ReadingGroup[] = [
+  { id: 1, letters: ['alif', 'ba', 'ta'], label: 'ا ب ت', isComplete: true },
+];
+
+describe('ReadingActions', () => {
+  afterEach(() => {
+    cleanup();
+    vi.clearAllMocks();
+  });
+
+  it('renders 3 buttons for multiple groups: Shuffle, Next Group, Done', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Next group' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
+  });
+
+  it('renders 2 buttons for single group: Shuffle and Done only', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    render(
+      <ReadingActions
+        groups={SINGLE_GROUP}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Next group' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
+  });
+
+  it('clicking Shuffle calls onShuffle once', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    const user = userEvent.setup();
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Shuffle rows' }));
+    expect(mockOnShuffle).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Next Group calls onNext once', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    const user = userEvent.setup();
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Next group' }));
+    expect(mockOnNext).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Done calls onDone once', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    const user = userEvent.setup();
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Done reading practice' }));
+    expect(mockOnDone).toHaveBeenCalledTimes(1);
+  });
+
+  it('all buttons have min-h-[56px]', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    const buttons = screen.getAllByRole('button');
+    for (const button of buttons) {
+      expect(button.className).toContain('min-h-[56px]');
+    }
+  });
+
+  it('Lucide icons Shuffle, ChevronRight, Check are rendered inside buttons', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    const { container } = render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+      />,
+    );
+
+    // Icons are rendered as SVG elements inside each button
+    const svgs = container.querySelectorAll('button svg');
+    expect(svgs.length).toBe(3);
+  });
+});
