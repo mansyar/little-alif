@@ -89,7 +89,7 @@ async function createTestProfile(
   userId: string,
   name = 'TestChild',
   avatar = 'ba-boat',
-  vowelMode: string = 'fathah',
+  vowelMode = 'fathah',
 ) {
   const [profile] = await dbClient
     .insert(profiles)
@@ -118,10 +118,7 @@ describe('getReadingData', () => {
     const profile = await createTestProfile(db, TEST_USER);
 
     // Toggle 3 specific letters ON: ba (2), dal (10), kaf (22)
-    await db
-      .update(letterToggles)
-      .set({ isVisible: true })
-      .where(eq(letterToggles.letterId, 'ba'));
+    await db.update(letterToggles).set({ isVisible: true }).where(eq(letterToggles.letterId, 'ba'));
 
     await db
       .update(letterToggles)
@@ -155,14 +152,8 @@ describe('getReadingData', () => {
       .update(letterToggles)
       .set({ isVisible: true })
       .where(eq(letterToggles.letterId, 'alif'));
-    await db
-      .update(letterToggles)
-      .set({ isVisible: true })
-      .where(eq(letterToggles.letterId, 'ba'));
-    await db
-      .update(letterToggles)
-      .set({ isVisible: true })
-      .where(eq(letterToggles.letterId, 'ta'));
+    await db.update(letterToggles).set({ isVisible: true }).where(eq(letterToggles.letterId, 'ba'));
+    await db.update(letterToggles).set({ isVisible: true }).where(eq(letterToggles.letterId, 'ta'));
 
     const result = await getReadingData(db, TEST_USER, profile.id);
 
