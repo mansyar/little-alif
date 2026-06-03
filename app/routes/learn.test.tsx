@@ -47,6 +47,10 @@ vi.mock('@tanstack/react-router', async () => {
       <a {...props}>{children}</a>
     ),
     useNavigate: () => mockNavigate,
+    // Return a no-match result so the learn page renders its own content
+    useMatchRoute: () => () => undefined,
+    // Render nothing for Outlet — child routes are not tested in this file
+    Outlet: () => null,
   };
 });
 

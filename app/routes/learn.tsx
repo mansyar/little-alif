@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useMatchRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { preloadOnIdle } from '~/lib/audio/preloader';
@@ -22,7 +22,16 @@ function LearnPage() {
     preloadOnIdle(audioEngine);
   }, []);
 
+  // Hooks must be called unconditionally (rules-of-hooks).
+  const matchRoute = useMatchRoute();
   const profileId = useAuthStore((state) => state.childProfileId);
+
+  // When a child route (e.g. /learn/reading) is active, render just the
+  // <Outlet /> so the child's component appears instead of /learn's content.
+  const isOnChildRoute = matchRoute({ to: '/learn/reading' });
+  if (isOnChildRoute) {
+    return <Outlet />;
+  }
 
   // Render branches are separated into their own components so each has
   // a stable hook list (avoids conditional-hook violations).
