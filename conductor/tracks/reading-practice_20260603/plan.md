@@ -18,33 +18,33 @@
   - [x] Export `getReadingDataSchema = z.object({ profileId: z.string().uuid() })`
   - [x] Re-export the `VowelMode` enum from `~/lib/validations/letters` (or duplicate the `'none' | 'fathah' | 'kasrah' | 'dammah'` literal — match the style of the existing `letters.ts` schema file)
 
-- [ ] Task: Write failing tests for reading utilities
-  - [ ] Create `app/lib/utils/reading.test.ts`
-  - [ ] Test: `generateReadingGroups([])` and `generateReadingGroups(['a','b'])` both return `[]` (fewer than 3 letters — caller must not render)
-  - [ ] Test: 3 letters → exactly 1 group of 3 letters, `isComplete: true`, label = space-joined Arabic chars
-  - [ ] Test: 4 letters → 2 groups, first `isComplete: true`, second `isComplete: false` with 1 letter
-  - [ ] Test: 5 letters → 2 groups, first complete (3), second incomplete (2)
-  - [ ] Test: 6 letters → 2 groups, both complete
-  - [ ] Test: 7 letters → 3 groups (3, 3, 1), last is incomplete
-  - [ ] Test: groups are emitted in the same order as the input
-  - [ ] Test: `generatePracticeRow(3 letters, 'systematic', ...)` returns 9 cells in `[letter_a_fathah, letter_a_kasrah, letter_a_dammah, letter_b_fathah, ...]` order
-  - [ ] Test: `generatePracticeRow(1 letter, 'systematic', ...)` returns 3 cells (still 3 harakat)
-  - [ ] Test: `generatePracticeRow(3 letters, 'mixed', ...)` returns 9 cells with the same set of composed strings as systematic (just in shuffled order)
-  - [ ] Test: `generatePracticeRow(2 letters, 'mixed', ...)` returns 6 cells (3 harakat × 2 letters)
-  - [ ] Test: `generatePracticeRow(1 letter, 'mixed', ...)` returns 3 cells
-  - [ ] Test: `generatePracticeGrid(3 letters, ...)` returns 6 rows; row 0 is `{ type: 'systematic', cells: [9 systematic cells] }`; rows 1–5 are each `{ type: 'mixed', cells: [...9 cells] }`
-  - [ ] Test: each mixed row contains the same 9 cells as row 0 (set equality)
-  - [ ] Test: with a non-connecting letter (e.g., ر) and `kasrah`, the systematic row uses the precomposed glyph `رِ` (verifies `composeLetter` is wired)
-  - [ ] Test: missing `getCharById` for a letter ID → that letter's cells are skipped (not `undefined` in the output)
-  - [ ] Run `pnpm test` and confirm new tests fail (Red phase)
+- [x] Task: Write failing tests for reading utilities
+  - [x] Create `app/lib/utils/reading.test.ts`
+  - [x] Test: `generateReadingGroups([])` and `generateReadingGroups(['a','b'])` both return `[]` (fewer than 3 letters — caller must not render)
+  - [x] Test: 3 letters → exactly 1 group of 3 letters, `isComplete: true`, label = space-joined Arabic chars
+  - [x] Test: 4 letters → 2 groups, first `isComplete: true`, second `isComplete: false` with 1 letter
+  - [x] Test: 5 letters → 2 groups, first complete (3), second incomplete (2)
+  - [x] Test: 6 letters → 2 groups, both complete
+  - [x] Test: 7 letters → 3 groups (3, 3, 1), last is incomplete
+  - [x] Test: groups are emitted in the same order as the input
+  - [x] Test: `generatePracticeRow(3 letters, 'systematic', ...)` returns 9 cells in `[letter_a_fathah, letter_a_kasrah, letter_a_dammah, letter_b_fathah, ...]` order
+  - [x] Test: `generatePracticeRow(1 letter, 'systematic', ...)` returns 3 cells (still 3 harakat)
+  - [x] Test: `generatePracticeRow(3 letters, 'mixed', ...)` returns 9 cells with the same set of composed strings as systematic (just in shuffled order)
+  - [x] Test: `generatePracticeRow(2 letters, 'mixed', ...)` returns 6 cells (3 harakat × 2 letters)
+  - [x] Test: `generatePracticeRow(1 letter, 'mixed', ...)` returns 3 cells
+  - [x] Test: `generatePracticeGrid(3 letters, ...)` returns 6 rows; row 0 is `{ type: 'systematic', cells: [9 systematic cells] }`; rows 1–5 are each `{ type: 'mixed', cells: [...9 cells] }`
+  - [x] Test: each mixed row contains the same 9 cells as row 0 (set equality)
+  - [x] Test: with a non-connecting letter (e.g., ر) and `kasrah`, the systematic row uses the precomposed glyph `رِ` (verifies `composeLetter` is wired)
+  - [x] Test: missing `getCharById` for a letter ID → that letter's cells are skipped (not `undefined` in the output)
+  - [x] Run `pnpm test` and confirm new tests fail (Red phase)
 
-- [ ] Task: Implement reading utilities
-  - [ ] Create `app/lib/utils/reading.ts`
-  - [ ] Define `ReadingGroup` and `PracticeRow` types (in-file exports)
-  - [ ] Implement `generateReadingGroups(visibleLetterIds)` — slice into chunks of 3, mark each with `isComplete: letters.length === 3`, label = `letters.map(getCharById).join(' ')`
-  - [ ] Implement `generatePracticeRow(groupLetters, rowType, composeFn, getCharById)` — builds the systematic sequence in letter-then-harakat order, or the shuffled set for mixed
-  - [ ] Implement `generatePracticeGrid(groupLetters, composeFn, getCharById)` — calls `generatePracticeRow` 6 times: 1 systematic + 5 mixed
-  - [ ] Run `pnpm test` and confirm new tests pass (Green phase)
+- [x] Task: Implement reading utilities [79f36a9]
+  - [x] Create `app/lib/utils/reading.ts`
+  - [x] Define `ReadingGroup` and `PracticeRow` types (in-file exports)
+  - [x] Implement `generateReadingGroups(visibleLetterIds)` — slice into chunks of 3, mark each with `isComplete: letters.length === 3`, label = `letters.map(getCharById).join(' ')`
+  - [x] Implement `generatePracticeRow(groupLetters, rowType, composeFn, getCharById)` — builds the systematic sequence in letter-then-harakat order, or the shuffled set for mixed
+  - [x] Implement `generatePracticeGrid(groupLetters, composeFn, getCharById)` — calls `generatePracticeRow` 6 times: 1 systematic + 5 mixed
+  - [x] Run `pnpm test` and confirm new tests pass (Green phase)
 
 - [ ] Task: Write failing tests for `getReadingData` pure helper
   - [ ] Create `app/server/__tests__/reading.test.ts`
