@@ -26,7 +26,7 @@ export interface PracticeRow {
 // Fisher–Yates shuffle (in-place)
 // ---------------------------------------------------------------------------
 
-function fisherYatesShuffle<T>(array: T[]): T[] {
+export function fisherYatesShuffle<T>(array: T[]): T[] {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
