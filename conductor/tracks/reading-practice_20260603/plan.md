@@ -275,5 +275,10 @@
   - [x] Fix: Several `ReadingActions.test.tsx` tests missing required `onRandomizeHarakat` prop
   - [x] Add: Test for Randomize vowel button click in `ReadingActions.test.tsx`
   - [x] Fix: Randomize button set all cells to same random harakat — changed to per-cell random harakat (each cell independently gets random fathah/kasrah/dammah). Added `randomHarakats` state + `VowelMode` to `CellData` in `ReadingGrid`. Random mode clears on harakat bar click or group switch.
+  - [x] Fix: GroupHeader uses `text-4xl` instead of `text-5xl` — bumped to match spec
+  - [x] Fix: `SelectChildMessage` Back link pointed to `/` instead of `/dashboard` — now consistent
+  - [x] Fix: Update spec.md to reflect per-letter random harakat design (was still documenting the old 3-vowels-per-letter grid)
+  - [x] Fix: Add `*.log` to .gitignore
+  - [x] Fix: `setRandomHarakats` in `useEffect` was blocked by Husky/ESLint `set-state-in-effect` rule — refactored to use Zustand `subscribe` callback pattern instead [c7bf753]
 
 </protect>
