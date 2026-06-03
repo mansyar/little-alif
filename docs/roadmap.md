@@ -636,6 +636,8 @@ Implement idle-time voice preloading to warm up the SpeechSynthesis engine. On i
 
 ---
 
+### T-10: Reading Practice (Iqra' Mode)
+
 **Dependencies:** T-06, T-07, T-08, T-09
 
 **Description:**
