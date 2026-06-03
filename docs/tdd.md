@@ -1,31 +1,31 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.3 (T-08 — Child Letter Grid complete)
+**Version:** 1.4 (T-10 — Reading Practice complete)
 **Based on:** PRD v1.3
 
 ### Implementation Status
 
 > Sections marked **✅ Implemented** are delivered in the archived tracks. Sections marked **⬜ Pending** are planned for future tracks.
 
-| §   | Section                              | Status                    | Track                                                                                                                                                                                                                                                                                                              |
-| --- | ------------------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
-| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                             |
-| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
-| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
-| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                         |
-| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
-| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                           |
-| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
-| 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                             |
-| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
-| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                 |
-| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
-| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
-| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
-| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
-| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                             |
+| §   | Section                              | Status                    | Track                                                                                                                                                                                                                                                                                                                    |
+| --- | ------------------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
+| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                   |
+| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)       |
+| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)       |
+| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)               |
+| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
+| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/) |
+| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
+| 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                   |
+| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
+| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                       |
+| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
+| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
+| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
+| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
+| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                   |
 
 ---
 
@@ -1321,21 +1321,23 @@ Child grid renders →
   │     │     └── onClick(i) → currentGroupIndex = i → re-render
   │     ├── GroupHeader:
   │     │     └── Shows 3 Arabic chars of current group
-  │     ├── ReadingGrid (6 rows):
-  │     │     ├── Row 0: systematic (generatePracticeRow('systematic'))
-  │     │     └── Rows 1-5: randomized (generatePracticeRow('mixed'))
-  │     │           └── ReadingCell × 9 per row
-  │     │                 └── onClick → audioEngine.play(`${letterId}_${vowelMode}`)
-  │     │                              → brief green flash on cell
-  │     └── ReadingActions:
-  │           ├── "Shuffle" → re-generate rows 2-6 (same group)
-  │           ├── "Next Group" → currentGroupIndex++ → re-render
-  │           └── "Done" → navigate back to /learn
-  │
-  └── Key behaviors:
-        ├── Groups are auto-derived — no manual group management
-        ├── All 3 harakat modes appear in every group (systematic + mixed rows)
-        └── Harakat audio matches what the child sees in each cell
+   │     ├── ReadingGrid (6 rows):
+   │     │     ├── Row 0: systematic (letters in display order)
+   │     │     └── Rows 1-5: randomized (letters shuffled per row)
+   │     │           └── ReadingCell × N per row (1 per letter)
+   │     │                 └── onClick → audioEngine.play(composed glyph)
+   │     │                              → brief green flash on cell
+   │     └── ReadingActions:
+   │           ├── "Randomize" → assign per-cell random vowels across all 6 rows
+   │           ├── "Shuffle" → re-shuffle rows 2-6 (same group)
+   │           ├── "Next Group" → currentGroupIndex++ → re-render
+   │           └── "Done" → navigate back to /learn
+   │
+   └── Key behaviors:
+         ├── Groups are auto-derived — no manual group management
+         ├── Normal mode: all cells use the current harakat from the harakat bar
+         ├── Randomize mode: each cell gets an independent random vowel (cleared on harakat bar change)
+         └── Harakat audio matches what the child sees in each cell
 ```
 
 ---

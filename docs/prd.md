@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.3 (T-08 — Child Letter Grid complete)
+**Version:** 1.4 (T-10 — Reading Practice complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -36,7 +36,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Child Letter Grid**    | ✅ Complete | Touch grid, audio playback, empty state, ProfileBadge, disabled Reading Practice button. See [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
 | **Audio Service**        | ✅ Complete | Web Speech API pronunciation. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                    |
 | **Audio Preloader**      | ✅ Complete | Idle-time voice warm-up via `requestIdleCallback`. See [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                           |
-| **Reading Practice**     | ⬜ Pending  | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
+| **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
 | **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                                             |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                      |
 | **Docker / Deploy**      | ⬜ Pending  | Containerization for Coolify                                                                                                                                                  |
@@ -191,8 +191,8 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | REQ-8.1  | A separate "Reading Practice" screen accessible from the child's letter grid via a prominent button.                                                                                                                                                | P0       |
 | REQ-8.2  | Groups are dynamically generated from the child's toggled-on letters — 3 letters per group, in display order. Reading Practice button is disabled if fewer than 3 letters are toggled on (a group of 1–2 letters produces a sparse, unusable grid). | P0       |
-| REQ-8.3  | Each group is presented as a 6-row grid. Row 1 is systematic: each letter with Fathah, then Kasrah, then Dammah (e.g., بَ بِ بُ تَ تِ تُ ثَ ثِ ثُ).                                                                                                 | P0       |
-| REQ-8.4  | Rows 2–6 are randomized: each letter with each harakat shuffled into a random sequence.                                                                                                                                                             | P0       |
+| REQ-8.3  | Each group is presented as a 6-row grid. Row 1 is systematic (letters in order). Each cell shows one letter composed with the current harakat (e.g., بَ تَ ثَ).                                                                                     | P0       |
+| REQ-8.4  | Rows 2–6 are randomized: each row shuffles the letters into a different random sequence. A "Randomize" button assigns per-cell independent random vowels (fathah/kasrah/dammah) across all 6 rows. Switching the harakat bar clears random mode.    | P0       |
 | REQ-8.5  | Each cell is tappable — tapping plays the pronunciation for that letter+vowel combination.                                                                                                                                                          | P0       |
 | REQ-8.6  | Group navigation: pill-style buttons at the top let the user jump between groups.                                                                                                                                                                   | P1       |
 | REQ-8.7  | A group header shows the Arabic letters of the current group.                                                                                                                                                                                       | P1       |

@@ -19,7 +19,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ✅ Complete |
 | T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
 | T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
-| T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
+| T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ✅ Complete |
 | T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
 | T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
 
@@ -40,7 +40,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
 | T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)         |
 | T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)     |
-| T-10  | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                                |
+| T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)   |
 | T-11  | Child Mode                             | ⬜ Pending  | —                                                                                |
 | T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                                |
 
@@ -636,9 +636,10 @@ Implement idle-time voice preloading to warm up the SpeechSynthesis engine. On i
 
 ---
 
-### T-10: Reading Practice (Iqra' Mode)
+### T-10: Reading Practice (Iqra' Mode) ✅
 
 **Dependencies:** T-06, T-07, T-08, T-09
+**Status:** ✅ Complete ([`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/))
 
 **Description:**
 Implement the reading practice screen with dynamic letter groups, systematic + randomized rows, navigation pills, and shuffle support.
@@ -646,24 +647,26 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 **PRD Ref:** §4 — Module 8 (Reading Practice), DD-3 (3-letter minimum gate)
 **TDD Ref:** §5 (Reading Practice — `app/lib/utils/reading.ts`)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/routes/learn/reading.tsx` — Reading practice page
-- `app/components/child/reading/ReadingGrid.tsx` — 6-row grid layout
-- `app/components/child/reading/ReadingCell.tsx` — Single tappable cell with tap highlight
-- `app/components/child/reading/GroupHeader.tsx` — Shows the 3 letters of the current group
-- `app/components/child/reading/GroupPills.tsx` — Navigation pills (one per group)
-- `app/components/child/reading/ReadingActions.tsx` — Shuffle / Next Group / Done buttons
+- `app/routes/learn/reading.tsx` — Reading practice page with per-letter random harakat, harakat bar clears random mode
+- `app/components/child/reading/ReadingGrid.tsx` — 6-row grid (1 systematic + 5 shuffled), per-cell random harakat support
+- `app/components/child/reading/ReadingCell.tsx` — Single tappable cell with tap highlight animation
+- `app/components/child/reading/GroupHeader.tsx` — Shows the 3 Arabic glyphs of the current group
+- `app/components/child/reading/GroupPills.tsx` — Pill navigation for groups, highlights active
+- `app/components/child/reading/ReadingActions.tsx` — Randomize / Shuffle / Next Group / Done buttons
 - `app/lib/utils/reading.ts` — `generateReadingGroups()`, `generatePracticeRow()`, `generatePracticeGrid()`
-- `app/server/reading.ts` — `getReadingDataFn`
+- `app/server/reading.ts` — `getReadingDataFn` server function
+- `app/lib/utils/reading.test.ts` — Unit tests for utility functions
+- `app/components/child/reading/*.test.tsx` — Component tests for all 5 reading components
 
 **TDD Ref:** §3 (Reading server function), §5 (Reading utilities — full implementation details)
 
 **Grid Structure (per group):**
 
-- Row 1: Systematic — each letter with Fathah, Kasrah, Dammah in order (e.g., بَ بِ بُ تَ تِ تُ ثَ ثِ ثُ)
-- Rows 2–6: Mixed — all 9 combinations shuffled into random sequence (5 different shuffles)
-- Total: 54 cells per group (9 systematic + 45 randomized)
+- Rows 1–6: 1 cell per letter (N cells for an N-letter group). Row 1 is systematic (display order), rows 2–6 are independently shuffled (Fisher–Yates).
+- Normal mode: all cells composed with the current harakat from the harakat bar.
+- Randomize mode: each cell gets an independent random vowel (fathah/kasrah/dammah). Cleared when the harakat bar is changed or group is switched.
 
 **Key Decisions:**
 
@@ -671,29 +674,30 @@ Implement the reading practice screen with dynamic letter groups, systematic + r
 - Groups generated on the client from server data (letters + vowel mode), not pre-computed
 - Cell tap plays audio via same AudioService used by the letter grid
 - Green flash on tap to confirm interaction
-- Next Group wraps around (from last group → back to first)
-- Shuffle re-randomizes rows 2–6 without affecting Row 1 or group order
+- Per-letter random harakat replaces the original 3-harakat-per-cell design — simpler grid, randomized practice
+- Randomize mode cleared on harakat bar change (Zustand subscribe pattern) or group switch
+- Zustand `subscribe` used instead of `useEffect` setState to satisfy ESLint `set-state-in-effect` rule
 
-**Edge Cases:**
+**Edge Cases (all handled):**
 
-- Exactly 3 letters → single group, No next group button needed
-- 4–5 letters → first group of 3, second group of 1–2 → second group disabled with tooltip
-- 6 letters → two full groups of 3
-- 7 letters → two full groups + one incomplete → last group disabled
-- Vowel mode changed during reading session → grid re-renders with new harakat
-- Very fast or repeated shuffle → debounce to prevent flickering
+- Exactly 3 letters → single group, Next Group wraps to same group
+- 4–5 letters → last group has 1–2 letters (renders fewer cells, still functional)
+- 6+ letters → multiple full groups, all navigable via pills
+- Empty visible letters → back to /learn with "Select a child" message
+- Vowel mode changed during reading session → grid re-renders, random mode cleared
+- Randomize + Shuffle sequence works correctly
 
-**Verification:**
+**Verification (all passing):**
 
-- Groups of 3 generated from toggled-on letters
-- Row 1 is systematic
-- Rows 2–6 are randomized (different each time)
-- Tap plays correct audio
-- Group pills navigate correctly
-- Shuffle re-randomizes rows 2–6
-- Next Group wraps around
-- < 3 letters → button disabled on parent dashboard
-- Single group → no wrap-around edge case handled
+- Groups of 3 generated from toggled-on letters, sequential navigation works
+- Row 1 is systematic, rows 2–6 are shuffled differently each time
+- Randomize assigns per-cell random vowels across all rows
+- Shuffle re-randomizes rows 2–6 without clearing random harakat mode
+- Next Group wraps around from last to first
+- < 3 letters → button disabled on /learn parent dashboard
+- Harakat bar change → random mode cleared, grid re-renders
+- 365/365 tests pass, typecheck/lint/format clean
+- Code review completed — applied fixes (GroupHeader text size, back link, spec update, ESLint refactor)
 
 ---
 
