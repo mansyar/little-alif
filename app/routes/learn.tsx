@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { preloadOnIdle } from '~/lib/audio/preloader';
@@ -55,6 +55,7 @@ interface LearnContentProps {
 
 function LearnContent({ profileId }: LearnContentProps) {
   const currentHarakat = useUiStore((state) => state.currentHarakat);
+  const navigate = useNavigate();
 
   const profileQuery = useQuery({
     queryKey: ['activeProfile', profileId],
@@ -132,6 +133,9 @@ function LearnContent({ profileId }: LearnContentProps) {
         <button
           type="button"
           disabled={!canStartReading}
+          onClick={() => {
+            void navigate({ to: '/learn/reading' });
+          }}
           className="rounded-large bg-green px-6 py-3 text-white font-bold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Reading Practice

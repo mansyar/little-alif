@@ -11,6 +11,7 @@ import { useUiStore } from '~/stores/ui-store';
 const mockGetActiveProfile = vi.fn();
 const mockGetVisibleLetters = vi.fn();
 const mockPreloadOnIdle = vi.fn();
+const mockNavigate = vi.fn();
 
 vi.mock('~/server/profiles', () => ({
   getActiveProfileFn: (opts: { data: { profileId: string } }) =>
@@ -45,6 +46,7 @@ vi.mock('@tanstack/react-router', async () => {
     }: AnchorHTMLAttributes<HTMLAnchorElement> & { children: ReactNode }) => (
       <a {...props}>{children}</a>
     ),
+    useNavigate: () => mockNavigate,
   };
 });
 
