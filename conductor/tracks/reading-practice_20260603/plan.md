@@ -7,7 +7,7 @@
 
 ---
 
-## Phase 1: Reading Utilities & Server Function [checkpoint: <sha>]
+## Phase 1: Reading Utilities & Server Function [checkpoint: 82c7f8a]
 
 **Goal:** Build the pure-function reading utilities (`generateReadingGroups`, `generatePracticeRow`, `generatePracticeGrid`) and the `getReadingDataFn` server function with full TDD coverage. After this phase, the data layer is fully ready — no UI yet.
 
