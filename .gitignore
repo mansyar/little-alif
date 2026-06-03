@@ -30,6 +30,7 @@ public/audio/
 # Debug logs
 npm-debug.log*
 pnpm-debug.log*
+*.log
 
 # TanStack Router generated file
 app/routeTree.gen.ts

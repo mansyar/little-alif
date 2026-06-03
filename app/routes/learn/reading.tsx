@@ -41,10 +41,10 @@ function SelectChildMessage() {
         Select a child profile from the dashboard to start reading practice.
       </p>
       <Link
-        to="/"
+        to="/dashboard"
         className="px-6 py-3 rounded-small border-2 border-green text-green font-semibold hover:bg-green hover:text-white transition-colors"
       >
-        Back to Home
+        Back to Dashboard
       </Link>
     </main>
   );
@@ -103,11 +103,16 @@ function ReadingContent({ profileId }: ReadingContentProps) {
     }
   }, [readingQuery.data, setHarakat]);
 
-  // Clear random harakat mode when user manually picks a vowel from the bar
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+  // Clear random harakat mode when user picks a different vowel via the harakat bar.
+  // Uses Zustand subscribe (callback-based) to avoid sync setState-in-effect lint rule.
   useEffect(() => {
-    setRandomHarakats(null);
-  }, [currentHarakat]);
+    const unsub = useUiStore.subscribe((state, prevState) => {
+      if (state.currentHarakat !== prevState.currentHarakat) {
+        setRandomHarakats(null);
+      }
+    });
+    return unsub;
+  }, []);
 
   // Redirect to /learn if fewer than 3 letters
   useEffect(() => {

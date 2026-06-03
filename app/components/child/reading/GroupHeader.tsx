@@ -14,11 +14,7 @@ export function GroupHeader({ group, vowelMode }: GroupHeaderProps) {
     <div className="flex flex-col items-center gap-6" aria-label={`Current group: ${group.label}`}>
       <div className="flex items-center gap-6">
         {chars.map((char, index) => (
-          <span
-            key={index}
-            aria-hidden="true"
-            className="font-arabic text-4xl font-bold text-text-dark"
-          >
+          <span key={index} aria-hidden="true" className="font-arabic text-5xl text-text-dark">
             {composeLetter(char, vowelMode)}
           </span>
         ))}

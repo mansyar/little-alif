@@ -98,13 +98,15 @@ Pure helper functions for generating groups and rows. No React, no DOM, no I/O �
 ### FR-6: `ReadingGrid` Component
 
 - **File:** `app/components/child/reading/ReadingGrid.tsx` (new file)
-- **Props:** `group: ReadingGroup`, `vowelMode: VowelMode`, `grid: PracticeRow[]` (6 rows pre-computed by the route via `generatePracticeGrid`)
+- **Props:** `group: ReadingGroup`, `letterChars: Record<string, string>`, `randomHarakats?: VowelMode[][] | null`
 - **Layout:** `flex flex-col gap-2`, with one "Pattern" label above row 0 (per the answered spec), then 6 rows of `ReadingCell` components.
 - **Pattern label:** small text (`text-sm text-gray-500`), left-aligned, "Pattern". `aria-hidden` (decorative). Rendered once above row 0, not repeated.
 - **Row layout:** `flex flex-wrap gap-2` per row. Each row is rendered as a horizontal strip; cells within a row share the systematic-or-mixed order.
-- **Vowel mode reactivity:** the component reads `useUiStore.currentHarakat` at render time, then re-derives the grid via `useMemo([group, currentHarakat])` calling `generatePracticeGrid`. (Mirrors the `LetterCard` pattern in T-08 — the route supplies data, the grid memoizes derived state.)
-- **Empty case:** if `grid.length === 0` (e.g., group with 0 letters — should not happen, but guarded), render nothing.
-- **Accessibility:** the wrapper is `role="grid"` with `aria-rowcount={6}` and `aria-colcount` per row; each row has `role="row"`, each cell has `role="gridcell"`.
+- **Normal mode:** each row has 1 cell per letter (N cells per row), all composed with `currentHarakat` from `useUiStore`. Row 0 is systematic (letter order); rows 1–5 are each independently shuffled (Fisher–Yates).
+- **Randomize mode:** when `randomHarakats` is provided, each cell gets an independent random vowel (fathah/kasrah/dammah) per the 2D array. Row 0 is systematic; rows 1–5 are independently shuffled.
+- **Vowel mode reactivity:** the component reads `useUiStore.currentHarakat` at render time, then re-derives the grid via `useMemo([group, currentHarakat])`. Changing `currentHarakat` also clears `randomHarakats` (set to `null` via the parent route).
+- **Empty case:** if no cells can be built (e.g., all letter IDs produce missing chars), rows may be empty — guarded by `.filter(Boolean)`.
+- **Accessibility:** the wrapper is `role="grid"` with `aria-rowcount={6}`; each row has `role="row"`, each cell has `role="gridcell"`.
 
 ### FR-7: `ReadingCell` Component
 
@@ -125,10 +127,11 @@ Pure helper functions for generating groups and rows. No React, no DOM, no I/O �
 ### FR-8: `ReadingActions` Component
 
 - **File:** `app/components/child/reading/ReadingActions.tsx` (new file)
-- **Props:** `groups: ReadingGroup[]`, `currentIndex: number`, `onShuffle: () => void`, `onNext: () => void`, `onDone: () => void`
+- **Props:** `groups: ReadingGroup[]`, `currentIndex: number`, `onShuffle: () => void`, `onNext: () => void`, `onDone: () => void`, `onRandomizeHarakat: () => void`
 - **Layout:** horizontal row of 3 buttons (`flex gap-3`), each ≥ 56×56dp touch target.
 - **Buttons:**
-  - **Shuffle** — Lucide `Shuffle` icon, label "Shuffle". Calls `onShuffle` (route re-runs `generatePracticeGrid`, which re-shuffles the 5 mixed rows; the systematic row stays in place). The grid state is held in the route's `useState` (a `gridVersion` counter that increments on shuffle, or a stored `grid` that is recomputed).
+  - **Randomize** — Lucide `Dices` icon, label "Random". Calls `onRandomizeHarakat` which assigns per-cell random vowels (fathah/kasrah/dammah independently per cell) across all 6 rows.
+- **Shuffle** — Lucide `Shuffle` icon, label "Shuffle". Calls `onShuffle` which increments a `shuffleSeed` state in the parent route, causing `ReadingGrid` to re-render with a new `key` prop.
   - **Next Group** — Lucide `ChevronRight` icon, label "Next Group". Calls `onNext` which does `(currentIndex + 1) % groups.length` (wrap-around). Disabled if the next group is incomplete (REQ-8.9: only the disabled _current_ group is unreachable, but per the spec we still allow navigation forward to the next _complete_ group).
   - **Done** — Lucide `Check` icon, label "Done". Calls `onDone` which navigates to `/learn` via `useNavigate()`.
 - **Single-group case:** when `groups.length === 1`, the Next Group button is hidden entirely (per roadmap edge case: "Exactly 3 letters → single group, No next group button needed").
@@ -140,6 +143,7 @@ Pure helper functions for generating groups and rows. No React, no DOM, no I/O �
 - The persisted `profile.vowelMode` (returned by `getReadingDataFn`) is used only as the initial value of `currentHarakat` when the route mounts.
 - No server round-trip; no data refetch.
 - Changing harakat does **not** change `currentGroupIndex` — the child stays on whichever group they were on.
+- Changing harakat **clears** random harakat mode (`randomHarakats` is set to `null`) via a `useEffect` that watches `currentHarakat`.
 
 ### FR-10: `/learn` Integration (small change to T-08 file)
 
