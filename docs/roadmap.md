@@ -16,7 +16,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-05  | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
 | T-06  | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
 | T-07  | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
-| T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ⬜ Pending  |
+| T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ✅ Complete |
 | T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
 | T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
 | T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ⬜ Pending  |
@@ -27,22 +27,22 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ### Implementation Status
 
-| ID    | Title                                  | Status      | Archived Track                                                                 |
-| ----- | -------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
-| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)           |
-| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)         |
-| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)             |
-| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/) |
-| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)     |
-| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                   |
-| T-08  | Child Letter Grid                      | ⬜ Pending  | —                                                                              |
-| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)       |
-| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)   |
-| T-10  | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                              |
-| T-11  | Child Mode                             | ⬜ Pending  | —                                                                              |
-| T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                              |
+| ID    | Title                                  | Status      | Archived Track                                                                   |
+| ----- | -------------------------------------- | ----------- | -------------------------------------------------------------------------------- |
+| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
+| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
+| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
+| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)           |
+| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)               |
+| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)   |
+| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)       |
+| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                     |
+| T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
+| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)         |
+| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)     |
+| T-10  | Reading Practice (Iqra' Mode)          | ⬜ Pending  | —                                                                                |
+| T-11  | Child Mode                             | ⬜ Pending  | —                                                                                |
+| T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                                |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -459,9 +459,10 @@ Implement Unicode combining diacritics for dynamic vowel rendering. Build `compo
 
 ---
 
-### T-08: Child Letter Grid
+### T-08: Child Letter Grid ✅
 
 **Dependencies:** T-06, T-07, T-09
+**Status:** ✅ Complete ([`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/))
 
 **Description:**
 Build the child-facing letter grid showing only parent-introduced letters with dynamic harakat rendering. Each letter card is a large tappable target that plays audio.
@@ -469,42 +470,58 @@ Build the child-facing letter grid showing only parent-introduced letters with d
 **PRD Ref:** §4 — Module 5 (Child Letter Grid), Module 6 (Audio Engine)
 **TDD Ref:** §2 (Route Design — `/learn`)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `app/routes/learn.tsx` — Child letter grid page
-- `app/components/child/LetterGrid.tsx` — Grid layout with dynamic columns (responsive)
-- `app/components/child/LetterCard.tsx` — Single letter card with tap animation
-- `app/components/child/LetterDetail.tsx` — Full-screen letter display during playback
-- `app/components/child/EmptyState.tsx` — "No letters yet" icon-based illustration
-- `app/components/child/ProfileBadge.tsx` — Shows active child's avatar + name
-- "Reading Practice" button (disabled when < 3 letters toggled)
-- Tap animation (scale bounce) on card press
-- Auto-return to grid after playback (~1–2s)
+- [x] `getActiveProfileFn` — new server function returning `{ id, name, avatar, vowelMode }` for `/learn`
+- [x] `getActiveProfileSchema` — Zod schema in `app/lib/validations/profiles.ts`
+- [x] `app/routes/learn.tsx` — Real grid replaces the placeholder
+- [x] `app/components/child/ProfileBadge.tsx` — Active child avatar + name (AVATAR_MAP + Lucide `User` fallback)
+- [x] `app/components/child/EmptyState.tsx` — Icon-only (Lucide `BookOpen`, ~96px, `py-24`) — no text per REQ-5.8
+- [x] `app/components/child/LetterCard.tsx` — `<button>` with composed glyph, 28 pastel backgrounds, `min-h-[64px] min-w-[64px]`, `active:scale-95`
+- [x] `app/components/child/LetterDetail.tsx` — Full-screen overlay (`fixed inset-0 z-50 bg-background-warm/95`, `text-9xl`)
+- [x] `app/components/child/LetterGrid.tsx` — Orchestrator with `grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3 p-4`
+- [x] "Reading Practice" button — `disabled={visibleLetters.length < 3}` (DD-3)
+- [x] Loading + error states in route (LoadingSpinner + retry)
+- [x] Tests: 5 component test files (ProfileBadge 7, EmptyState 4, LetterCard 9, LetterDetail 6, LetterGrid 4) + 4 server-side tests in `profiles.test.ts` + 7 route tests
+- [x] 278/278 tests pass, `pnpm typecheck` clean, `pnpm lint` clean, `pnpm format:check` clean
 
-**PRD Ref:** REQ-5.1 through REQ-5.8
+**PRD Ref:** REQ-5.1 through REQ-5.8 — all satisfied
 
-**Key Decisions:**
+**Key Decisions (KD-1 through KD-6 from spec):**
 
-- Grid is portrait-first, adapts to landscape (CSS Grid with `auto-fill`)
-- Minimum touch target: 64×64dp (WCAG compliant)
-- No text labels on cards — purely visual (Arabic glyph + background color)
-- Audio playback via Web Speech API (see T-09)
-- "Reading Practice" button disabled state visually distinct (grayed out + tooltip)
+- KD-1: "Reading Practice" label kept literal (not icon-only) — disabled state aids parent co-use scenarios.
+- KD-2: `getActiveProfileFn` lives in `app/server/profiles.ts` next to existing profile server functions, reuses `validateSessionFn` and the `verifyProfileOwnership` shape.
+- KD-3: 28 pastel backgrounds defined inline as `LETTER_BG: Record<LetterId, string>` in `LetterCard.tsx` — no design tokens file.
+- KD-4: `LetterDetail` auto-dismiss is honest — driven by the `audioEngine.speak()` Promise's `.finally()`, not a separate timeout.
+- KD-5: Tapping the same letter during playback restarts the utterance (T-09 cancel-on-new-speak).
+- KD-6: `useUiStore.selectedLetterId` is the overlay's open/closed flag — no new state.
+- Harakat re-render uses `useUiStore.currentHarakat` read at render time, no refetch on vowel change (FR-9).
 
-**Edge Cases:**
+**Edge Cases (all covered by tests):**
 
-- Zero letters toggled → show EmptyState with icon + "Ask your parent!" message (no text — icon-only for pre-literate children)
-- Child changes vowel mode → grid re-renders without refetching data
-- Network error during server function → retry with exponential backoff
+- Zero visible letters → `EmptyState` (icon-only, no text)
+- Child changes vowel mode → all cards recompose via `composeLetter()`, no refetch
+- `getActiveProfileFn` rejects wrong-owner / missing profile / invalid UUID
+- Rapid card taps → previous utterance cancelled, overlay re-targeted to new letter
+- Speak promise rejection → `.finally()` still clears the overlay
+- Missing `profileId` in auth store → "Select a child" message + back link (no crash)
+- Loading state → `LoadingSpinner`
+- Error state → inline message + retry button (`refetch()`)
+- Less than 3 visible letters → "Reading Practice" button disabled
 
-**Verification:**
+**Verification (all passing):**
 
-- Only toggled-on letters appear
-- Vowel mode applies to all letters dynamically
-- Tapping a card triggers playback
-- "Reading Practice" button disabled when < 3 letters
-- Layout adapts to mobile and tablet
-- Empty state renders when no letters toggled
+- `/learn` shows only `isVisible === true` letters from `getVisibleLettersFn`
+- Letters render in `displayOrder` (1–28)
+- Tap a card → composed glyph pronounced via `audioEngine.speak(letter.character, currentHarakat)`
+- Overlay opens immediately on tap, auto-dismisses on `onend` (or cancellation)
+- Vowel mode toggle on `ChildHarakatBar` re-renders all cards without refetching
+- Zero visible letters → `EmptyState` renders
+- "Reading Practice" button: disabled < 3 letters, enabled ≥ 3
+- Touch targets ≥ 64×64dp; tested in portrait and landscape
+- 278/278 tests pass, typecheck/lint/format clean
+- Manual browser verification approved (Phase 3: "Approve & finalize")
+- Code review completed — 1 Medium cleanup applied, 2 Low items noted
 
 ---
 
@@ -766,23 +783,23 @@ Final polish: error handling, responsive testing, performance optimization. Pack
 ## Track Dependencies Graph
 
 ```
-T-01 (Scaffolding)  ── ✅
+ T-01 (Scaffolding)  ── ✅
  ├── T-02 (Database) ── ✅
  │    ├── T-03 (Auth) ── ✅
  │    │    ├── T-05 (Dashboard & Profiles) ✅
  │    │    │    ├── T-06 (Letter Toggles) ✅
- │    │    │    │    ├── T-08 (Child Grid) ⬜
+ │    │    │    │    ├── T-08 (Child Grid) ✅
  │    │    │    │    │    └── T-10 (Reading Practice) ⬜ ─┐
  │    │    │    │    └── T-11 (Child Mode) ⬜ ────────────┤
  │    │    │    └── T-11 (Child Mode) ⬜ ─────────────────┤
  │    │    └── T-11 (Child Mode) ⬜ ──────────────────────┤
  │    └── T-07 (Harakat) ✅ ──────────────────────────────┤
  │                                                        │
-T-03b (Code Quality) ── ✅                                │
-T-04 (i18n — parallel to T-02/T-03) ✅                    │
-T-09 (Audio — parallel to T-02/T-03) ✅                   │
-                                                           ▼
-                                                    T-12 (Polish & Deploy) ⬜
+ T-03b (Code Quality) ── ✅                                │
+ T-04 (i18n — parallel to T-02/T-03) ✅                    │
+ T-09 (Audio — parallel to T-02/T-03) ✅                   │
+                                                            ▼
+                                                     T-12 (Polish & Deploy) ⬜
 ```
 
 ## Track Format

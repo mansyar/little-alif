@@ -1,31 +1,31 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.2 (Development Update)
-**Based on:** PRD v1.2
+**Version:** 1.3 (T-08 — Child Letter Grid complete)
+**Based on:** PRD v1.3
 
 ### Implementation Status
 
 > Sections marked **✅ Implemented** are delivered in the archived tracks. Sections marked **⬜ Pending** are planned for future tracks.
 
-| §   | Section                              | Status                    | Track                                                                                                                                                                                                                            |
-| --- | ------------------------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                                                             |
-| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/) |
-| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/) |
-| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                                                                         |
-| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                                                           |
-| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 9   | Component Data Flow                  | ⬜ Pending                | —                                                                                                                                                                                                                                |
-| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                             |
-| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                               |
-| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                |
-| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                |
-| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                |
-| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                |
-| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                           |
+| §   | Section                              | Status                    | Track                                                                                                                                                                                                                                                                                                              |
+| --- | ------------------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
+| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                             |
+| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
+| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
+| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                         |
+| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
+| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                           |
+| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
+| 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                             |
+| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                               |
+| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                 |
+| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
+| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
+| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
+| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                  |
+| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                             |
 
 ---
 
@@ -223,6 +223,12 @@ deleteProfileFn({ profileId: string })
   → { success: true }
   // Requires: valid JWT
   // Cascading delete: letter_toggles + profile
+
+getActiveProfileFn({ profileId: string })
+  → { id: string, name: string, avatar: string, vowelMode: VowelMode }
+  // Requires: valid JWT (parent) OR child-mode cookie (matches profileId)
+  // Used by /learn route to populate ProfileBadge without embedding PII
+  // in the child-mode cookie. Throws if profile is missing or not owned.
 ```
 
 ### Letters (`app/server/letters.ts`)
@@ -317,6 +323,10 @@ export const updateProfileSchema = z.object({
 
 export const deleteProfileSchema = z.object({
   profileId: z.string().uuid(),
+});
+
+export const getActiveProfileSchema = z.object({
+  profileId: z.string().uuid({ message: 'Invalid profile ID.' }),
 });
 ```
 
@@ -1233,31 +1243,45 @@ export const db = drizzle(client, { schema });
 /learn route (protected by middleware)
   │
   ├── On mount:
-  │     ├── Read childProfileId from child-mode cookie (or URL param)
-  │     ├── Initialize AudioEngine on first tap (browser policy)
-  │     ├── child-store.loadVisibleLetters(profileId)
-  │     └── Start audio preloader for visible letters
+  │     ├── Read childProfileId from useAuthStore.childProfileId
+  │     ├── preloadOnIdle(audioEngine) (T-09b — warm up SpeechSynthesis)
+  │     ├── useQuery(['activeProfile', profileId]) → getActiveProfileFn (T-08)
+  │     └── useQuery(['visibleLetters', profileId]) → getVisibleLettersFn (T-06)
   │
-  ├── If visibleLetters.length === 0:
-  │     └── Render EmptyState (friendly illustration)
+  ├── If profileId is missing:
+  │     └── Render "Select a child profile from the dashboard" + back link
   │
-  ├── If visibleLetters.length > 0:
-  │     └── LetterGrid
+  ├── If either query is loading:
+  │     └── Render LoadingSpinner (T-08)
+  │
+  ├── If either query errors:
+  │     └── Render inline error with retry button (T-08)
+  │
+  ├── If visibleLetters.filter(l => l.isVisible).length === 0:
+  │     └── Render EmptyState (icon-only, no text — REQ-5.8)
+  │
+  ├── If visible letters exist:
+  │     └── LetterGrid (auto-fill, minmax(80px, 1fr) — REQ-5.1)
   │           └── LetterCard × N
-  │                 ├── Shows: Arabic glyph (large), colored background
-  │                 ├── onClick:
-  │                 │     ├── ui-store.selectLetter(letterId)
-  │                 │     ├── audioEngine.play(letterId)
-  │                 │     ├── ui-store.setPlaying(true)
-  │                 │     ├── After playback completes (~1-2s):
-  │                 │     │     ├── Handler: AudioEngine play resolves
-  │                 │     │     ├── ui-store.setPlaying(false)
-  │                 │     │     └── ui-store.selectLetter(null) (auto-return)
-  │                 │     └── Show brief scale animation on card
-  │                 └── During playback: LetterDetail overlay (full-screen letter)
+  │                 ├── Shows: composed glyph via composeLetter(char, currentHarakat) (T-07)
+  │                 ├── 28 pastel backgrounds keyed by letterId (KD-3)
+  │                 ├── min 64×64dp touch target (REQ-5.3)
+  │                 ├── active:scale-95 transition-transform (REQ-5.7)
+  │                 ├── aria-label={letterId}, glyph aria-hidden (T-08)
+  │                 └── onClick:
+  │                       ├── ui-store.setSelectedLetter(letterId) — opens overlay
+  │                       ├── audioEngine.speak(letter.character, currentHarakat)
+  │                       │     └── Promise resolves on utterance end (or on cancel)
+  │                       └── .finally(() => setSelectedLetter(null))
+  │                             └── Honest auto-dismiss tied to actual playback (KD-4)
+  │
+  ├── During playback: LetterDetail overlay (full-screen, text-9xl, z-50)
+  │
+  ├── After grid: "Reading Practice" button
+  │     └── disabled={visibleLetters.length < 3} (DD-3)
   │
   └── On unmount:
-        └── Dispose AudioEngine
+        └── Audio engine singleton persists across mounts (no dispose on unmount)
 ```
 
 ### Child Grid — Harakat Selector
