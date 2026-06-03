@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logoutFn, validateSessionFn } from '~/server/auth-fns';
 import { deleteProfileFn } from '~/server/profiles';
@@ -8,6 +8,7 @@ import { LanguageToggle } from '~/components/parent/LanguageToggle';
 import { ProfileList } from '~/components/parent/ProfileList';
 import { ProfileEditor } from '~/components/parent/ProfileEditor';
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
+import { useAuthStore } from '~/stores/auth-store';
 import type { AvatarKey } from '~/db/schema';
 
 interface ProfileCard {
@@ -32,6 +33,8 @@ export const Route = createFileRoute('/dashboard')({
 function DashboardPage() {
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const setChildMode = useAuthStore((state) => state.setChildMode);
   const [signingOut, setSigningOut] = useState(false);
 
   // ProfileEditor state
@@ -52,6 +55,11 @@ function DashboardPage() {
       setDeleteProfileId(null);
     },
   });
+
+  function handleStartLearning(profileId: string) {
+    setChildMode(profileId);
+    void navigate({ to: '/learn' });
+  }
 
   function handleAddChild() {
     setEditingProfile(undefined);
@@ -128,6 +136,7 @@ function DashboardPage() {
         <ProfileList
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onStartLearning={handleStartLearning}
           expandedProfileId={expandedProfileId}
           onToggleLetters={(profileId) =>
             setExpandedProfileId((prev) => (prev === profileId ? null : profileId))

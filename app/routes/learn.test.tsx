@@ -217,7 +217,7 @@ describe('Learn route', () => {
     expect(screen.queryByLabelText('tsa')).toBeNull();
   });
 
-  it('disables the Reading Practice button when fewer than 3 letters are visible', async () => {
+  it('disables the Reading Practice link when fewer than 3 letters are visible', async () => {
     setActiveChild(TEST_PROFILE_ID);
     mockGetActiveProfile.mockResolvedValue(TEST_PROFILE);
     mockGetVisibleLetters.mockResolvedValue([VISIBLE_LETTER_A, VISIBLE_LETTER_B]);
@@ -231,12 +231,14 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    const readingBtn = await screen.findByRole('button', { name: 'Reading Practice' });
-    expect(readingBtn).toBeTruthy();
-    expect((readingBtn as HTMLButtonElement).disabled).toBe(true);
+    // Mock Link renders <a> without href (uses `to` prop), so we query by text
+    const readingLink = await screen.findByText('Reading Practice');
+    expect(readingLink).toBeTruthy();
+    expect(readingLink.hasAttribute('disabled')).toBe(true);
+    expect(readingLink.getAttribute('to')).toBe('/learn/reading');
   });
 
-  it('enables the Reading Practice button when 3 or more letters are visible', async () => {
+  it('enables the Reading Practice link when 3 or more letters are visible', async () => {
     setActiveChild(TEST_PROFILE_ID);
     mockGetActiveProfile.mockResolvedValue(TEST_PROFILE);
     mockGetVisibleLetters.mockResolvedValue([VISIBLE_LETTER_A, VISIBLE_LETTER_B, VISIBLE_LETTER_T]);
@@ -250,12 +252,14 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    const readingBtn = await screen.findByRole('button', { name: 'Reading Practice' });
-    expect(readingBtn).toBeTruthy();
-    expect((readingBtn as HTMLButtonElement).disabled).toBe(false);
+    // Mock Link renders <a> without href (uses `to` prop), so we query by text
+    const readingLink = await screen.findByText('Reading Practice');
+    expect(readingLink).toBeTruthy();
+    expect(readingLink.getAttribute('disabled')).toBeNull();
+    expect(readingLink.getAttribute('to')).toBe('/learn/reading');
   });
 
-  it('renders a "back to home" link alongside the select-child message', async () => {
+  it('renders a "back to dashboard" link alongside the select-child message', async () => {
     setActiveChild(null);
 
     const { Route } = await import('./learn');
@@ -270,8 +274,8 @@ describe('Learn route', () => {
     // Sanity check that the "missing profile" branch still offers navigation
     expect(await screen.findByText(/Select a child profile from the dashboard/i)).toBeTruthy();
 
-    // The select-child message branch should include a back/home link.
+    // The select-child message branch should include a back/dashboard link.
     // (The Link mock renders a plain <a> without `href`, so we assert by text.)
-    expect(screen.getByText('Back to Home')).toBeTruthy();
+    expect(screen.getByText('Back to Dashboard')).toBeTruthy();
   });
 });

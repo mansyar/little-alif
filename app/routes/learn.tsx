@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { preloadOnIdle } from '~/lib/audio/preloader';
@@ -40,10 +40,10 @@ function SelectChildMessage() {
         Select a child profile from the dashboard to start learning.
       </p>
       <Link
-        to="/"
+        to="/dashboard"
         className="px-6 py-3 rounded-small border-2 border-green text-green font-semibold hover:bg-green hover:text-white transition-colors"
       >
-        Back to Home
+        Back to Dashboard
       </Link>
     </main>
   );
@@ -55,7 +55,6 @@ interface LearnContentProps {
 
 function LearnContent({ profileId }: LearnContentProps) {
   const currentHarakat = useUiStore((state) => state.currentHarakat);
-  const navigate = useNavigate();
 
   const profileQuery = useQuery({
     queryKey: ['activeProfile', profileId],
@@ -116,7 +115,7 @@ function LearnContent({ profileId }: LearnContentProps) {
     <main className="min-h-screen flex flex-col bg-background-warm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-sand-light">
         <ProfileBadge profile={profile ? { name: profile.name, avatar: profile.avatar } : null} />
-        <Link to="/" className="text-sm text-text-muted hover:text-text-dark">
+        <Link to="/dashboard" className="text-sm text-text-muted hover:text-text-dark">
           Back
         </Link>
       </div>
@@ -130,16 +129,13 @@ function LearnContent({ profileId }: LearnContentProps) {
       </div>
 
       <div className="flex justify-center px-4 py-6">
-        <button
-          type="button"
+        <Link
+          to="/learn/reading"
           disabled={!canStartReading}
-          onClick={() => {
-            void navigate({ to: '/learn/reading' });
-          }}
           className="rounded-large bg-green px-6 py-3 text-white font-bold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Reading Practice
-        </button>
+        </Link>
       </div>
     </main>
   );

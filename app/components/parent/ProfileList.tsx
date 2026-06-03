@@ -17,6 +17,7 @@ interface ProfileCard {
 interface ProfileListProps {
   onEdit: (profile: ProfileCard) => void;
   onDelete: (profileId: string) => void;
+  onStartLearning?: (profileId: string) => void;
   expandedProfileId?: string | null;
   onToggleLetters?: (profileId: string) => void;
 }
@@ -24,6 +25,7 @@ interface ProfileListProps {
 export function ProfileList({
   onEdit,
   onDelete,
+  onStartLearning,
   expandedProfileId,
   onToggleLetters,
 }: ProfileListProps) {
@@ -83,7 +85,12 @@ export function ProfileList({
             key={profile.id}
             className="flex flex-col rounded-large bg-white p-5 shadow-card transition-shadow hover:shadow-lg"
           >
-            <div className="mb-3 flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => onStartLearning?.(profile.id)}
+              className="mb-3 flex w-full items-center gap-4 text-left transition-opacity hover:opacity-80"
+              aria-label={`Start learning with ${profile.name}`}
+            >
               <div className="h-14 w-14 shrink-0">
                 {AvatarComponent ? (
                   <AvatarComponent className="h-full w-full" />
@@ -100,7 +107,7 @@ export function ProfileList({
                   /28 {LL.PROFILE_LETTERS_LABEL()}
                 </p>
               </div>
-            </div>
+            </button>
 
             <div className="mt-auto flex items-center gap-2 border-t border-sand-light pt-3">
               <button

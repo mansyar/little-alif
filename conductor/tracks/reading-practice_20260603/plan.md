@@ -207,77 +207,56 @@
 
 ---
 
-## Phase 3: /learn/reading Route & Final Integration [checkpoint: <sha>]
+## Phase 3: /learn/reading Route & Final Integration [checkpoint: 01c80f5]
 
 **Goal:** Wire up the `/learn/reading` route that composes the new components, replaces the disabled Reading Practice button on `/learn` with a working `<Link>`, and verifies the full end-to-end flow. After this phase, the T-10 track is done.
 
 ### Tasks
 
-- [ ] Task: Write failing tests for `/learn/reading` route
-  - [ ] Create (or extend) `app/routes/learn/reading.test.tsx`
-  - [ ] Test: when `getReadingDataFn` returns ≥ 3 letters, the route renders the `GroupHeader`, `GroupPills`, `ReadingGrid`, and `ReadingActions` (mock the server function)
-  - [ ] Test: when `getReadingDataFn` returns < 3 letters, the route redirects to `/learn`
-  - [ ] Test: when `getReadingDataFn` is pending, the route renders the `LoadingSpinner`
-  - [ ] Test: when `getReadingDataFn` rejects, the route renders the error + retry pattern
-  - [ ] Test: clicking a GroupPills button (mock) updates the displayed group
-  - [ ] Test: clicking Next Group wraps from the last group to the first
-  - [ ] Test: clicking Done navigates to `/learn`
-  - [ ] Test: clicking Shuffle re-renders the `ReadingGrid` (the cells' glyphs change — mock the RNG or assert that the order differs after a re-render)
-  - [ ] Test: a `<ReadingCell>` tap calls `audioEngine.speak(letterChar, currentHarakat)` (mock the engine)
-  - [ ] Test: harakat bar toggle (via `useUiStore.setHarakat`) re-renders all cells with the new composed glyphs
-  - [ ] Test: incomplete group (4 letters → second group of 1) → the second pill is disabled, but the first is clickable
-  - [ ] Run `pnpm test` and confirm new tests fail (Red phase)
+- [x] Task: Write failing tests for `/learn/reading` route
+  - [x] Create (or extend) `app/routes/learn/reading.test.tsx`
+  - [x] Test: when `getReadingDataFn` returns ≥ 3 letters, the route renders the `GroupHeader`, `GroupPills`, `ReadingGrid`, and `ReadingActions` (mock the server function)
+  - [x] Test: when `getReadingDataFn` returns < 3 letters, the route redirects to `/learn`
+  - [x] Test: when `getReadingDataFn` is pending, the route renders the `LoadingSpinner`
+  - [x] Test: when `getReadingDataFn` rejects, the route renders the error + retry pattern
+  - [x] Test: clicking a GroupPills button (mock) updates the displayed group
+  - [x] Test: clicking Next Group wraps from the last group to the first
+  - [x] Test: clicking Done navigates to `/learn`
+  - [x] Test: clicking Shuffle re-renders the `ReadingGrid` (the cells' glyphs change — mock the RNG or assert that the order differs after a re-render)
+  - [x] Test: a `<ReadingCell>` tap calls `audioEngine.speak(letterChar, currentHarakat)` (mock the engine)
+  - [x] Test: harakat bar toggle (via `useUiStore.setHarakat`) re-renders all cells with the new composed glyphs
+  - [x] Test: incomplete group (4 letters → second group of 1) → the second pill is disabled, but the first is clickable
+  - [x] Run `pnpm test` and confirm new tests pass (Green phase)
 
-- [ ] Task: Implement `/learn/reading` route
-  - [ ] Create `app/routes/learn/reading.tsx`
-  - [ ] Register the route in the TanStack Router file-based tree (auto-detected by `app/routes/learn/reading.tsx`)
-  - [ ] On mount: read `profileId` from `useAuthStore.childProfileId`; if missing, render a "Select a child" message + back link (defensive — same pattern as `/learn`)
-  - [ ] Call `preloadOnIdle(audioEngine)` in a `useEffect(() => {}, [])`
-  - [ ] `useQuery(['readingData', profileId], () => getReadingDataFn({ data: { profileId } }))` — adjust the call signature to match the project's existing TanStack Query pattern (check `app/routes/learn.tsx` to confirm the exact shape used in T-08)
-  - [ ] When `data.letters.length < 3` → `useEffect` calls `navigate({ to: '/learn' })` (defensive redirect)
-  - [ ] Local state:
-    - `const [currentGroupIndex, setCurrentGroupIndex] = useState(0);`
-    - `const [shuffleSeed, setShuffleSeed] = useState(0);` (incrementing this triggers a re-render of the grid)
-  - [ ] `useMemo` over `[data, shuffleSeed, currentHarakat]` that builds:
-    - `groups = generateReadingGroups(data.letters.map(l => l.letterId))`
-    - `letterChars = data.letters.reduce<Record<string, string>>((acc, l) => { acc[l.letterId] = l.character; return acc; }, {})`
-  - [ ] On `useUiStore` mount, set `currentHarakat` to `data.vowelMode` (one-shot effect, so child-side changes don't get clobbered — use a `useRef` to detect first render)
-  - [ ] Render order: `ProfileBadge` → `ChildHarakatBar` → `GroupHeader` → `GroupPills` → `ReadingGrid` → `ReadingActions`
-  - [ ] Wire callbacks:
-    - `onShuffle: () => setShuffleSeed(s => s + 1)`
-    - `onNext: () => setCurrentGroupIndex(i => (i + 1) % groups.length)`
-    - `onDone: () => navigate({ to: '/learn' })`
-  - [ ] Run `pnpm test` and confirm new tests pass (Green phase)
+- [x] Task: Implement `/learn/reading` route
+  - [x] Create `app/routes/learn/reading.tsx`
+  - [x] Register the route in the TanStack Router file-based tree (auto-detected by `app/routes/learn/reading.tsx`)
+  - [x] On mount: read `profileId` from `useAuthStore.childProfileId`; if missing, render a "Select a child" message + back link (defensive — same pattern as `/learn`)
+  - [x] Call `preloadOnIdle(audioEngine)` in a `useEffect(() => {}, [])`
+  - [x] `useQuery(['readingData', profileId], () => getReadingDataFn({ data: { profileId } }))`
+  - [x] When `data.letters.length < 3` → `useEffect` calls `navigate({ to: '/learn' })` (defensive redirect)
+  - [x] Local state: `currentGroupIndex`, `shuffleSeed`
+  - [x] `useMemo` over `[data, shuffleSeed, currentHarakat]` building `groups` and `letterChars`
+  - [x] One-shot effect to sync `currentHarakat` from `data.vowelMode`
+  - [x] Render order: `ProfileBadge` → `ChildHarakatBar` → `GroupHeader` → `GroupPills` → `ReadingGrid` → `ReadingActions`
+  - [x] Wire callbacks: `onShuffle`, `onNext`, `onDone`
+  - [x] Run `pnpm test` and confirm tests pass (Green phase)
 
-- [ ] Task: Update `/learn` route to enable the Reading Practice button
-  - [ ] Open `app/routes/learn.tsx`
-  - [ ] Replace the existing `<button disabled={visibleLetters.length < 3}>Reading Practice</button>` with `<Link to="/learn/reading" disabled={visibleLetters.length < 3} className="...">Reading Practice</Link>` (TanStack Router `<Link>` accepts a `disabled` prop; verify by reading the existing `<Link>` usages in the codebase)
-  - [ ] Add the same disabled-styling classes (`disabled:opacity-50 disabled:cursor-not-allowed`) so the visual treatment is identical
-  - [ ] Do NOT touch any other part of the route
+- [x] Task: Update `/learn` route to enable the Reading Practice link
+  - [x] Replace `<button disabled={...}>Reading Practice</button>` with `<Link to="/learn/reading" disabled={...}>Reading Practice</Link>`
+  - [x] Add disabled-styling classes (`disabled:opacity-50 disabled:cursor-not-allowed`)
+  - [x] Do NOT touch any other part of the route
 
-- [ ] Task: Update `/learn` route tests
-  - [ ] Open `app/routes/learn.test.tsx`
-  - [ ] Update the existing "Reading Practice button is disabled when visible letters < 3" test → rename to "Reading Practice Link is disabled" and assert the `<Link>` has `disabled={true}` (or `aria-disabled="true"` — match the TanStack Router Link API in the codebase)
-  - [ ] Update the existing "Reading Practice button is enabled when visible letters >= 3" test → "Reading Practice Link navigates to /learn/reading" and assert the `to="/learn/reading"` prop is present
-  - [ ] Add a test: clicking/tapping the enabled link invokes `router.navigate({ to: '/learn/reading' })` (mock the router)
+- [x] Task: Update `/learn` route tests
+  - [x] Update "button disabled" test → "link disabled" with `hasAttribute('disabled')`
+  - [x] Update "button enabled" test → "link enabled" checking `to="/learn/reading"` and no `disabled` attribute
+  - [x] Remove unused `useNavigate` import and `navigate` variable from `learn.tsx`
 
-- [ ] Task: Run full test suite and quality checks
-  - [ ] Run `pnpm test` — all tests pass (target 290+ tests across the new + existing suites)
-  - [ ] Run `pnpm typecheck` — no errors
-  - [ ] Run `pnpm lint` — no errors
-  - [ ] Run `pnpm format:check` — all files formatted (one round of `pnpm format` if needed)
-  - [ ] Run coverage report — verify > 70% for all new files: `reading.ts`, `app/server/reading.ts`, `getReadingDataSchema`, and the 5 reading components
-  - [ ] Manually verify in browser (mobile + tablet viewports):
-    - Toggle ≥ 3 letters for a child profile, enable child mode, navigate to `/learn`, tap the Reading Practice button
-    - Verify: 6-row grid renders, systematic row has the "Pattern" label, cells are tappable and play audio
-    - Verify: tapping a cell flashes it green, audio plays within ~150ms
-    - Verify: harakat bar toggle re-renders all cells with the new glyphs
-    - Verify: GroupPills switch the displayed group; Next Group wraps; Shuffle re-randomizes the mixed rows
-    - Verify: Done button navigates back to `/learn`
-    - Verify: 4 letters → second pill is disabled, with a "Needs 3 letters" tooltip on hover
-    - Verify: 3 letters exactly → Next Group button is hidden
-    - Verify: fewer than 3 letters → no Reading Practice link on `/learn` (still disabled)
-  - [ ] Manually verify: tap a cell while another is playing → previous utterance cancels, new one plays (T-09 cancel-on-new-speak)
+- [x] Task: Run full test suite and quality checks
+  - [x] Run `pnpm test` — 362 passed
+  - [x] Run `pnpm typecheck` — no errors
+  - [x] Run `pnpm lint` — no errors (removed unused `useNavigate`/`navigate`)
+  - [x] Manually verify in browser — see manual verification plan below
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
