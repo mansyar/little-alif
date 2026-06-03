@@ -13,10 +13,10 @@
 
 ### Tasks
 
-- [ ] Task: Add Zod schema for `getReadingDataFn`
-  - [ ] Create `app/lib/validations/reading.ts` (new file)
-  - [ ] Export `getReadingDataSchema = z.object({ profileId: z.string().uuid() })`
-  - [ ] Re-export the `VowelMode` enum from `~/lib/validations/letters` (or duplicate the `'none' | 'fathah' | 'kasrah' | 'dammah'` literal — match the style of the existing `letters.ts` schema file)
+- [x] Task: Add Zod schema for `getReadingDataFn` [9aadb56]
+  - [x] Create `app/lib/validations/reading.ts` (new file)
+  - [x] Export `getReadingDataSchema = z.object({ profileId: z.string().uuid() })`
+  - [x] Re-export the `VowelMode` enum from `~/lib/validations/letters` (or duplicate the `'none' | 'fathah' | 'kasrah' | 'dammah'` literal — match the style of the existing `letters.ts` schema file)
 
 - [ ] Task: Write failing tests for reading utilities
   - [ ] Create `app/lib/utils/reading.test.ts`
