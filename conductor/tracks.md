@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Child Mode**
-  _Link: ./tracks/child-mode_20260604/_
+- [x] **Track: Child Mode**
+      _Link: ./tracks/child-mode_20260604/_
