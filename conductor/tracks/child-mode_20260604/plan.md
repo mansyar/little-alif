@@ -60,20 +60,20 @@
 
 ---
 
-## Phase 5: Server Function Dual Auth — Child-Allowed Functions
+## Phase 5: Server Function Dual Auth — Child-Allowed Functions [checkpoint: 75c06fb]
 
-- [ ] Task: Update `getVisibleLettersFn` for child-mode auth
-  - [ ] Write integration tests for child-mode letter fetching
-  - [ ] Update: accept child session → verify cookie profileId matches request → return letters
-- [ ] Task: Update `getActiveProfileFn` for child-mode auth
-  - [ ] Write tests for child-mode profile fetching
-  - [ ] Update: accept child session → verify cookie profileId matches → return profile
-- [ ] Task: Update `getReadingDataFn` for child-mode auth (in `app/server/reading.ts`)
-  - [ ] Write tests for child-mode reading data
-  - [ ] Update: accept child session → verify cookie profileId matches → return reading data
-- [ ] Task: Verify parent-only functions still reject child sessions
-  - [ ] Write tests that `toggleLetterFn`, `bulkToggleLettersFn`, mutation profile functions reject child-mode
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Dual Auth Integration' (Protocol in workflow.md)
+- [x] Task: Update `getVisibleLettersFn` for child-mode auth `75c06fb`
+  - [x] Write integration tests for child-mode letter fetching `75c06fb`
+  - [x] Update: accept child session → verify cookie profileId matches request → return letters `75c06fb`
+- [x] Task: Update `getActiveProfileFn` for child-mode auth `75c06fb`
+  - [x] Write tests for child-mode profile fetching `75c06fb`
+  - [x] Update: accept child session → verify cookie profileId matches → return profile `75c06fb`
+- [x] Task: Update `getReadingDataFn` for child-mode auth (in `app/server/reading.ts`) `75c06fb`
+  - [x] Write tests for child-mode reading data `75c06fb`
+  - [x] Update: accept child session → verify cookie profileId matches → return reading data `75c06fb`
+- [x] Task: Verify parent-only functions still reject child sessions `75c06fb`
+  - [x] Write tests that `toggleLetterFn`, `bulkToggleLettersFn`, mutation profile functions reject child-mode `75c06fb`
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Dual Auth Integration' (Protocol in workflow.md) `75c06fb`
 
 ---
 
