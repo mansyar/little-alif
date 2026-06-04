@@ -1,4 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
+import { getCookie, setCookie } from '@tanstack/react-start/server';
 import { and, count, eq, sql, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
 import { getDb, type DbClient } from '~/db';
@@ -205,7 +206,20 @@ export const deleteProfileFn = createServerFn({ method: 'POST' })
     const session = await validateSessionFn();
     requireParentSession(session);
     const db = getDb();
-    return deleteProfile(db, session.user.id, data.profileId);
+
+    await deleteProfile(db, session.user.id, data.profileId);
+
+    // Clean up child-mode cookie if it references the deleted profile
+    const childCookie = getCookie('child_mode');
+    if (childCookie) {
+      const { verifyChildModeCookie } = await import('~/lib/utils/child-mode');
+      const payload = verifyChildModeCookie(childCookie);
+      if (payload?.profileId === data.profileId) {
+        setCookie('child_mode', '', { maxAge: 0, path: '/' });
+      }
+    }
+
+    return { success: true };
   });
 
 /**
