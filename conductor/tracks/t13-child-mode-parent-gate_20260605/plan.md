@@ -16,17 +16,17 @@ This plan follows the project's TDD workflow: every implementation task is prece
 - [x] Task: Implement `app/lib/utils/parent-gate.ts` `6cca52c`
   - [x] Export the three constants with the values above
   - [x] Add a short module-level JSDoc explaining the gesture semantics
-- [~] Task: Write failing tests for `app/lib/hooks/useParentGateHandlers.ts`
-  - [ ] Test: returns `{ handleExit, handleSwitchChild }` object
-  - [ ] Test: `handleExit` calls `disableChildModeFn`, clears auth-store child state, routes to `/dashboard` when `useAuthStore.getState().user` is truthy
-  - [ ] Test: `handleExit` routes to `/login` (not `/dashboard`) when no parent user is set in the auth store
-  - [ ] Test: `handleSwitchChild` toggles a local state to show the `ChildSwitcher` overlay
-- [ ] Task: Implement `app/lib/hooks/useParentGateHandlers.ts`
-  - [ ] Use `useAuthStore.getState()` (read-on-call, not subscription) to avoid re-render churn
-  - [ ] Use `useNavigate()` from TanStack Router
-  - [ ] Import `disableChildModeFn` from `~/server/auth-fns`
-  - [ ] On `handleExit`: call `disableChildModeFn()`, then `useAuthStore.getState().setChildMode(null)`, then navigate
-  - [ ] On `handleSwitchChild`: set local state `setSwitcherOpen(true)`
+- [x] Task: Write failing tests for `app/lib/hooks/useParentGateHandlers.ts` `9d346f6`
+  - [x] Test: returns `{ handleExit, handleSwitchChild }` object
+  - [x] Test: `handleExit` calls `disableChildModeFn`, clears auth-store child state, routes to `/dashboard` when `useAuthStore.getState().user` is truthy
+  - [x] Test: `handleExit` routes to `/login` (not `/dashboard`) when no parent user is set in the auth store
+  - [x] Test: `handleSwitchChild` toggles a local state to show the `ChildSwitcher` overlay
+- [x] Task: Implement `app/lib/hooks/useParentGateHandlers.ts` `4a7628b`
+  - [x] Use `useAuthStore.getState()` (read-on-call, not subscription) to avoid re-render churn
+  - [x] Use `useNavigate()` from TanStack Router
+  - [x] Import `disableChildModeFn` from `~/server/auth-fns`
+  - [x] On `handleExit`: call `disableChildModeFn()`, then `useAuthStore.getState().setChildMode(null)`, then navigate
+  - [x] On `handleSwitchChild`: set local state `setSwitcherOpen(true)`
 
 ---
 
