@@ -5,7 +5,7 @@
 
 ---
 
-## Phase 1: Cookie Signing Utility
+## Phase 1: Cookie Signing Utility [checkpoint: 23812a2]
 
 - [x] Task: Create `app/lib/utils/child-mode.ts` — HMAC cookie sign/verify `bb925fd`
   - [x] Write unit tests for `signChildModeCookie()` and `verifyChildModeCookie()`
