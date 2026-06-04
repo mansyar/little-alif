@@ -46,17 +46,17 @@
 
 ---
 
-## Phase 4: ChildModeToggle Component
+## Phase 4: ChildModeToggle Component [checkpoint: 5e03384]
 
 - [x] Task: Create `app/components/parent/ChildModeToggle.tsx` `b5a4da7`
   - [x] Write component tests for enable/disable flow `b5a4da7`
   - [x] Implement toggle UI with Radix Switch `b5a4da7`
   - [x] Wire to `enableChildModeFn` and `disableChildModeFn` `b5a4da7`
   - [x] Show active status (which profile has child mode enabled) `b5a4da7`
-- [~] Task: Integrate ChildModeToggle into dashboard (`app/routes/dashboard.tsx`)
-  - [ ] Add toggle to profile cards in `ProfileList`
-  - [ ] Verify navigation flow: enable → redirect to /learn
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: ChildModeToggle Component' (Protocol in workflow.md)
+- [x] Task: Integrate ChildModeToggle into dashboard (`app/routes/dashboard.tsx`) `5e03384`
+  - [x] Add toggle to profile cards in `ProfileList` `5e03384`
+  - [x] Verify navigation flow: enable → redirect to /learn `5e03384`
+- [x] Task: Conductor - User Manual Verification 'Phase 4: ChildModeToggle Component' (Protocol in workflow.md) `5e03384`
 
 ---
 
