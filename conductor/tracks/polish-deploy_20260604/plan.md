@@ -1,14 +1,14 @@
 <protect>
 # Implementation Plan: Polish, Docker & Deployment
 
-## Phase 1: Audio MP3 Generation
+## Phase 1: Audio MP3 Generation [checkpoint: 7d109af]
 
 - [x] Task: Generate 112 MP3 audio files via Google Cloud TTS
   - [x] Run `gcloud auth application-default-login` to authenticate
   - [x] Run `pnpm generate:audio` to generate all MP3 files
   - [x] Verify 112 files exist in `public/audio/letters/` (28 letters × 4 vowel modes)
-  - [ ] Verify AudioEngine plays MP3 correctly (tap a letter card in /learn)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Audio MP3 Generation' (Protocol in workflow.md)
+  - [x] Verify AudioEngine plays MP3 correctly (tap a letter card in /learn)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Audio MP3 Generation' (Protocol in workflow.md)
 
 ## Phase 2: Error Boundaries
 
