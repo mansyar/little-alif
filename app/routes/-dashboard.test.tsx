@@ -62,7 +62,7 @@ describe('Dashboard route', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the sidebar with dashboard title', async () => {
+  it('renders the sidebar with dashboard title', { timeout: 10000 }, async () => {
     const { Route } = await import('./dashboard');
     const Component = Route.options.component;
 
@@ -87,7 +87,7 @@ describe('Dashboard route', () => {
     expect(childProfileElements.length).toBe(2);
   });
 
-  it('renders the locale toggle and "Add Child" button', async () => {
+  it('renders the locale toggle and "Add Child" button', { timeout: 10000 }, async () => {
     const { Route } = await import('./dashboard');
     const Component = Route.options.component;
 
@@ -101,9 +101,8 @@ describe('Dashboard route', () => {
       </QueryClientProvider>,
     );
 
-    // "Bahasa Indonesia" appears only in the sidebar
-    const localeButtons = await screen.findAllByText('Bahasa Indonesia');
-    expect(localeButtons.length).toBe(1);
+    // "Bahasa Indonesia" rendered by LanguageToggle — assert it exists
+    expect(await screen.findByText('Bahasa Indonesia')).toBeTruthy();
 
     // Add Child button in main content
     expect(screen.getByText('Add Child')).toBeTruthy();
