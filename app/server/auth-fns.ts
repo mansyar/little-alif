@@ -5,6 +5,9 @@ import { z } from 'zod';
 import { getDb, type DbClient } from '~/db';
 import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
 import { signChildModeCookie } from '~/lib/utils/child-mode';
+import { eq } from 'drizzle-orm';
+import { profiles } from '~/db/schema';
+import { verifyChildModeCookie } from '~/lib/utils/child-mode';
 import { getAuth } from './auth';
 import { getActiveProfile } from './profiles';
 
@@ -91,21 +94,79 @@ export const logoutFn = createServerFn({ method: 'POST' }).handler(async () => {
 });
 
 /**
- * Validate the current session cookie and return the active user, or null
- * when no valid session exists. Does not throw on missing session.
+ * Build a child session from a valid child-mode cookie.
+ *
+ * Verifies the HMAC signature, looks up the profile's parent userId from
+ * the DB, and returns a session-like object compatible with the shape that
+ * BetterAuth's getSession() returns. Returns null if the cookie is invalid,
+ * tampered, or the profile has been deleted.
+ */
+export async function buildChildSession(
+  db: DbClient,
+  cookieValue: string,
+): Promise<{
+  user: { id: string; email: string; isChild: true; childProfileId: string };
+  session: { token: string; expiresAt: string; userId: string };
+} | null> {
+  const payload = verifyChildModeCookie(cookieValue);
+  if (!payload) return null;
+
+  const profile = await db
+    .select({ userId: profiles.userId })
+    .from(profiles)
+    .where(eq(profiles.id, payload.profileId))
+    .then((rows) => rows[0] ?? null);
+
+  if (!profile) return null;
+
+  return {
+    user: {
+      id: profile.userId,
+      email: '',
+      isChild: true,
+      childProfileId: payload.profileId,
+    },
+    session: {
+      token: '',
+      expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      userId: profile.userId,
+    },
+  };
+}
+
+/**
+ * Validate the current session cookie or child-mode cookie and return
+ * the active user, or null when no valid session exists.
+ *
+ * Priority order:
+ *   1. Parent JWT session (better-auth.session_token)
+ *   2. Child-mode cookie (child_mode)
+ *
+ * Does not throw on missing session.
  */
 export const validateSessionFn = createServerFn({ method: 'GET' })
   .inputValidator(z.object({}).optional())
   .handler(async () => {
     const auth = getAuth();
     const token = getCookie('better-auth.session_token');
-    if (token === undefined) {
-      return null;
+
+    // Priority 1: parent JWT session
+    if (token !== undefined) {
+      const result = await auth.api.getSession({
+        headers: new Headers({ cookie: buildCookieHeader(token) }),
+      });
+      if (result) return result;
     }
-    const result = await auth.api.getSession({
-      headers: new Headers({ cookie: buildCookieHeader(token) }),
-    });
-    return result ?? null;
+
+    // Priority 2: child-mode cookie
+    const childCookie = getCookie('child_mode');
+    if (childCookie !== undefined) {
+      const db = getDb();
+      const childSession = await buildChildSession(db, childCookie);
+      if (childSession) return childSession;
+    }
+
+    return null;
   });
 
 // ─── Child Mode Helpers ───────────────────────────────────────────────

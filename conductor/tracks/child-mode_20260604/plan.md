@@ -30,7 +30,7 @@
 - [x] Task: Update `validateSessionFn` for dual auth `cfc0d3a`
   - [x] Write tests for child-mode cookie validation path
   - [x] Implement: check `child_mode` cookie → verify → return child session shape
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Server Functions' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Server Functions' (Protocol in workflow.md)
 
 ---
 
