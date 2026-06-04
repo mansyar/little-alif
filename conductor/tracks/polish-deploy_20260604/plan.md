@@ -50,7 +50,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Docker & Deployment' (Protocol in workflow.md)
   - [x] Docker compose now stays running (server listening on :3000)
 
-## Phase 5: Verification & Audit [checkpoint: a76b0ac]
+## Phase 5: Verification & Audit [checkpoint: 436678f]
 
 - [x] Task: Run full test suite and verify pass rate
   - [x] `pnpm test` — 51 files, 404 tests passing
