@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Polish, Docker & Deployment (T-12)**
+- [x] **Track: Polish, Docker & Deployment (T-12)**: ✅ Completed `fcc9483`
       _Link: [./tracks/polish-deploy_20260604/](./tracks/polish-deploy_20260604/)_
