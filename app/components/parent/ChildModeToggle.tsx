@@ -62,9 +62,9 @@ export function ChildModeToggle({ profileId, profileName }: ChildModeToggleProps
         onCheckedChange={handleToggle}
         disabled={isPending}
         aria-label={`${isActive ? 'Disable' : 'Enable'} child mode for ${profileName}`}
-        className="relative h-5 w-9 rounded-full bg-sand-dark data-[state=checked]:bg-green"
+        className="relative h-6 w-11 rounded-full bg-sand-dark data-[state=checked]:bg-green"
       >
-        <Switch.Thumb className="block h-4 w-4 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-[18px]" />
+        <Switch.Thumb className="block h-4 w-4 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-[26px]" />
       </Switch.Root>
       <span className="text-xs font-medium text-text-muted">
         {isActive ? LL.CHILDMODE_ACTIVE() : LL.CHILDMODE_ENABLE()}

@@ -71,7 +71,7 @@ function RegisterPage() {
         </label>
 
         {error !== null && (
-          <p className="text-red text-sm" role="alert">
+          <p className="text-coral text-sm" role="alert">
             {error}
           </p>
         )}

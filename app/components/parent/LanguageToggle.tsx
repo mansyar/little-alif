@@ -18,6 +18,7 @@ export function LanguageToggle() {
         void handleToggle();
       }}
       type="button"
+      className="focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2"
     >
       {LL.LOCALE_SWITCH()}
     </button>

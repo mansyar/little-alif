@@ -25,17 +25,17 @@ function LandingPage() {
       </p>
       <div className="flex gap-4 flex-col sm:flex-row">
         <Link
-          to="/login"
-          search={{ redirect: '/dashboard' }}
+          to="/register"
           className="px-6 py-3 rounded-small bg-green text-white font-semibold hover:bg-green-light transition-colors"
         >
-          Parent Login
+          Create Account
         </Link>
         <Link
-          to="/register"
+          to="/login"
+          search={{ redirect: '/dashboard' }}
           className="px-6 py-3 rounded-small border-2 border-green text-green font-semibold hover:bg-green hover:text-white transition-colors"
         >
-          Create Account
+          Parent Login
         </Link>
       </div>
     </main>

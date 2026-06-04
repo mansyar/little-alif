@@ -126,9 +126,9 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
                 debouncedToggle(letter.letterId as LetterId, checked);
               }}
               disabled={anyPending}
-              className="relative h-5 w-9 rounded-full bg-sand-dark data-[state=checked]:bg-green"
+              className="relative h-6 w-11 rounded-full bg-sand-dark data-[state=checked]:bg-green"
             >
-              <Switch.Thumb className="block h-4 w-4 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-[18px]" />
+              <Switch.Thumb className="block h-4 w-4 translate-x-0.5 rounded-full bg-white transition-transform data-[state=checked]:translate-x-[26px]" />
             </Switch.Root>
           </div>
         ))}

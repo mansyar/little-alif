@@ -72,7 +72,7 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
       {rows.map((row, rowIndex) => (
         <div key={rowIndex}>
           {rowIndex === 0 && (
-            <div aria-hidden="true" className="text-sm text-gray-500 mb-1">
+            <div aria-hidden="true" className="text-sm text-text-muted mb-1">
               Pattern
             </div>
           )}

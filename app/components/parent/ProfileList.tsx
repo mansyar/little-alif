@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { User } from 'lucide-react';
 import { listProfilesFn } from '~/server/profiles';
 import { AVATAR_MAP } from './avatars';
 import type { AvatarKey } from '~/db/schema';
@@ -71,7 +72,7 @@ export function ProfileList({
   if (!profiles || profiles.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="mb-4 text-5xl text-sand-dark">👤</div>
+        <User className="mb-4 h-24 w-24 text-text-muted opacity-30" />
         <p className="text-lg font-medium text-text-muted">{LL.DASHBOARD_NO_CHILDREN()}</p>
       </div>
     );
