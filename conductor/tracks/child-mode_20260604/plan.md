@@ -7,12 +7,12 @@
 
 ## Phase 1: Cookie Signing Utility
 
-- [ ] Task: Create `app/lib/utils/child-mode.ts` — HMAC cookie sign/verify
-  - [ ] Write unit tests for `signChildModeCookie()` and `verifyChildModeCookie()`
-  - [ ] Implement `signChildModeCookie(profileId, name, avatar): string`
-  - [ ] Implement `verifyChildModeCookie(cookieValue): ChildModePayload | null`
-  - [ ] Add `CHILD_MODE_SECRET` env var fallback logic (falls back to `JWT_SECRET`)
-  - [ ] Verify tests pass
+- [x] Task: Create `app/lib/utils/child-mode.ts` — HMAC cookie sign/verify `bb925fd`
+  - [x] Write unit tests for `signChildModeCookie()` and `verifyChildModeCookie()`
+  - [x] Implement `signChildModeCookie(profileId, name, avatar): string`
+  - [x] Implement `verifyChildModeCookie(cookieValue): ChildModePayload | null`
+  - [x] Add `CHILD_MODE_SECRET` env var fallback logic (falls back to `BETTER_AUTH_SECRET`)
+  - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Cookie Signing Utility' (Protocol in workflow.md)
 
 ---
