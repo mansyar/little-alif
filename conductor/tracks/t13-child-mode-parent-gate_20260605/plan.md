@@ -6,7 +6,7 @@ This plan follows the project's TDD workflow: every implementation task is prece
 
 ---
 
-## Phase 1: Foundation — Constants and Parent Gate Handler Hook
+## Phase 1: Foundation — Constants and Parent Gate Handler Hook [checkpoint: d4094aa]
 
 - [x] Task: Write failing tests for `app/lib/utils/parent-gate.ts` constants module `d898a5a`
   - [x] Test: `PARENT_GATE_LONG_PRESS_MS` is exported and equals 1500
