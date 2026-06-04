@@ -111,9 +111,7 @@ describe('GroupPills', () => {
 
   it('container has overflow-x-auto for horizontal scrolling', async () => {
     const { GroupPills } = await import('./GroupPills');
-    const { container } = render(
-      <GroupPills groups={GROUPS} activeIndex={0} onSelect={vi.fn()} />,
-    );
+    const { container } = render(<GroupPills groups={GROUPS} activeIndex={0} onSelect={vi.fn()} />);
 
     const tablist = container.querySelector('[role="tablist"]');
     expect(tablist?.className).toContain('overflow-x-auto');

@@ -4,10 +4,8 @@ import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
 import { getDb, type DbClient } from '~/db';
 import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
-import { signChildModeCookie } from '~/lib/utils/child-mode';
 import { eq } from 'drizzle-orm';
 import { profiles } from '~/db/schema';
-import { verifyChildModeCookie } from '~/lib/utils/child-mode';
 import { getAuth } from './auth';
 import { getActiveProfile } from './profiles';
 
@@ -108,6 +106,7 @@ export async function buildChildSession(
   user: { id: string; email: string; isChild: true; childProfileId: string };
   session: { token: string; expiresAt: string; userId: string };
 } | null> {
+  const { verifyChildModeCookie } = await import('~/lib/utils/child-mode');
   const payload = verifyChildModeCookie(cookieValue);
   if (!payload) return null;
 
@@ -201,6 +200,7 @@ export const enableChildModeFn = createServerFn({ method: 'POST' })
     const db = getDb();
     const { name, avatar } = await enableChildMode(db, session.user.id, data.profileId);
 
+    const { signChildModeCookie } = await import('~/lib/utils/child-mode');
     const cookieValue = signChildModeCookie(data.profileId, name, avatar);
     setCookie('child_mode', cookieValue, {
       httpOnly: false,
