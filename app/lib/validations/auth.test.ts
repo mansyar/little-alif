@@ -38,63 +38,21 @@ describe('registerSchema', () => {
 });
 
 describe('enableChildModeSchema', () => {
-  it('accepts a valid profileId, name, and avatar', () => {
+  it('accepts a valid profileId', () => {
     const result = enableChildModeSchema.safeParse({
       profileId: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Aisyah',
-      avatar: 'ba-boat',
     });
     expect(result.success).toBe(true);
   });
 
   it('rejects missing profileId', () => {
-    const result = enableChildModeSchema.safeParse({
-      name: 'Aisyah',
-      avatar: 'ba-boat',
-    });
+    const result = enableChildModeSchema.safeParse({});
     expect(result.success).toBe(false);
   });
 
   it('rejects invalid UUID profileId', () => {
     const result = enableChildModeSchema.safeParse({
       profileId: 'not-a-uuid',
-      name: 'Aisyah',
-      avatar: 'ba-boat',
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects missing name', () => {
-    const result = enableChildModeSchema.safeParse({
-      profileId: '550e8400-e29b-41d4-a716-446655440000',
-      avatar: 'ba-boat',
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects empty name', () => {
-    const result = enableChildModeSchema.safeParse({
-      profileId: '550e8400-e29b-41d4-a716-446655440000',
-      name: '',
-      avatar: 'ba-boat',
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects name over 50 characters', () => {
-    const result = enableChildModeSchema.safeParse({
-      profileId: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'A'.repeat(51),
-      avatar: 'ba-boat',
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects invalid avatar key', () => {
-    const result = enableChildModeSchema.safeParse({
-      profileId: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Aisyah',
-      avatar: 'invalid-avatar',
     });
     expect(result.success).toBe(false);
   });

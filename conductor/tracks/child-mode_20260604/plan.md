@@ -19,8 +19,8 @@
 
 ## Phase 2: Server Functions (enableChildModeFn & disableChildModeFn)
 
-- [ ] Task: Add Zod schemas for child mode operations
-  - [ ] Add `enableChildModeSchema` to `app/lib/validations/auth.ts`
+- [x] Task: Add Zod schemas for child mode operations `4b2a4f1`
+  - [x] Add `enableChildModeSchema` to `app/lib/validations/auth.ts` `4b2a4f1`
 - [ ] Task: Implement `enableChildModeFn` in `app/server/auth-fns.ts`
   - [ ] Write unit tests for `enableChildModeFn`
   - [ ] Implement: validate profile ownership → sign cookie → set cookie → return success
