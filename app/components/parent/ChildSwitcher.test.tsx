@@ -66,14 +66,9 @@ describe('ChildSwitcher', () => {
   it('renders a Radix Dialog when open is true', async () => {
     mockListProfilesForSwitch.mockResolvedValue([]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     expect(screen.getByRole('dialog')).toBeTruthy();
   });
@@ -81,14 +76,9 @@ describe('ChildSwitcher', () => {
   it('shows the "Switch child" heading', async () => {
     mockListProfilesForSwitch.mockResolvedValue([]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     expect(screen.getByText('Switch child')).toBeTruthy();
   });
@@ -96,14 +86,9 @@ describe('ChildSwitcher', () => {
   it('shows the "No other children" empty state when profile list is empty', async () => {
     mockListProfilesForSwitch.mockResolvedValue([]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     expect(await screen.findByText(/no other children/i)).toBeTruthy();
   });
@@ -113,14 +98,9 @@ describe('ChildSwitcher', () => {
       { id: ACTIVE_PROFILE_ID, name: 'Aisyah', avatar: 'alif-lamp' },
     ]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     expect(await screen.findByText(/no other children/i)).toBeTruthy();
   });
@@ -132,14 +112,9 @@ describe('ChildSwitcher', () => {
       { id: OTHER_PROFILE_2, name: 'Citra', avatar: 'ta-table' },
     ]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     // Active profile tile is NOT shown
     expect(screen.queryByText('Aisyah')).toBeNull();
@@ -154,14 +129,9 @@ describe('ChildSwitcher', () => {
       { id: OTHER_PROFILE_1, name: 'Bilal', avatar: 'ba-boat' },
     ]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     expect(await screen.findByLabelText(/Switch to Bilal/i)).toBeTruthy();
   });
@@ -197,14 +167,9 @@ describe('ChildSwitcher', () => {
       { id: OTHER_PROFILE_1, name: 'Bilal', avatar: 'ba-boat' },
     ]);
     const { ChildSwitcher } = await import('./ChildSwitcher');
-    render(
-      <ChildSwitcher
-        open
-        onOpenChange={vi.fn()}
-        activeProfileId={ACTIVE_PROFILE_ID}
-      />,
-      { wrapper: createWrapper() },
-    );
+    render(<ChildSwitcher open onOpenChange={vi.fn()} activeProfileId={ACTIVE_PROFILE_ID} />, {
+      wrapper: createWrapper(),
+    });
 
     const bilalTile = await screen.findByLabelText(/Switch to Bilal/i);
     fireEvent.click(bilalTile);

@@ -75,8 +75,7 @@ interface LearnContentProps {
 
 function LearnContent({ profileId }: LearnContentProps) {
   const currentHarakat = useUiStore((state) => state.currentHarakat);
-  const { handleExit, handleSwitchChild, switcherOpen, setSwitcherOpen } =
-    useParentGateHandlers();
+  const { handleExit, handleSwitchChild, switcherOpen, setSwitcherOpen } = useParentGateHandlers();
 
   const profileQuery = useQuery({
     queryKey: ['activeProfile', profileId],

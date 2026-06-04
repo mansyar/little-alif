@@ -30,7 +30,7 @@ export function useParentGateHandlers(): UseParentGateHandlersResult {
     await disableChildModeFn();
     useAuthStore.getState().setChildMode(null);
     const user = useAuthStore.getState().user;
-    navigate({ to: user ? '/dashboard' : '/login' });
+    void navigate({ to: user ? '/dashboard' : '/login' });
   }, [navigate]);
 
   const handleSwitchChild = useCallback(() => {

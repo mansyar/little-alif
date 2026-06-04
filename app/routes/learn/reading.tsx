@@ -63,8 +63,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
   const navigate = useNavigate();
   const currentHarakat = useUiStore((state) => state.currentHarakat);
   const setHarakat = useUiStore((state) => state.setHarakat);
-  const { handleExit, handleSwitchChild, switcherOpen, setSwitcherOpen } =
-    useParentGateHandlers();
+  const { handleExit, handleSwitchChild, switcherOpen, setSwitcherOpen } = useParentGateHandlers();
 
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [shuffleSeed, setShuffleSeed] = useState(0);

@@ -422,7 +422,7 @@ describe('listProfilesForSwitch (pure helper)', () => {
     );
   });
 
-  it('returns only the calling user\'s profiles', async () => {
+  it("returns only the calling user's profiles", async () => {
     const otherUserId = 'switch-other-user';
     await db.delete(profiles).where(eq(profiles.userId, otherUserId));
 

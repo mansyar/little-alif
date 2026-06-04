@@ -195,7 +195,7 @@ describe('ParentGate', () => {
     const { ParentGate } = await import('./ParentGate');
     render(<ParentGate onExit={onExit} onSwitchChild={onSwitchChild} disabled />);
 
-    const button = screen.getByLabelText('Parent menu') as HTMLButtonElement;
+    const button = screen.getByLabelText('Parent menu');
     expect(button.disabled).toBe(true);
 
     act(() => {
@@ -288,7 +288,7 @@ describe('ParentGate', () => {
     });
 
     const dialog = screen.getByRole('dialog');
-    const overlay = document.querySelector('[data-radix-dialog-overlay]') as HTMLElement | null;
+    const overlay = document.querySelector<HTMLElement>('[data-radix-dialog-overlay]');
     const dialogClass = dialog.className + ' ' + (overlay?.className ?? '');
     expect(dialogClass).toMatch(/z-60|z-\[60\]/);
   });
