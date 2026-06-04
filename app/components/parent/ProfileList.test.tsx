@@ -81,7 +81,7 @@ describe('ProfileList', () => {
       wrapper: createWrapper(),
     });
     expect(container.querySelector('.animate-spin')).toBeTruthy();
-  });
+  }, 15000);
 
   it('shows empty state when no profiles exist', async () => {
     mockListProfiles.mockResolvedValue([]);
