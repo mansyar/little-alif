@@ -34,10 +34,12 @@ export function LetterGrid({ visibleLetters, currentHarakat }: LetterGridProps) 
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3 p-4">
-        {visibleLetters.map((letter) => (
-          <LetterCard key={letter.letterId} letter={letter} />
-        ))}
+      <div className="flex justify-center px-4 py-4">
+        <div className="grid w-full max-w-lg grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3">
+          {visibleLetters.map((letter) => (
+            <LetterCard key={letter.letterId} letter={letter} />
+          ))}
+        </div>
       </div>
       <LetterDetail visibleLetters={visibleLetters} currentHarakat={currentHarakat} />
     </>
