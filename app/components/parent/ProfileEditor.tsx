@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useI18nContext } from '~/lib/i18n';
+import { useUiStore } from '~/stores/ui-store';
 import { createProfileSchema, updateProfileSchema } from '~/lib/validations/profiles';
 import { createProfileFn, updateProfileFn } from '~/server/profiles';
 import { AvatarPicker } from './AvatarPicker';
@@ -24,6 +25,7 @@ interface ProfileEditorProps {
 export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProps) {
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
+  const pushToast = useUiStore((state) => state.pushToast);
   const [name, setName] = useState(profile?.name ?? '');
   const [avatar, setAvatar] = useState<AvatarKey | null>(profile?.avatar ?? null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -72,6 +74,9 @@ export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProp
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
       onOpenChange(false);
+    },
+    onError: (err: Error) => {
+      pushToast({ variant: 'error', message: err.message ?? 'Could not save.' });
     },
   });
 

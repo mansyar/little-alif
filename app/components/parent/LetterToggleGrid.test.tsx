@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import type { VisibleLetter } from '~/server/letters';
 import { LETTER_IDS } from '~/db/schema';
+import { useUiStore } from '~/stores/ui-store';
 
 const mockProfileId = 'test-profile-id';
 
@@ -176,7 +177,7 @@ describe('LetterToggleGrid', () => {
     });
   });
 
-  it('shows error state when toggleLetterFn fails', async () => {
+  it('pushes error toast when toggleLetterFn fails', async () => {
     mockToggleLetter.mockRejectedValue(new Error('Toggle failed'));
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
@@ -188,9 +189,13 @@ describe('LetterToggleGrid', () => {
     const user = userEvent.setup();
     await user.click(switches[0]!);
 
-    // Wait for debounce to trigger the mutation and error to display
-    const errorMsg = await screen.findByText('Toggle failed');
-    expect(errorMsg).toBeTruthy();
+    // Wait for debounce to trigger the mutation and error toast
+    await waitFor(() => {
+      const toasts = useUiStore.getState().toasts;
+      expect(toasts).toHaveLength(1);
+      expect(toasts[0]!.message).toBe('Toggle failed');
+      expect(toasts[0]!.variant).toBe('error');
+    });
   });
 
   it('debounces rapid toggle clicks: only one server call after multiple clicks within 300ms', async () => {

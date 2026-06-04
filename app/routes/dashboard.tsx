@@ -10,6 +10,7 @@ import { ProfileEditor } from '~/components/parent/ProfileEditor';
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
 import { ErrorBoundary } from '~/components/ui/ErrorBoundary';
 import { useAuthStore } from '~/stores/auth-store';
+import { useUiStore } from '~/stores/ui-store';
 import type { AvatarKey } from '~/db/schema';
 
 interface ProfileCard {
@@ -36,6 +37,7 @@ function DashboardPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const setChildMode = useAuthStore((state) => state.setChildMode);
+  const pushToast = useUiStore((state) => state.pushToast);
   const [signingOut, setSigningOut] = useState(false);
 
   // ProfileEditor state
@@ -54,6 +56,9 @@ function DashboardPage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
       setDeleteProfileId(null);
+    },
+    onError: (err: Error) => {
+      pushToast({ variant: 'error', message: err.message ?? 'Could not save changes.' });
     },
   });
 
@@ -87,8 +92,12 @@ function DashboardPage() {
     try {
       await logoutFn();
       window.location.href = '/';
-    } catch {
+    } catch (err) {
       setSigningOut(false);
+      pushToast({
+        variant: 'error',
+        message: err instanceof Error ? err.message : 'Connection error',
+      });
     }
   }
 

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateProfileFn } from '~/server/profiles';
 import { VOWEL_MODES } from '~/lib/utils/harakat';
 import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
+import { useUiStore } from '~/stores/ui-store';
 
 interface HarakatSelectorProps {
   profileId: string;
@@ -14,6 +14,7 @@ interface HarakatSelectorProps {
 export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelectorProps) {
   const queryClient = useQueryClient();
   const { LL } = useI18nContext();
+  const pushToast = useUiStore((state) => state.pushToast);
 
   const LABELS: Record<VowelMode, string> = {
     none: LL.HARAKAT_PLAIN(),
@@ -21,24 +22,14 @@ export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelector
     kasrah: LL.HARAKAT_KASRAH(),
     dammah: LL.HARAKAT_DAMMAH(),
   };
-  const [mutationError, setMutationError] = useState<string | null>(null);
-
-  // Auto-clear mutation error after 5 seconds
-  useEffect(() => {
-    if (mutationError !== null) {
-      const timer = setTimeout(() => setMutationError(null), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [mutationError]);
 
   const updateMutation = useMutation({
     mutationFn: (vowelMode: VowelMode) => updateProfileFn({ data: { profileId, vowelMode } }),
     onSuccess: () => {
-      setMutationError(null);
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
     onError: (err: Error) => {
-      setMutationError(err.message ?? 'Failed to update vowel mode.');
+      pushToast({ variant: 'error', message: err.message ?? 'Could not update vowel mode.' });
     },
   });
 
@@ -71,9 +62,6 @@ export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelector
           );
         })}
       </RadioGroup.Root>
-
-      {/* Mutation error message */}
-      {mutationError !== null && <p className="mt-1 text-xs text-red-500">{mutationError}</p>}
     </div>
   );
 }

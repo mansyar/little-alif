@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Switch from '@radix-ui/react-switch';
 import { getVisibleLettersFn, toggleLetterFn, bulkToggleLettersFn } from '~/server/letters';
@@ -8,6 +8,7 @@ import { useI18nContext } from '~/lib/i18n';
 import type { VisibleLetter } from '~/server/letters';
 import { useDebouncedCallback } from '~/lib/utils/useDebouncedCallback';
 import type { VowelMode } from '~/lib/utils/harakat';
+import { useUiStore } from '~/stores/ui-store';
 import { HarakatSelector } from './HarakatSelector';
 
 interface LetterToggleGridProps {
@@ -18,15 +19,7 @@ interface LetterToggleGridProps {
 export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps) {
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
-  const [mutationError, setMutationError] = useState<string | null>(null);
-
-  // Auto-clear mutation error after 5 seconds
-  useEffect(() => {
-    if (mutationError !== null) {
-      const timer = setTimeout(() => setMutationError(null), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [mutationError]);
+  const pushToast = useUiStore((state) => state.pushToast);
 
   const {
     data: letters,
@@ -42,12 +35,11 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     mutationFn: ({ letterId, isVisible }: { letterId: LetterId; isVisible: boolean }) =>
       toggleLetterFn({ data: { profileId, letterId, isVisible } }),
     onSuccess: () => {
-      setMutationError(null);
       void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
     onError: (err: Error) => {
-      setMutationError(err.message ?? LL.ERROR_GENERIC());
+      pushToast({ variant: 'error', message: err.message ?? LL.ERROR_GENERIC() });
     },
   });
 
@@ -67,12 +59,11 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     mutationFn: ({ isVisible }: { isVisible: boolean }) =>
       bulkToggleLettersFn({ data: { profileId, letterIds: [...LETTER_IDS], isVisible } }),
     onSuccess: () => {
-      setMutationError(null);
       void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
     onError: (err: Error) => {
-      setMutationError(err.message ?? LL.ERROR_GENERIC());
+      pushToast({ variant: 'error', message: err.message ?? LL.ERROR_GENERIC() });
     },
   });
 
@@ -120,13 +111,6 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
           {LL.LETTERS_HIDE()}
         </button>
       </div>
-
-      {/* Mutation error message */}
-      {mutationError !== null && (
-        <div className="mb-4 rounded-large bg-red-50 p-3 text-center">
-          <p className="text-sm text-red-600">{mutationError}</p>
-        </div>
-      )}
 
       {/* 28-letter grid */}
       <div className="grid grid-cols-4 gap-3 sm:grid-cols-7">

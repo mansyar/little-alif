@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import appCss from '../app.css?url';
 import { I18nClient } from '~/lib/i18n';
+import { ToastContainer } from '~/components/ui/ToastContainer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +61,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body>
         <I18nClient locale="en">{children}</I18nClient>
+        <ToastContainer />
         <Scripts />
       </body>
     </html>

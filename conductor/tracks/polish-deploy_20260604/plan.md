@@ -23,11 +23,11 @@
 
 ## Phase 3: Toast Notifications
 
-- [ ] Task: Create ToastContainer component
-  - [ ] Write tests for ToastContainer (`app/components/ui/ToastContainer.test.tsx`) — verify toasts render, auto-dismiss, dismiss on click
-  - [ ] Implement `app/components/ui/ToastContainer.tsx` — reads `toasts` from `useUiStore`, renders each toast with variant styling (success/error/info), auto-dismiss after 5s, dismiss on click
-  - [ ] Wire ToastContainer into `__root.tsx` — render below main content
-- [ ] Task: Wire toast notifications into server function error handlers
+- [x] Task: Create ToastContainer component
+  - [x] Write tests for ToastContainer (`app/components/ui/ToastContainer.test.tsx`) — verify toasts render, auto-dismiss, dismiss on click
+  - [x] Implement `app/components/ui/ToastContainer.tsx` — reads `toasts` from `useUiStore`, renders each toast with variant styling (success/error/info), auto-dismiss after 5s, dismiss on click
+  - [x] Wire ToastContainer into `__root.tsx` — render below main content
+- [~] Task: Wire toast notifications into server function error handlers
   - [ ] Wire toast in `letters.ts` server functions — toggle failure → Toast: "Could not save"
   - [ ] Wire toast in `profiles.ts` server functions — max 4 → Toast: "Maximum 4 children", save failure → Toast: "Could not save"
   - [ ] Wire toast in `profiles.ts` — vowel mode save failure → Toast: "Could not update vowel mode"
