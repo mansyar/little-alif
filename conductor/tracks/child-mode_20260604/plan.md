@@ -17,7 +17,7 @@
 
 ---
 
-## Phase 2: Server Functions (enableChildModeFn & disableChildModeFn)
+## Phase 2: Server Functions (enableChildModeFn & disableChildModeFn) [checkpoint: 4128bfd]
 
 - [x] Task: Add Zod schemas for child mode operations `7f52a4f`
   - [x] Add `enableChildModeSchema` to `app/lib/validations/auth.ts` `7f52a4f`
