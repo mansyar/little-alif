@@ -8,6 +8,24 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['./vitest-setup.ts'],
     include: ['app/**/*.{test,spec}.{ts,tsx}'],
+    // Default Vitest test timeout is 5s. Under the default worker pool, tests
+    // that do a full DOM render with multiple async queries (e.g. route tests
+    // waiting for `findByText` after a TanStack Query resolution) can exceed
+    // 5s when the worker is contended. 30s is a pragmatic ceiling that still
+    // catches genuine hangs while absorbing worker-pool scheduling jitter.
+    testTimeout: 30000,
+    // Cap concurrent workers. The default uses all available CPUs which causes
+    // tests that do full DOM renders (jsdom + React Query) to starve each
+    // other when many test files run in the same pool. Limiting to 3 keeps
+    // wall-clock time reasonable while reducing per-test contention.
+    maxConcurrency: 10,
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        maxThreads: 3,
+        minThreads: 1,
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
