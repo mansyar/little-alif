@@ -9,7 +9,7 @@ import {
   type ToggleLetterInput,
   type BulkToggleLettersInput,
 } from '~/lib/validations/letters';
-import { validateSessionFn } from './auth-fns';
+import { authorizeChildAccess, requireParentSession, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
@@ -156,6 +156,7 @@ export const getVisibleLettersFn = createServerFn({ method: 'GET' })
     if (session === null) {
       throw new Error('Unauthenticated.');
     }
+    authorizeChildAccess(session, data.profileId);
     const db = getDb();
     return getVisibleLetters(db, session.user.id, data.profileId);
   });
@@ -168,9 +169,7 @@ export const toggleLetterFn = createServerFn({ method: 'POST' })
   .inputValidator(toggleLetterSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return toggleLetter(db, session.user.id, data);
   });
@@ -183,9 +182,7 @@ export const bulkToggleLettersFn = createServerFn({ method: 'POST' })
   .inputValidator(bulkToggleLettersSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return bulkToggleLetters(db, session.user.id, data);
   });

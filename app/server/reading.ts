@@ -4,7 +4,7 @@ import { getDb, type DbClient } from '~/db';
 import { profiles, letters, letterToggles } from '~/db/schema';
 import { type VowelMode } from '~/lib/utils/harakat';
 import { getReadingDataSchema } from '~/lib/validations/reading';
-import { validateSessionFn } from './auth-fns';
+import { authorizeChildAccess, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
@@ -93,6 +93,7 @@ export const getReadingDataFn = createServerFn({ method: 'GET' })
     if (session === null) {
       throw new Error('Unauthenticated.');
     }
+    authorizeChildAccess(session, data.profileId);
     const db = getDb();
     return getReadingData(db, session.user.id, data.profileId);
   });

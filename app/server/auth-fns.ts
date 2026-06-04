@@ -168,6 +168,60 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
     return null;
   });
 
+/**
+ * Verify that a child session is allowed to access the given profile.
+ *
+ * When the session is a child-mode session (has `isChild: true`), this
+ * ensures the requested `profileId` matches the `childProfileId` in the
+ * session — preventing a child from accessing another child's data.
+ *
+ * When the session is a parent JWT session, this check is a no-op (the
+ * existing profile-ownership checks in each function handle authorization).
+ *
+ * Throws `'Unauthorized.'` on mismatch. Returns `void` on success.
+ */
+/**
+ * Verify that the session is a parent JWT session, rejecting child-mode
+ * sessions. Parent-only operations (create/update/delete profile, toggle
+ * letters, etc.) must call this before proceeding.
+ *
+ * Throws `'Unauthorized. Parent session required.'` for child sessions.
+ * Returns `void` on success.
+ */
+export function requireParentSession(
+  session: { user: Record<string, unknown> } | null,
+): asserts session is { user: { id: string } } {
+  if (session === null) {
+    throw new Error('Unauthenticated.');
+  }
+  if (session.user.isChild === true) {
+    throw new Error('Unauthorized. Parent session required.');
+  }
+}
+
+/**
+ * Verify that a child session is allowed to access the given profile.
+ *
+ * When the session is a child-mode session (has `isChild: true`), this
+ * ensures the requested `profileId` matches the `childProfileId` in the
+ * session — preventing a child from accessing another child's data.
+ *
+ * When the session is a parent JWT session, this check is a no-op (the
+ * existing profile-ownership checks in each function handle authorization).
+ *
+ * Throws `'Unauthorized.'` on mismatch. Returns `void` on success.
+ */
+export function authorizeChildAccess(
+  session: { user: Record<string, unknown> },
+  profileId: string,
+): void {
+  if (session.user.isChild === true) {
+    if (session.user.childProfileId !== profileId) {
+      throw new Error('Unauthorized.');
+    }
+  }
+}
+
 // ─── Child Mode Helpers ───────────────────────────────────────────────
 
 /**
@@ -193,9 +247,7 @@ export const enableChildModeFn = createServerFn({ method: 'POST' })
   .inputValidator(enableChildModeSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
 
     const db = getDb();
     const { name, avatar } = await enableChildMode(db, session.user.id, data.profileId);
@@ -221,9 +273,7 @@ export const disableChildModeFn = createServerFn({ method: 'POST' })
   .inputValidator(z.object({}).optional())
   .handler(async () => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
 
     setCookie('child_mode', '', {
       maxAge: 0,

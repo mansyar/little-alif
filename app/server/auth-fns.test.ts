@@ -111,3 +111,57 @@ describe('getAuth singleton', () => {
     expect(a).toBeDefined();
   });
 });
+
+describe('requireParentSession', () => {
+  it('throws "Unauthenticated." when session is null', async () => {
+    const { requireParentSession } = await import('./auth-fns');
+    expect(() => requireParentSession(null)).toThrow('Unauthenticated.');
+  });
+
+  it('throws "Parent session required." when session is a child session', async () => {
+    const { requireParentSession } = await import('./auth-fns');
+    const childSession = {
+      user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
+      session: { token: '' },
+    };
+    expect(() => requireParentSession(childSession)).toThrow(
+      'Unauthorized. Parent session required.',
+    );
+  });
+
+  it('passes (no throw) for a valid parent JWT session', async () => {
+    const { requireParentSession } = await import('./auth-fns');
+    const parentSession = {
+      user: { id: 'parent-1', email: 'parent@example.com', name: 'Parent' },
+      session: { token: 'abc' },
+    };
+    expect(() => requireParentSession(parentSession)).not.toThrow();
+  });
+});
+
+describe('authorizeChildAccess', () => {
+  it('passes when child session profileId matches', async () => {
+    const { authorizeChildAccess } = await import('./auth-fns');
+    const childSession = {
+      user: { id: 'parent-1', isChild: true, childProfileId: 'child-1' },
+    };
+    expect(() => authorizeChildAccess(childSession, 'child-1')).not.toThrow();
+  });
+
+  it('throws "Unauthorized." when child session profileId mismatches', async () => {
+    const { authorizeChildAccess } = await import('./auth-fns');
+    const childSession = {
+      user: { id: 'parent-1', isChild: true, childProfileId: 'child-1' },
+    };
+    expect(() => authorizeChildAccess(childSession, 'child-2')).toThrow('Unauthorized.');
+  });
+
+  it('passes (no-op) for a parent session', async () => {
+    const { authorizeChildAccess } = await import('./auth-fns');
+    const parentSession = {
+      user: { id: 'parent-1', email: 'parent@example.com' },
+    };
+    // profileId is irrelevant for parent sessions — ownership checks happen elsewhere
+    expect(() => authorizeChildAccess(parentSession, 'any-id')).not.toThrow();
+  });
+});

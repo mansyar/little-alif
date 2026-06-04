@@ -10,7 +10,7 @@ import {
   getActiveProfileSchema,
 } from '~/lib/validations/profiles';
 import type { CreateProfileInput, UpdateProfileInput } from '~/lib/validations/profiles';
-import { validateSessionFn } from './auth-fns';
+import { authorizeChildAccess, requireParentSession, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
@@ -167,9 +167,7 @@ export const listProfilesFn = createServerFn({ method: 'GET' })
   .inputValidator(z.object({}).optional())
   .handler(async () => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return listProfiles(db, session.user.id);
   });
@@ -181,9 +179,7 @@ export const createProfileFn = createServerFn({ method: 'POST' })
   .inputValidator(createProfileSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return createProfile(db, session.user.id, data);
   });
@@ -195,9 +191,7 @@ export const updateProfileFn = createServerFn({ method: 'POST' })
   .inputValidator(updateProfileSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return updateProfile(db, session.user.id, data);
   });
@@ -209,9 +203,7 @@ export const deleteProfileFn = createServerFn({ method: 'POST' })
   .inputValidator(deleteProfileSchema)
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
-    if (session === null) {
-      throw new Error('Unauthenticated.');
-    }
+    requireParentSession(session);
     const db = getDb();
     return deleteProfile(db, session.user.id, data.profileId);
   });
@@ -228,6 +220,7 @@ export const getActiveProfileFn = createServerFn({ method: 'GET' })
     if (session === null) {
       throw new Error('Unauthenticated.');
     }
+    authorizeChildAccess(session, data.profileId);
     const db = getDb();
     return getActiveProfile(db, session.user.id, data.profileId);
   });
