@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - DATABASE_URL=${DATABASE_URL:-file:./data/little-alif.db}
+      - CHILD_MODE_SECRET=${CHILD_MODE_SECRET:-}
+    volumes:
+      - little-alif-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  little-alif-data:

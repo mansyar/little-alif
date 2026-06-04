@@ -1,5 +1,9 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { signChildModeCookie, verifyChildModeCookie, type ChildModePayload } from './child-mode';
+import {
+  signChildModeCookie,
+  verifyChildModeCookie,
+  type ChildModePayload,
+} from './child-mode.server';
 
 // Set the secret before any imports run
 const TEST_SECRET = 'test-secret-thirty-two-chars-long!!';

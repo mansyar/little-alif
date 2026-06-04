@@ -42,7 +42,8 @@
     "tailwind-merge": "^2.6.0",
     "vinxi": "^0.5.1",
     "zod": "^3.24.1",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "kysely": "^0.28.17"
   },
   "devDependencies": {
     "@google-cloud/text-to-speech": "^6.4.1",

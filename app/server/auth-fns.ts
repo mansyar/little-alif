@@ -106,7 +106,7 @@ export async function buildChildSession(
   user: { id: string; email: string; isChild: true; childProfileId: string };
   session: { token: string; expiresAt: string; userId: string };
 } | null> {
-  const { verifyChildModeCookie } = await import('~/lib/utils/child-mode');
+  const { verifyChildModeCookie } = await import('~/lib/utils/child-mode.server');
   const payload = verifyChildModeCookie(cookieValue);
   if (!payload) return null;
 
@@ -240,7 +240,7 @@ export const enableChildModeFn = createServerFn({ method: 'POST' })
     const db = getDb();
     const { name, avatar } = await enableChildMode(db, session.user.id, data.profileId);
 
-    const { signChildModeCookie } = await import('~/lib/utils/child-mode');
+    const { signChildModeCookie } = await import('~/lib/utils/child-mode.server');
     const cookieValue = signChildModeCookie(data.profileId, name, avatar);
     setCookie('child_mode', cookieValue, {
       httpOnly: false,

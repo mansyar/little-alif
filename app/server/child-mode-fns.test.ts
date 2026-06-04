@@ -6,7 +6,7 @@ import { profiles, letterToggles, LETTER_IDS } from '~/db/schema';
 import * as authSchema from '~/db/auth-schema';
 import type { DbClient } from '~/db';
 import { enableChildMode, buildChildSession } from './auth-fns';
-import { signChildModeCookie } from '~/lib/utils/child-mode';
+import { signChildModeCookie } from '~/lib/utils/child-mode.server';
 
 // ─── Setup ────────────────────────────────────────────────────────────
 

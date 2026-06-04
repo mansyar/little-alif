@@ -212,7 +212,7 @@ export const deleteProfileFn = createServerFn({ method: 'POST' })
     // Clean up child-mode cookie if it references the deleted profile
     const childCookie = getCookie('child_mode');
     if (childCookie) {
-      const { verifyChildModeCookie } = await import('~/lib/utils/child-mode');
+      const { verifyChildModeCookie } = await import('~/lib/utils/child-mode.server');
       const payload = verifyChildModeCookie(childCookie);
       if (payload?.profileId === data.profileId) {
         setCookie('child_mode', '', { maxAge: 0, path: '/' });
