@@ -13,7 +13,7 @@
   - [x] Implement `verifyChildModeCookie(cookieValue): ChildModePayload | null`
   - [x] Add `CHILD_MODE_SECRET` env var fallback logic (falls back to `BETTER_AUTH_SECRET`)
   - [x] Verify tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Cookie Signing Utility' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Cookie Signing Utility' (Protocol in workflow.md)
 
 ---
 
