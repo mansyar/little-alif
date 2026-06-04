@@ -14,7 +14,7 @@ export function ReadingCell({ glyph, letterId, vowelMode, letterChar }: ReadingC
 
   const handleClick = () => {
     setFlashed(true);
-    void audioEngine.speak(letterChar, vowelMode).finally(() => {
+    void audioEngine.speak(letterId, vowelMode, letterChar).finally(() => {
       setFlashed(false);
     });
   };

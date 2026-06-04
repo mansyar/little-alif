@@ -1,312 +1,297 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { AudioEngine, type SpeechSynthesisAdapter } from './audio-engine';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-/**
- * A plain-object representation of SpeechSynthesisUtterance used in tests so we
- * can avoid creating real SpeechSynthesisUtterance instances (which require a
- * browser API not available in the Node test environment).
- */
-interface MockUtterance {
-  text: string;
-  rate: number;
-  voice: SpeechSynthesisVoice | null;
-  onend: (() => void) | null;
-  onerror: (() => void) | null;
-  onpause: (() => void) | null;
-  onresume: (() => void) | null;
-  onstart: (() => void) | null;
-  onboundary: (() => void) | null;
-  onmark: (() => void) | null;
-  pitch: number;
-  volume: number;
-  lang: string;
-}
-
-/** Type guard to access MockUtterance properties from a SpeechSynthesisUtterance. */
-function asMock(u: SpeechSynthesisUtterance | undefined): MockUtterance | undefined {
-  return u as unknown as MockUtterance | undefined;
-}
-
-/** Convenience: retrieve the most recent utterance as a MockUtterance. */
-function lastUtterance(adapter: ReturnType<typeof createMockAdapter>): MockUtterance {
-  return asMock(adapter.__spokenUtterances[adapter.__spokenUtterances.length - 1])!;
-}
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { AudioEngine } from './audio-engine';
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function createMockVoice(overrides: Partial<SpeechSynthesisVoice> = {}): SpeechSynthesisVoice {
+function createMockAudio() {
+  let endedHandler: (() => void) | null = null;
+  let errorHandler: (() => void) | null = null;
+  let currentSrc = '';
+
+  const audio = {
+    play: vi.fn(() => Promise.resolve()),
+    pause: vi.fn(),
+    addEventListener: vi.fn((event: string, handler: EventListener) => {
+      if (event === 'ended') endedHandler = handler as () => void;
+      if (event === 'error') errorHandler = handler as () => void;
+    }),
+    removeEventListener: vi.fn(),
+    set src(value: string) {
+      currentSrc = value;
+    },
+    get src() {
+      return currentSrc;
+    },
+    currentTime: 0,
+  };
+
   return {
-    lang: 'ar-SA',
-    name: 'Mock Arabic Voice',
-    voiceURI: 'mock-ar',
-    default: false,
-    localService: true,
-    ...overrides,
+    audio,
+    setSrc(value: string) {
+      currentSrc = value;
+    },
+    triggerEnded: () => endedHandler?.(),
+    triggerError: () => errorHandler?.(),
   };
 }
 
-interface MockAdapter extends SpeechSynthesisAdapter {
-  __spokenUtterances: SpeechSynthesisUtterance[];
-}
+function installMockEnvironment() {
+  // Mock Audio
+  const audioMock = createMockAudio();
+  const origAudio = globalThis.Audio;
+  const MockAudio = vi.fn((url?: string) => {
+    if (url) audioMock.setSrc(url);
+    return audioMock.audio;
+  }) as unknown as typeof Audio & { prototype: { play: () => Promise<void> } };
+  MockAudio.prototype.play = vi.fn(() => Promise.resolve());
+  globalThis.Audio = MockAudio;
 
-/**
- * Create a controllable mock SpeechSynthesisAdapter.
- *
- * The `speak` mock stores a reference to the most recently spoken utterance
- * so tests can invoke its `onend` / `onerror` callbacks to simulate the end
- * (or error) of speech.
- */
-function createMockAdapter(): MockAdapter {
-  const spokenUtterances: SpeechSynthesisUtterance[] = [];
+  // Mock SpeechSynthesis
+  let onvoiceschanged: (() => void) | null = null;
 
-  const speak: SpeechSynthesisAdapter['speak'] = (utterance) => {
-    spokenUtterances.push(utterance);
-  };
+  const utteranceInstances: {
+    text: string;
+    rate: number;
+    lang: string;
+    voice: SpeechSynthesisVoice | null;
+    onend: (() => void) | null;
+    onerror: (() => void) | null;
+  }[] = [];
 
-  const createUtterance: SpeechSynthesisAdapter['createUtterance'] = (text) => {
-    return {
-      text,
+  const MockUtterance = vi.fn((text?: string) => {
+    const instance = {
+      text: text ?? '',
       rate: 1,
-      voice: null,
-      onend: null,
-      onerror: null,
-      onpause: null,
-      onresume: null,
-      onstart: null,
-      onboundary: null,
-      onmark: null,
-      pitch: 1,
-      volume: 1,
       lang: '',
-    } as unknown as SpeechSynthesisUtterance;
+      voice: null,
+      onend: null as (() => void) | null,
+      onerror: null as (() => void) | null,
+    };
+    utteranceInstances.push(instance);
+    return instance;
+  }) as unknown as typeof SpeechSynthesisUtterance;
+  globalThis.SpeechSynthesisUtterance = MockUtterance;
+
+  const synthMock = {
+    speak: vi.fn(),
+    cancel: vi.fn(),
+    getVoices: vi.fn(() => [] as SpeechSynthesisVoice[]),
+    get onvoiceschanged() {
+      return onvoiceschanged;
+    },
+    set onvoiceschanged(h: (() => void) | null) {
+      onvoiceschanged = h;
+    },
   };
 
+  globalThis.window = {
+    speechSynthesis: synthMock,
+  } as unknown as Window & typeof globalThis;
+
   return {
-    getVoices: vi.fn(() => []),
-    createUtterance: vi.fn((text: string) => createUtterance(text)),
-    speak: vi.fn((utterance: SpeechSynthesisUtterance) => speak(utterance)),
-    cancel: vi.fn(),
-    speaking: false,
-    paused: false,
-    onvoiceschanged: null,
-    __spokenUtterances: spokenUtterances,
+    audioMock,
+    origAudio,
+    synthMock,
+    MockUtterance,
+    utteranceInstances,
   };
 }
 
-// ---------------------------------------------------------------------------
-// SpeechSynthesisAdapter – mock & contract
-// ---------------------------------------------------------------------------
-
-describe('SpeechSynthesisAdapter mock', () => {
-  it('creates a controllable mock adapter', () => {
-    const adapter = createMockAdapter();
-    expect(typeof adapter.getVoices).toBe('function');
-    expect(typeof adapter.speak).toBe('function');
-    expect(typeof adapter.cancel).toBe('function');
-    expect(adapter.speaking).toBe(false);
-    expect(adapter.paused).toBe(false);
-  });
-
-  it('createUtterance returns an object with text and event hooks', () => {
-    const adapter = createMockAdapter();
-    const utterance = adapter.createUtterance('بَ');
-    const mock = asMock(utterance)!;
-    expect(mock.text).toBe('بَ');
-    expect(mock.onend).toBeNull();
-    expect(mock.onerror).toBeNull();
-  });
-
-  it('speak stores the utterance for later inspection', () => {
-    const adapter = createMockAdapter();
-    const utterance = adapter.createUtterance('test');
-    adapter.speak(utterance);
-    expect(adapter.__spokenUtterances).toHaveLength(1);
-    expect(adapter.__spokenUtterances[0]).toBe(utterance);
-  });
-});
+function restoreEnvironment(origAudio: typeof Audio | undefined) {
+  if (origAudio) {
+    globalThis.Audio = origAudio;
+  } else {
+    delete (globalThis as Record<string, unknown>).Audio;
+  }
+  delete (globalThis as Record<string, unknown>).window;
+  delete (globalThis as Record<string, unknown>).SpeechSynthesisUtterance;
+}
 
 // ---------------------------------------------------------------------------
 // AudioEngine – isSupported / graceful degradation
 // ---------------------------------------------------------------------------
 
 describe('AudioEngine isSupported', () => {
-  it('is true when constructed with a valid adapter', () => {
-    const adapter = createMockAdapter();
-    const engine = new AudioEngine(adapter);
-    expect(engine.isSupported).toBe(true);
-  });
-
-  it('is false when no adapter is available', () => {
-    // Pass nothing (undefined) so the constructor falls through to
-    // createBrowserAdapter() which returns null in a Node environment.
+  it('is false in Node environment (no Audio constructor)', () => {
     const engine = new AudioEngine();
     expect(engine.isSupported).toBe(false);
   });
 
-  it('speak resolves silently when SpeechSynthesis is unavailable', async () => {
+  it('is true when Audio constructor is available', () => {
+    const { origAudio } = installMockEnvironment();
     const engine = new AudioEngine();
-    await expect(engine.speak('ب', 'fathah')).resolves.toBeUndefined();
+    expect(engine.isSupported).toBe(true);
+    restoreEnvironment(origAudio);
+  });
+
+  it('speak resolves silently when Audio is unavailable', async () => {
+    const engine = new AudioEngine();
+    await expect(engine.speak('alif', 'fathah', 'ا')).resolves.toBeUndefined();
   });
 });
 
 // ---------------------------------------------------------------------------
-// AudioEngine – voice selection
+// AudioEngine – speak MP3 path
 // ---------------------------------------------------------------------------
 
-describe('AudioEngine voice selection', () => {
-  let adapter: MockAdapter;
+describe('AudioEngine speak – MP3 path', () => {
   let engine: AudioEngine;
-  let mockGetVoices: ReturnType<typeof vi.fn>;
+  let env: ReturnType<typeof installMockEnvironment>;
 
   beforeEach(() => {
-    adapter = createMockAdapter();
-    mockGetVoices = vi.fn(() => []);
-    adapter.getVoices = mockGetVoices;
-    engine = new AudioEngine(adapter);
+    env = installMockEnvironment();
+    engine = new AudioEngine();
   });
 
-  it('prefers ar-SA over ar-XA', () => {
-    const arXA = createMockVoice({ lang: 'ar-XA', name: 'Arabic XA' });
-    const arSA = createMockVoice({ lang: 'ar-SA', name: 'Arabic SA' });
-    adapter.getVoices = vi.fn(() => [arXA, arSA]);
-
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('ar-SA');
+  afterEach(() => {
+    restoreEnvironment(env.origAudio);
   });
 
-  it('prefers ar-XA over any other Arabic voice', () => {
-    const arEG = createMockVoice({ lang: 'ar-EG', name: 'Arabic Egypt' });
-    const arXA = createMockVoice({ lang: 'ar-XA', name: 'Arabic XA' });
-    adapter.getVoices = vi.fn(() => [arEG, arXA]);
-
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('ar-XA');
+  it('constructs correct URL with letterId and vowelMode', () => {
+    void engine.speak('ba', 'fathah', 'ب');
+    expect(env.audioMock.audio.src).toContain('/audio/letters/ba_fathah.mp3');
   });
 
-  it('falls back to any Arabic voice when ar-SA and ar-XA are absent', () => {
-    const arEG = createMockVoice({ lang: 'ar-EG', name: 'Arabic Egypt' });
-    adapter.getVoices = vi.fn(() => [arEG]);
-
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('ar-EG');
+  it('constructs correct URL with none vowelMode (no suffix)', () => {
+    void engine.speak('alif', 'none', 'ا');
+    expect(env.audioMock.audio.src).toContain('/audio/letters/alif.mp3');
   });
 
-  it('falls back to the default voice when no Arabic voice is available', () => {
-    const defaultVoice = createMockVoice({
-      lang: 'en-US',
-      name: 'Default',
-      default: true,
-    });
-    const otherVoice = createMockVoice({ lang: 'fr-FR', name: 'French' });
-    adapter.getVoices = vi.fn(() => [otherVoice, defaultVoice]);
+  it('returns a Promise that resolves when audio ends', async () => {
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
 
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('en-US');
-  });
-
-  it('falls back to the first voice when no default exists and no Arabic', () => {
-    const firstVoice = createMockVoice({ lang: 'en-US', name: 'First US' });
-    const secondVoice = createMockVoice({ lang: 'fr-FR', name: 'French' });
-    adapter.getVoices = vi.fn(() => [firstVoice, secondVoice]);
-
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('en-US');
-  });
-
-  it('caches the selected voice (calls getVoices only once)', () => {
-    const arSA = createMockVoice({ lang: 'ar-SA' });
-    const mockGetVoices = vi.fn(() => [arSA]);
-    adapter.getVoices = mockGetVoices;
-
-    void engine.speak('ب', 'fathah');
-    void engine.speak('ت', 'kasrah');
-    void engine.speak('ث', 'dammah');
-
-    expect(mockGetVoices.mock.calls).toHaveLength(1);
-  });
-
-  it('resetVoiceScan allows re-scanning voices', () => {
-    const arSA = createMockVoice({ lang: 'ar-SA' });
-    const mockGetVoices = vi.fn(() => [arSA]);
-    adapter.getVoices = mockGetVoices;
-
-    void engine.speak('ب', 'fathah');
-    expect(mockGetVoices.mock.calls).toHaveLength(1);
-
-    engine.resetVoiceScan();
-    void engine.speak('ب', 'fathah');
-    expect(mockGetVoices.mock.calls).toHaveLength(2);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// AudioEngine – speak behaviour
-// ---------------------------------------------------------------------------
-
-describe('AudioEngine speak', () => {
-  let adapter: MockAdapter;
-  let engine: AudioEngine;
-  beforeEach(() => {
-    adapter = createMockAdapter();
-    adapter.getVoices = vi.fn(() => [createMockVoice({ lang: 'ar-SA' })]);
-    engine = new AudioEngine(adapter);
-  });
-
-  it('creates an utterance with the composed letter text', () => {
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).text).toBe('بَ');
-  });
-
-  it('sets utterance rate to 0.85', () => {
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).rate).toBe(0.85);
-  });
-
-  it('sets the selected voice on the utterance', () => {
-    void engine.speak('ب', 'fathah');
-    expect(lastUtterance(adapter).voice?.lang).toBe('ar-SA');
-  });
-
-  it('returns a Promise that resolves when the utterance ends', async () => {
-    const speakPromise = engine.speak('ب', 'fathah');
-
-    asMock(adapter.__spokenUtterances[0])!.onend!();
+    env.audioMock.triggerEnded();
 
     await expect(speakPromise).resolves.toBeUndefined();
   });
 
-  it('cancels previous utterance before starting a new one', () => {
-    void engine.speak('ب', 'fathah');
-    void engine.speak('ت', 'kasrah');
+  it('cancels previous audio before starting a new one', () => {
+    void engine.speak('ba', 'fathah', 'ب');
+    void engine.speak('ta', 'kasrah', 'ت');
 
-    expect(vi.mocked(adapter).cancel.mock.calls).toHaveLength(1);
-    expect(adapter.__spokenUtterances).toHaveLength(2);
+    expect(env.audioMock.audio.pause).toHaveBeenCalledTimes(1);
+    expect(env.audioMock.audio.play).toHaveBeenCalledTimes(2);
   });
 
-  it('resolves silently when onerror fires (no throw)', async () => {
-    const speakPromise = engine.speak('ب', 'fathah');
-
-    asMock(adapter.__spokenUtterances[0])!.onerror!();
-
-    await expect(speakPromise).resolves.toBeUndefined();
-  });
-
-  it('cancel() invokes adapter cancel and clears internal reference', () => {
-    void engine.speak('ب', 'fathah');
+  it('cancel() pauses audio and clears reference', () => {
+    void engine.speak('ba', 'fathah', 'ب');
     engine.cancel();
 
-    expect(vi.mocked(adapter).cancel.mock.calls).toHaveLength(1);
+    expect(env.audioMock.audio.pause).toHaveBeenCalledTimes(1);
+    expect(env.audioMock.audio.currentTime).toBe(0);
 
-    // After cancel, a new speak call should not trigger another cancel
-    // (since internal state was cleared)
-    void engine.speak('ت', 'dammah');
-    expect(vi.mocked(adapter).cancel.mock.calls).toHaveLength(1);
+    // After cancel, a new speak should play fresh audio
+    vi.clearAllMocks();
+    void engine.speak('ba', 'none', 'ب');
+    expect(env.audioMock.audio.src).toContain('/audio/letters/ba.mp3');
+  });
+
+  it('cancel() resolves the pending speak promise', async () => {
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    engine.cancel();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// AudioEngine – Web Speech fallback
+// ---------------------------------------------------------------------------
+
+describe('AudioEngine speak – Web Speech fallback', () => {
+  let engine: AudioEngine;
+  let env: ReturnType<typeof installMockEnvironment>;
+
+  beforeEach(() => {
+    env = installMockEnvironment();
+    engine = new AudioEngine();
+  });
+
+  afterEach(() => {
+    restoreEnvironment(env.origAudio);
+  });
+
+  it('falls back to Web Speech when play() rejects (autoplay block)', async () => {
+    // Simulate browser blocking the first play() call
+    env.audioMock.audio.play = vi.fn(() => Promise.reject(new Error('play blocked')));
+
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+
+    // play().catch(onMp3Fail) runs as a microtask — drain the queue
+    // before checking synchronous side effects
+    await Promise.resolve();
+
+    // Fallback should have been triggered by the catch handler
+    expect(env.synthMock.speak).toHaveBeenCalledTimes(1);
+    expect(env.utteranceInstances).toHaveLength(1);
+    expect(env.utteranceInstances[0]!.text).toBe('بَ');
+
+    env.utteranceInstances[0]!.onend?.();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+
+  it('falls back to Web Speech when MP3 errors', async () => {
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    env.audioMock.triggerError();
+
+    // Fallback created a Web Speech utterance
+    expect(env.synthMock.speak).toHaveBeenCalledTimes(1);
+    expect(env.utteranceInstances).toHaveLength(1);
+    expect(env.utteranceInstances[0]!.text).toBe('بَ');
+
+    // Resolve the fallback
+    env.utteranceInstances[0]!.onend?.();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+
+  it('fallback sets rate 0.85 and lang ar-SA', async () => {
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    env.audioMock.triggerError();
+
+    expect(env.utteranceInstances[0]!.rate).toBe(0.85);
+    expect(env.utteranceInstances[0]!.lang).toBe('ar-SA');
+
+    env.utteranceInstances[0]!.onend?.();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+
+  it('fallback resolves when utterance.onerror fires', async () => {
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    env.audioMock.triggerError();
+
+    env.utteranceInstances[0]!.onerror?.();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+
+  it('fallback uses available Arabic voice when found', async () => {
+    // Reinstall with Arabic voice available
+    restoreEnvironment(env.origAudio);
+    env = installMockEnvironment();
+    env.synthMock.getVoices.mockReturnValue([
+      { lang: 'en-US', name: 'Test US' },
+      { lang: 'ar-SA', name: 'Test Arabic' },
+    ] as SpeechSynthesisVoice[]);
+    engine = new AudioEngine();
+
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    env.audioMock.triggerError();
+
+    expect(env.utteranceInstances[0]!.voice?.lang).toBe('ar-SA');
+
+    env.utteranceInstances[0]!.onend?.();
+    await expect(speakPromise).resolves.toBeUndefined();
+  });
+
+  it('fallback resolves silently when SpeechSynthesis is unavailable', async () => {
+    // Remove SpeechSynthesis from window mock
+    delete (globalThis.window as unknown as Record<string, unknown>).speechSynthesis;
+
+    const speakPromise = engine.speak('ba', 'fathah', 'ب');
+    env.audioMock.triggerError();
+
+    // No fallback possible → resolves silently
+    await expect(speakPromise).resolves.toBeUndefined();
   });
 });
 
@@ -315,21 +300,32 @@ describe('AudioEngine speak', () => {
 // ---------------------------------------------------------------------------
 
 describe('AudioEngine dispose', () => {
-  it('cancels and clears the adapter reference', () => {
-    const adapter = createMockAdapter();
-    const engine = new AudioEngine(adapter);
+  let engine: AudioEngine;
+  let env: ReturnType<typeof installMockEnvironment>;
 
+  beforeEach(() => {
+    env = installMockEnvironment();
+    engine = new AudioEngine();
+  });
+
+  afterEach(() => {
+    restoreEnvironment(env.origAudio);
+  });
+
+  it('cancels current playback', () => {
+    void engine.speak('ba', 'fathah', 'ب');
     engine.dispose();
 
-    expect(vi.mocked(adapter).cancel.mock.calls).toHaveLength(1);
+    expect(env.audioMock.audio.pause).toHaveBeenCalledTimes(1);
+  });
+
+  it('makes isSupported return false', () => {
+    engine.dispose();
     expect(engine.isSupported).toBe(false);
   });
 
   it('speak resolves silently after dispose', async () => {
-    const adapter = createMockAdapter();
-    const engine = new AudioEngine(adapter);
-
     engine.dispose();
-    await expect(engine.speak('ب', 'fathah')).resolves.toBeUndefined();
+    await expect(engine.speak('ba', 'fathah', 'ب')).resolves.toBeUndefined();
   });
 });

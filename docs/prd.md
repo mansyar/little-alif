@@ -34,8 +34,8 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Letter Toggle Mgmt**   | ✅ Complete | ON/OFF switches per letter per child. See [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                                          |
 | **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                  |
 | **Child Letter Grid**    | ✅ Complete | Touch grid, audio playback, empty state, ProfileBadge, disabled Reading Practice button. See [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
-| **Audio Service**        | ✅ Complete | Web Speech API pronunciation. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                    |
-| **Audio Preloader**      | ✅ Complete | Idle-time voice warm-up via `requestIdleCallback`. See [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                           |
+| **Audio Service**        | ✅ Complete | Hybrid: pre-recorded MP3 (Google Cloud TTS) + Web Speech fallback. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                               |
+| **Audio Generation**     | ✅ Complete | Build-time script generates 112 MP3 files via Google Cloud TTS (`ar-XA`). See [`hybrid-audio_20260604`](../conductor/archive/audio-preloader_20260602/)                       |
 | **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
 | **Child Mode**           | ✅ Complete | Cookie-based auth bypass for kids. See [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                                                     |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                      |
@@ -101,7 +101,7 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 - **Radix UI for accessible primitives.** Unstyled, accessible components for the parent dashboard: Switch (letter toggles), Dialog (profile editor), and future interactive elements.
 - **Lucide for icons.** Lightweight, consistent icon library for UI affordances (speaker, lock, edit, toggle indicators).
 - **SQLite.** Single-file database, mounted as a Docker volume. No database service needed.
-- **Web Speech API for pronunciation.** TTS-based audio with singleton `AudioEngine` — no audio file management needed. Voice selection prefers Arabic (`ar-SA` > `ar-XA`) with graceful degradation.
+- **Hybrid audio: pre-recorded MP3 + Web Speech fallback.** Primary playback uses Google Cloud TTS MP3 files (`ar-XA`) for consistent, cross-browser quality. Web Speech API provides silent fallback on file-load failures. Build-time script generates 112 files (28 letters × 4 harakat).
 
 ---
 
@@ -162,14 +162,14 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 
 ### Module 6: Audio Engine (Client-Side)
 
-| ID      | Requirement                                                                                                             | Priority |
-| ------- | ----------------------------------------------------------------------------------------------------------------------- | -------- |
-| REQ-6.1 | Audio playback via `AudioEngine.speak(letterChar, vowelMode)` using Web Speech API (SpeechSynthesis).                   | P0       |
-| REQ-6.2 | Pronunciation text built via `composeLetter()` — matches the harakat currently displayed.                               | P0       |
-| REQ-6.3 | Voice selection prefers Arabic (`ar-SA` > `ar-XA` > any `ar-*` > browser default).                                      | P0       |
-| REQ-6.4 | Speaking rate set to 0.85 (slower for children). Rapid successive `speak()` calls cancel the previous utterance first.  | P0       |
-| REQ-6.5 | Graceful degradation: if `SpeechSynthesis` is unavailable, `speak()` resolves silently — no error state, no UI clutter. | P0       |
-| REQ-6.6 | Idle-time voice preloading (via `requestIdleCallback`) warms up the SpeechSynthesis engine for near-instant playback.   | P1       |
+| ID      | Requirement                                                                                                                                                                       | Priority |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| REQ-6.1 | Audio playback via `AudioEngine.speak(letterId, vowelMode, letterChar)` — MP3 primary, Web Speech API fallback.                                                                   | P0       |
+| REQ-6.2 | MP3 URL constructed from `letterId` and `vowelMode` (e.g., `/audio/letters/ba_fathah.mp3`). Playback via `HTMLAudioElement`.                                                      | P0       |
+| REQ-6.3 | On MP3 load/play failure, fall back to Web Speech API: `composeLetter(letterChar, vowelMode)`, `utterance.lang = 'ar-SA'`, `utterance.rate = 0.85`, prefer Arabic (`ar-*`) voice. | P0       |
+| REQ-6.4 | Rapid successive `speak()` calls cancel the previous playback first — the old Promise resolves immediately.                                                                       | P0       |
+| REQ-6.5 | Graceful degradation: if `Audio` API is unavailable, `speak()` resolves silently — no error state, no UI clutter.                                                                 | P0       |
+| REQ-6.6 | MP3 files generated via build-time script using Google Cloud TTS (`ar-XA` Wavenet, FEMALE, `speakingRate: 0.85`). 112 files total (28 letters × 4 harakat).                       | P1       |
 
 ### Module 7: Harakat (Vowel Modes)
 
@@ -214,7 +214,8 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 - Child can change vowel mode independently from their grid view
 - Unicode combining diacritics for dynamic vowel rendering (no separate glyphs)
 - Reading Practice (Iqra' Mode): dynamic groups of 3 letters from toggled-on set, 6-row grid (1 systematic + 5 randomized)
-- Web Speech API pronunciation playback via singleton AudioEngine (TTS-based, no audio files)
+- Hybrid audio playback: pre-recorded MP3 (Google Cloud TTS) primary, Web Speech API fallback
+- Build-time audio generation script (Google Cloud TTS, 112 MP3 files)
 - Child Mode for one profile per device
 - Bilingual parent UI (English + Indonesian)
 

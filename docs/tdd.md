@@ -8,24 +8,24 @@
 
 > Sections marked **✅ Implemented** are delivered in the archived tracks. Sections marked **⬜ Pending** are planned for future tracks.
 
-| §   | Section                              | Status                    | Track                                                                                                                                                                                                                                                                                                                    |
-| --- | ------------------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
-| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                   |
-| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)       |
-| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)       |
-| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)               |
-| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
-| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/) |
-| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
-| 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                   |
-| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                     |
-| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                       |
-| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
-| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
-| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
-| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                        |
-| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                   |
+| §   | Section                              | Status                    | Track                                                                                                                                                                                                                                                                                                                 |
+| --- | ------------------------------------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Project Structure                    | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                  |
+| 2   | Route Design                         | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                |
+| 3   | Server Functions                     | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)    |
+| 4   | Zod Schemas                          | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/), [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)    |
+| 5   | UI Component Library                 | ✅ Implemented            | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/), [`harakat_20260602`](../conductor/archive/harakat_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)            |
+| 6   | State Management (stores scaffolded) | ✅ Implemented (scaffold) | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                  |
+| 7   | Audio Architecture                   | ✅ Implemented            | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/), [`hybrid-audio_20260604`](../conductor/archive/audio-preloader_20260602/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/) |
+| 8   | Database Schema                      | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                  |
+| 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                |
+| 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                  |
+| 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                    |
+| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
+| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
+| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
+| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
+| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
 
 ---
 
@@ -74,8 +74,8 @@ little-alif/
 │   │       └── ConfirmDialog.tsx    # Confirm destructive actions (Radix Dialog)
 │   ├── lib/
 │   │   ├── audio/
-│   │   │   ├── audio-engine.ts      # Web Speech API AudioEngine singleton
-│   │   │   └── preloader.ts         # Idle-time audio preloading
+│   │   │   ├── audio-engine.ts      # Hybrid audio: MP3 primary, Web Speech fallback
+│   │   │   └── audio-engine.test.ts # Unit tests
 │   │   ├── i18n/
 │   │   │   ├── index.ts             # i18n init + locale detection (SSR + client)
 │   │   │   ├── en/
@@ -109,13 +109,18 @@ little-alif/
 │   │   └── middleware.ts            # Auth middleware
 │   └── config.ts                    # App-wide constants
 ├── public/
-│   ├── audio/                       # Pronunciation .mp3 files
-│   │   ├── alif.mp3
-│   │   ├── ba.mp3
-│   │   └── ...
+│   ├── audio/
+│   │   └── letters/                  # Pre-recorded MP3 files (28 letters × 4 harakat)
+│   │       ├── alif.mp3
+│   │       ├── alif_fathah.mp3
+│   │       ├── alif_kasrah.mp3
+│   │       ├── alif_dammah.mp3
+│   │       └── ...
 │   └── images/
 │       └── avatars/                 # Themed avatar SVGs
 ├── drizzle.config.ts
+├── scripts/
+│   └── generate-audio.ts              # Google Cloud TTS — generates 112 MP3 files
 ├── docker/
 │   └── Dockerfile
 ├── docker-compose.yml
@@ -659,44 +664,54 @@ interface UIState {
 
 ### Overview
 
-T-09 implemented a **Web Speech API (SpeechSynthesis)** pronunciation engine that replaces the original pre-recorded MP3 approach from earlier design discussions. TTS-based pronunciation was chosen over file-based audio for Phase 1 — zero file management, instant setup, and acceptable quality for isolated letter pronunciation.
+Audio uses a **hybrid approach**: pre-recorded MP3 files (Google Cloud TTS) as the primary playback mechanism, with Web Speech API (SpeechSynthesis) as a silent fallback. MP3 playback has immediate, consistent latency and works identically across all browsers and operating systems — no voice availability issues, no async loading, no browser-specific bugs.
+
+### Audio Files
+
+112 MP3 files (28 letters × 4 vowel modes) reside in `public/audio/letters/`:
+
+```
+public/audio/letters/
+├── alif.mp3          # alif (no harakat)
+├── alif_fathah.mp3   # alif + fathah
+├── alif_kasrah.mp3   # alif + kasrah
+├── alif_dammah.mp3   # alif + dammah
+├── ba.mp3
+├── ba_fathah.mp3
+└── ... (112 total)
+```
+
+Naming convention: `{letterId}.mp3` for plain, `{letterId}_{vowelMode}.mp3` for vowel modes.
+
+### Audio Generation (`scripts/generate-audio.ts`)
+
+A build-time Node.js script that:
+
+1. Reads `SEED_LETTERS` from the seed data and `VOWEL_MODES` from harakat constants.
+2. Composes Arabic text via `composeLetter()` from `app/lib/utils/harakat.ts`.
+3. Calls **Google Cloud Text-to-Speech** with `ar-XA` voice (Wavenet, FEMALE) at `speakingRate: 0.85`.
+4. Writes each MP3 file to `public/audio/letters/`.
+
+**Alif dammah special case:** TTS input uses `ttsInputText()` which maps alif+vowel to standard hamza-carrying form (`أَ` / `إِ` / `أُ`) for correct pronunciation, while the app display still shows the simplified `ا` for young learners.
+
+**Idempotent:** Skips existing files. Re-run `pnpm generate:audio` to fill in missing files.
+
+**Run:** `pnpm generate:audio`. Requires `gcloud auth application-default-login` first.
 
 ### AudioEngine (`app/lib/audio/audio-engine.ts`)
 
-`AudioEngine` is a singleton class with an **adapter pattern** for testability:
-
-```
-export interface SpeechSynthesisAdapter {
-  getVoices(): SpeechSynthesisVoice[];
-  createUtterance(text: string): SpeechSynthesisUtterance;
-  speak(utterance: SpeechSynthesisUtterance): void;
-  cancel(): void;
-  readonly speaking: boolean;
-  readonly paused: boolean;
-  onvoiceschanged: ((this: SpeechSynthesis, ev: Event) => void) | null;
-}
-```
-
-The browser adapter wraps `window.speechSynthesis`. In Node.js tests, a mock adapter is injected instead.
-
-### AudioEngine API
+`AudioEngine` is a singleton class with **hybrid MP3 + Web Speech playback**:
 
 ```typescript
 class AudioEngine {
   // Properties
-  get isSupported(): boolean; // true when SpeechSynthesis is available
+  get isSupported(): boolean; // true when Audio API is available
 
-  // Constructor — accepts optional adapter for testing
-  constructor(adapter?: SpeechSynthesisAdapter);
+  // Speak a letter — plays MP3, falls back to Web Speech on failure
+  speak(letterId: string, vowelMode: VowelMode, letterChar: string): Promise<void>;
 
-  // Speak a letter with a vowel mode — returns Promise that resolves on playback end
-  speak(letterChar: string, vowelMode: VowelMode): Promise<void>;
-
-  // Cancel any ongoing utterance immediately
+  // Cancel any ongoing playback immediately
   cancel(): void;
-
-  // Reset voice cache to re-scan available voices (e.g., if onvoiceschanged fires)
-  resetVoiceScan(): void;
 
   // Tear down engine, release resources
   dispose(): void;
@@ -706,114 +721,47 @@ class AudioEngine {
 export const audioEngine = new AudioEngine();
 ```
 
-### Voice Selection (FR-1)
+### Playback Flow
 
-Preference order: `ar-SA` > `ar-XA` > any voice with `lang` starting with `'ar'` > browser default voice.
+1. `speak(letterId, vowelMode, letterChar)` constructs the MP3 URL from `letterId` and `vowelMode`.
+2. Creates an `HTMLAudioElement` with the URL.
+3. On `ended` event → resolves the Promise (playback complete).
+4. On `error` event or `play()` rejection → **falls back to Web Speech API**:
+   - Creates a `SpeechSynthesisUtterance` with `composeLetter(letterChar, vowelMode)`.
+   - Sets `utterance.rate = 0.85`, `utterance.lang = 'ar-SA'`.
+   - Uses any available Arabic voice (`ar-*`).
+   - Chrome workaround: always `cancel()` before `speak()`.
+5. Returns a Promise that resolves when either path completes.
+6. If a previous playback is in progress, `cancel()` is called first — the old Promise resolves immediately.
 
-- Voice scan runs once on first `speak()` call — result is cached (`voiceScanComplete` flag).
-- `resetVoiceScan()` allows re-scanning (e.g., when `onvoiceschanged` fires — voices may load asynchronously in Chrome).
-- If no voice is found, `speak()` uses the browser's default voice with no Arabic priority.
+### Graceful Degradation
 
-### Pronunciation Playback (FR-2)
+- If `Audio` API is unavailable: `isSupported` returns `false` → `speak()` resolves silently.
+- If MP3 fails to load/play: transparent fallback to Web Speech API (user hears no difference).
+- If both fail: Promise resolves silently — no visual error state.
+- No idle preloading needed — MP3 files have no cold-start delay.
 
-1. `speak(letterChar, vowelMode)` builds pronunciation text via `composeLetter()` from `app/lib/utils/harakat.ts`.
-2. Creates a `SpeechSynthesisUtterance` with the composed text.
-3. Sets `utterance.rate = 0.85` (slower, clearer for children).
-4. Sets `utterance.voice` to the cached Arabic voice (if found).
-5. Calls `speechSynthesis.speak(utterance)`.
-6. Returns a Promise that resolves when the utterance's `onend` event fires.
-7. If a previous utterance is still playing, it is cancelled first — the old Promise resolves immediately (no hanging promises).
+### Web Speech Fallback State
 
-### Graceful Degradation (FR-3)
-
-- If `SpeechSynthesis` is unavailable: constructor returns `null` adapter → `isSupported` returns `false` → `speak()` resolves silently.
-- Components can check `audioEngine.isSupported` to conditionally render audio-related UI.
-- No audio fallback UI needed for Phase 1 — letters highlight visually but make no sound.
-
-### Idle Preloading (FR-4) — ✅ Implemented
-
-Idle-time voice preloading via `requestIdleCallback` warms up the SpeechSynthesis engine, reducing first-utterance latency from ~500ms to near-instant. The preloader runs on mount of the `/learn` route.
-
-**File:** `app/lib/audio/preloader.ts`
-
-```typescript
-import { AudioEngine } from './audio-engine';
-
-let preloaded = false;
-
-/**
- * Warm up the SpeechSynthesis engine during browser idle time.
- * - Fire-and-forget: returns `void`, no Promise or async state.
- * - Idempotent: only the first call triggers warm-up.
- * - Graceful: silently exits when SpeechSynthesis is unavailable, voices
- *   haven't been scanned yet, or an utterance is actively playing.
- */
-export function preloadOnIdle(engine: AudioEngine): void {
-  if (preloaded) return;
-  if (!engine.isSupported) return;
-
-  const adapter = engine.adapter;
-  if (!adapter) return;
-  if (adapter.speaking) return;
-
-  const voice = engine.voice;
-  if (!voice) return;
-
-  preloaded = true;
-
-  const schedule =
-    typeof requestIdleCallback !== 'undefined'
-      ? (cb: () => void) => requestIdleCallback(cb)
-      : (cb: () => void) => setTimeout(cb, 1000);
-
-  schedule(() => {
-    const utterance = adapter.createUtterance('');
-    utterance.voice = voice;
-    adapter.speak(utterance);
-  });
-}
-
-export function resetPreloader(): void {
-  preloaded = false;
-}
-```
-
-**Integration:** Called on mount of `/learn` route via `useEffect`:
-
-```typescript
-useEffect(() => {
-  preloadOnIdle(audioEngine);
-}, []);
-```
-
-**Tests:** `app/lib/audio/preloader.test.ts` — 7 tests covering idempotency, graceful skipping, voice caching, active playback guard.
+- Lazy initialization (`ensureAdapter()`) creates a browser SpeechSynthesis adapter only on first fallback use.
+- Voice scan runs once: prefers `ar-*` voices, caches result.
+- `onvoiceschanged` event triggers re-scan for async voice loading in Chrome.
 
 ### Test Architecture
 
-- Test file: `app/lib/audio/audio-engine.test.ts` (22 tests)
-- Test file: `app/lib/audio/preloader.test.ts` (7 tests)
-- Mock adapter (`createMockAdapter()`) provides controllable `getVoices`, `speak`, `cancel`.
-- Mock utterances capture `onend`/`onerror` callbacks for Promise lifecycle testing.
-- Tests cover: voice selection (7), speak behavior (6), graceful degradation (3), cancel (2), dispose (2), adapter mock (3), preloader idempotency (2), preloader graceful skipping (3), preloader voice caching (1), preloader active playback guard (1).
-- All 29 audio tests pass in jsdom environment (Node.js, no browser needed).
+- Test file: `app/lib/audio/audio-engine.test.ts` (currently TBD count after refactor)
+- Tests mock the `Audio` constructor and `window.speechSynthesis` to cover both the MP3 success path and the Web Speech fallback path.
+- Preloader removed entirely — no cold-start delay with MP3 files.
 
 ### Key Decisions
 
-1. **Web Speech API** chosen over pre-recorded MP3 files (zero file management, TTS quality acceptable for isolated letters).
-2. **Singleton pattern** (not React context) — matches the existing functional pattern used by `harakat.ts`.
-3. **Adapter pattern** — thin abstraction over `window.speechSynthesis` enables full unit test coverage without a browser.
-4. **Promise-based `speak()`** — resolves on `onend` event, enabling sequential playback and composable async patterns.
-5. **No init() call** — constructor handles initialization. No user gesture required (SpeechSynthesis is not subject to autoplay restrictions like Web Audio).
-6. **Cache voice on first call** — avoids re-scanning `getVoices()` on every tap.
-7. **`onvoiceschanged` wired** to `resetVoiceScan()` — handles async voice loading in Chrome.
-
-### Future Upgrade Path
-
-If TTS quality proves insufficient, swap to pre-recorded MP3 files by:
-
-1. Dropping `.mp3` files into `public/audio/`.
-2. Replacing the Web Speech API `speak()` implementation with `HTMLAudioElement` or Web Audio API.
-3. The `AudioEngine` API surface (`speak()`, `cancel()`, `isSupported`) remains unchanged — components don't need updating.
+1. **MP3 primary, Web Speech fallback:** Pre-recorded audio provides consistent, cross-browser quality with no voice-availability issues. Web Speech is retained as a fallback for development environments or missing audio files.
+2. **Singleton pattern** (not React context) — matches existing functional pattern used by `harakat.ts`.
+3. **Promise-based `speak()`** — resolves on audio `ended` event, enabling sequential playback and composable async patterns.
+4. **`speak(letterId, vowelMode, letterChar)`** — the 3-arg signature supports both MP3 URL construction (from `letterId`) and Web Speech fallback (from `letterChar`).
+5. **No preloader** — MP3 files have no cold-start latency (unlike Web Speech which needs a warm-up utterance).
+6. **Google Cloud TTS** for audio generation — high-quality Wavenet voices in `ar-XA`. Script is idempotent, build-time only, not part of the app runtime.
+7. **Alif hamza carrier mapping** — TTS input uses `أَ`/`إِ`/`أُ` for correct pronunciation while display uses simplified `ا` for child-friendly orthography.
 
 ---
 
@@ -1244,7 +1192,6 @@ export const db = drizzle(client, { schema });
   │
   ├── On mount:
   │     ├── Read childProfileId from useAuthStore.childProfileId
-  │     ├── preloadOnIdle(audioEngine) (T-09b — warm up SpeechSynthesis)
   │     ├── useQuery(['activeProfile', profileId]) → getActiveProfileFn (T-08)
   │     └── useQuery(['visibleLetters', profileId]) → getVisibleLettersFn (T-06)
   │
@@ -1711,15 +1658,15 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
 
 ## 11. Performance Budgets
 
-| Metric                             | Target            | Measurement             |
-| ---------------------------------- | ----------------- | ----------------------- |
-| **LCP (Largest Contentful Paint)** | < 2.5s            | Lighthouse              |
-| **FID (First Input Delay)**        | < 100ms           | Lighthouse / RUM        |
-| **Audio Tap-to-Play**              | < 150ms           | Custom Performance.mark |
-| **Harakat Mode Switch Re-render**  | < 50ms            | React DevTools Profiler |
-| **First Preload Batch**            | Within 3s of idle | requestIdleCallback     |
-| **Bundle Size (initial JS)**       | < 120KB gzipped   | Bundler analyzer        |
-| **SQLite Query (single row)**      | < 10ms            | Drizzle logging         |
+| Metric                             | Target                      | Measurement             |
+| ---------------------------------- | --------------------------- | ----------------------- |
+| **LCP (Largest Contentful Paint)** | < 2.5s                      | Lighthouse              |
+| **FID (First Input Delay)**        | < 100ms                     | Lighthouse / RUM        |
+| **Audio Tap-to-Play**              | < 150ms                     | Custom Performance.mark |
+| **Harakat Mode Switch Re-render**  | < 50ms                      | React DevTools Profiler |
+| **Audio File Load**                | < 100ms (typical size ~3KB) | Network tab             |
+| **Bundle Size (initial JS)**       | < 120KB gzipped             | Bundler analyzer        |
+| **SQLite Query (single row)**      | < 10ms                      | Drizzle logging         |
 
 ---
 

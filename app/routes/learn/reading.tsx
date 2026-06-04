@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { audioEngine } from '~/lib/audio/audio-engine';
-import { preloadOnIdle } from '~/lib/audio/preloader';
 import { getReadingDataFn } from '~/server/reading';
 import { generateReadingGroups } from '~/lib/utils/reading';
 import type { VowelMode } from '~/lib/utils/harakat';
@@ -20,11 +18,6 @@ export const Route = createFileRoute('/learn/reading')({
 });
 
 function ReadingPage() {
-  // Warm up SpeechSynthesis during idle time
-  useEffect(() => {
-    preloadOnIdle(audioEngine);
-  }, []);
-
   const profileId = useAuthStore((state) => state.childProfileId);
 
   if (!profileId) {

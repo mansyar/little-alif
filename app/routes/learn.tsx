@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
 import { createFileRoute, Link, Outlet, useMatchRoute, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { audioEngine } from '~/lib/audio/audio-engine';
-import { preloadOnIdle } from '~/lib/audio/preloader';
 import { validateSessionFn } from '~/server/auth-fns';
 import { getActiveProfileFn } from '~/server/profiles';
 import { getVisibleLettersFn, type VisibleLetter } from '~/server/letters';
@@ -25,13 +22,6 @@ export const Route = createFileRoute('/learn')({
 });
 
 function LearnPage() {
-  // Warm up SpeechSynthesis during idle time so the first real utterance
-  // has near-instant latency instead of ~500ms cold-start delay.
-  useEffect(() => {
-    preloadOnIdle(audioEngine);
-  }, []);
-
-  // Hooks must be called unconditionally (rules-of-hooks).
   const matchRoute = useMatchRoute();
   const profileId = useAuthStore((state) => state.childProfileId);
 

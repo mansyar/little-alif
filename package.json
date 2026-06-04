@@ -20,7 +20,8 @@
     "prepare": "husky",
     "db:push": "drizzle-kit push --force",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx app/db/seed.ts"
+    "db:seed": "tsx app/db/seed.ts",
+    "generate:audio": "tsx scripts/generate-audio.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
@@ -44,6 +45,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@google-cloud/text-to-speech": "^6.4.1",
     "@tailwindcss/vite": "^4.0.0",
     "@testing-library/jest-dom": "6.6.0",
     "@testing-library/react": "16.0.0",

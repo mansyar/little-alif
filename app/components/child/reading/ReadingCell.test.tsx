@@ -31,14 +31,14 @@ describe('ReadingCell', () => {
     expect(screen.getByText('بَ')).toBeTruthy();
   });
 
-  it('tap calls audioEngine.speak(letterChar, vowelMode)', async () => {
+  it('tap calls audioEngine.speak(letterId, vowelMode)', async () => {
     const user = userEvent.setup();
     const { ReadingCell } = await import('./ReadingCell');
     render(<ReadingCell glyph="بِ" letterId="ba" vowelMode="kasrah" letterChar="ب" />);
 
     await user.click(screen.getByRole('button'));
 
-    expect(speakMock).toHaveBeenCalledWith('ب', 'kasrah');
+    expect(speakMock).toHaveBeenCalledWith('ba', 'kasrah', 'ب');
   });
 
   it('tap sets data-flashed to true', async () => {

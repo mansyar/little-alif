@@ -10,16 +10,11 @@ import { useUiStore } from '~/stores/ui-store';
 // ── Mocks ──────────────────────────────────────────────────────────────
 
 const mockGetReadingData = vi.fn();
-const mockPreloadOnIdle = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('~/server/reading', () => ({
   getReadingDataFn: (opts: { data: { profileId: string } }) =>
     mockGetReadingData(opts.data.profileId) as Promise<unknown>,
-}));
-
-vi.mock('~/lib/audio/preloader', () => ({
-  preloadOnIdle: mockPreloadOnIdle,
 }));
 
 vi.mock('~/lib/audio/audio-engine', () => ({

@@ -70,7 +70,7 @@ export function LetterCard({ letter }: LetterCardProps) {
 
   const handleClick = () => {
     setSelectedLetter(letter.letterId);
-    void audioEngine.speak(letter.character, currentHarakat).finally(() => {
+    void audioEngine.speak(letter.letterId, currentHarakat, letter.character).finally(() => {
       setSelectedLetter(null);
     });
   };

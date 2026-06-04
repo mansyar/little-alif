@@ -11,7 +11,6 @@ import { useUiStore } from '~/stores/ui-store';
 const mockGetActiveProfile = vi.fn();
 const mockGetVisibleLetters = vi.fn();
 const mockValidateSession = vi.fn();
-const mockPreloadOnIdle = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('~/server/profiles', () => ({
@@ -28,12 +27,7 @@ vi.mock('~/server/auth-fns', () => ({
   validateSessionFn: () => mockValidateSession() as Promise<unknown>,
 }));
 
-vi.mock('~/lib/audio/preloader', () => ({
-  preloadOnIdle: mockPreloadOnIdle,
-}));
-
-// audioEngine needs to be a real-ish object so the import doesn't crash,
-// but the actual preload logic is already thoroughly tested in preloader.test.ts.
+// audioEngine needs to be a real-ish object so the import doesn't crash.
 vi.mock('~/lib/audio/audio-engine', () => ({
   audioEngine: {} as import('~/lib/audio/audio-engine').AudioEngine,
 }));
@@ -228,19 +222,6 @@ describe('Learn route', () => {
   });
 
   // ── Existing tests (preserved) ───────────────────────────────────────
-
-  it('calls preloadOnIdle on mount', async () => {
-    const { Route } = await import('./learn');
-    const Component = Route.options.component;
-
-    if (!Component) {
-      throw new Error('Learn route has no component');
-    }
-
-    render(<Component />, { wrapper: createWrapper() });
-
-    expect(mockPreloadOnIdle).toHaveBeenCalledTimes(1);
-  });
 
   it('renders a "select a child" message when childProfileId is null', async () => {
     setActiveChild(null);

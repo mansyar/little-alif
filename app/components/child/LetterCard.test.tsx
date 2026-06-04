@@ -60,7 +60,7 @@ describe('LetterCard', () => {
     expect(screen.getByText(expected)).toBeTruthy();
   });
 
-  it('tap calls audioEngine.speak(letter.character, currentHarakat)', async () => {
+  it('tap calls audioEngine.speak(letter.letterId, currentHarakat)', async () => {
     useUiStore.setState({ currentHarakat: 'kasrah' });
 
     render(<LetterCard letter={letter} />);
@@ -70,7 +70,7 @@ describe('LetterCard', () => {
     await user.click(card);
 
     expect(speakMock).toHaveBeenCalledTimes(1);
-    expect(speakMock).toHaveBeenCalledWith('ا', 'kasrah');
+    expect(speakMock).toHaveBeenCalledWith('alif', 'kasrah', 'ا');
   });
 
   it('tap sets selectedLetterId in useUiStore (opens the LetterDetail overlay)', async () => {

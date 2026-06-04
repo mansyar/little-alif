@@ -22,6 +22,7 @@ export default tseslint.config(
       'app/lib/i18n/i18n-react.tsx',
       'app/lib/i18n/formatters.ts',
       'app/lib/i18n/custom-types.ts',
+      'scripts/**',
     ],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({

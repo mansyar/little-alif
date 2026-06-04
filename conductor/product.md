@@ -42,7 +42,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 - **Child-selectable vowel mode** — child can change independently from their grid view
 - **Unicode combining diacritics** for dynamic vowel rendering (no separate glyphs)
 - **Reading Practice (Iqra' Mode):** Dynamic groups of 3 letters, 6-row grid (1 systematic + 5 randomized)
-- **Audio pronunciation playback** (Web Speech API / pre-recorded audio)
+- **Audio pronunciation playback** (pre-recorded MP3 via Google Cloud TTS, Web Speech API fallback)
 - **Child Mode:** Cookie-based persistent mode bypassing auth for one profile per device
 - **Bilingual parent UI:** English + Indonesian
 
@@ -82,7 +82,7 @@ Full-screen grid showing only parent-introduced letters. Large tappable cards (�
 
 ### Module 6: Audio Engine
 
-Audio playback via Web Speech API (SpeechSynthesis) with singleton AudioEngine. TTS-based pronunciation — no audio file management needed. Idle preloading (Phase 2) reduces first-utterance latency.
+Hybrid audio: pre-recorded MP3 files (Google Cloud TTS, `ar-XA`) as primary playback, Web Speech API as silent fallback. Build-time script generates 112 MP3 files (28 letters × 4 harakat). Singleton AudioEngine with `speak(letterId, vowelMode, letterChar)` signature — MP3 on success, Web Speech on error. No idle preloading needed (MP3 has no cold-start latency).
 
 ### Module 7: Harakat (Vowel Modes)
 
