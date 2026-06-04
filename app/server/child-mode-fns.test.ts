@@ -5,7 +5,8 @@ import { eq } from 'drizzle-orm';
 import { profiles, letterToggles, LETTER_IDS } from '~/db/schema';
 import * as authSchema from '~/db/auth-schema';
 import type { DbClient } from '~/db';
-import { enableChildMode } from './auth-fns';
+import { enableChildMode, buildChildSession } from './auth-fns';
+import { signChildModeCookie } from '~/lib/utils/child-mode';
 
 // ─── Setup ────────────────────────────────────────────────────────────
 
@@ -73,6 +74,8 @@ async function seedLetters(): Promise<void> {
 }
 
 beforeAll(async () => {
+  process.env.CHILD_MODE_SECRET = 'test-secret-for-buildchildsession-tests';
+
   rawClient = createClient({ url: ':memory:' });
   db = drizzle(rawClient, {
     schema: { ...authSchema, profiles, letterToggles },
@@ -131,6 +134,68 @@ describe('enableChildMode (pure helper)', () => {
     await expect(enableChildMode(db, USER_ID, fakeId)).rejects.toThrow(
       'Profile not found or does not belong to you.',
     );
+  });
+});
+
+describe('buildChildSession (pure helper)', () => {
+  beforeEach(async () => {
+    await db.delete(profiles).where(eq(profiles.userId, USER_ID));
+    await db.delete(profiles).where(eq(profiles.userId, OTHER_USER));
+  });
+
+  it('returns a child session for a valid cookie with an existing profile', async () => {
+    const [profile] = await db
+      .insert(profiles)
+      .values({
+        userId: USER_ID,
+        name: 'Aisyah',
+        avatar: 'alif-lamp',
+      })
+      .returning();
+
+    const cookie = signChildModeCookie(profile!.id, 'Aisyah', 'alif-lamp');
+    const session = await buildChildSession(db, cookie);
+
+    expect(session).not.toBeNull();
+    expect(session!.user).toEqual({
+      id: USER_ID,
+      email: '',
+      isChild: true,
+      childProfileId: profile!.id,
+    });
+    expect(session!.session.userId).toBe(USER_ID);
+    expect(session!.session.token).toBe('');
+    expect(session!.session.expiresAt).toBeDefined();
+  });
+
+  it('returns null when the cookie profile has been deleted', async () => {
+    const [profile] = await db
+      .insert(profiles)
+      .values({
+        userId: USER_ID,
+        name: 'Budi',
+        avatar: 'ba-boat',
+      })
+      .returning();
+
+    const cookie = signChildModeCookie(profile!.id, 'Budi', 'ba-boat');
+
+    // Delete the profile
+    await db.delete(profiles).where(eq(profiles.id, profile!.id));
+
+    const session = await buildChildSession(db, cookie);
+    expect(session).toBeNull();
+  });
+
+  it('returns null for an invalid/tampered cookie value', async () => {
+    const tampered = 'eyJmb28iOiJiYXJ9.someinvalid';
+    const session = await buildChildSession(db, tampered);
+    expect(session).toBeNull();
+  });
+
+  it('returns null for an empty cookie value', async () => {
+    const session = await buildChildSession(db, '');
+    expect(session).toBeNull();
   });
 });
 
