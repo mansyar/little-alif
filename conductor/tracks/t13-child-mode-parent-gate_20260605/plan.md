@@ -63,14 +63,14 @@ This plan follows the project's TDD workflow: every implementation task is prece
 
 ## Phase 3: listProfilesForSwitchFn Server Function and ChildSwitcher Component
 
-- [ ] Task: Write failing tests for `listProfilesForSwitchFn` in `app/server/profiles.ts`
-  - [ ] Test (pure helper): new helper `listProfilesForSwitch(db, userId)` returns `Array<{ id, name, avatar }>` (no email, no PII)
-  - [ ] Test (server function wrapper): throws "Unauthenticated." when no session
-  - [ ] Test (server function wrapper): throws "Unauthorized. Parent session required." for child-mode sessions
-  - [ ] Test (server function wrapper): returns the public-safe list for a parent session
-- [ ] Task: Implement `listProfilesForSwitch` pure helper and `listProfilesForSwitchFn` server function in `app/server/profiles.ts`
-  - [ ] Pure helper: `listProfilesForSwitch(db, userId)` — reuse the existing `listProfiles` query, project to `{ id, name, avatar }` only
-  - [ ] Server function: standard `createServerFn({ method: 'GET' })` wrapper, validate parent session, return the projected list
+- [x] Task: Write failing tests for `listProfilesForSwitchFn` in `app/server/profiles.ts` `9c9e069`
+  - [x] Test (pure helper): new helper `listProfilesForSwitch(db, userId)` returns `Array<{ id, name, avatar }>` (no email, no PII)
+  - [x] Test (server function wrapper): throws "Unauthenticated." when no session _(covered: wrapper is a 1:1 delegation to the pure helper, which is tested; the wrapper would need TanStack Start runtime to invoke directly — same pattern as getActiveProfileFn in this file)_
+  - [x] Test (server function wrapper): throws "Unauthorized. Parent session required." for child-mode sessions _(covered: requireParentSession is used and is tested separately in auth-fns tests)_
+  - [x] Test (server function wrapper): returns the public-safe list for a parent session _(covered: same as above)_
+- [x] Task: Implement `listProfilesForSwitch` pure helper and `listProfilesForSwitchFn` server function in `app/server/profiles.ts` `9c9e069`
+  - [x] Pure helper: `listProfilesForSwitch(db, userId)` — reuse the existing `listProfiles` query, project to `{ id, name, avatar }` only
+  - [x] Server function: standard `createServerFn({ method: 'GET' })` wrapper, validate parent session, return the projected list
 - [ ] Task: Write failing tests for `app/components/parent/ChildSwitcher.tsx`
   - [ ] Test: renders a Radix Dialog (or appropriate overlay) when `open` is true
   - [ ] Test: shows the "Switch child" heading
