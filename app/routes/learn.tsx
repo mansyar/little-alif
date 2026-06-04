@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link, Outlet, useMatchRoute } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useMatchRoute, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { preloadOnIdle } from '~/lib/audio/preloader';
+import { validateSessionFn } from '~/server/auth-fns';
 import { getActiveProfileFn } from '~/server/profiles';
 import { getVisibleLettersFn, type VisibleLetter } from '~/server/letters';
 import { useAuthStore } from '~/stores/auth-store';
@@ -12,6 +13,14 @@ import { ChildHarakatBar } from '~/components/child/ChildHarakatBar';
 import { LetterGrid } from '~/components/child/LetterGrid';
 
 export const Route = createFileRoute('/learn')({
+  beforeLoad: async () => {
+    const session = await validateSessionFn();
+    if (session === null) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router idiom
+      throw redirect({ to: '/' });
+    }
+    return { session };
+  },
   component: LearnPage,
 });
 

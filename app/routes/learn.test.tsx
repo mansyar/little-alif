@@ -10,6 +10,7 @@ import { useUiStore } from '~/stores/ui-store';
 
 const mockGetActiveProfile = vi.fn();
 const mockGetVisibleLetters = vi.fn();
+const mockValidateSession = vi.fn();
 const mockPreloadOnIdle = vi.fn();
 const mockNavigate = vi.fn();
 
@@ -21,6 +22,10 @@ vi.mock('~/server/profiles', () => ({
 vi.mock('~/server/letters', () => ({
   getVisibleLettersFn: (opts: { data: { profileId: string } }) =>
     mockGetVisibleLetters(opts.data.profileId) as Promise<unknown>,
+}));
+
+vi.mock('~/server/auth-fns', () => ({
+  validateSessionFn: () => mockValidateSession() as Promise<unknown>,
 }));
 
 vi.mock('~/lib/audio/preloader', () => ({
@@ -51,6 +56,8 @@ vi.mock('@tanstack/react-router', async () => {
     useMatchRoute: () => () => undefined,
     // Render nothing for Outlet — child routes are not tested in this file
     Outlet: () => null,
+    // Return context for useRouteContext
+    useRouteContext: () => ({ childProfileId: null }),
   };
 });
 
@@ -93,6 +100,24 @@ const HIDDEN_LETTER = {
   isVisible: false,
 };
 
+const MOCK_CHILD_SESSION = {
+  user: { id: 'parent-1', email: '', isChild: true, childProfileId: TEST_PROFILE_ID },
+  session: {
+    token: '',
+    expiresAt: new Date(Date.now() + 86400000).toISOString(),
+    userId: 'parent-1',
+  },
+};
+
+const MOCK_PARENT_SESSION = {
+  user: { id: 'parent-1', email: 'parent@example.com', name: 'Parent' },
+  session: {
+    token: 'abc',
+    expiresAt: new Date(Date.now() + 86400000).toISOString(),
+    userId: 'parent-1',
+  },
+};
+
 // ── Helpers ────────────────────────────────────────────────────────────
 
 let queryClient: QueryClient;
@@ -124,7 +149,72 @@ function resetUiStore() {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mockBeforeLoadContext(): any {
+  return {
+    location: { href: '/learn' },
+    params: {},
+    context: {},
+    cause: 'enter' as const,
+    search: {},
+    abortController: new AbortController(),
+  };
+}
+
 // ── Tests ──────────────────────────────────────────────────────────────
+
+describe('Learn route beforeLoad', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('redirects to / when no session', async () => {
+    mockValidateSession.mockResolvedValue(null);
+
+    const { Route } = await import('./learn');
+    const beforeLoad = Route.options.beforeLoad;
+
+    if (!beforeLoad) {
+      throw new Error('Learn route has no beforeLoad');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    await expect(beforeLoad(mockBeforeLoadContext())).rejects.toMatchObject({
+      status: 307,
+      options: { to: '/' },
+    });
+  });
+
+  it('allows parent session to proceed', async () => {
+    mockValidateSession.mockResolvedValue(MOCK_PARENT_SESSION);
+
+    const { Route } = await import('./learn');
+    const beforeLoad = Route.options.beforeLoad;
+
+    if (!beforeLoad) {
+      throw new Error('Learn route has no beforeLoad');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const result = await beforeLoad(mockBeforeLoadContext());
+    expect(result).toEqual({ session: MOCK_PARENT_SESSION });
+  });
+
+  it('allows child session to proceed and exposes childProfileId', async () => {
+    mockValidateSession.mockResolvedValue(MOCK_CHILD_SESSION);
+
+    const { Route } = await import('./learn');
+    const beforeLoad = Route.options.beforeLoad;
+
+    if (!beforeLoad) {
+      throw new Error('Learn route has no beforeLoad');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const result = await beforeLoad(mockBeforeLoadContext());
+    expect(result).toEqual({ session: MOCK_CHILD_SESSION });
+  });
+});
 
 describe('Learn route', () => {
   beforeEach(() => {
@@ -136,6 +226,8 @@ describe('Learn route', () => {
   afterEach(() => {
     cleanup();
   });
+
+  // ── Existing tests (preserved) ───────────────────────────────────────
 
   it('calls preloadOnIdle on mount', async () => {
     const { Route } = await import('./learn');
@@ -162,7 +254,6 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    // The message is rendered as plain text (no card grid, no Reading Practice button)
     expect(await screen.findByText(/Select a child profile from the dashboard/i)).toBeTruthy();
     expect(screen.queryByText('Reading Practice')).toBeNull();
   });
@@ -186,15 +277,12 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    // Active child name appears in ProfileBadge
     expect(await screen.findByText('Aisyah')).toBeTruthy();
 
-    // LetterCards rendered for the 3 visible letters (hidden letter excluded)
     const alifCard = await screen.findByLabelText('alif');
     expect(alifCard).toBeTruthy();
     expect(screen.getByLabelText('ba')).toBeTruthy();
     expect(screen.getByLabelText('ta')).toBeTruthy();
-    // Hidden letter must NOT render a card
     expect(screen.queryByLabelText('tsa')).toBeNull();
   });
 
@@ -212,12 +300,8 @@ describe('Learn route', () => {
 
     const { container } = render(<Component />, { wrapper: createWrapper() });
 
-    // ProfileBadge still renders with the profile name
     expect(await screen.findByText('Aisyah')).toBeTruthy();
-
-    // EmptyState icon is rendered (Lucide BookOpen)
     expect(container.querySelector('svg.lucide-book-open')).toBeTruthy();
-    // No LetterCard should render
     expect(screen.queryByLabelText('tsa')).toBeNull();
   });
 
@@ -235,7 +319,6 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    // Mock Link renders <a> without href (uses `to` prop), so we query by text
     const readingLink = await screen.findByText('Reading Practice');
     expect(readingLink).toBeTruthy();
     expect(readingLink.hasAttribute('disabled')).toBe(true);
@@ -256,7 +339,6 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    // Mock Link renders <a> without href (uses `to` prop), so we query by text
     const readingLink = await screen.findByText('Reading Practice');
     expect(readingLink).toBeTruthy();
     expect(readingLink.getAttribute('disabled')).toBeNull();
@@ -275,11 +357,7 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    // Sanity check that the "missing profile" branch still offers navigation
     expect(await screen.findByText(/Select a child profile from the dashboard/i)).toBeTruthy();
-
-    // The select-child message branch should include a back/dashboard link.
-    // (The Link mock renders a plain <a> without `href`, so we assert by text.)
     expect(screen.getByText('Back to Dashboard')).toBeTruthy();
   });
 });
