@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { AVATAR_KEYS } from '~/db/schema';
 
 /**
  * Email + password registration input validation.
@@ -23,3 +24,17 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: 'Password is required.' }),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
+
+/**
+ * Schema for enabling child mode on a profile.
+ * Validates profileId (UUID), name (1-50 chars), and avatar (valid AvatarKey).
+ */
+export const enableChildModeSchema = z.object({
+  profileId: z.string().uuid({ message: 'Invalid profile ID.' }),
+  name: z
+    .string()
+    .min(1, { message: 'Name is required.' })
+    .max(50, { message: 'Name must be 50 characters or fewer.' }),
+  avatar: z.enum(AVATAR_KEYS, { message: 'Please select a valid avatar.' }),
+});
+export type EnableChildModeInput = z.infer<typeof enableChildModeSchema>;
