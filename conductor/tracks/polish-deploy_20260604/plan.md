@@ -10,7 +10,7 @@
   - [x] Verify AudioEngine plays MP3 correctly (tap a letter card in /learn)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Audio MP3 Generation' (Protocol in workflow.md)
 
-## Phase 2: Error Boundaries
+## Phase 2: Error Boundaries [checkpoint: ]
 
 - [x] Task: Create reusable ErrorBoundary component (90ae33c)
   - [x] Write tests for ErrorBoundary (`app/components/ui/ErrorBoundary.test.tsx`) — verify it catches errors, renders fallback, resets on "Try Again"
@@ -19,7 +19,7 @@
   - [x] Wrap `/dashboard` route with ErrorBoundary
   - [x] Wrap `/learn` route with ErrorBoundary
   - [x] Wrap `/learn/reading` route with ErrorBoundary
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Error Boundaries' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Error Boundaries' (Protocol in workflow.md)
 
 ## Phase 3: Toast Notifications
 
