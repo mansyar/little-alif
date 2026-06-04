@@ -13,7 +13,9 @@ export default defineConfig({
     // waiting for `findByText` after a TanStack Query resolution) can exceed
     // 5s when the worker is contended. 30s is a pragmatic ceiling that still
     // catches genuine hangs while absorbing worker-pool scheduling jitter.
-    testTimeout: 30000,
+    // Coverage instrumentation roughly doubles per-test wall time, so 60s
+    // covers both `pnpm test` and `pnpm test --coverage` runs.
+    testTimeout: 60000,
     // Cap concurrent workers. The default uses all available CPUs which causes
     // tests that do full DOM renders (jsdom + React Query) to starve each
     // other when many test files run in the same pool. Limiting to 3 keeps
