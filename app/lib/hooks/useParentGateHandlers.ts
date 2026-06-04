@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { disableChildModeFn } from '~/server/auth-fns';
+import { disableChildModeFn, validateSessionFn } from '~/server/auth-fns';
 import { useAuthStore } from '~/stores/auth-store';
 
 export interface UseParentGateHandlersResult {
@@ -29,8 +29,13 @@ export function useParentGateHandlers(): UseParentGateHandlersResult {
   const handleExit = useCallback(async () => {
     await disableChildModeFn();
     useAuthStore.getState().setChildMode(null);
-    const user = useAuthStore.getState().user;
-    void navigate({ to: user ? '/dashboard' : '/login' });
+    // Re-validate the parent session from the server rather than reading the
+    // in-memory `user` field — `setUser` is only invoked in tests, so in
+    // production the store's `user` is always null even when the parent JWT
+    // cookie is valid. After `disableChildModeFn` clears the child-mode
+    // cookie, the parent JWT (if any) is what `validateSessionFn` finds.
+    const session = await validateSessionFn();
+    void navigate({ to: session ? '/dashboard' : '/login' });
   }, [navigate]);
 
   const handleSwitchChild = useCallback(() => {

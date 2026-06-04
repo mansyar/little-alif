@@ -100,14 +100,14 @@ A hidden lock icon in the top-right corner of `/learn` and `/learn/reading` head
 
 ## Design Decisions
 
-| #    | Decision                              | Rationale                                                           |
-| ---- | ------------------------------------- | ------------------------------------------------------------------- |
-| DD-1 | Alif (ا) gets no special treatment    | Pure vowel — renders correctly in grid, audio handles pronunciation |
-| DD-2 | ز (zai) added to non-connecting list  | Same base shape as ر — needs same precomposed glyph treatment       |
-| DD-3 | 3-letter minimum for Reading Practice | 1–2 letters produce sparse, confusing grid                          |
-| DD-4 | Cairo font with `font-display: block` | Consistent harakat rendering across platforms                       |
-| DD-5 | Sukun and tashdid are Phase 2         | Current scope is single-diacritic per letter                        |
-| DD-6 | `composeLetter()` is a pure function  | Returns string, no DOM wrapper — usable everywhere                  |
-| DD-7 | Parent gate is a hidden lock icon (not a visible "Back" link) | Child can't accidentally exit; parent discovers it. 40% opacity + two unlock gestures (long-press, 3-tap) prevent accidental activation. |
-| DD-8 | ChildSwitcher lists only *other* profiles | Single-child households see empty state; prevents no-op switches. |
-| DD-9 | Parent menu and ChildSwitcher use Radix Dialog at z-60 and z-70 | Layered above LetterDetail (z-50) so the menu is never occluded by the letter overlay. |
+| #    | Decision                                                        | Rationale                                                                                                                                |
+| ---- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| DD-1 | Alif (ا) gets no special treatment                              | Pure vowel — renders correctly in grid, audio handles pronunciation                                                                      |
+| DD-2 | ز (zai) added to non-connecting list                            | Same base shape as ر — needs same precomposed glyph treatment                                                                            |
+| DD-3 | 3-letter minimum for Reading Practice                           | 1–2 letters produce sparse, confusing grid                                                                                               |
+| DD-4 | Cairo font with `font-display: block`                           | Consistent harakat rendering across platforms                                                                                            |
+| DD-5 | Sukun and tashdid are Phase 2                                   | Current scope is single-diacritic per letter                                                                                             |
+| DD-6 | `composeLetter()` is a pure function                            | Returns string, no DOM wrapper — usable everywhere                                                                                       |
+| DD-7 | Parent gate is a hidden lock icon (not a visible "Back" link)   | Child can't accidentally exit; parent discovers it. 40% opacity + two unlock gestures (long-press, 3-tap) prevent accidental activation. |
+| DD-8 | ChildSwitcher lists only _other_ profiles                       | Single-child households see empty state; prevents no-op switches.                                                                        |
+| DD-9 | Parent menu and ChildSwitcher use Radix Dialog at z-60 and z-70 | Layered above LetterDetail (z-50) so the menu is never occluded by the letter overlay.                                                   |

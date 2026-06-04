@@ -6,10 +6,12 @@ import { useAuthStore } from '~/stores/auth-store';
 // ── Mocks ──────────────────────────────────────────────────────────────
 
 const mockDisableChildMode = vi.fn();
+const mockValidateSession = vi.fn();
 const mockNavigate = vi.fn();
 
 vi.mock('~/server/auth-fns', () => ({
   disableChildModeFn: () => mockDisableChildMode() as Promise<unknown>,
+  validateSessionFn: () => mockValidateSession() as Promise<unknown>,
 }));
 
 vi.mock('@tanstack/react-router', () => ({
@@ -24,10 +26,6 @@ beforeEach(() => {
   mockDisableChildMode.mockResolvedValue({ success: true });
 });
 
-function setParentUser() {
-  useAuthStore.getState().setUser({ id: 'parent-1', email: 'p@example.com' });
-}
-
 // ── Tests ──────────────────────────────────────────────────────────────
 
 describe('useParentGateHandlers', () => {
@@ -40,7 +38,7 @@ describe('useParentGateHandlers', () => {
   });
 
   it('handleExit calls disableChildModeFn', async () => {
-    setParentUser();
+    mockValidateSession.mockResolvedValue({ user: { id: 'p' } });
     const { useParentGateHandlers } = await import('./useParentGateHandlers');
     const { result } = renderHook(() => useParentGateHandlers());
 
@@ -52,7 +50,7 @@ describe('useParentGateHandlers', () => {
   });
 
   it('handleExit clears the auth-store child state via setChildMode(null)', async () => {
-    setParentUser();
+    mockValidateSession.mockResolvedValue({ user: { id: 'p' } });
     useAuthStore.getState().setChildMode('child-1');
 
     const { useParentGateHandlers } = await import('./useParentGateHandlers');
@@ -65,8 +63,11 @@ describe('useParentGateHandlers', () => {
     expect(useAuthStore.getState().childProfileId).toBeNull();
   });
 
-  it('handleExit navigates to /dashboard when a parent user is set in the auth store', async () => {
-    setParentUser();
+  it('handleExit navigates to /dashboard when a parent session is valid', async () => {
+    // Simulates the common case: user logged in (parent JWT cookie is still
+    // present), then entered child mode. After disableChildModeFn clears the
+    // child_mode cookie, the parent JWT is still valid.
+    mockValidateSession.mockResolvedValue({ user: { id: 'parent-1', email: 'p@example.com' } });
 
     const { useParentGateHandlers } = await import('./useParentGateHandlers');
     const { result } = renderHook(() => useParentGateHandlers());
@@ -75,12 +76,14 @@ describe('useParentGateHandlers', () => {
       await result.current.handleExit();
     });
 
+    expect(mockValidateSession).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith({ to: '/dashboard' });
   });
 
-  it('handleExit navigates to /login (not /dashboard) when no parent user is set', async () => {
-    // No parent user set
-    useAuthStore.getState().setChildMode('child-1');
+  it('handleExit navigates to /login (not /dashboard) when no parent session is valid', async () => {
+    // Simulates the edge case: the user only ever used child mode (e.g. a
+    // shared family device) and there is no parent JWT cookie to fall back to.
+    mockValidateSession.mockResolvedValue(null);
 
     const { useParentGateHandlers } = await import('./useParentGateHandlers');
     const { result } = renderHook(() => useParentGateHandlers());

@@ -196,7 +196,7 @@ describe('ParentGate', () => {
     render(<ParentGate onExit={onExit} onSwitchChild={onSwitchChild} disabled />);
 
     const button = screen.getByLabelText('Parent menu');
-    expect(button.disabled).toBe(true);
+    expect(button.hasAttribute('disabled')).toBe(true);
 
     act(() => {
       pressDown(button);
