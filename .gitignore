@@ -49,3 +49,6 @@ local.db
 
 # Test coverage reports
 coverage/
+
+# TanStack Start build artifacts
+.tanstack/

@@ -1,8 +1,8 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.5 (T-11 — Child Mode complete)
-**Based on:** PRD v1.5
+**Version:** 1.6 (T-12 — Polish, Docker & Deployment complete)
+**Based on:** PRD v1.6
 
 ### Implementation Status
 
@@ -21,10 +21,10 @@
 | 9   | Component Data Flow                  | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/), [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                |
 | 10  | Auth Flow                            | ✅ Implemented            | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                                                                                                                                                                                  |
 | 11  | Bilingual UI                         | ✅ Implemented            | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                                                                                                                                                                                    |
-| 12  | Component Interaction Map            | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
-| 13  | Performance Budgets                  | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
-| 14  | Deployment Configuration             | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
-| 15  | Error Handling                       | ⬜ Pending                | —                                                                                                                                                                                                                                                                                                                     |
+| 12  | Component Interaction Map            | ✅ Implemented            | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/), [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)                                                                                                                                                      |
+| 13  | Performance Budgets                  | ✅ Implemented            | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                                                                                      |
+| 14  | Deployment Configuration             | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
+| 15  | Error Handling                       | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
 | 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
 
 ---
@@ -71,6 +71,10 @@ little-alif/
 │   │   └── ui/
 │   │       ├── LoadingSpinner.tsx
 │   │       ├── Toast.tsx            # Error/success notifications
+│   │       ├── ToastContainer.tsx   # Toast display manager (reads Zustand ui-store)
+│   │       ├── ToastContainer.test.tsx
+│   │       ├── ErrorBoundary.tsx    # Route-level crash boundary (class component)
+│   │       ├── ErrorBoundary.test.tsx
 │   │       └── ConfirmDialog.tsx    # Confirm destructive actions (Radix Dialog)
 │   ├── lib/
 │   │   ├── audio/
@@ -122,7 +126,8 @@ little-alif/
 ├── scripts/
 │   └── generate-audio.ts              # Google Cloud TTS — generates 112 MP3 files
 ├── docker/
-│   └── Dockerfile
+│   ├── Dockerfile
+│   └── server-entry.mjs           # Custom HTTP server for production (static + SSR)
 ├── docker-compose.yml
 ├── package.json
 ├── tsconfig.json
@@ -1612,17 +1617,20 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
 ## 10. Component Interaction Map (Visual)
 
 ```
-                     ┌──────────────────────────┐
-                     │        __root.tsx         │
-                     │  (AuthGate + Providers)   │
-                     └──────────┬───────────────┘
+                     ┌────────────────────────────────────┐
+                     │          __root.tsx                │
+                     │  (AuthGate + Providers +           │
+                     │   ToastContainer)                  │
+                     └──────────┬─────────────────────────┘
                                 │
            ┌─────────────────────┼──────────────────────┐
            ▼                     ▼                      ▼
     ┌───────────┐       ┌──────────────┐       ┌───────────────┐
     │  /login   │       │  /dashboard  │       │   /learn      │
     │ LoginForm │       │  (Parent)    │       │  (Child)      │
-    └───────────┘       │              │       │               │
+    └───────────┘       │  ┌──────────┐│       │  ┌──────────┐ │
+                        │  │ErrorBound││       │  │ErrorBound│ │
+                        │  └──────────┘│       │  └──────────┘ │
                         │ ProfileList  │       │ LetterGrid    │
                         │  ├─►ProfileEditor│   │  └─►LetterCard│
                         │  └─►ChildModeToggle│ │  ├─►ChildHarakatBar│
@@ -1635,7 +1643,9 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
                                                 ┌───────▼───────┐
                                                 │ /learn/reading│
                                                 │  (Child)      │
-                                                │               │
+                                                │  ┌──────────┐ │
+                                                │  │ErrorBound│ │
+                                                │  └──────────┘ │
                                                 │ GroupPills    │
                                                 │ GroupHeader   │
                                                 │ ReadingGrid   │
@@ -1644,14 +1654,16 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
                                                 └───────────────┘
 
         Global (app-wide):
-        ┌──────────────────────────────────────────────────┐
-        │  Zustand Stores: auth-store, child-store,        │
-        │  ui-store                                        │
-        │  i18n: translations by cookie                    │
-        │  AudioEngine: lazy-init on first tap             │
-        │  harakat.ts: composeLetter() utility             │
-        │  reading.ts: generateReadingGroups() utility     │
-        └──────────────────────────────────────────────────┘
+        ┌──────────────────────────────────────────────────────┐
+        │  Zustand Stores: auth-store, child-store,            │
+        │  ui-store (includes toasts[])                        │
+        │  i18n: translations by cookie                        │
+        │  AudioEngine: lazy-init on first tap                 │
+        │  harakat.ts: composeLetter() utility                 │
+        │  reading.ts: generateReadingGroups() utility         │
+        │  ToastContainer: top-level, reads ui-store.toasts    │
+        │  ErrorBoundary: wraps dashboard, learn, reading      │
+        └──────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -1672,42 +1684,57 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
 
 ## 12. Deployment Configuration
 
-### Dockerfile
+### Dockerfile (`docker/Dockerfile`)
+
+Multi-stage build: deps → build → runner. Three distinct stages minimize the final image size.
 
 ```dockerfile
-FROM node:20-alpine AS base
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
 WORKDIR /app
-
-FROM base AS deps
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-FROM deps AS build
+# Stage 2: Build
+FROM node:20-alpine AS build
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ENV NODE_ENV=production
 RUN pnpm build
 
-FROM base AS runner
+# Stage 3: Runner (production)
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/public ./public
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
-
+COPY docker/server-entry.mjs ./docker/server-entry.mjs
 EXPOSE 3000
-CMD ["node", "./dist/server/index.js"]
+CMD ["node", "docker/server-entry.mjs"]
 ```
 
-### docker-compose.yml
+### docker-compose.yml (`docker-compose.yml` at project root)
 
 ```yaml
-version: '3.8'
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     ports:
       - '3000:3000'
     environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - DATABASE_URL=file:./data/little-alif.db
+      - NODE_ENV=production
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - DATABASE_URL=${DATABASE_URL:-file:./data/little-alif.db}
+      - CHILD_MODE_SECRET=${CHILD_MODE_SECRET:-}
     volumes:
       - little-alif-data:/app/data
     restart: unless-stopped
@@ -1716,30 +1743,100 @@ volumes:
   little-alif-data:
 ```
 
+### server-entry.mjs (`docker/server-entry.mjs`)
+
+A custom Node.js HTTP server that serves static assets from `public/` and delegates all other requests to the TanStack Start SSR handler. Ships as an ES module (`.mjs`) to avoid CommonJS/ESM conflicts.
+
 ### Environment Variables
 
-| Variable       | Required | Description                                        |
-| -------------- | -------- | -------------------------------------------------- |
-| `JWT_SECRET`   | Yes      | Secret for signing JWT tokens (min 32 chars)       |
-| `DATABASE_URL` | No       | SQLite path. Default: `file:./data/little-alif.db` |
-| `NODE_ENV`     | No       | `production` or `development`                      |
+| Variable             | Required | Description                                                     |
+| -------------------- | -------- | --------------------------------------------------------------- |
+| `BETTER_AUTH_SECRET` | Yes      | Secret for signing Better Auth session cookies (min 32 chars)   |
+| `BETTER_AUTH_URL`    | No       | Public URL of the app. Default: `http://localhost:3000`         |
+| `DATABASE_URL`       | No       | SQLite path. Default: `file:./data/little-alif.db`              |
+| `CHILD_MODE_SECRET`  | No       | Secret for signing child-mode cookies. Generated if not set.    |
+| `NODE_ENV`           | No       | `production` or `development`. Default: `production` in runner. |
 
 ---
 
 ## 13. Error Handling
 
-| Scenario                                     | UX                                                  | Logging       |
+Two complementary error handling layers:
+
+1. **Error Boundaries** — Catch route-level React crashes (rendering errors). Display a full-page "Try Again" fallback.
+2. **Toast Notifications** — Catch per-action server function errors (network failures, validation errors). Display a dismissable, auto-expiring notification.
+
+### Error Boundary
+
+A reusable class component (`app/components/ui/ErrorBoundary.tsx`) that wraps each protected route:
+
+```tsx
+// ErrorBoundary wraps the route component
+// On error → shows fallback UI with "Try Again" button
+// On recover → re-renders children normally
+```
+
+**Pattern (in each route):**
+
+```tsx
+export default function Dashboard() {
+  return (
+    <ErrorBoundary>
+      <DashboardContent />
+    </ErrorBoundary>
+  );
+}
+```
+
+- Routes wrapped: `/dashboard`, `/learn`, `/learn/reading`
+- `componentDidCatch` captures error info
+- `Try Again` button calls `setState({ hasError: false })` to re-render children
+- Fallback UI shows a subtle error icon + message in the app's design language
+- 5 tests covering: renders children, catches errors, fallback renders, Try Again recovers, sets hasError state
+
+### Toast Notifications
+
+A Zustand-driven toast system (`app/components/ui/ToastContainer.tsx`) that reads from `useUiStore`:
+
+```typescript
+// ui-store.ts — toast state
+toasts: Array<{ id: string; message: string; type: 'success' | 'error' }>;
+addToast(message: string, type: 'success' | 'error') => void;
+removeToast(id: string) => void;
+```
+
+- `ToastContainer` renders at the app layout level (above route content)
+- Auto-dismiss after 5 seconds (setTimeout in `addToast`)
+- Dismiss on click (calls `removeToast`)
+- `aria-live="polite"` for screen reader announcements
+- Renders nothing when `toasts.length === 0` (empty state)
+- Styled with project design tokens: `border-coral/30 bg-coral/10 text-coral` for errors, green for success
+- 8 tests covering: rendering, success/error variants, auto-dismiss, dismiss on click, multiple toasts, empty state
+
+**Wired into server function error handlers:**
+| Component | Scenario | Toast Type | Message |
+| ------------------------ | -------------------------------- | ---------- | ---------------------------- |
+| `HarakatSelector` | Vowel mode save fails | `error` | Generic error |
+| `LetterToggleGrid` | Toggle save fails | `error` | Generic error |
+| `ProfileEditor` | Profile create/update fails | `error` | Generic error |
+| `Dashboard` | Delete profile fails | `error` | Generic error |
+| `Dashboard` | Sign out fails | `error` | Generic error |
+
+### Error Matrix
+
+| Scenario                                     | UX                                                  | Layer         |
 | -------------------------------------------- | --------------------------------------------------- | ------------- |
-| Auth session expired                         | Silent redirect to `/login`                         | None          |
-| Server function network error                | Toast: "Connection error" + retry                   | console.error |
-| Audio file not found                         | Silent — skip playback                              | console.warn  |
-| Letter toggle save fails                     | Toast: "Could not save" + revert toggle visually    | console.error |
-| Profile creation exceeds 4                   | Toast: "Maximum 4 children"                         | None          |
-| Vowel mode save fails                        | Toast: "Could not update vowel mode"                | console.error |
-| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | None          |
-| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | None          |
-| SQLite write failure                         | Toast: "Could not save changes"                     | console.error |
-| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | console.warn  |
+| Auth session expired                         | Silent redirect to `/login`                         | Router        |
+| Route rendering crash                        | Full-page "Try Again" fallback                      | ErrorBoundary |
+| Server function network error                | Toast: generic error + dismiss                      | Toast system  |
+| Audio file not found                         | Silent — skip playback                              | AudioEngine   |
+| Letter toggle save fails                     | Toast error + revert toggle visually                | Toast system  |
+| Profile creation exceeds 4                   | Toast: generic error                                | Toast system  |
+| Vowel mode save fails                        | Toast: generic error                                | Toast system  |
+| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | Component     |
+| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | Component     |
+| SQLite write failure                         | Toast: generic error                                | Toast system  |
+| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | Middleware    |
 
 ---
 

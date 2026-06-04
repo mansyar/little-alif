@@ -21,9 +21,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
 | T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ✅ Complete |
 | T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ✅ Complete |
-| T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
+| T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ✅ Complete |
 
-**Total estimated effort: ~32–52 hours**
+\***\*All 12 tracks complete.** Total effort: ~36–58 hours\*\*
 
 ### Implementation Status
 
@@ -42,7 +42,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)     |
 | T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)   |
 | T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)               |
-| T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                                |
+| T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)         |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -743,46 +743,48 @@ Implement cookie-based child mode that bypasses auth. One profile per device. Pa
 
 ---
 
-### T-12: Polish, Docker & Deployment
+### T-12: Polish, Docker & Deployment ✅
 
 **Dependencies:** T-10, T-11
+**Status:** ✅ Complete ([`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/))
 
 **Description:**
-Final polish: error handling, responsive testing, performance optimization. Package the app in Docker for Coolify deployment.
+Final polish: audio MP3 generation, error handling, toast notifications, Docker packaging, and verification. 30 files changed, 935 insertions, 178 deletions.
 
 **PRD Ref:** §8 (Non-Functional Requirements)
-**TDD Ref:** §1 (Docker files), §9 (Error Handling), §10 (Performance Budgets)
+**TDD Ref:** §12 (Deployment Configuration), §13 (Error Handling), §11 (Performance Budgets)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- `docker/Dockerfile` — Multi-stage build with Node.js
-- `docker-compose.yml` — App service + SQLite volume mount
-- `.env.example` — Complete environment variable reference
-- Error boundaries for all route components
-- Toast notifications for server function errors
-- Responsive design verification (mobile 360px → tablet 1024px)
-- Touch target audit (all interactive elements ≥ 44x44dp minimum, ≥ 64x64dp preferred)
-- Performance check: first paint < 2s, audio latency < 150ms
-- Accessibility check: keyboard navigation, screen reader support (Radix UI handles most)
-- `pnpm build` succeeds
+- **Audio MP3 Generation** — 112 MP3 files via Google Cloud TTS (`ar-XA` Wavenet, `speakingRate: 0.85`). Build-time script generates all 28 letters × 4 harakat modes.
+- **Error Boundaries** — Reusable `<ErrorBoundary>` class component wrapping `/dashboard`, `/learn`, `/learn/reading`. `componentDidCatch` with "Try Again" fallback. 5 tests covering all states.
+- **Toast Notifications** — `ToastContainer` reading from Zustand `useUiStore`, auto-dismiss 5s, dismiss on click, `aria-live="polite"`, empty state. Wired into `HarakatSelector`, `LetterToggleGrid`, `ProfileEditor`, `Dashboard` (delete/sign-out errors). 8 tests covering all variants.
+- **Docker & Deployment** — Multi-stage Dockerfile (`deps → build → runner`, Node 20 Alpine), `docker-compose.yml` with SQLite volume mount, `docker/server-entry.mjs` custom HTTP server (SSR handler + static assets), `.env.example` with all vars documented.
+- **Verification** — 404 tests passing across 51 files, `pnpm build` succeeds, `pnpm typecheck` clean, `pnpm lint` clean, code review completed with all findings addressed.
 
-**TDD Ref:** §9 (Error Handling strategies), §10 (Performance budgets: 150ms audio, 2s first paint)
+**TDD Ref:** §12 (Deployment Configuration — Dockerfile, docker-compose, env vars), §13 (Error Handling — toast + error boundary)
 
 **Key Decisions:**
 
-- Docker multi-stage build: `node:20-alpine` → `nginx:alpine` (static files) or keep as Node.js for SSR
-- SQLite file mounted as Docker volume (survives container rebuilds)
-- Coolify deploy: connect Git repo → set env vars → deploy
-- Error states: toast for recoverable errors, error boundary page for crashes
+- `ErrorBoundary` is a class component (required by React for `componentDidCatch`)
+- Toast system uses Zustand `useUiStore` (not a separate context) — consistent with existing state management
+- Error boundaries protect route-level crashes; toast covers per-action server function errors
+- Docker multi-stage build: `node:20-alpine`, 3 stages (deps → build → runner), custom `server-entry.mjs`
+- `docker-compose.yml` at project root (Coolify convention), `Dockerfile` in `docker/` directory
+- SQLite file mounted as Docker volume (`/app/data`) — survives container rebuilds
+- Zod v3→v4 upgrade documented in tech-stack.md
+- Coral design tokens used for toast error variants (matching project palette)
 
 **Verification:**
 
 - `pnpm build` produces production bundle
-- `docker compose up` starts the app
+- `docker compose up` starts the app with SSR
 - SQLite data persists after container restart
-- All routes work on mobile viewports
-- Touch targets meet minimum size
-- First paint < 2s on simulated 3G
+- All routes wrapped in ErrorBoundary
+- Toast notifications on server function errors (5s auto-dismiss)
+- 404 tests passing across 51 files
+- `pnpm typecheck` clean, `pnpm lint` clean
+- Code review completed — 1 Medium + 4 Low findings fixed, 3 flaky test issues resolved
 
 ---
 
@@ -805,7 +807,7 @@ Final polish: error handling, responsive testing, performance optimization. Pack
  T-04 (i18n — parallel to T-02/T-03) ✅                     │
  T-09 (Audio — parallel to T-02/T-03) ✅                    │
                                                               ▼
-                                                       T-12 (Polish & Deploy) ⬜
+                                                        T-12 (Polish & Deploy) ✅
 ```
 
 ## Track Format

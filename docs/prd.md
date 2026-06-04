@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.5 (T-11 — Child Mode complete)
+**Version:** 1.6 (T-12 — Polish, Docker & Deployment complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -39,7 +39,8 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
 | **Child Mode**           | ✅ Complete | Cookie-based auth bypass for kids. See [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                                                     |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                      |
-| **Docker / Deploy**      | ⬜ Pending  | Containerization for Coolify                                                                                                                                                  |
+| **Docker / Deploy**      | ✅ Complete | Multi-stage Dockerfile, docker-compose, custom server entry. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                     |
+| **Error Handling**       | ✅ Complete | Error boundaries on all routes, toast notifications for server errors. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                           |
 
 ---
 
