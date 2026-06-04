@@ -6,6 +6,7 @@ import { getVisibleLettersFn, type VisibleLetter } from '~/server/letters';
 import { useAuthStore } from '~/stores/auth-store';
 import { useUiStore } from '~/stores/ui-store';
 import { ProfileBadge } from '~/components/child/ProfileBadge';
+import { ErrorBoundary } from '~/components/ui/ErrorBoundary';
 import { ChildHarakatBar } from '~/components/child/ChildHarakatBar';
 import { LetterGrid } from '~/components/child/LetterGrid';
 
@@ -22,6 +23,14 @@ export const Route = createFileRoute('/learn')({
 });
 
 function LearnPage() {
+  return (
+    <ErrorBoundary>
+      <LearnPageContent />
+    </ErrorBoundary>
+  );
+}
+
+function LearnPageContent() {
   const matchRoute = useMatchRoute();
   const profileId = useAuthStore((state) => state.childProfileId);
 

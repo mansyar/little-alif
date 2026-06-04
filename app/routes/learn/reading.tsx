@@ -7,6 +7,7 @@ import type { VowelMode } from '~/lib/utils/harakat';
 import { useAuthStore } from '~/stores/auth-store';
 import { useUiStore } from '~/stores/ui-store';
 import { ProfileBadge } from '~/components/child/ProfileBadge';
+import { ErrorBoundary } from '~/components/ui/ErrorBoundary';
 import { ChildHarakatBar } from '~/components/child/ChildHarakatBar';
 import { GroupHeader } from '~/components/child/reading/GroupHeader';
 import { GroupPills } from '~/components/child/reading/GroupPills';
@@ -18,6 +19,14 @@ export const Route = createFileRoute('/learn/reading')({
 });
 
 function ReadingPage() {
+  return (
+    <ErrorBoundary>
+      <ReadingPageContent />
+    </ErrorBoundary>
+  );
+}
+
+function ReadingPageContent() {
   const profileId = useAuthStore((state) => state.childProfileId);
 
   if (!profileId) {
