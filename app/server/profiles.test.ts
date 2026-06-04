@@ -11,6 +11,7 @@ import {
   updateProfile,
   deleteProfile,
   getActiveProfile,
+  listProfilesForSwitch,
 } from './profiles';
 import { getActiveProfileSchema } from '~/lib/validations/profiles';
 
@@ -383,3 +384,53 @@ describe('getActiveProfileSchema', () => {
 // (createProfileFn, updateProfileFn, deleteProfileFn), it is a thin
 // createServerFn wrapper that delegates to the pure helper and would
 // require the TanStack Start server runtime context to invoke directly.
+
+// ─── listProfilesForSwitch (T-13) ──────────────────────────────────────
+
+describe('listProfilesForSwitch (pure helper)', () => {
+  const userId = 'switch-test-user';
+
+  beforeEach(async () => {
+    await db.delete(profiles).where(eq(profiles.userId, userId));
+  });
+
+  it('returns an empty array when the user has no profiles', async () => {
+    const result = await listProfilesForSwitch(db, userId);
+    expect(result).toEqual([]);
+  });
+
+  it('returns { id, name, avatar } for each profile, no PII', async () => {
+    const p1 = await createProfile(db, userId, { name: 'Aisyah', avatar: 'alif-lamp' });
+    const p2 = await createProfile(db, userId, { name: 'Bilal', avatar: 'ba-boat' });
+
+    const result = await listProfilesForSwitch(db, userId);
+
+    expect(result).toHaveLength(2);
+    for (const r of result) {
+      // Public-safe shape: only id, name, avatar
+      expect(Object.keys(r).sort()).toEqual(['avatar', 'id', 'name']);
+      expect(r).not.toHaveProperty('userId');
+      expect(r).not.toHaveProperty('vowelMode');
+      expect(r).not.toHaveProperty('createdAt');
+      expect(r).not.toHaveProperty('updatedAt');
+    }
+    expect(result).toEqual(
+      expect.arrayContaining([
+        { id: p1.id, name: 'Aisyah', avatar: 'alif-lamp' },
+        { id: p2.id, name: 'Bilal', avatar: 'ba-boat' },
+      ]),
+    );
+  });
+
+  it('returns only the calling user\'s profiles', async () => {
+    const otherUserId = 'switch-other-user';
+    await db.delete(profiles).where(eq(profiles.userId, otherUserId));
+
+    await createProfile(db, userId, { name: 'Mine', avatar: 'alif-lamp' });
+    await createProfile(db, otherUserId, { name: 'Theirs', avatar: 'ba-boat' });
+
+    const result = await listProfilesForSwitch(db, userId);
+    expect(result).toHaveLength(1);
+    expect(result[0]!.name).toBe('Mine');
+  });
+});

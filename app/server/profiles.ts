@@ -159,6 +159,27 @@ export async function getActiveProfile(db: DbClient, userId: string, profileId: 
   return profile;
 }
 
+/**
+ * List the public-safe identifying fields for every child profile owned by
+ * `userId`. Used by the `ChildSwitcher` overlay on the child routes so a
+ * parent can hand the device between siblings mid-session.
+ *
+ * Returns the minimum shape needed to render a profile tile — deliberately
+ * omits `vowelMode`, `createdAt`, `updatedAt`, and any parent-relationship
+ * fields. The data is safe to expose to any caller that already has a
+ * parent session.
+ */
+export async function listProfilesForSwitch(db: DbClient, userId: string) {
+  return db
+    .select({
+      id: profiles.id,
+      name: profiles.name,
+      avatar: profiles.avatar,
+    })
+    .from(profiles)
+    .where(eq(profiles.userId, userId));
+}
+
 // ─── Server Function Wrappers ─────────────────────────────────────────
 
 /**
@@ -237,4 +258,20 @@ export const getActiveProfileFn = createServerFn({ method: 'GET' })
     authorizeChildAccess(session, data.profileId);
     const db = getDb();
     return getActiveProfile(db, session.user.id, data.profileId);
+  });
+
+/**
+ * Server function: list profiles for the `ChildSwitcher` overlay.
+ *
+ * Parent-only — a child-mode session must not be able to enumerate
+ * profiles (it can only see its own). Returns the same public-safe shape
+ * as the pure helper.
+ */
+export const listProfilesForSwitchFn = createServerFn({ method: 'GET' })
+  .inputValidator(z.object({}).optional())
+  .handler(async () => {
+    const session = await validateSessionFn();
+    requireParentSession(session);
+    const db = getDb();
+    return listProfilesForSwitch(db, session.user.id);
   });
