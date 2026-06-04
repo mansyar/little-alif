@@ -33,7 +33,7 @@
   - [x] Wire toast in `profiles.ts` — vowel mode save failure → Toast: "Could not update vowel mode"
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Toast Notifications' (Protocol in workflow.md)
 
-## Phase 4: Docker & Deployment Configuration
+## Phase 4: Docker & Deployment Configuration [checkpoint: 4ed417b]
 
 - [x] Task: Create Dockerfile (77b6022)
   - [x] Write `docker/Dockerfile` with multi-stage build (deps → build → runner, node:20-alpine)
@@ -41,12 +41,12 @@
   - [x] Test `docker build` produces a working image
 - [x] Task: Create docker-compose.yml (77b6022)
   - [x] Write `docker-compose.yml` with app service, SQLite volume mount, env vars
-  - [ ] Test `docker compose up` starts the app successfully
+  - [x] Test `docker compose up` starts the app successfully
 - [x] Task: Update .env.example (77b6022)
   - [x] Add `BETTER_AUTH_URL` (was missing)
   - [x] Add `NODE_ENV`
   - [x] Add documentation comments for all variables
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Docker & Deployment' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Docker & Deployment' (Protocol in workflow.md)
 
 ## Phase 5: Verification & Audit
 
