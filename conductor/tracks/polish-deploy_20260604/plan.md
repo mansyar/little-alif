@@ -3,10 +3,10 @@
 
 ## Phase 1: Audio MP3 Generation
 
-- [ ] Task: Generate 112 MP3 audio files via Google Cloud TTS
-  - [ ] Run `gcloud auth application-default-login` to authenticate
-  - [ ] Run `pnpm generate:audio` to generate all MP3 files
-  - [ ] Verify 112 files exist in `public/audio/letters/` (28 letters × 4 vowel modes)
+- [x] Task: Generate 112 MP3 audio files via Google Cloud TTS
+  - [x] Run `gcloud auth application-default-login` to authenticate
+  - [x] Run `pnpm generate:audio` to generate all MP3 files
+  - [x] Verify 112 files exist in `public/audio/letters/` (28 letters × 4 vowel modes)
   - [ ] Verify AudioEngine plays MP3 correctly (tap a letter card in /learn)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Audio MP3 Generation' (Protocol in workflow.md)
 
