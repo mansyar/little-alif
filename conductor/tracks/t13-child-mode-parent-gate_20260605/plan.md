@@ -93,20 +93,20 @@ This plan follows the project's TDD workflow: every implementation task is prece
 
 ## Phase 4: Route Integration — Remove "Back" Links and Wire ParentGate
 
-- [ ] Task: Update `app/routes/learn.tsx` to remove the "Back" link and add `ParentGate`
-  - [ ] Replace the `<Link to="/dashboard">Back</Link>` at the previous location (lines 135–137) with `<ParentGate onExit={...} onSwitchChild={...} />`
-  - [ ] Use the `useParentGateHandlers()` hook to get `handleExit` and `handleSwitchChild`
-  - [ ] Render `<ChildSwitcher open={...} onSwitch={...} />` in the JSX (the hook owns the open state)
-- [ ] Task: Update `app/routes/learn/reading.tsx` to remove the "Back" link and add `ParentGate`
-  - [ ] Same pattern as `/learn`
-  - [ ] Reuse the `useParentGateHandlers()` hook
-- [ ] Task: Update `app/routes/learn.test.tsx`
-  - [ ] Remove any test that asserts "Back" link text or `to="/dashboard"` on the header link
-  - [ ] Add a test: the lock icon (`aria-label="Parent menu"`) is present in the header
-  - [ ] Add a test: the "Back" text link is NOT present in the header when a child is selected
-- [ ] Task: Update `app/routes/learn/reading.test.tsx`
-  - [ ] Same updates as above
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Route Integration' (Protocol in workflow.md)
+- [x] Task: Update `app/routes/learn.tsx` to remove the "Back" link and add `ParentGate` `d951455`
+  - [x] Replace the `<Link to="/dashboard">Back</Link>` at the previous location (lines 135–137) with `<ParentGate onExit={...} onSwitchChild={...} />`
+  - [x] Use the `useParentGateHandlers()` hook to get `handleExit` and `handleSwitchChild`
+  - [x] Render `<ChildSwitcher open={...} onOpenChange={...} activeProfileId={...} />` in the JSX (the hook owns the open state)
+- [x] Task: Update `app/routes/learn/reading.tsx` to remove the "Back" link and add `ParentGate` `d951455`
+  - [x] Same pattern as `/learn`
+  - [x] Reuse the `useParentGateHandlers()` hook
+- [x] Task: Update `app/routes/learn.test.tsx` `d951455`
+  - [x] Remove any test that asserts "Back" link text or `to="/dashboard"` on the header link
+  - [x] Add a test: the lock icon (`aria-label="Parent menu"`) is present in the header
+  - [x] Add a test: the "Back" text link is NOT present in the header when a child is selected
+- [x] Task: Update `app/routes/learn/reading.test.tsx` `d951455`
+  - [x] Same updates as above
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Route Integration' (Protocol in workflow.md)
 
 ---
 
