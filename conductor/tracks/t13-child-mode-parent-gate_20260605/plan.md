@@ -71,23 +71,23 @@ This plan follows the project's TDD workflow: every implementation task is prece
 - [x] Task: Implement `listProfilesForSwitch` pure helper and `listProfilesForSwitchFn` server function in `app/server/profiles.ts` `9c9e069`
   - [x] Pure helper: `listProfilesForSwitch(db, userId)` — reuse the existing `listProfiles` query, project to `{ id, name, avatar }` only
   - [x] Server function: standard `createServerFn({ method: 'GET' })` wrapper, validate parent session, return the projected list
-- [ ] Task: Write failing tests for `app/components/parent/ChildSwitcher.tsx`
-  - [ ] Test: renders a Radix Dialog (or appropriate overlay) when `open` is true
-  - [ ] Test: shows the "Switch child" heading
-  - [ ] Test: shows the "No other children" empty state when profile list is empty
-  - [ ] Test: shows the "No other children" empty state when profile list has exactly one profile (the active one)
-  - [ ] Test: shows a tappable tile per non-active profile when profile list has >1 entries
-  - [ ] Test: clicking a profile tile calls the `onSwitch` prop with that profile's id
-  - [ ] Test: clicking a profile tile triggers `enableChildModeFn` (mocked)
-  - [ ] Test: `aria-label` of each tile includes the child name
-- [ ] Task: Implement `app/components/parent/ChildSwitcher.tsx`
-  - [ ] Use Radix `Dialog` at z-70
-  - [ ] Fetch profiles via `useQuery({ queryKey: ['profilesForSwitch'], queryFn: () => listProfilesForSwitchFn() })`
-  - [ ] Filter out the currently-active profile (passed via prop or read from store)
-  - [ ] Render tiles in a responsive grid (2 columns on small screens, up to 4 columns on wider)
-  - [ ] Each tile: avatar (from `AVATAR_MAP`) + name + tapping fires `onSwitch`
-  - [ ] Empty state: a centered message and a "Close" button
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: ChildSwitcher' (Protocol in workflow.md)
+- [x] Task: Write failing tests for `app/components/parent/ChildSwitcher.tsx` `1b41d29`
+  - [x] Test: renders a Radix Dialog (or appropriate overlay) when `open` is true
+  - [x] Test: shows the "Switch child" heading
+  - [x] Test: shows the "No other children" empty state when profile list is empty
+  - [x] Test: shows the "No other children" empty state when profile list has exactly one profile (the active one)
+  - [x] Test: shows a tappable tile per non-active profile when profile list has >1 entries
+  - [x] Test: clicking a profile tile calls the `onSwitch` prop with that profile's id
+  - [x] Test: clicking a profile tile triggers `enableChildModeFn` (mocked)
+  - [x] Test: `aria-label` of each tile includes the child name
+- [x] Task: Implement `app/components/parent/ChildSwitcher.tsx` `1616fdb`
+  - [x] Use Radix `Dialog` at z-70
+  - [x] Fetch profiles via `useQuery({ queryKey: ['profilesForSwitch'], queryFn: () => listProfilesForSwitchFn() })`
+  - [x] Filter out the currently-active profile (passed via prop or read from store)
+  - [x] Render tiles in a responsive grid (2 columns on small screens, up to 3 columns on wider)
+  - [x] Each tile: avatar (from `AVATAR_MAP`) + name + tapping fires `onSwitch`
+  - [x] Empty state: a centered message and a "Close" button
+- [x] Task: Conductor - User Manual Verification 'Phase 3: ChildSwitcher' (Protocol in workflow.md)
 
 ---
 
