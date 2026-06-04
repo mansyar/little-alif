@@ -39,9 +39,9 @@
 - [x] Task: Update landing page (`app/routes/index.tsx`) beforeLoad `7f1f070`
   - [x] Write route tests for child-mode redirect flow `7f1f070`
   - [x] Implement: check child cookie first → redirect to `/learn`, else check JWT → `/dashboard`, else landing `7f1f070`
-- [ ] Task: Add beforeLoad guard to `/learn` route (`app/routes/learn.tsx`)
-  - [ ] Write route tests for learn route auth
-  - [ ] Implement: accept parent JWT or child-mode cookie → set authStore.childProfileId
+- [x] Task: Add beforeLoad guard to `/learn` route (`app/routes/learn.tsx`) `589c4a5`
+  - [x] Write route tests for learn route auth `589c4a5`
+  - [x] Implement: accept parent JWT or child-mode cookie → set authStore.childProfileId `589c4a5`
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Route Protection' (Protocol in workflow.md)
 
 ---
