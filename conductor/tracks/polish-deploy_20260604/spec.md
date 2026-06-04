@@ -1,3 +1,4 @@
+<protect>
 # Specification: Polish, Docker & Deployment
 
 ## Overview
@@ -87,3 +88,4 @@ Final polish track covering error handling infrastructure (Error Boundaries + To
 - Google Cloud TTS audio generation is a one-time build step (not part of the runtime)
 - Automated visual regression testing
 - CI/CD pipeline configuration
+  </protect>

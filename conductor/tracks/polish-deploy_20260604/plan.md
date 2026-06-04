@@ -1,3 +1,4 @@
+<protect>
 # Implementation Plan: Polish, Docker & Deployment
 
 ## Phase 1: Audio MP3 Generation
@@ -60,3 +61,4 @@
   - [ ] Performance check: verify first paint < 2s (DevTools throttling to Slow 3G)
   - [ ] Accessibility check: keyboard-navigate all routes, verify screen reader announcements
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Verification & Audit' (Protocol in workflow.md)
+      </protect>
