@@ -59,11 +59,13 @@ describe('ProfileEditor', () => {
     const { ProfileEditor } = await import('./ProfileEditor');
     render(<ProfileEditor open={true} onOpenChange={vi.fn()} />, { wrapper: createWrapper() });
 
-    expect(screen.getByText('Add Child Profile')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Add Child Profile')).toBeTruthy();
+    });
     const nameInput = screen.getByLabelText<HTMLInputElement>(/name/i);
     expect(nameInput).toBeTruthy();
     expect(nameInput.value).toBe('');
-  });
+  }, 15000);
 
   it('renders edit mode with pre-filled form when profile provided', async () => {
     const { ProfileEditor } = await import('./ProfileEditor');

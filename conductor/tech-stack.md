@@ -43,7 +43,7 @@
 
 ## Validation
 
-- **Schema Validation:** Zod (validates all server function inputs)
+- **Schema Validation:** Zod v4 (upgraded from v3 on 2026-06-04 during T-12 — safeParse/infer patterns unchanged)
 - **Schemas:** Auth (email/password), Profiles (name/avatar/vowelMode), Letters (toggle operations)
 
 ## Internationalization

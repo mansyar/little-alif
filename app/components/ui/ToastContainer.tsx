@@ -5,7 +5,7 @@ const TOAST_DURATION = 5_000;
 
 const variantStyles: Record<string, string> = {
   success: 'border-green/30 bg-green-light text-green-dark',
-  error: 'border-red-300 bg-red-50 text-red-700',
+  error: 'border-coral/30 bg-coral/10 text-coral',
   info: 'border-sand-dark/30 bg-sand-light text-text-dark',
 };
 

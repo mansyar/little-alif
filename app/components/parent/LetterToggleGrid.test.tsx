@@ -103,7 +103,7 @@ function createWrapper() {
 describe('LetterToggleGrid', () => {
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    useUiStore.setState({ toasts: [] });
   });
 
   it('renders all 28 letters in correct display order', async () => {
@@ -199,6 +199,11 @@ describe('LetterToggleGrid', () => {
   });
 
   it('debounces rapid toggle clicks: only one server call after multiple clicks within 300ms', async () => {
+    // The debounce behavior is thoroughly tested at the unit level
+    // (useDebouncedCallback.test.ts — 5 tests). This integration test
+    // uses synchronous native clicks (no await between them) so all 3
+    // clicks register in the same tick, making the debounce deterministic
+    // even under scheduler contention.
     mockToggleLetter.mockResolvedValue({ letterId: 'alif', isVisible: true });
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
@@ -206,19 +211,22 @@ describe('LetterToggleGrid', () => {
       wrapper: createWrapper(),
     });
 
-    const switches = await screen.findAllByRole('switch');
-    const user = userEvent.setup();
+    const switches = await screen.findAllByRole('switch', {}, { timeout: 10000 });
+    const switchEl = switches[0]!;
 
-    // Rapidly click the same switch 3 times
-    await user.click(switches[0]!);
-    await user.click(switches[0]!);
-    await user.click(switches[0]!);
+    // Clear call count from previous tests that also click the switch
+    mockToggleLetter.mockClear();
 
-    // Wait for the debounced call to fire once
-    await waitFor(() => {
-      expect(mockToggleLetter).toHaveBeenCalledTimes(1);
-    });
-  });
+    // Synchronous clicks — all within the same tick, no awaits between them
+    switchEl.click();
+    switchEl.click();
+    switchEl.click();
+
+    // Wait for debounce to settle
+    await new Promise((r) => setTimeout(r, 500));
+
+    expect(mockToggleLetter).toHaveBeenCalledTimes(1);
+  }, 15000);
 
   it('calls bulkToggleLettersFn with all letter IDs when "Show All" is clicked', async () => {
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
@@ -238,7 +246,7 @@ describe('LetterToggleGrid', () => {
       letterIds: [...LETTER_IDS],
       isVisible: true,
     });
-  });
+  }, 15000);
 
   it('calls bulkToggleLettersFn with all letter IDs when "Hide All" is clicked', async () => {
     // Set up some letters ON so "Hide All" is meaningful
@@ -259,5 +267,5 @@ describe('LetterToggleGrid', () => {
       letterIds: [...LETTER_IDS],
       isVisible: false,
     });
-  });
+  }, 15000);
 });

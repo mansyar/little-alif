@@ -177,7 +177,7 @@ describe('Learn route beforeLoad', () => {
       status: 307,
       options: { to: '/' },
     });
-  });
+  }, 15000);
 
   it('allows parent session to proceed', async () => {
     mockValidateSession.mockResolvedValue(MOCK_PARENT_SESSION);

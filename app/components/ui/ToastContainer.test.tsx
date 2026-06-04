@@ -48,7 +48,7 @@ describe('ToastContainer', () => {
 
     render(<ToastContainer />);
     const toast = screen.getByText('Error!');
-    expect(toast.className).toContain('red');
+    expect(toast.className).toContain('coral');
   });
 
   it('renders info variant with appropriate styling', () => {
