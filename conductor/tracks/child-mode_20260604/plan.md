@@ -36,9 +36,9 @@
 
 ## Phase 3: Landing Page & Learn Route Protection
 
-- [ ] Task: Update landing page (`app/routes/index.tsx`) beforeLoad
-  - [ ] Write route tests for child-mode redirect flow
-  - [ ] Implement: check child cookie first → redirect to `/learn`, else check JWT → `/dashboard`, else landing
+- [x] Task: Update landing page (`app/routes/index.tsx`) beforeLoad `7f1f070`
+  - [x] Write route tests for child-mode redirect flow `7f1f070`
+  - [x] Implement: check child cookie first → redirect to `/learn`, else check JWT → `/dashboard`, else landing `7f1f070`
 - [ ] Task: Add beforeLoad guard to `/learn` route (`app/routes/learn.tsx`)
   - [ ] Write route tests for learn route auth
   - [ ] Implement: accept parent JWT or child-mode cookie → set authStore.childProfileId
