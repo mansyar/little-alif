@@ -45,6 +45,8 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 - **Audio pronunciation playback** (pre-recorded MP3 via Google Cloud TTS, Web Speech API fallback)
 - **Child Mode:** Cookie-based persistent mode bypassing auth for one profile per device
 - **Bilingual parent UI:** English + Indonesian
+- **Hidden parent gate** on child routes — low-contrast lock icon unlocked by long-press (1.5s) or 3 taps within 1s; opens a menu to switch child or exit to parent dashboard
+- **Mid-session child switching** — parent can swap to a different child profile from the parent menu without going back to the dashboard
 
 ## Out of Scope (Phase 1)
 
@@ -92,6 +94,10 @@ Parent selects global vowel mode per child. Child can independently change mode 
 
 Separate screen accessible from child grid. Dynamic groups of 3 letters from toggled-on set. Systematic + randomized practice rows. Minimum 3 letters required.
 
+### Module 9: Parent Gate & Child Switching (T-13)
+
+A hidden lock icon in the top-right corner of `/learn` and `/learn/reading` headers provides a parent-only escape hatch from child mode. The icon is styled at 40% muted-text opacity to be invisible to young children but discoverable to parents. Two unlock gestures: long-press for 1.5s, or three taps within 1s. Unlocking opens a Radix Dialog menu (z-60) with two actions: **Switch child** (opens an overlay listing the parent's other profiles, tapping one enables child mode for that profile and navigates to `/learn`) and **Exit to parent dashboard** (clears child-mode cookie, navigates to `/dashboard` or `/login` if no parent session is active). The `Back` text link previously visible in child route headers is removed — the parent gate is the only way out of child mode.
+
 ## Design Decisions
 
 | #    | Decision                              | Rationale                                                           |
@@ -102,3 +108,6 @@ Separate screen accessible from child grid. Dynamic groups of 3 letters from tog
 | DD-4 | Cairo font with `font-display: block` | Consistent harakat rendering across platforms                       |
 | DD-5 | Sukun and tashdid are Phase 2         | Current scope is single-diacritic per letter                        |
 | DD-6 | `composeLetter()` is a pure function  | Returns string, no DOM wrapper — usable everywhere                  |
+| DD-7 | Parent gate is a hidden lock icon (not a visible "Back" link) | Child can't accidentally exit; parent discovers it. 40% opacity + two unlock gestures (long-press, 3-tap) prevent accidental activation. |
+| DD-8 | ChildSwitcher lists only *other* profiles | Single-child households see empty state; prevents no-op switches. |
+| DD-9 | Parent menu and ChildSwitcher use Radix Dialog at z-60 and z-70 | Layered above LetterDetail (z-50) so the menu is never occluded by the letter overlay. |
