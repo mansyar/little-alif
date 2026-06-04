@@ -1,3 +1,4 @@
+<protect>
 # Spec: Child Mode
 
 **Track ID:** `child-mode_20260604`
@@ -113,3 +114,4 @@ Radix Switch-based toggle per profile card on the dashboard:
 5. Delete profile in child mode → cookie cleared on next request
 6. Tampered cookie → treated as no cookie
 7. Parent logout → child mode still works (cookie preserved)
+   </protect>

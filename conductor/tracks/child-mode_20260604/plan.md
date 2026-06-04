@@ -1,3 +1,4 @@
+<protect>
 # Plan: Child Mode
 
 **Track ID:** `child-mode_20260604`
@@ -87,3 +88,4 @@
   - [ ] `pnpm lint` — clean
   - [ ] `pnpm format:check` — clean
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: Edge Cases & Final Verification' (Protocol in workflow.md)
+      </protect>
