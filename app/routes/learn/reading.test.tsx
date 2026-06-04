@@ -293,4 +293,34 @@ describe('Reading route (/learn/reading)', () => {
     expect(incompletePill).toBeTruthy();
     expect(incompletePill.getAttribute('aria-disabled')).toBe('true');
   });
+
+  it('renders a hidden parent-menu lock icon in the header', async () => {
+    const { Route } = await import('./reading');
+    const Component = Route.options.component;
+
+    if (!Component) throw new Error('Reading route has no component');
+
+    render(<Component />, { wrapper: createWrapper() });
+
+    // Lock icon (ParentGate) is the parent escape hatch — replaces the old "Back" text link.
+    expect(await screen.findByLabelText('Parent menu')).toBeTruthy();
+  });
+
+  it('does NOT render a "Back" text link in the header', async () => {
+    const { Route } = await import('./reading');
+    const Component = Route.options.component;
+
+    if (!Component) throw new Error('Reading route has no component');
+
+    render(<Component />, { wrapper: createWrapper() });
+
+    // Wait for the page to render
+    expect(await screen.findByText('Pattern')).toBeTruthy();
+
+    // The "Back" text link (replaced by ParentGate) should not be present in the header.
+    const links = screen.queryAllByRole('link');
+    for (const link of links) {
+      expect(link.textContent).not.toBe('Back');
+    }
+  });
 });

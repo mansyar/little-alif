@@ -5,7 +5,10 @@ import { getActiveProfileFn } from '~/server/profiles';
 import { getVisibleLettersFn, type VisibleLetter } from '~/server/letters';
 import { useAuthStore } from '~/stores/auth-store';
 import { useUiStore } from '~/stores/ui-store';
+import { useParentGateHandlers } from '~/lib/hooks/useParentGateHandlers';
 import { ProfileBadge } from '~/components/child/ProfileBadge';
+import { ParentGate } from '~/components/child/ParentGate';
+import { ChildSwitcher } from '~/components/parent/ChildSwitcher';
 import { ErrorBoundary } from '~/components/ui/ErrorBoundary';
 import { ChildHarakatBar } from '~/components/child/ChildHarakatBar';
 import { LetterGrid } from '~/components/child/LetterGrid';
@@ -72,6 +75,8 @@ interface LearnContentProps {
 
 function LearnContent({ profileId }: LearnContentProps) {
   const currentHarakat = useUiStore((state) => state.currentHarakat);
+  const { handleExit, handleSwitchChild, switcherOpen, setSwitcherOpen } =
+    useParentGateHandlers();
 
   const profileQuery = useQuery({
     queryKey: ['activeProfile', profileId],
@@ -132,10 +137,14 @@ function LearnContent({ profileId }: LearnContentProps) {
     <main className="min-h-screen flex flex-col bg-background-warm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-sand-light">
         <ProfileBadge profile={profile ? { name: profile.name, avatar: profile.avatar } : null} />
-        <Link to="/dashboard" className="text-sm text-text-muted hover:text-text-dark">
-          Back
-        </Link>
+        <ParentGate onExit={handleExit} onSwitchChild={handleSwitchChild} />
       </div>
+
+      <ChildSwitcher
+        open={switcherOpen}
+        onOpenChange={setSwitcherOpen}
+        activeProfileId={profileId}
+      />
 
       <div className="flex justify-center px-4 py-3">
         <ChildHarakatBar />

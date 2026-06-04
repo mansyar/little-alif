@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: T-13 — Child Mode Parent Gate & Flow Polish**
+- [~] **Track: T-13 — Child Mode Parent Gate & Flow Polish**
       _Link: [./tracks/t13-child-mode-parent-gate_20260605/](./tracks/t13-child-mode-parent-gate_20260605/)_

@@ -341,4 +341,47 @@ describe('Learn route', () => {
     expect(await screen.findByText(/Select a child profile from the dashboard/i)).toBeTruthy();
     expect(screen.getByText('Back to Dashboard')).toBeTruthy();
   });
+
+  it('renders a hidden parent-menu lock icon in the header when a child is selected', async () => {
+    setActiveChild(TEST_PROFILE_ID);
+    mockGetActiveProfile.mockResolvedValue(TEST_PROFILE);
+    mockGetVisibleLetters.mockResolvedValue([VISIBLE_LETTER_A, VISIBLE_LETTER_B, VISIBLE_LETTER_T]);
+
+    const { Route } = await import('./learn');
+    const Component = Route.options.component;
+
+    if (!Component) {
+      throw new Error('Learn route has no component');
+    }
+
+    render(<Component />, { wrapper: createWrapper() });
+
+    // Lock icon (ParentGate) is the parent escape hatch — replaces the old "Back" text link.
+    expect(await screen.findByLabelText('Parent menu')).toBeTruthy();
+  });
+
+  it('does NOT render a "Back" text link in the header when a child is selected', async () => {
+    setActiveChild(TEST_PROFILE_ID);
+    mockGetActiveProfile.mockResolvedValue(TEST_PROFILE);
+    mockGetVisibleLetters.mockResolvedValue([VISIBLE_LETTER_A, VISIBLE_LETTER_B, VISIBLE_LETTER_T]);
+
+    const { Route } = await import('./learn');
+    const Component = Route.options.component;
+
+    if (!Component) {
+      throw new Error('Learn route has no component');
+    }
+
+    render(<Component />, { wrapper: createWrapper() });
+
+    // Wait for the page to render
+    expect(await screen.findByText('Aisyah')).toBeTruthy();
+
+    // The "Back" text link (replaced by ParentGate) should not be present in the child header.
+    // (The "Back to Dashboard" string in SelectChildMessage is a different, parent-only context.)
+    const links = screen.queryAllByRole('link');
+    for (const link of links) {
+      expect(link.textContent).not.toBe('Back');
+    }
+  });
 });
