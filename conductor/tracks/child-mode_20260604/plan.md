@@ -19,14 +19,14 @@
 
 ## Phase 2: Server Functions (enableChildModeFn & disableChildModeFn)
 
-- [x] Task: Add Zod schemas for child mode operations `4b2a4f1`
-  - [x] Add `enableChildModeSchema` to `app/lib/validations/auth.ts` `4b2a4f1`
-- [ ] Task: Implement `enableChildModeFn` in `app/server/auth-fns.ts`
-  - [ ] Write unit tests for `enableChildModeFn`
-  - [ ] Implement: validate profile ownership → sign cookie → set cookie → return success
-- [ ] Task: Implement `disableChildModeFn` in `app/server/auth-fns.ts`
-  - [ ] Write unit tests for `disableChildModeFn`
-  - [ ] Implement: delete `child_mode` cookie → return success
+- [x] Task: Add Zod schemas for child mode operations `7f52a4f`
+  - [x] Add `enableChildModeSchema` to `app/lib/validations/auth.ts` `7f52a4f`
+- [x] Task: Implement `enableChildModeFn` in `app/server/auth-fns.ts` `71f8d2f`
+  - [x] Write unit tests for `enableChildModeFn`
+  - [x] Implement: validate profile ownership → sign cookie → set cookie → return success
+- [x] Task: Implement `disableChildModeFn` in `app/server/auth-fns.ts` `71f8d2f`
+  - [x] Write unit tests for `disableChildModeFn`
+  - [x] Implement: delete `child_mode` cookie → return success
 - [ ] Task: Update `validateSessionFn` for dual auth
   - [ ] Write tests for child-mode cookie validation path
   - [ ] Implement: check `child_mode` cookie → verify → return child session shape
