@@ -27,11 +27,11 @@
   - [x] Write tests for ToastContainer (`app/components/ui/ToastContainer.test.tsx`) — verify toasts render, auto-dismiss, dismiss on click
   - [x] Implement `app/components/ui/ToastContainer.tsx` — reads `toasts` from `useUiStore`, renders each toast with variant styling (success/error/info), auto-dismiss after 5s, dismiss on click
   - [x] Wire ToastContainer into `__root.tsx` — render below main content
-- [~] Task: Wire toast notifications into server function error handlers
-  - [ ] Wire toast in `letters.ts` server functions — toggle failure → Toast: "Could not save"
-  - [ ] Wire toast in `profiles.ts` server functions — max 4 → Toast: "Maximum 4 children", save failure → Toast: "Could not save"
-  - [ ] Wire toast in `profiles.ts` — vowel mode save failure → Toast: "Could not update vowel mode"
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Toast Notifications' (Protocol in workflow.md)
+- [x] Task: Wire toast notifications into server function error handlers (0af90a9)
+  - [x] Wire toast in `letters.ts` server functions — toggle failure → Toast: "Could not save"
+  - [x] Wire toast in `profiles.ts` server functions — max 4 → Toast: "Maximum 4 children", save failure → Toast: "Could not save"
+  - [x] Wire toast in `profiles.ts` — vowel mode save failure → Toast: "Could not update vowel mode"
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Toast Notifications' (Protocol in workflow.md)
 
 ## Phase 4: Docker & Deployment Configuration
 
