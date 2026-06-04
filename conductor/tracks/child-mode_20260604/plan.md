@@ -27,9 +27,9 @@
 - [x] Task: Implement `disableChildModeFn` in `app/server/auth-fns.ts` `71f8d2f`
   - [x] Write unit tests for `disableChildModeFn`
   - [x] Implement: delete `child_mode` cookie → return success
-- [ ] Task: Update `validateSessionFn` for dual auth
-  - [ ] Write tests for child-mode cookie validation path
-  - [ ] Implement: check `child_mode` cookie → verify → return child session shape
+- [x] Task: Update `validateSessionFn` for dual auth `cfc0d3a`
+  - [x] Write tests for child-mode cookie validation path
+  - [x] Implement: check `child_mode` cookie → verify → return child session shape
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Server Functions' (Protocol in workflow.md)
 
 ---
