@@ -10,7 +10,7 @@
   - [x] Verify AudioEngine plays MP3 correctly (tap a letter card in /learn)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Audio MP3 Generation' (Protocol in workflow.md)
 
-## Phase 2: Error Boundaries [checkpoint: ]
+## Phase 2: Error Boundaries [checkpoint: aaa4a0a]
 
 - [x] Task: Create reusable ErrorBoundary component (90ae33c)
   - [x] Write tests for ErrorBoundary (`app/components/ui/ErrorBoundary.test.tsx`) — verify it catches errors, renders fallback, resets on "Try Again"
