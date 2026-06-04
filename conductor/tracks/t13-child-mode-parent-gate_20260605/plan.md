@@ -32,32 +32,32 @@ This plan follows the project's TDD workflow: every implementation task is prece
 
 ## Phase 2: ParentGate Component
 
-- [ ] Task: Write failing tests for `app/components/child/ParentGate.tsx`
-  - [ ] Test: renders a `Lock` icon (Lucide) by default
-  - [ ] Test: the lock icon has `aria-label="Parent menu"`
-  - [ ] Test: clicking the icon once does NOT open the parent menu
-  - [ ] Test: clicking the icon 3 times within 1s opens the parent menu (use `vi.useFakeTimers()`)
-  - [ ] Test: clicking the icon 3 times with >1s between taps does NOT open the menu
-  - [ ] Test: holding the icon for 1.5s (using pointerdown + advance timers 1500ms + pointerup) opens the parent menu
-  - [ ] Test: holding for <1.5s then releasing does NOT open the menu
-  - [ ] Test: the progress ring is at 0% width at rest and grows during the hold (use `data-progress` attribute)
-  - [ ] Test: when `disabled` is true, no interaction is accepted
-  - [ ] Test: clicking "Switch child" in the parent menu calls the `onSwitchChild` prop
-  - [ ] Test: clicking "Exit to parent dashboard" in the parent menu calls the `onExit` prop
-  - [ ] Test: the parent menu can be closed via the Close affordance
-  - [ ] Test: the parent menu is rendered at z-60 (above LetterDetail z-50)
-- [ ] Task: Implement `app/components/child/ParentGate.tsx`
-  - [ ] Use React `useState` for: `holding`, `progress` (0–1), `menuOpen`, `tapTimestamps` (array of ms)
-  - [ ] Use `useRef` for the hold timer id (so cleanup is clean)
-  - [ ] Use `pointerdown` / `pointerup` / `pointerleave` for cross-device handling
-  - [ ] On `pointerdown`: start a 1.5s timer, set `holding=true`, drive `progress` via CSS transition
-  - [ ] On `pointerup` / `pointerleave` / `pointercancel` before timer fires: clear timer, reset progress
-  - [ ] On hold timer fire: open menu, reset state
-  - [ ] On single click (no hold): record timestamp; if 3 timestamps within 1s, open menu
-  - [ ] Render: `<button>` with `aria-label`, `Lock` icon from Lucide, an absolutely-positioned `<span>` for the progress ring (`border-t-green border-2` whose width is set by `style={{ width: \`${progress \* 100}%\` }}` or a CSS variable)
-  - [ ] Parent menu: use Radix `Dialog` (or build a simple absolutely-positioned popover since the trigger is in a fixed corner)
-  - [ ] Cleanup `useEffect`: clear any pending timer on unmount
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: ParentGate Component' (Protocol in workflow.md)
+- [x] Task: Write failing tests for `app/components/child/ParentGate.tsx` `1ee470d`
+  - [x] Test: renders a `Lock` icon (Lucide) by default
+  - [x] Test: the lock icon has `aria-label="Parent menu"`
+  - [x] Test: clicking the icon once does NOT open the parent menu
+  - [x] Test: clicking the icon 3 times within 1s opens the parent menu (use `vi.useFakeTimers()`)
+  - [x] Test: clicking the icon 3 times with >1s between taps does NOT open the menu
+  - [x] Test: holding the icon for 1.5s (using pointerdown + advance timers 1500ms + pointerup) opens the parent menu
+  - [x] Test: holding for <1.5s then releasing does NOT open the menu
+  - [x] Test: the progress ring is at 0% width at rest and grows during the hold (use `data-progress` attribute)
+  - [x] Test: when `disabled` is true, no interaction is accepted
+  - [x] Test: clicking "Switch child" in the parent menu calls the `onSwitchChild` prop
+  - [x] Test: clicking "Exit to parent dashboard" in the parent menu calls the `onExit` prop
+  - [x] Test: the parent menu can be closed via the Close affordance
+  - [x] Test: the parent menu is rendered at z-60 (above LetterDetail z-50)
+- [x] Task: Implement `app/components/child/ParentGate.tsx` `2103010`
+  - [x] Use React `useState` for: `holding`, `progress` (0–1), `menuOpen`, `tapTimestamps` (array of ms)
+  - [x] Use `useRef` for the hold timer id (so cleanup is clean)
+  - [x] Use `pointerdown` / `pointerup` / `pointerleave` for cross-device handling
+  - [x] On `pointerdown`: start a 1.5s timer, set `holding=true`, drive `progress` via CSS transition
+  - [x] On `pointerup` / `pointerleave` / `pointercancel` before timer fires: clear timer, reset progress
+  - [x] On hold timer fire: open menu, reset state
+  - [x] On single click (no hold): record timestamp; if 3 timestamps within 1s, open menu
+  - [x] Render: `<button>` with `aria-label`, `Lock` icon from Lucide, an absolutely-positioned `<span>` for the progress ring (`border-t-green border-2` whose width is set by `style={{ width: \`${progress \* 100}%\` }}` or a CSS variable)
+  - [x] Parent menu: use Radix `Dialog` (or build a simple absolutely-positioned popover since the trigger is in a fixed corner)
+  - [x] Cleanup `useEffect`: clear any pending timer on unmount
+- [x] Task: Conductor - User Manual Verification 'Phase 2: ParentGate Component' (Protocol in workflow.md)
 
 ---
 
