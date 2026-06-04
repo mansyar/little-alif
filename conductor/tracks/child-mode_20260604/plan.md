@@ -88,4 +88,10 @@
   - [x] `pnpm lint` — clean `b3d39a9`
   - [x] `pnpm format:check` — clean `b3d39a9`
 - [x] Task: Conductor - User Manual Verification 'Phase 6: Edge Cases & Final Verification' (Protocol in workflow.md) `b3d39a9`
+
+---
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions (remove orphan JSDoc before `requireParentSession`) `33d5dc8`
       </protect>
