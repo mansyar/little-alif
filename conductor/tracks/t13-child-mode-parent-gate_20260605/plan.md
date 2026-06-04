@@ -8,15 +8,15 @@ This plan follows the project's TDD workflow: every implementation task is prece
 
 ## Phase 1: Foundation — Constants and Parent Gate Handler Hook
 
-- [ ] Task: Write failing tests for `app/lib/utils/parent-gate.ts` constants module
-  - [ ] Test: `PARENT_GATE_LONG_PRESS_MS` is exported and equals 1500
-  - [ ] Test: `PARENT_GATE_TAP_WINDOW_MS` is exported and equals 1000
-  - [ ] Test: `PARENT_GATE_TAP_COUNT` is exported and equals 3
-  - [ ] Test: All three constants are `number` and `> 0`
-- [ ] Task: Implement `app/lib/utils/parent-gate.ts`
-  - [ ] Export the three constants with the values above
-  - [ ] Add a short module-level JSDoc explaining the gesture semantics
-- [ ] Task: Write failing tests for `app/lib/hooks/useParentGateHandlers.ts`
+- [x] Task: Write failing tests for `app/lib/utils/parent-gate.ts` constants module `d898a5a`
+  - [x] Test: `PARENT_GATE_LONG_PRESS_MS` is exported and equals 1500
+  - [x] Test: `PARENT_GATE_TAP_WINDOW_MS` is exported and equals 1000
+  - [x] Test: `PARENT_GATE_TAP_COUNT` is exported and equals 3
+  - [x] Test: All three constants are `number` and `> 0`
+- [x] Task: Implement `app/lib/utils/parent-gate.ts` `6cca52c`
+  - [x] Export the three constants with the values above
+  - [x] Add a short module-level JSDoc explaining the gesture semantics
+- [~] Task: Write failing tests for `app/lib/hooks/useParentGateHandlers.ts`
   - [ ] Test: returns `{ handleExit, handleSwitchChild }` object
   - [ ] Test: `handleExit` calls `disableChildModeFn`, clears auth-store child state, routes to `/dashboard` when `useAuthStore.getState().user` is truthy
   - [ ] Test: `handleExit` routes to `/login` (not `/dashboard`) when no parent user is set in the auth store
