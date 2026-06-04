@@ -21,7 +21,7 @@
   - [x] Wrap `/learn/reading` route with ErrorBoundary
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Error Boundaries' (Protocol in workflow.md)
 
-## Phase 3: Toast Notifications
+## Phase 3: Toast Notifications [checkpoint: 27a529f]
 
 - [x] Task: Create ToastContainer component
   - [x] Write tests for ToastContainer (`app/components/ui/ToastContainer.test.tsx`) — verify toasts render, auto-dismiss, dismiss on click
