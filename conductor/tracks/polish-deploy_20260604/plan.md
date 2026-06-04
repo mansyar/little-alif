@@ -12,13 +12,13 @@
 
 ## Phase 2: Error Boundaries
 
-- [ ] Task: Create reusable ErrorBoundary component
-  - [ ] Write tests for ErrorBoundary (`app/components/ui/ErrorBoundary.test.tsx`) — verify it catches errors, renders fallback, resets on "Try Again"
-  - [ ] Implement `app/components/ui/ErrorBoundary.tsx` — React class component with `componentDidCatch`, fallback UI with "Try Again" button, `console.error` logging
-- [ ] Task: Wire Error Boundaries into route components
-  - [ ] Wrap `/dashboard` route with ErrorBoundary
-  - [ ] Wrap `/learn` route with ErrorBoundary
-  - [ ] Wrap `/learn/reading` route with ErrorBoundary
+- [x] Task: Create reusable ErrorBoundary component (90ae33c)
+  - [x] Write tests for ErrorBoundary (`app/components/ui/ErrorBoundary.test.tsx`) — verify it catches errors, renders fallback, resets on "Try Again"
+  - [x] Implement `app/components/ui/ErrorBoundary.tsx` — React class component with `componentDidCatch`, fallback UI with "Try Again" button, `console.error` logging
+- [x] Task: Wire Error Boundaries into route components (90ae33c)
+  - [x] Wrap `/dashboard` route with ErrorBoundary
+  - [x] Wrap `/learn` route with ErrorBoundary
+  - [x] Wrap `/learn/reading` route with ErrorBoundary
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Error Boundaries' (Protocol in workflow.md)
 
 ## Phase 3: Toast Notifications
