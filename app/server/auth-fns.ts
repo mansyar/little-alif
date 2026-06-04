@@ -169,18 +169,6 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
   });
 
 /**
- * Verify that a child session is allowed to access the given profile.
- *
- * When the session is a child-mode session (has `isChild: true`), this
- * ensures the requested `profileId` matches the `childProfileId` in the
- * session — preventing a child from accessing another child's data.
- *
- * When the session is a parent JWT session, this check is a no-op (the
- * existing profile-ownership checks in each function handle authorization).
- *
- * Throws `'Unauthorized.'` on mismatch. Returns `void` on success.
- */
-/**
  * Verify that the session is a parent JWT session, rejecting child-mode
  * sessions. Parent-only operations (create/update/delete profile, toggle
  * letters, etc.) must call this before proceeding.
