@@ -41,16 +41,18 @@
   - [x] Test `docker build` produces a working image
 - [x] Task: Create docker-compose.yml (77b6022)
   - [x] Write `docker-compose.yml` with app service, SQLite volume mount, env vars
+  - [x] Add `docker/server-entry.mjs` (custom HTTP server wraps TanStack Start fetch handler)
   - [x] Test `docker compose up` starts the app successfully
 - [x] Task: Update .env.example (77b6022)
   - [x] Add `BETTER_AUTH_URL` (was missing)
   - [x] Add `NODE_ENV`
   - [x] Add documentation comments for all variables
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Docker & Deployment' (Protocol in workflow.md)
+  - [x] Docker compose now stays running (server listening on :3000)
 
 ## Phase 5: Verification & Audit
 
-- [ ] Task: Run full test suite and verify pass rate
+- [x] Task: Run full test suite and verify pass rate
   - [ ] `pnpm test` — all existing tests pass
   - [ ] `pnpm typecheck` — no type errors
   - [ ] `pnpm lint` — no lint errors

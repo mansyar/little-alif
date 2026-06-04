@@ -56,6 +56,9 @@ COPY --from=build /app/node_modules ./node_modules
 # Copy package.json for metadata (not strictly needed but conventional)
 COPY --from=build /app/package.json ./
 
+# Copy the server entry wrapper
+COPY docker/server-entry.mjs ./docker/server-entry.mjs
+
 EXPOSE 3000
 
-CMD ["node", "dist/server/server.js"]
+CMD ["node", "docker/server-entry.mjs"]
