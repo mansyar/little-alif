@@ -1,8 +1,8 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.4 (T-10 — Reading Practice complete)
-**Based on:** PRD v1.3
+**Version:** 1.5 (T-11 — Child Mode complete)
+**Based on:** PRD v1.5
 
 ### Implementation Status
 

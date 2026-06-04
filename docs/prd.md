@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.4 (T-10 — Reading Practice complete)
+**Version:** 1.5 (T-11 — Child Mode complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -37,7 +37,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Audio Service**        | ✅ Complete | Web Speech API pronunciation. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                    |
 | **Audio Preloader**      | ✅ Complete | Idle-time voice warm-up via `requestIdleCallback`. See [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                           |
 | **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
-| **Child Mode**           | ⬜ Pending  | Cookie-based auth bypass for kids                                                                                                                                             |
+| **Child Mode**           | ✅ Complete | Cookie-based auth bypass for kids. See [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                                                     |
 | **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                      |
 | **Docker / Deploy**      | ⬜ Pending  | Containerization for Coolify                                                                                                                                                  |
 

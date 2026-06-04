@@ -20,7 +20,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
 | T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
 | T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ✅ Complete |
-| T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ⬜ Pending  |
+| T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ✅ Complete |
 | T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ⬜ Pending  |
 
 **Total estimated effort: ~32–52 hours**
@@ -41,7 +41,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)         |
 | T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)     |
 | T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)   |
-| T-11  | Child Mode                             | ⬜ Pending  | —                                                                                |
+| T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)               |
 | T-12  | Polish, Docker & Deployment            | ⬜ Pending  | —                                                                                |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
@@ -795,17 +795,17 @@ Final polish: error handling, responsive testing, performance optimization. Pack
  │    │    ├── T-05 (Dashboard & Profiles) ✅
  │    │    │    ├── T-06 (Letter Toggles) ✅
  │    │    │    │    ├── T-08 (Child Grid) ✅
- │    │    │    │    │    └── T-10 (Reading Practice) ⬜ ─┐
- │    │    │    │    └── T-11 (Child Mode) ⬜ ────────────┤
- │    │    │    └── T-11 (Child Mode) ⬜ ─────────────────┤
- │    │    └── T-11 (Child Mode) ⬜ ──────────────────────┤
- │    └── T-07 (Harakat) ✅ ──────────────────────────────┤
- │                                                        │
- T-03b (Code Quality) ── ✅                                │
- T-04 (i18n — parallel to T-02/T-03) ✅                    │
- T-09 (Audio — parallel to T-02/T-03) ✅                   │
-                                                            ▼
-                                                     T-12 (Polish & Deploy) ⬜
+ │    │    │    │    │    └── T-10 (Reading Practice) ✅ ──┐
+ │    │    │    │    └── T-11 (Child Mode) ✅ ─────────────┤
+ │    │    │    └── T-11 (Child Mode) ✅ ──────────────────┤
+ │    │    └── T-11 (Child Mode) ✅ ───────────────────────┤
+ │    └── T-07 (Harakat) ✅ ───────────────────────────────┤
+ │                                                         │
+ T-03b (Code Quality) ── ✅                                 │
+ T-04 (i18n — parallel to T-02/T-03) ✅                     │
+ T-09 (Audio — parallel to T-02/T-03) ✅                    │
+                                                              ▼
+                                                       T-12 (Polish & Deploy) ⬜
 ```
 
 ## Track Format
