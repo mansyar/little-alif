@@ -34,7 +34,7 @@
 
 ---
 
-## Phase 3: Landing Page & Learn Route Protection
+## Phase 3: Landing Page & Learn Route Protection [checkpoint: a78ef19]
 
 - [x] Task: Update landing page (`app/routes/index.tsx`) beforeLoad `7f1f070`
   - [x] Write route tests for child-mode redirect flow `7f1f070`
@@ -42,7 +42,7 @@
 - [x] Task: Add beforeLoad guard to `/learn` route (`app/routes/learn.tsx`) `589c4a5`
   - [x] Write route tests for learn route auth `589c4a5`
   - [x] Implement: accept parent JWT or child-mode cookie → set authStore.childProfileId `589c4a5`
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Route Protection' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Route Protection' (Protocol in workflow.md) `a78ef19`
 
 ---
 
