@@ -1,9 +1,12 @@
 import { APIError } from 'better-auth';
 import { createServerFn } from '@tanstack/react-start';
-import { getCookie, getRequest } from '@tanstack/react-start/server';
+import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
-import { loginSchema, registerSchema } from '~/lib/validations/auth';
+import { getDb, type DbClient } from '~/db';
+import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
+import { signChildModeCookie } from '~/lib/utils/child-mode';
 import { getAuth } from './auth';
+import { getActiveProfile } from './profiles';
 
 /**
  * Pure helper — derives a display name from the email local-part.
@@ -103,4 +106,68 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
       headers: new Headers({ cookie: buildCookieHeader(token) }),
     });
     return result ?? null;
+  });
+
+// ─── Child Mode Helpers ───────────────────────────────────────────────
+
+/**
+ * Validate profile ownership and return the data needed to sign a child-mode
+ * cookie. Reuses `getActiveProfile` from the profiles module to ensure
+ * consistent ownership checks.
+ */
+export async function enableChildMode(
+  db: DbClient,
+  userId: string,
+  profileId: string,
+): Promise<{ name: string; avatar: string }> {
+  const profile = await getActiveProfile(db, userId, profileId);
+  return { name: profile.name, avatar: profile.avatar };
+}
+
+/**
+ * Enable child mode for a profile. Validates parent session and profile
+ * ownership, then sets a signed `child_mode` cookie (Max-Age: 365 days,
+ * HttpOnly: false, SameSite: Lax). Replaces any existing child-mode cookie.
+ */
+export const enableChildModeFn = createServerFn({ method: 'POST' })
+  .inputValidator(enableChildModeSchema)
+  .handler(async ({ data }) => {
+    const session = await validateSessionFn();
+    if (session === null) {
+      throw new Error('Unauthenticated.');
+    }
+
+    const db = getDb();
+    const { name, avatar } = await enableChildMode(db, session.user.id, data.profileId);
+
+    const cookieValue = signChildModeCookie(data.profileId, name, avatar);
+    setCookie('child_mode', cookieValue, {
+      httpOnly: false,
+      maxAge: 31_536_000,
+      sameSite: 'lax',
+      path: '/',
+    });
+
+    return { success: true, profile: { name, avatar } };
+  });
+
+/**
+ * Disable child mode for the current device. Validates parent session, then
+ * clears the `child_mode` cookie. Takes no input — the active cookie on this
+ * device is what gets deleted.
+ */
+export const disableChildModeFn = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({}).optional())
+  .handler(async () => {
+    const session = await validateSessionFn();
+    if (session === null) {
+      throw new Error('Unauthenticated.');
+    }
+
+    setCookie('child_mode', '', {
+      maxAge: 0,
+      path: '/',
+    });
+
+    return { success: true };
   });
