@@ -63,4 +63,8 @@
   - [x] Performance check: first paint < 2s on Slow 3G — feels fast
   - [x] Accessibility check: keyboard navigation works, screen reader friendly
 - [x] Task: Conductor - User Manual Verification 'Phase 5: Verification & Audit' (Protocol in workflow.md)
+
+## Phase 6: Review Fixes
+
+- [x] Task: Apply review suggestions (807c053)
       </protect>
