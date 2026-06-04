@@ -23,6 +23,16 @@ vi.mock('~/server/letters', () => ({
   bulkToggleLettersFn: () => Promise.resolve({ updatedCount: 0 }),
 }));
 
+vi.mock('~/server/auth-fns', () => ({
+  enableChildModeFn: () =>
+    Promise.resolve({ success: true, profile: { name: 'Test', avatar: 'alif-lamp' } }),
+  disableChildModeFn: () => Promise.resolve({ success: true }),
+}));
+
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: () => vi.fn(),
+}));
+
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
@@ -33,6 +43,8 @@ vi.mock('~/lib/i18n', () => ({
       PROFILE_DELETE: () => 'Delete' as const,
       ERROR_GENERIC: () => 'Something went wrong.' as const,
       PROFILE_CANCEL: () => 'Try again' as const,
+      CHILDMODE_ENABLE: () => 'Enable Child Mode' as const,
+      CHILDMODE_ACTIVE: () => 'Child Mode is active' as const,
     },
   }),
 }));
@@ -86,12 +98,14 @@ describe('ProfileList', () => {
         id: '1',
         name: 'Aisyah',
         avatar: 'alif-lamp',
+        vowelMode: 'fathah',
         introducedCount: 5,
       },
       {
         id: '2',
         name: 'Bilal',
         avatar: 'ba-boat',
+        vowelMode: 'fathah',
         introducedCount: 12,
       },
     ]);
@@ -111,6 +125,7 @@ describe('ProfileList', () => {
         id: '1',
         name: 'Aisyah',
         avatar: 'alif-lamp',
+        vowelMode: 'fathah',
         introducedCount: 3,
       },
     ]);

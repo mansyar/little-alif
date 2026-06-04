@@ -5,6 +5,7 @@ import type { AvatarKey } from '~/db/schema';
 import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
 import { LetterToggleGrid } from './LetterToggleGrid';
+import { ChildModeToggle } from './ChildModeToggle';
 
 interface ProfileCard {
   id: string;
@@ -121,6 +122,7 @@ export function ProfileList({
                   ? LL.PROFILE_CANCEL()
                   : LL.PROFILE_MANAGE_LETTERS()}
               </button>
+              <ChildModeToggle profileId={profile.id} profileName={profile.name} />
               <button
                 type="button"
                 onClick={() => onEdit(profile)}
