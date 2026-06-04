@@ -35,17 +35,17 @@
 
 ## Phase 4: Docker & Deployment Configuration
 
-- [ ] Task: Create Dockerfile
-  - [ ] Write `docker/Dockerfile` with multi-stage build (deps → build → runner, node:20-alpine)
-  - [ ] Verify `pnpm build` succeeds in production mode
-  - [ ] Test `docker build` produces a working image
-- [ ] Task: Create docker-compose.yml
-  - [ ] Write `docker-compose.yml` with app service, SQLite volume mount, env vars
+- [x] Task: Create Dockerfile (77b6022)
+  - [x] Write `docker/Dockerfile` with multi-stage build (deps → build → runner, node:20-alpine)
+  - [x] Verify `pnpm build` succeeds in production mode
+  - [x] Test `docker build` produces a working image
+- [x] Task: Create docker-compose.yml (77b6022)
+  - [x] Write `docker-compose.yml` with app service, SQLite volume mount, env vars
   - [ ] Test `docker compose up` starts the app successfully
-- [ ] Task: Update .env.example
-  - [ ] Add `BETTER_AUTH_URL` (was missing)
-  - [ ] Add `NODE_ENV`
-  - [ ] Add documentation comments for all variables
+- [x] Task: Update .env.example (77b6022)
+  - [x] Add `BETTER_AUTH_URL` (was missing)
+  - [x] Add `NODE_ENV`
+  - [x] Add documentation comments for all variables
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Docker & Deployment' (Protocol in workflow.md)
 
 ## Phase 5: Verification & Audit
