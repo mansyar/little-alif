@@ -17,11 +17,11 @@ export function GroupPills({ groups, activeIndex, onSelect }: GroupPillsProps) {
           'min-h-[44px] shrink-0 rounded-full px-4 text-sm font-medium transition-colors';
 
         if (isActive) {
-          className += ' bg-emerald-500 text-white';
+          className += ' bg-green text-white';
         } else if (group.isComplete) {
-          className += ' border border-emerald-500 text-emerald-700 bg-white';
+          className += ' border border-green text-green-dark bg-white';
         } else {
-          className += ' border border-gray-300 text-gray-400 bg-gray-50 cursor-not-allowed';
+          className += ' border border-sand-dark text-text-muted bg-white';
         }
 
         return (

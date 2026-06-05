@@ -28,7 +28,7 @@ describe('GroupPills', () => {
     render(<GroupPills groups={GROUPS} activeIndex={0} onSelect={vi.fn()} />);
 
     const buttons = screen.getAllByRole('tab');
-    expect(buttons[0]!.className).toContain('bg-emerald-500');
+    expect(buttons[0]!.className).toContain('bg-green');
     expect(buttons[0]!.className).toContain('text-white');
   });
 
@@ -39,8 +39,8 @@ describe('GroupPills', () => {
 
     const buttons = screen.getAllByRole('tab');
     // Second button (index 1) is complete and inactive
-    expect(buttons[1]!.className).toContain('border-emerald-500');
-    expect(buttons[1]!.className).toContain('text-emerald-700');
+    expect(buttons[1]!.className).toContain('border-green');
+    expect(buttons[1]!.className).toContain('text-green-dark');
     expect(buttons[1]!.getAttribute('aria-disabled')).toBeNull();
     expect((buttons[1]! as HTMLButtonElement).disabled).toBe(false);
   });
@@ -51,8 +51,8 @@ describe('GroupPills', () => {
 
     const buttons = screen.getAllByRole('tab');
     // Third button (index 2) is incomplete and inactive
-    expect(buttons[2]!.className).toContain('border-gray-300');
-    expect(buttons[2]!.className).toContain('text-gray-400');
+    expect(buttons[2]!.className).toContain('border-sand-dark');
+    expect(buttons[2]!.className).toContain('text-text-muted');
     expect((buttons[2]! as HTMLButtonElement).disabled).toBe(true);
     expect(buttons[2]!.getAttribute('aria-disabled')).toBe('true');
     expect(buttons[2]!.getAttribute('title')).toBe('Needs 3 letters');
