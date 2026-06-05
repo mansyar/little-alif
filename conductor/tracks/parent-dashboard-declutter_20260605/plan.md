@@ -14,10 +14,10 @@
 
 ### Task 1.3: Implement ProfileMenu component
 
-- [ ] Write failing tests for `ProfileMenu` (renders dropdown items, opens ConfirmDialog on sign out)
-- [ ] Implement `app/components/parent/ProfileMenu.tsx` with Radix DropdownMenu
-- [ ] Integrate `ConfirmDialog` (danger variant) for sign-out confirmation
-- [ ] Verify tests pass
+- [x] Write failing tests for `ProfileMenu` (renders dropdown items, opens ConfirmDialog on sign out) [0d84925]
+- [x] Implement `app/components/parent/ProfileMenu.tsx` with Radix DropdownMenu [4973f82]
+- [x] Integrate `ConfirmDialog` (danger variant) for sign-out confirmation [4973f82]
+- [x] Verify tests pass [0d84925]
 
 ### Task 1.4: Update dashboard layout
 
