@@ -1,42 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import type { LetterId } from '~/lib/constants/letters';
 
-/**
- * Letter ID enum for the 28 Hijaiyah letters.
- * Kept as a const tuple so it can be re-used by the seed script and any
- * downstream validation (Zod) without importing Drizzle table types.
- */
-export const LETTER_IDS = [
-  'alif',
-  'ba',
-  'ta',
-  'tsa',
-  'jim',
-  'ha',
-  'kho',
-  'dal',
-  'dzal',
-  'ra',
-  'zai',
-  'sin',
-  'syin',
-  'shad',
-  'dhad',
-  'tha',
-  'dzha',
-  'ain',
-  'ghain',
-  'fa',
-  'qaf',
-  'kaf',
-  'lam',
-  'mim',
-  'nun',
-  'waw',
-  'hae',
-  'ya',
-] as const;
-export type LetterId = (typeof LETTER_IDS)[number];
+export type { LetterId };
 
 /**
  * Vowel mode enum used by profiles to determine which audio file plays
