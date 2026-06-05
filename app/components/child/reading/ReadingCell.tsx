@@ -25,7 +25,7 @@ export function ReadingCell({ glyph, letterId, vowelMode, letterChar }: ReadingC
       data-flashed={flashed}
       aria-label={`${letterId} ${vowelMode}`}
       onClick={handleClick}
-      className="flex aspect-square min-h-[56px] min-w-[56px] items-center justify-center rounded-lg bg-gray-50 text-3xl font-arabic data-[flashed=true]:bg-emerald-200 transition-colors duration-200"
+      className="flex aspect-square min-h-[56px] min-w-[56px] items-center justify-center rounded-small bg-sand-light text-3xl font-arabic data-[flashed=true]:bg-green-light transition-colors duration-200"
     >
       <span aria-hidden="true">{glyph}</span>
     </button>
