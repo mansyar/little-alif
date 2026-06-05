@@ -53,25 +53,25 @@
 
 ## Phase 4: Cleanup & Migration
 
-- [ ] Task: Update package.json scripts
-  - [ ] `lint` → `oxlint . --deny-warnings`
-  - [ ] `lint:fix` → `oxlint --fix . --deny-warnings`
-  - [ ] `format` → `oxfmt --write .`
-  - [ ] `format:check` → `oxfmt --check .`
-- [ ] Task: Update pre-commit hook and lint-staged
-  - [ ] Remove `lint-staged` from devDependencies
-  - [ ] Remove `lint-staged` config block from package.json
-  - [ ] Update `.husky/pre-commit`: replace `pnpm lint-staged && pnpm typecheck` with `oxlint --fix . && oxfmt --write . && pnpm typecheck`
-- [ ] Task: Remove old devDependencies
-  - [ ] `pnpm remove eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser typescript-eslint eslint-plugin-react eslint-plugin-react-hooks globals prettier`
-- [ ] Task: Delete old config files
-  - [ ] Delete `eslint.config.js`
-  - [ ] Archive or delete `.prettierrc` (if not needed by Oxfmt)
-  - [ ] Archive or delete `.prettierignore` (if not needed by Oxfmt)
-- [ ] Task: Update conductor/tech-stack.md
-  - [ ] Replace ESLint 9 + Prettier 3 references with Oxlint + Oxfmt
-  - [ ] Update rule/plugin descriptions
-  - [ ] Update pre-commit hook description
+- [x] Task: Update package.json scripts (commit 913fa32)
+  - [x] `lint` → `oxlint . --deny-warnings`
+  - [x] `lint:fix` → `oxlint --fix . --deny-warnings`
+  - [x] `format` → `oxfmt --write .`
+  - [x] `format:check` → `oxfmt --check .`
+- [x] Task: Update pre-commit hook and lint-staged (commit 913fa32)
+  - [x] Remove `lint-staged` from devDependencies
+  - [x] Remove `lint-staged` config block from package.json
+  - [x] Update `.husky/pre-commit`: replace `pnpm lint-staged && pnpm typecheck` with `oxlint --fix . && oxfmt --write . && pnpm typecheck`
+- [x] Task: Remove old devDependencies (commit 913fa32)
+  - [x] `pnpm remove eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser typescript-eslint eslint-plugin-react eslint-plugin-react-hooks globals prettier`
+- [x] Task: Delete old config files (commit 913fa32)
+  - [x] Delete `eslint.config.js`
+  - [x] Delete `.prettierrc`
+  - [x] Delete `.prettierignore`
+- [x] Task: Update conductor/tech-stack.md
+  - [x] Replace ESLint 9 + Prettier 3 references with Oxlint + Oxfmt
+  - [x] Update rule/plugin descriptions
+  - [x] Update pre-commit hook description
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Cleanup & Migration' (Protocol in workflow.md)
 
 ## Phase 5: Final Verification

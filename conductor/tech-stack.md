@@ -70,8 +70,7 @@
 ## Development Tools
 
 - **Type Checking:** TypeScript 5.7 (strict, `tsc --noEmit --incremental`)
-- **Linting:** ESLint 9 (flat config) with `@typescript-eslint/recommended-type-checked` + `stylistic-type-checked`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. Initial rule severity is `warn` to avoid blocking on pre-existing style debt; tighten to `error` in a follow-up track.
-- **Formatting:** Prettier 3 with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: 'all'`. Ignored: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `*.min.*`, `.husky`, `*.tsbuildinfo`, `app/routeTree.gen.ts`, `app/db/migrations`.
-- **Git Hooks:** Husky 9 (`.husky/pre-commit` invokes `pnpm lint-staged && pnpm typecheck`)
-- **Staged-File Runner:** lint-staged 17 (runs ESLint/Prettier on staged files only; tsc is intentionally outside the per-file glob — see [Workflow — Pre-Commit Quality Gates](./workflow.md#pre-commit-quality-gates))
-- **Testing:** Vitest 3 (unit + integration tests, jsdom environment for Radix UI)
+- **Linting:** Oxlint 1.68 (type-aware linting via `--type-aware` or config `typeAware: true`) with plugins: typescript, react, unicorn, oxc. 86 rules enabled. Zero warnings enforced via `--deny-warnings`.
+- **Formatting:** Oxfmt 0.53 with `printWidth: 100`, `semi: true`, `singleQuote: true`, `tabWidth: 2`, `trailingComma: 'all'`. Ignored: `node_modules`, `dist`, `.output`, `coverage`, `pnpm-lock.yaml`, `app/routeTree.gen.ts`, `app/db/migrations`.
+- **Git Hooks:** Husky 9 (`.husky/pre-commit` invokes `oxlint --fix . && oxfmt --write . && pnpm typecheck`)
+- **Testing:** Vitest 4 (unit + integration tests, jsdom environment for Radix UI)
