@@ -19,13 +19,13 @@
 **Files:** `app/components/child/reading/ReadingActions.tsx`
 **No test changes needed** — ReadingActions.test.tsx does not assert color/radius class names.
 
-- [ ] **Task:** Update ReadingActions.tsx class names
-  - [ ] Replace `border-gray-200` → `border-sand-dark` on all 4 buttons
-  - [ ] Replace `rounded-lg` → `rounded-small` on all 4 buttons
-  - [ ] Replace `hover:bg-gray-50` → `hover:bg-sand-light` on all 4 buttons
-  - [ ] Add `text-green` class to Lucide icon `<svg>` elements
-  - [ ] Run `pnpm test` to confirm no regressions
-- [ ] **Task:** Conductor — User Manual Verification 'ReadingActions Token Replacement' (Protocol in workflow.md)
+- [x] **Task:** Update ReadingActions.tsx class names (605e837)
+  - [x] Replace `border-gray-200` → `border-sand-dark` on all 4 buttons
+  - [x] Replace `rounded-lg` → `rounded-small` on all 4 buttons
+  - [x] Add `hover:bg-sand-light` hover state on all 4 buttons
+  - [x] Add `text-green` class to Lucide icon `<svg>` elements
+  - [x] Run `pnpm test` to confirm no regressions
+- [x] **Task:** Conductor — User Manual Verification 'ReadingActions Token Replacement' (Protocol in workflow.md)
 
 ---
 
