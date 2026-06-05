@@ -117,13 +117,21 @@ describe('ProfileList', () => {
     expect(container.querySelector('.animate-spin')).toBeFalsy();
   }, 15000);
 
-  it('shows empty state when no profiles exist', async () => {
+  it('shows empty state with profile avatar SVG (not generic User icon) when no profiles exist', async () => {
     mockListProfiles.mockResolvedValue([]);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
+      wrapper: createWrapper(),
+    });
 
     const message = await screen.findByText('No child profiles yet. Add one to get started.');
     expect(message).toBeTruthy();
+
+    // Should render an avatar SVG (viewBox 0 0 64 64) with opacity-30, not a generic icon
+    const svg = container.querySelector('svg');
+    expect(svg).toBeTruthy();
+    expect(svg?.getAttribute('viewBox')).toBe('0 0 64 64');
+    expect(svg?.getAttribute('class')).toContain('opacity-30');
   });
 
   it('renders profile cards with names and letter counts', async () => {

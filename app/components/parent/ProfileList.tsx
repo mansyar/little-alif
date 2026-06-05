@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { User } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { listProfilesFn } from '~/server/profiles';
-import { AVATAR_MAP } from './avatars';
+import { AVATAR_MAP, AlifLamp } from './avatars';
 import type { AvatarKey } from '~/db/schema';
 import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
@@ -81,7 +80,7 @@ export function ProfileList({ onEdit, onDelete, onStartLearning }: ProfileListPr
   if (!profiles || profiles.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <User className="mb-4 h-24 w-24 text-text-muted opacity-30" />
+        <AlifLamp className="mb-4 h-24 w-24 text-text-muted opacity-30" />
         <p className="text-lg font-medium text-text-muted">{LL.DASHBOARD_NO_CHILDREN()}</p>
       </div>
     );
