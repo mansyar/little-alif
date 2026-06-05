@@ -49,20 +49,21 @@
 
 ### Tasks
 
-- [ ] **Task 2.1: Write failing tests for i18n keys**
-  - [ ] Add test expecting `ReadingActions` to render translated text for each of the 5 keys
-  - [ ] Run test — confirm **Red** (keys don't exist yet, components use hardcoded strings)
+- [x] **Task 2.1: Write failing tests for i18n keys**
+  - [x] Add test expecting `ReadingActions` to render translated text for each of the 5 keys
+  - [x] Run test — confirm **Red** (keys don't exist yet, components use hardcoded strings)
 
-- [ ] **Task 2.2: Add i18n keys**
-  - [ ] Add 5 keys (`READING_SHUFFLE`, `READING_DONE`, `READING_NEXT_GROUP`, `READING_RANDOMIZE`, `READING_PATTERN_LABEL`) to `app/lib/i18n/en/index.ts`
-  - [ ] Add 5 Indonesian translations to `app/lib/i18n/id/index.ts`
-  - [ ] Run `pnpm i18n` to regenerate type files
-  - [ ] Verify `pnpm typecheck` passes
+- [x] **Task 2.2: Add i18n keys**
+  - [x] Add 5 keys (`READING_SHUFFLE`, `READING_DONE`, `READING_NEXT_GROUP`, `READING_RANDOMIZE`, `READING_PATTERN_LABEL`) to `app/lib/i18n/en/index.ts`
+  - [x] Add 5 Indonesian translations to `app/lib/i18n/id/index.ts`
+  - [x] Run `pnpm i18n` to regenerate type files
+  - [x] Verify `pnpm typecheck` passes
 
-- [ ] **Task 2.3: Update ReadingActions.tsx**
-  - [ ] Replace hardcoded strings with `LL` calls in `app/components/child/reading/ReadingActions.tsx`
-  - [ ] Add `import { useI18nContext } from '~/lib/i18n'`
-  - [ ] Verify `pnpm typecheck` passes
+- [x] **Task 2.3: Update ReadingActions.tsx**
+  - [x] Replace hardcoded strings with `LL` calls in `app/components/child/reading/ReadingActions.tsx`
+  - [x] Add `import { useI18nContext } from '~/lib/i18n'`
+  - [x] Update `-reading.test.tsx` with i18n mock + updated aria-label queries
+  - [x] Verify `pnpm typecheck` passes
 
 - [ ] **Task 2.4: Update GroupPills.tsx**
   - [ ] Replace hardcoded "Pattern" label with `LL.READING_PATTERN_LABEL()` in `GroupPills.tsx` (if that label exists — verify first)

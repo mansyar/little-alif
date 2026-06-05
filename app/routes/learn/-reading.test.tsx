@@ -21,6 +21,18 @@ vi.mock('~/lib/audio/audio-engine', () => ({
   audioEngine: {} as import('~/lib/audio/audio-engine').AudioEngine,
 }));
 
+vi.mock('~/lib/i18n', () => ({
+  useI18nContext: () => ({
+    LL: {
+      READING_SHUFFLE: () => 'Shuffle',
+      READING_DONE: () => 'Done',
+      READING_NEXT_GROUP: () => 'Next Group',
+      READING_RANDOMIZE: () => 'Randomize',
+      READING_PATTERN_LABEL: () => 'Pattern',
+    },
+  }),
+}));
+
 vi.mock('@tanstack/react-router', async () => {
   const actual =
     await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
@@ -121,8 +133,8 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for data to load — components should appear
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
-    expect(await screen.findByLabelText('Done reading practice')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
+    expect(await screen.findByLabelText('Done')).toBeTruthy();
 
     // Grid renders 6 rows
     const rows = document.querySelectorAll('[role="row"]');
@@ -189,7 +201,7 @@ describe('Reading route (/learn/reading)', () => {
     await userEvent.setup().click(screen.getByText('Try again'));
 
     // After successful retry, the components should appear
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
   });
 
   it('clicks Next Group to navigate to next group and wraps around', async () => {
@@ -203,12 +215,12 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for data load
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
     expect(await screen.findByRole('tab', { name: 'Group 1: ا ب ت' })).toBeTruthy(); // Group 1 pills
     expect(await screen.findByRole('tab', { name: 'Group 2: ث' })).toBeTruthy(); // Group 2 pill (incomplete, but still rendered)
 
     // Click next group
-    const nextBtn = await screen.findByLabelText('Next group');
+    const nextBtn = await screen.findByLabelText('Next Group');
     await userEvent.setup().click(nextBtn);
 
     // After clicking next, the second group should be active
@@ -225,9 +237,9 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
 
-    await userEvent.setup().click(screen.getByLabelText('Done reading practice'));
+    await userEvent.setup().click(screen.getByLabelText('Done'));
 
     expect(mockNavigate).toHaveBeenCalledWith({ to: '/learn' });
   });
@@ -240,9 +252,9 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
 
-    await userEvent.setup().click(screen.getByLabelText('Shuffle rows'));
+    await userEvent.setup().click(screen.getByLabelText('Shuffle'));
 
     // Grid still renders 6 rows after shuffle
     const rows = document.querySelectorAll('[role="row"]');
@@ -257,7 +269,7 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    await screen.findByLabelText('Shuffle rows');
+    await screen.findByLabelText('Shuffle');
 
     // Toggle to kasrah via uiStore
     act(() => {
@@ -321,7 +333,7 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for the page to render
-    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
 
     // The "Back" text link (replaced by ParentGate) should not be present in the header.
     const links = screen.queryAllByRole('link');

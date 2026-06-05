@@ -175,6 +175,26 @@ type RootTranslation = {
 	 */
 	LOCALE_SWITCH: string
 	/**
+	 * S​h​u​f​f​l​e
+	 */
+	READING_SHUFFLE: string
+	/**
+	 * D​o​n​e
+	 */
+	READING_DONE: string
+	/**
+	 * N​e​x​t​ ​G​r​o​u​p
+	 */
+	READING_NEXT_GROUP: string
+	/**
+	 * R​a​n​d​o​m​i​z​e
+	 */
+	READING_RANDOMIZE: string
+	/**
+	 * P​a​t​t​e​r​n
+	 */
+	READING_PATTERN_LABEL: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_GENERIC: string
@@ -349,6 +369,26 @@ export type TranslationFunctions = {
 	 * Bahasa Indonesia
 	 */
 	LOCALE_SWITCH: () => LocalizedString
+	/**
+	 * Shuffle
+	 */
+	READING_SHUFFLE: () => LocalizedString
+	/**
+	 * Done
+	 */
+	READING_DONE: () => LocalizedString
+	/**
+	 * Next Group
+	 */
+	READING_NEXT_GROUP: () => LocalizedString
+	/**
+	 * Randomize
+	 */
+	READING_RANDOMIZE: () => LocalizedString
+	/**
+	 * Pattern
+	 */
+	READING_PATTERN_LABEL: () => LocalizedString
 	/**
 	 * Something went wrong. Please try again.
 	 */

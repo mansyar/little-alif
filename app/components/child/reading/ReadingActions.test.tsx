@@ -4,6 +4,18 @@ import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReadingGroup } from '~/lib/utils/reading';
 
+vi.mock('~/lib/i18n', () => ({
+  useI18nContext: () => ({
+    LL: {
+      READING_SHUFFLE: () => 'X_SHUFFLE',
+      READING_DONE: () => 'X_DONE',
+      READING_NEXT_GROUP: () => 'X_NEXT_GROUP',
+      READING_RANDOMIZE: () => 'X_RANDOMIZE',
+      READING_PATTERN_LABEL: () => 'X_PATTERN',
+    },
+  }),
+}));
+
 const mockOnShuffle = vi.fn();
 const mockOnNext = vi.fn();
 const mockOnDone = vi.fn();
@@ -24,6 +36,24 @@ describe('ReadingActions', () => {
     vi.clearAllMocks();
   });
 
+  it('renders translated text from LL calls for all buttons', async () => {
+    const { ReadingActions } = await import('./ReadingActions');
+    render(
+      <ReadingActions
+        groups={TWO_GROUPS}
+        onShuffle={mockOnShuffle}
+        onNext={mockOnNext}
+        onDone={mockOnDone}
+        onRandomizeHarakat={mockOnRandomizeHarakat}
+      />,
+    );
+
+    expect(screen.getByText('X_RANDOMIZE')).toBeTruthy();
+    expect(screen.getByText('X_SHUFFLE')).toBeTruthy();
+    expect(screen.getByText('X_NEXT_GROUP')).toBeTruthy();
+    expect(screen.getByText('X_DONE')).toBeTruthy();
+  });
+
   it('renders Random, Shuffle, Next Group, Done buttons for multiple groups', async () => {
     const { ReadingActions } = await import('./ReadingActions');
     render(
@@ -36,10 +66,10 @@ describe('ReadingActions', () => {
       />,
     );
 
-    expect(screen.getByRole('button', { name: 'Randomize vowel' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Next group' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_RANDOMIZE' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_SHUFFLE' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_NEXT_GROUP' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_DONE' })).toBeTruthy();
   });
 
   it('renders Random + Shuffle + Done for single group (no Next Group)', async () => {
@@ -54,10 +84,10 @@ describe('ReadingActions', () => {
       />,
     );
 
-    expect(screen.getByRole('button', { name: 'Randomize vowel' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Shuffle rows' })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Next group' })).toBeNull();
-    expect(screen.getByRole('button', { name: 'Done reading practice' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_RANDOMIZE' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'X_SHUFFLE' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'X_NEXT_GROUP' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'X_DONE' })).toBeTruthy();
   });
 
   it('clicking Shuffle calls onShuffle once', async () => {
@@ -73,7 +103,7 @@ describe('ReadingActions', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Shuffle rows' }));
+    await user.click(screen.getByRole('button', { name: 'X_SHUFFLE' }));
     expect(mockOnShuffle).toHaveBeenCalledTimes(1);
   });
 
@@ -90,7 +120,7 @@ describe('ReadingActions', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Next group' }));
+    await user.click(screen.getByRole('button', { name: 'X_NEXT_GROUP' }));
     expect(mockOnNext).toHaveBeenCalledTimes(1);
   });
 
@@ -107,7 +137,7 @@ describe('ReadingActions', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Done reading practice' }));
+    await user.click(screen.getByRole('button', { name: 'X_DONE' }));
     expect(mockOnDone).toHaveBeenCalledTimes(1);
   });
 
@@ -124,7 +154,7 @@ describe('ReadingActions', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Randomize vowel' }));
+    await user.click(screen.getByRole('button', { name: 'X_RANDOMIZE' }));
     expect(mockOnRandomizeHarakat).toHaveBeenCalledTimes(1);
   });
 

@@ -55,6 +55,13 @@ const id = {
   // Locale
   LOCALE_SWITCH: 'English',
 
+  // Reading Practice
+  READING_SHUFFLE: 'Acak',
+  READING_DONE: 'Selesai',
+  READING_NEXT_GROUP: 'Grup Berikutnya',
+  READING_RANDOMIZE: 'Acak Vokal',
+  READING_PATTERN_LABEL: 'Pola',
+
   // Errors
   ERROR_GENERIC: 'Terjadi kesalahan. Silakan coba lagi.',
   ERROR_INVALID_EMAIL: 'Masukkan alamat surel yang valid.',

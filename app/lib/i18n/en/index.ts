@@ -55,6 +55,13 @@ const en = {
   // Locale
   LOCALE_SWITCH: 'Bahasa Indonesia',
 
+  // Reading Practice
+  READING_SHUFFLE: 'Shuffle',
+  READING_DONE: 'Done',
+  READING_NEXT_GROUP: 'Next Group',
+  READING_RANDOMIZE: 'Randomize',
+  READING_PATTERN_LABEL: 'Pattern',
+
   // Errors
   ERROR_GENERIC: 'Something went wrong. Please try again.',
   ERROR_INVALID_EMAIL: 'Please enter a valid email address.',
