@@ -14,12 +14,12 @@
   - [x] Enable type-aware linting config for oxlint-tsgolint
   - [x] Set rule severities to match current behavior (warn/error parity)
   - [x] Fix tsconfig.json `baseUrl` to avoid tsgolint error
-- [x] Task: Finalize .oxlintignore (7bf475b)
+- [x] Task: Finalize .oxlintignore (49d1714)
   - [x] Create .oxlintignore with same patterns as existing ESLint ignores
-- [~] Task: Configure Oxfmt
-  - [ ] Verify Oxfmt reads .prettierrc natively (printWidth: 100, singleQuote, etc.)
-  - [ ] If not compatible, create Oxfmt-specific config
-  - [ ] Verify .prettierignore is compatible or create oxfmt equivalent
+- [x] Task: Configure Oxfmt (49d1714)
+  - [x] Verify Oxfmt reads .prettierrc natively — NO, needs separate config
+  - [x] Create Oxfmt-specific config via `oxfmt --migrate prettier` → .oxfmtrc.json
+  - [x] Verify .prettierignore is compatible — YES, oxfmt reads it by default
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Lint Parity Verification
