@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Parent Dashboard De-clutter**
-      _Link: [./tracks/parent-dashboard-declutter_20260605/](./tracks/parent-dashboard-declutter_20260605/)_
+- [~] **Track: Parent Dashboard De-clutter**
+  _Link: [./tracks/parent-dashboard-declutter_20260605/](./tracks/parent-dashboard-declutter_20260605/)_

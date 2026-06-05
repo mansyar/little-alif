@@ -31,6 +31,28 @@ vi.mock('~/server/auth-fns', () => ({
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => vi.fn(),
+  Link: ({
+    to,
+    params,
+    children,
+    ...props
+  }: {
+    to: string;
+    params?: Record<string, string>;
+    children: ReactNode;
+  }) => {
+    let href = to;
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        href = href.replace(`$${key}`, value);
+      }
+    }
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
+  },
 }));
 
 vi.mock('~/lib/i18n', () => ({
@@ -119,7 +141,7 @@ describe('ProfileList', () => {
     expect(screen.getByText(/12\/28/)).toBeTruthy();
   });
 
-  it('renders action buttons for each profile', async () => {
+  it('renders action controls for each profile', async () => {
     mockListProfiles.mockResolvedValue([
       {
         id: '1',
@@ -136,6 +158,74 @@ describe('ProfileList', () => {
     expect(await screen.findByText('Manage Letters')).toBeTruthy();
     expect(screen.getByText('Edit')).toBeTruthy();
     expect(screen.getByText('Delete')).toBeTruthy();
+  });
+
+  it('renders Manage Letters as a link to the dedicated route', async () => {
+    mockListProfiles.mockResolvedValue([
+      {
+        id: 'profile-123',
+        name: 'Aisyah',
+        avatar: 'alif-lamp',
+        vowelMode: 'fathah',
+        introducedCount: 5,
+      },
+    ]);
+
+    const { ProfileList } = await import('./ProfileList');
+    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+
+    await screen.findByText('Aisyah');
+
+    const manageLettersLink = screen.getByRole('link', { name: /manage letters/i });
+    expect(manageLettersLink).toBeDefined();
+    expect(manageLettersLink.getAttribute('href')).toBe('/dashboard/profiles/profile-123/letters');
+  });
+
+  it('applies min-h-[140px] to profile cards', async () => {
+    mockListProfiles.mockResolvedValue([
+      {
+        id: '1',
+        name: 'Aisyah',
+        avatar: 'alif-lamp',
+        vowelMode: 'fathah',
+        introducedCount: 3,
+      },
+    ]);
+
+    const { ProfileList } = await import('./ProfileList');
+    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
+      wrapper: createWrapper(),
+    });
+
+    await screen.findByText('Aisyah');
+
+    const cardDivs = container.querySelectorAll('.rounded-large');
+    expect(cardDivs.length).toBe(1);
+    // The profile card should have min-h-[140px] class
+    expect(cardDivs[0]?.className).toContain('min-h-[140px]');
+  });
+
+  it('does not render inline LetterToggleGrid content', async () => {
+    mockListProfiles.mockResolvedValue([
+      {
+        id: '1',
+        name: 'Aisyah',
+        avatar: 'alif-lamp',
+        vowelMode: 'fathah',
+        introducedCount: 3,
+      },
+    ]);
+
+    const { ProfileList } = await import('./ProfileList');
+    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
+      wrapper: createWrapper(),
+    });
+
+    await screen.findByText('Aisyah');
+
+    // The footer's border-t is the only one — inline LetterToggleGrid would add a second
+    const borderedDividers = container.querySelectorAll('.border-t');
+    expect(borderedDividers.length).toBe(1);
   });
 
   it('handles server error gracefully', async () => {

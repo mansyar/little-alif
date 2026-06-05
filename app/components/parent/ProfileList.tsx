@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { User } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import { listProfilesFn } from '~/server/profiles';
 import { AVATAR_MAP } from './avatars';
 import type { AvatarKey } from '~/db/schema';
 import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
-import { LetterToggleGrid } from './LetterToggleGrid';
 import { ChildModeToggle } from './ChildModeToggle';
 
 interface ProfileCard {
@@ -20,17 +20,9 @@ interface ProfileListProps {
   onEdit: (profile: ProfileCard) => void;
   onDelete: (profileId: string) => void;
   onStartLearning?: (profileId: string) => void;
-  expandedProfileId?: string | null;
-  onToggleLetters?: (profileId: string) => void;
 }
 
-export function ProfileList({
-  onEdit,
-  onDelete,
-  onStartLearning,
-  expandedProfileId,
-  onToggleLetters,
-}: ProfileListProps) {
+export function ProfileList({ onEdit, onDelete, onStartLearning }: ProfileListProps) {
   const { LL } = useI18nContext();
   const {
     data: profiles,
@@ -85,7 +77,7 @@ export function ProfileList({
         return (
           <div
             key={profile.id}
-            className="flex flex-col rounded-large bg-white p-5 shadow-card transition-shadow hover:shadow-lg"
+            className="flex min-h-[140px] flex-col rounded-large bg-white p-5 shadow-card transition-shadow hover:shadow-lg"
           >
             <button
               type="button"
@@ -112,17 +104,13 @@ export function ProfileList({
             </button>
 
             <div className="mt-auto flex items-center gap-2 border-t border-sand-light pt-3">
-              <button
-                type="button"
-                onClick={() => onToggleLetters?.(profile.id)}
-                className={`rounded-small px-3 py-1.5 text-sm font-medium transition-colors hover:bg-blue-50 ${
-                  expandedProfileId === profile.id ? 'bg-blue-50 text-blue-700' : 'text-blue-600'
-                }`}
+              <Link
+                to="/dashboard/profiles/$id/letters"
+                params={{ id: profile.id }}
+                className="rounded-small px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50"
               >
-                {expandedProfileId === profile.id
-                  ? LL.PROFILE_CANCEL()
-                  : LL.PROFILE_MANAGE_LETTERS()}
-              </button>
+                {LL.PROFILE_MANAGE_LETTERS()}
+              </Link>
               <ChildModeToggle profileId={profile.id} profileName={profile.name} />
               <button
                 type="button"
@@ -139,12 +127,6 @@ export function ProfileList({
                 {LL.PROFILE_DELETE()}
               </button>
             </div>
-
-            {expandedProfileId === profile.id && (
-              <div className="border-t border-sand-light pt-4">
-                <LetterToggleGrid profileId={profile.id} vowelMode={profile.vowelMode} />
-              </div>
-            )}
           </div>
         );
       })}
