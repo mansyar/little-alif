@@ -51,7 +51,7 @@ export function fisherYatesShuffle<T>(array: T[]): T[] {
  */
 export function generateReadingGroups(
   visibleLetterIds: string[],
-  getCharById?: (id: string) => string,
+  getCharById?: (id: string) => string | undefined,
 ): ReadingGroup[] {
   if (visibleLetterIds.length < 3) return [];
 
@@ -60,10 +60,13 @@ export function generateReadingGroups(
 
   for (let i = 0; i < visibleLetterIds.length; i += 3) {
     const chunk = visibleLetterIds.slice(i, i + 3);
+    const resolvedChars = chunk.map((id) => resolve(id));
+    const firstValid = resolvedChars.find((c) => c);
+    const label = resolvedChars.map((c) => c ?? firstValid ?? '').join(' ');
     groups.push({
       id: groups.length + 1,
       letters: chunk,
-      label: chunk.map(resolve).join(' '),
+      label,
       isComplete: chunk.length === 3,
     });
   }

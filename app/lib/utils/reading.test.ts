@@ -139,6 +139,17 @@ describe('generateReadingGroups', () => {
     expect(groupAt(groups, 0).id).toBe(1);
     expect(groupAt(groups, 1).id).toBe(2);
   });
+
+  it('uses first resolved character as fallback when resolver returns undefined', () => {
+    // Resolver returns undefined for 'ba' — fallback should use 'ا' (from 'alif')
+    // Current bug: join converts undefined to empty string, producing "ا   ا" (double space)
+    const groups = generateReadingGroups(['alif', 'ba', 'ta'], (id) =>
+      id === 'ba' ? undefined : 'ا',
+    );
+    expect(groups).toHaveLength(1);
+    // All three positions should resolve to Arabic characters, no gaps
+    expect(groups[0]!.label).toBe('\u0627 \u0627 \u0627');
+  });
 });
 
 // =========================================================================

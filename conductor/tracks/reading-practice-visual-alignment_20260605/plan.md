@@ -71,16 +71,16 @@
 **Files:** `app/lib/utils/reading.ts`, `app/lib/utils/reading.test.ts`
 **Test changes needed** — New test for undefined-resolver fallback.
 
-- [ ] **Task:** Fix `generateReadingGroups()` label fallback
-  - [ ] **[Red]** Add test to `reading.test.ts`:
+- [x] **Task:** Fix `generateReadingGroups()` label fallback
+  - [x] **[Red]** Add test to `reading.test.ts`:
     - Call `generateReadingGroups(['alif', 'ba', 'ta'], (id) => id === 'ba' ? undefined : 'ا')`
     - Assert that `group.label` contains Arabic characters (not 'ba' or the raw ID)
-    - Confirm the new test FAILS (current code would use `undefined` or the fallback ID)
-  - [ ] **[Green]** Update `generateReadingGroups()` in `reading.ts`:
+    - Confirm the new test FAILS
+  - [x] **[Green]** Update `generateReadingGroups()` in `reading.ts`:
     - When `resolve(id)` returns a falsy value, use the first successfully resolved character in the chunk as the fallback placeholder
     - Ensure all existing label tests still pass
-  - [ ] Verify all tests pass
-- [ ] **Task:** Conductor — User Manual Verification 'Label Fallback Fix' (Protocol in workflow.md)
+  - [x] Verify all tests pass
+- [x] **Task:** Conductor — User Manual Verification 'Label Fallback Fix' (Protocol in workflow.md)
 
 ---
 
