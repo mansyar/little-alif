@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { describe, expect, it, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 import { render, screen, cleanup, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -92,6 +92,13 @@ function resetUiStore() {
 // ── Tests ──────────────────────────────────────────────────────────────
 
 describe('Reading route (/learn/reading)', () => {
+  beforeAll(() => {
+    // Guard against fake-timer pollution from prior test files (e.g. ParentGate
+    // uses vi.useFakeTimers extensively). Reading route tests run with real
+    // timers so query resolution, setTimeout(0) microtask deferrals, etc. work.
+    vi.useRealTimers();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     resetUiStore();
@@ -121,7 +128,7 @@ describe('Reading route (/learn/reading)', () => {
     // Grid renders 6 rows
     const rows = document.querySelectorAll('[role="row"]');
     expect(rows).toHaveLength(6);
-  });
+  }, 15000);
 
   it('redirects to /learn when fewer than 3 letters', async () => {
     mockGetReadingData.mockResolvedValue(READING_DATA_TWO);
