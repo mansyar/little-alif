@@ -21,11 +21,11 @@
 
 ### Task 1.4: Update dashboard layout
 
-- [ ] Write failing tests for updated dashboard layout (no sidebar, header present)
-- [ ] Update `app/routes/dashboard.tsx` — replace `<aside>` sidebar with `<DashboardHeader />`
-- [ ] Remove sidebar-related classes and structure
-- [ ] Profile cards become single-column list on mobile, 2-column on desktop
-- [ ] Verify tests pass
+- [x] Write failing tests for updated dashboard layout (no sidebar, header present) [b332550]
+- [x] Update `app/routes/dashboard.tsx` — replace `<aside>` sidebar with `<DashboardHeader />` [b332550]
+- [x] Remove sidebar-related classes and structure [b332550]
+- [x] Profile cards become single-column list on mobile, 2-column on desktop [b332550]
+- [x] Verify tests pass [b332550]
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Dedicated Letter Management Route
