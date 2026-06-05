@@ -22,7 +22,7 @@ vi.mock('~/lib/audio/audio-engine', () => ({
 }));
 
 import { LetterCard } from './LetterCard';
-import type { LetterId } from '~/db/schema';
+import type { LetterId } from '~/lib/constants/letters';
 import type { VowelMode } from '~/lib/utils/harakat';
 
 const letter = {

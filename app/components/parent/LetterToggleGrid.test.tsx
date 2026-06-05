@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import type { VisibleLetter } from '~/server/letters';
-import { LETTER_IDS } from '~/db/schema';
+import { LETTER_IDS } from '~/lib/constants/letters';
 import { useUiStore } from '~/stores/ui-store';
 
 const mockProfileId = 'test-profile-id';

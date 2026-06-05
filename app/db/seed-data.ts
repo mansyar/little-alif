@@ -1,4 +1,4 @@
-import type { LetterId } from './schema';
+import type { LetterId } from '~/lib/constants/letters';
 
 /**
  * Seed data for the 28 Hijaiyah letters.

@@ -2,7 +2,8 @@ import { describe, expect, it, beforeAll, afterAll, beforeEach } from 'vitest';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { eq } from 'drizzle-orm';
-import { profiles, letterToggles, LETTER_IDS } from '~/db/schema';
+import { profiles, letterToggles } from '~/db/schema';
+import { LETTER_IDS } from '~/lib/constants/letters';
 import * as authSchema from '~/db/auth-schema';
 import type { DbClient } from '~/db';
 import {

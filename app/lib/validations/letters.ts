@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LETTER_IDS } from '~/db/schema';
+import { LETTER_IDS } from '~/lib/constants/letters';
 
 /**
  * Schema for fetching visible letters for a child profile.

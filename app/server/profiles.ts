@@ -3,7 +3,8 @@ import { getCookie, setCookie } from '@tanstack/react-start/server';
 import { and, count, eq, sql, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
 import { getDb, type DbClient } from '~/db';
-import { profiles, letterToggles, LETTER_IDS } from '~/db/schema';
+import { profiles, letterToggles } from '~/db/schema';
+import { LETTER_IDS } from '~/lib/constants/letters';
 import {
   createProfileSchema,
   updateProfileSchema,
