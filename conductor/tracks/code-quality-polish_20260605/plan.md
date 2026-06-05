@@ -11,7 +11,7 @@
 
 ### Tasks
 
-- [ ] **Task 1.1: Create constants file**
+- [x] **Task 1.1: Create constants file** `a9b74fa`
   - [ ] Create `app/lib/constants/letters.ts` defining `LETTER_IDS as const`, `LetterId` type, and `LETTER_BG_COLORS: Record<LetterId, string>` (28 pastel Tailwind classes)
   - [ ] Write test for constants file verifying:
     - `LETTER_IDS` has exactly 28 entries
