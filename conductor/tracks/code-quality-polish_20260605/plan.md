@@ -43,7 +43,7 @@
 
 ---
 
-## Phase 2: Reading Practice i18n
+## Phase 2: Reading Practice i18n [checkpoint: <pending>]
 
 **Goal:** Localize 5 reading practice action labels with EN/ID i18n keys.
 
@@ -75,9 +75,9 @@
   - [x] The "renders translated text from LL calls for all buttons" test proves component renders LL values; locale switch behavior is i18n layer responsibility
   - [x] Run tests — 59 files, 485 tests pass — **Green**
 
-- [ ] **Task 2.6: Run full verification**
-  - [ ] `pnpm test` — all tests pass
-  - [ ] `pnpm typecheck` — clean
-  - [ ] `pnpm lint` — clean
+- [x] **Task 2.6: Run full verification**
+  - [x] `pnpm test` — 59 files, 485 tests pass
+  - [x] `pnpm typecheck` — clean
+  - [x] `pnpm lint` — clean
 
 - [ ] **Task: Conductor - User Manual Verification 'Phase 2: Reading Practice i18n' (Protocol in workflow.md)**
