@@ -80,4 +80,8 @@
   - [x] `pnpm typecheck` — clean
   - [x] `pnpm lint` — clean
 
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: Reading Practice i18n' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: Reading Practice i18n' (Protocol in workflow.md)**
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions 74dfe7f
