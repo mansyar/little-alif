@@ -76,7 +76,7 @@ Cookie-based mode that bypasses auth. Parent enables for one profile per device.
 
 ### Module 4: Parent Dashboard — Letter Management
 
-Dashboard shows all child profiles. Clicking a profile opens a letter management view with ON/OFF toggles for all 28 letters.
+Mobile-first dashboard with a top app bar (replacing sidebar) showing all child profiles in a card grid. Each profile card has a "Manage Letters" link that navigates to a dedicated `/dashboard/profiles/:id/letters` route with ON/OFF toggles for all 28 letters. Profile cards also include child mode toggle, edit, and delete actions.
 
 ### Module 5: Child Letter Grid
 

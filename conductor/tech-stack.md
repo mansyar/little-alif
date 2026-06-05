@@ -17,7 +17,7 @@
 
 - **CSS Framework:** Tailwind CSS v4
 - **Class Merge Utility:** clsx + tailwind-merge (via `cn.ts`)
-- **UI Primitives:** Radix UI (@radix-ui/react-switch, react-dialog, react-alert-dialog, react-radio-group)
+- **UI Primitives:** Radix UI (@radix-ui/react-switch, react-dialog, react-alert-dialog, react-radio-group, @radix-ui/react-dropdown-menu)
 - **Icons:** Lucide React
 - **Fonts:** Cairo (Arabic) + Nunito (Latin) via Google Fonts
 - **Arabic Rendering:** Unicode combining diacritics with precomposed fallbacks for non-connecting letters
