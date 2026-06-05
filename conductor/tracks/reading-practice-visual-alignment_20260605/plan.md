@@ -34,19 +34,19 @@
 **Files:** `app/components/child/reading/GroupPills.tsx`, `app/components/child/reading/GroupPills.test.tsx`
 **Test changes needed** — GroupPills.test.tsx asserts old emerald/gray class names.
 
-- [ ] **Task:** Update GroupPills.tsx active/complete/incomplete class names
-  - [ ] **[Red]** Update `GroupPills.test.tsx`:
+- [x] **Task:** Update GroupPills.tsx active/complete/incomplete class names (35eeeb8)
+  - [x] **[Red]** Update `GroupPills.test.tsx`:
     - Active: `bg-emerald-500` → `bg-green`, `text-white` unchanged
     - Complete: `border-emerald-500` → `border-green`, `text-emerald-700` → `text-green-dark`
     - Incomplete: `border-gray-300` → `border-sand-dark`, `text-gray-400` → `text-text-muted`
-    - Confirm tests FAIL with old class names
-  - [ ] **[Green]** Update `GroupPills.tsx`:
+    - Confirmed tests FAIL with old class names ✓
+  - [x] **[Green]** Update `GroupPills.tsx`:
     - Active: `bg-emerald-500 text-white` → `bg-green text-white`
     - Complete: `border border-emerald-500 text-emerald-700 bg-white` → `border border-green text-green-dark bg-white`
     - Incomplete: `border border-gray-300 text-gray-400 bg-gray-50` → `border border-sand-dark text-text-muted bg-white`
-    - Remove `cursor-not-allowed` from incomplete class string
-  - [ ] Verify all tests pass
-- [ ] **Task:** Conductor — User Manual Verification 'GroupPills Token Replacement' (Protocol in workflow.md)
+    - Removed `cursor-not-allowed` from incomplete class string
+  - [x] Verify all tests pass
+- [x] **Task:** Conductor — User Manual Verification 'GroupPills Token Replacement' (Protocol in workflow.md)
 
 ---
 
