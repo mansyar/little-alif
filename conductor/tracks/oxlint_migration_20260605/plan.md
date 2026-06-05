@@ -1,6 +1,6 @@
 # Plan: Migrate to Oxlint + Oxfmt
 
-## Phase 1: Setup & Configuration [checkpoint: b01b85f]
+## Phase 1: Setup & Configuration [checkpoint: cbffdaa]
 
 - [x] Task: Install oxlint, oxfmt, and oxlint-tsgolint (2c3e5e5)
   - [x] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
