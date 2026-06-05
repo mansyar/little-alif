@@ -82,7 +82,9 @@ describe('HarakatSelector', () => {
     await user.click(kasrahItem);
 
     await vi.waitFor(() => {
-      expect(mockUpdateProfile).toHaveBeenCalledWith({ data: { profileId: 'profile-1', vowelMode: 'kasrah' } });
+      expect(mockUpdateProfile).toHaveBeenCalledWith({
+        data: { profileId: 'profile-1', vowelMode: 'kasrah' },
+      });
     });
   });
 

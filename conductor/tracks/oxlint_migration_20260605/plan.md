@@ -14,9 +14,9 @@
   - [x] Enable type-aware linting config for oxlint-tsgolint
   - [x] Set rule severities to match current behavior (warn/error parity)
   - [x] Fix tsconfig.json `baseUrl` to avoid tsgolint error
-- [ ] Task: Finalize .oxlintignore
-  - [ ] Create .oxlintignore with same patterns as existing ESLint ignores
-- [ ] Task: Configure Oxfmt
+- [x] Task: Finalize .oxlintignore (7bf475b)
+  - [x] Create .oxlintignore with same patterns as existing ESLint ignores
+- [~] Task: Configure Oxfmt
   - [ ] Verify Oxfmt reads .prettierrc natively (printWidth: 100, singleQuote, etc.)
   - [ ] If not compatible, create Oxfmt-specific config
   - [ ] Verify .prettierignore is compatible or create oxfmt equivalent

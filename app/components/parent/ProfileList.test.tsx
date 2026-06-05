@@ -23,7 +23,16 @@ vi.mock('@tanstack/react-router', () => ({
     params?: Record<string, string>;
   }) => {
     const href = `${to}${params ? `/${params.id}` : ''}`;
-    return <a href={href} onClick={() => { mockNavigate(to, params); }}>{children}</a>;
+    return (
+      <a
+        href={href}
+        onClick={() => {
+          mockNavigate(to, params);
+        }}
+      >
+        {children}
+      </a>
+    );
   },
   useNavigate: () => mockNavigate,
   useRouter: () => ({}),
@@ -84,10 +93,7 @@ describe('ProfileList', () => {
   it('renders loading skeleton initially', async () => {
     mockListProfiles.mockReturnValue(new Promise(() => undefined)); // never resolves
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     // Loading skeleton has animate-pulse
     const skeletons = document.querySelectorAll('.animate-pulse');
@@ -97,10 +103,7 @@ describe('ProfileList', () => {
   it('renders profiles when data loads successfully', async () => {
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('Aisyah')).toBeTruthy();
     expect(await screen.findByText('Bilal')).toBeTruthy();
@@ -109,10 +112,7 @@ describe('ProfileList', () => {
   it('shows introducedCount and letters label', async () => {
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('5/28 letters')).toBeTruthy();
     expect(await screen.findByText('12/28 letters')).toBeTruthy();
@@ -121,10 +121,7 @@ describe('ProfileList', () => {
   it('renders empty state when no profiles exist', async () => {
     mockListProfiles.mockResolvedValue([]);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('No children yet')).toBeTruthy();
   });
@@ -132,10 +129,7 @@ describe('ProfileList', () => {
   it('renders error state with retry button when query fails', async () => {
     mockListProfiles.mockRejectedValue(new Error('Network error'));
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     expect(await screen.findByText('Network error')).toBeTruthy();
     // Retry button renders
@@ -146,10 +140,7 @@ describe('ProfileList', () => {
     const onEdit = vi.fn();
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={onEdit} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={onEdit} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     const user = userEvent.setup();
     const editButtons = await screen.findAllByText('Edit');
@@ -164,10 +155,7 @@ describe('ProfileList', () => {
     const onDelete = vi.fn();
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={onDelete} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={onDelete} />, { wrapper: createWrapper() });
 
     const user = userEvent.setup();
     const deleteButtons = await screen.findAllByText('Delete');
@@ -180,10 +168,9 @@ describe('ProfileList', () => {
     const onStartLearning = vi.fn();
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} onStartLearning={onStartLearning} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} onStartLearning={onStartLearning} />, {
+      wrapper: createWrapper(),
+    });
 
     const user = userEvent.setup();
     const learnBtn = await screen.findByLabelText('Start learning with Aisyah');
@@ -195,10 +182,7 @@ describe('ProfileList', () => {
   it('renders "Manage letters" link for each profile', async () => {
     mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(
-      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
-      { wrapper: createWrapper() },
-    );
+    render(<ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />, { wrapper: createWrapper() });
 
     const links = await screen.findAllByText('Manage letters');
     expect(links).toHaveLength(2);
