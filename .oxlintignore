@@ -2,6 +2,7 @@ node_modules/**
 dist/**
 .output/**
 coverage/**
+pnpm-lock.yaml
 *.config.js
 app/db/migrations/**
 app/routeTree.gen.ts

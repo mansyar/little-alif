@@ -1,14 +1,8 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
-
-// The ESLint config dynamically imports typescript-eslint, eslint-plugin-react,
-// eslint-plugin-react-hooks, and globals. Cold-loading that graph takes several
-// seconds on a typical machine, so we load it once in beforeAll and share the
-// result across the tests below instead of importing on every assertion.
-let eslintConfig: { default: { ignores?: string[] }[] };
 
 function readJson<T>(relativePath: string): T {
   const fullPath = path.join(PROJECT_ROOT, relativePath);
@@ -20,20 +14,20 @@ interface PackageJson {
   'lint-staged'?: Record<string, string[]>;
 }
 
-describe('Tooling: Prettier', () => {
-  it('has a .prettierrc file at the project root', () => {
-    expect(existsSync(path.join(PROJECT_ROOT, '.prettierrc'))).toBe(true);
+describe('Tooling: Oxfmt', () => {
+  it('has an .oxfmtrc.json file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.oxfmtrc.json'))).toBe(true);
   });
 
-  it('.prettierrc is valid JSON', () => {
-    const raw = readFileSync(path.join(PROJECT_ROOT, '.prettierrc'), 'utf-8');
+  it('.oxfmtrc.json is valid JSON', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.oxfmtrc.json'), 'utf-8');
     expect(() => {
       JSON.parse(raw);
     }).not.toThrow();
   });
 
-  it('.prettierrc uses project-appropriate defaults', () => {
-    const config = readJson<Record<string, unknown>>('.prettierrc');
+  it('.oxfmtrc.json preserves project formatting defaults', () => {
+    const config = readJson<Record<string, unknown>>('.oxfmtrc.json');
     expect(config).toMatchObject({
       printWidth: 100,
       semi: true,
@@ -42,48 +36,45 @@ describe('Tooling: Prettier', () => {
     });
   });
 
-  it('has a .prettierignore file at the project root', () => {
-    expect(existsSync(path.join(PROJECT_ROOT, '.prettierignore'))).toBe(true);
+  it('has a .oxlintignore file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.oxlintignore'))).toBe(true);
   });
 
-  it('.prettierignore excludes build artifacts and lockfiles', () => {
-    const raw = readFileSync(path.join(PROJECT_ROOT, '.prettierignore'), 'utf-8');
+  it('.oxlintignore excludes build artifacts and lockfiles', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.oxlintignore'), 'utf-8');
     const entries = raw
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && !line.startsWith('#'));
     for (const required of [
-      'node_modules',
-      'dist',
-      '.output',
-      'coverage',
+      'node_modules/**',
+      'dist/**',
+      '.output/**',
+      'coverage/**',
       'pnpm-lock.yaml',
       'app/routeTree.gen.ts',
-      'app/db/migrations',
+      'app/db/migrations/**',
     ]) {
       expect(entries).toContain(required);
     }
   });
 });
 
-describe('Tooling: ESLint', () => {
-  it('has an eslint.config.js file at the project root', () => {
-    expect(existsSync(path.join(PROJECT_ROOT, 'eslint.config.js'))).toBe(true);
+describe('Tooling: Oxlint', () => {
+  it('has an .oxlintrc.json file at the project root', () => {
+    expect(existsSync(path.join(PROJECT_ROOT, '.oxlintrc.json'))).toBe(true);
   });
 
-  beforeAll(async () => {
-    const configPath = path.join(PROJECT_ROOT, 'eslint.config.js');
-    const fileUrl = new URL(`file:///${configPath.replace(/\\/g, '/')}`);
-    eslintConfig = (await import(fileUrl.href)) as { default: { ignores?: string[] }[] };
-  }, 30_000);
-
-  it('eslint.config.js is loadable and exports an array', () => {
-    expect(Array.isArray(eslintConfig.default)).toBe(true);
+  it('.oxlintrc.json is valid JSON', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.oxlintrc.json'), 'utf-8');
+    expect(() => {
+      JSON.parse(raw);
+    }).not.toThrow();
   });
 
-  it('eslint.config.js ignores generated files and build artifacts', () => {
-    const ignoreConfig = eslintConfig.default.find((c) => Array.isArray(c.ignores));
-    const ignores = ignoreConfig?.ignores ?? [];
+  it('.oxlintrc.json ignores generated files and build artifacts', () => {
+    const config = readJson<{ ignorePatterns?: string[] }>('.oxlintrc.json');
+    const ignores = config.ignorePatterns ?? [];
     for (const required of [
       'node_modules/**',
       'dist/**',
