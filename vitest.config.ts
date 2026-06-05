@@ -23,7 +23,7 @@ export default defineConfig({
     maxConcurrency: 10,
     maxWorkers: 3,
     coverage: {
-      provider: 'istanbul',
+      provider: 'v8',
       reporter: ['text', 'html'],
       include: ['app/**/*.{ts,tsx}'],
       exclude: [
