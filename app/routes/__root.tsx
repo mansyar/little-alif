@@ -22,6 +22,7 @@ export const Route = createRootRoute({
       { title: 'Little Alif — Arabic alphabet, one letter at a time' },
     ],
     links: [
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
       { rel: 'stylesheet', href: appCss },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       {

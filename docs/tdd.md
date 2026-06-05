@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.8 (T-14 — Reading Practice Visual Alignment complete)
+**Version:** 1.9 (T-15 — Parent Dashboard De-clutter complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -28,6 +28,7 @@
 | 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
 | 17  | Parent Gate & Child Switcher         | ✅ Implemented            | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                                                                                                                                                                                                    |
 | 18  | Reading Practice Visual Alignment    | ✅ Implemented            | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/)                                                                                                                                                                                                      |
+| 19  | Parent Dashboard De-clutter          | ✅ Implemented            | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)                                                                                                                                                                                                                    |
 
 ---
 
@@ -43,14 +44,18 @@ little-alif/
 │   │   ├── register.tsx             # Parent registration page
 │   │   ├── dashboard.tsx            # Parent dashboard — profile list + per-child letter toggles
 │   │   ├── learn.tsx                # Child letter grid (only accessible in child mode)
-│   │   └── learn/
-│   │       └── reading.tsx          # Child reading practice (Iqra' mode)
+│   │   ├── learn/
+│   │   │   └── reading.tsx          # Child reading practice (Iqra' mode)
+│   │   └── dashboard/
+│   │       └── profiles.$id.letters.tsx  # Dedicated letter management route per profile
 │   ├── components/
 │   │   ├── auth/
 │   │   │   ├── LoginForm.tsx
 │   │   │   ├── RegisterForm.tsx
 │   │   │   └── AuthGate.tsx         # Decides: login vs child mode skip
 │   │   ├── parent/
+│   │   │   ├── DashboardHeader.tsx  # Top app bar with title + language toggle + profile menu
+│   │   │   ├── ProfileMenu.tsx      # Radix DropdownMenu — Manage Letters + Sign out with ConfirmDialog
 │   │   │   ├── ProfileList.tsx      # List of child profiles as cards
 │   │   │   ├── ProfileEditor.tsx    # Add/edit child profile modal (Radix Dialog)
 │   │   │   ├── AvatarPicker.tsx     # Avatar selection grid
@@ -146,14 +151,15 @@ little-alif/
 
 ## 2. Route Design (TanStack Router)
 
-| Route            | Auth Required                  | Description                                                                             |
-| ---------------- | ------------------------------ | --------------------------------------------------------------------------------------- |
-| `/`              | No                             | Landing. Checks child-mode cookie → redirects to `/learn` or `/login`.                  |
-| `/login`         | No                             | Parent login form.                                                                      |
-| `/register`      | No                             | Parent registration form.                                                               |
-| `/dashboard`     | Yes (parent JWT)               | Parent dashboard — profile listing + per-child letter management.                       |
-| `/learn`         | Yes (child-mode cookie or JWT) | Child letter grid. Shows only parent-introduced letters. Includes harakat mode buttons. |
-| `/learn/reading` | Yes (child-mode cookie or JWT) | Child reading practice (Iqra' mode). Dynamic groups from toggled-on letters.            |
+| Route                             | Auth Required                  | Description                                                                             |
+| --------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------- |
+| `/`                               | No                             | Landing. Checks child-mode cookie → redirects to `/learn` or `/login`.                  |
+| `/login`                          | No                             | Parent login form.                                                                      |
+| `/register`                       | No                             | Parent registration form.                                                               |
+| `/dashboard`                      | Yes (parent JWT)               | Parent dashboard — profile listing + per-child letter management.                       |
+| `/learn`                          | Yes (child-mode cookie or JWT) | Child letter grid. Shows only parent-introduced letters. Includes harakat mode buttons. |
+| `/learn/reading`                  | Yes (child-mode cookie or JWT) | Child reading practice (Iqra' mode). Dynamic groups from toggled-on letters.            |
+| `/dashboard/profiles/$id/letters` | Yes (parent JWT)               | Dedicated letter management route per profile. Deep-linkable from profile cards.        |
 
 **Middleware Chain (applied to `/dashboard` and `/learn`):**
 
@@ -548,12 +554,14 @@ Radix UI primitives provide accessible, unstyled components. Tailwind handles th
 
 ### Component Mapping
 
-| PRD Feature           | Radix Primitive                | Purpose                                                          |
-| --------------------- | ------------------------------ | ---------------------------------------------------------------- |
-| Letter ON/OFF toggles | `@radix-ui/react-switch`       | Accessible toggle switch for each letter in the parent dashboard |
-| Profile editor        | `@radix-ui/react-dialog`       | Modal for adding/editing child profiles                          |
-| Delete confirmation   | `@radix-ui/react-alert-dialog` | Destructive action confirmation                                  |
-| Avatar picker         | `@radix-ui/react-radio-group`  | Single-select avatar grid                                        |
+| PRD Feature           | Radix Primitive                 | Purpose                                                          |
+| --------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| Letter ON/OFF toggles | `@radix-ui/react-switch`        | Accessible toggle switch for each letter in the parent dashboard |
+| Profile editor        | `@radix-ui/react-dialog`        | Modal for adding/editing child profiles                          |
+| Delete confirmation   | `@radix-ui/react-alert-dialog`  | Destructive action confirmation                                  |
+| Avatar picker         | `@radix-ui/react-radio-group`   | Single-select avatar grid                                        |
+| Profile dropdown menu | `@radix-ui/react-dropdown-menu` | ProfileMenu — Manage Letters + Sign out with ConfirmDialog       |
+| Dashboard header      | —(composite)                    | DashboardHeader — title, LanguageToggle, ProfileMenu             |
 
 ### Styling Pattern
 
@@ -1638,21 +1646,33 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
                                 │
            ┌─────────────────────┼──────────────────────┐
            ▼                     ▼                      ▼
-    ┌───────────┐       ┌──────────────┐       ┌───────────────┐
-    │  /login   │       │  /dashboard  │       │   /learn      │
-    │ LoginForm │       │  (Parent)    │       │  (Child)      │
-    └───────────┘       │  ┌──────────┐│       │  ┌──────────┐ │
-                        │  │ErrorBound││       │  │ErrorBound│ │
-                        │  └──────────┘│       │  └──────────┘ │
-                        │ ProfileList  │       │ LetterGrid    │
-                        │  ├─►ProfileEditor│   │  └─►LetterCard│
-                        │  └─►ChildModeToggle│ │  ├─►ChildHarakatBar│
-                        │              │       │  └─►HarakatIndicator│
-                        │ LetterToggle │       │               │
-                        │  Grid        │       │ AudioEngine   │
-                        │  ├─►Harakat  │       │ (singleton)   │
-                        │  │  Selector │       └───────┬───────┘
-                        └──────────────┘               │
+    ┌───────────┐       ┌──────────────┐          ┌───────────────┐
+    │  /login   │       │  /dashboard  │          │   /learn      │
+    │ LoginForm │       │  (Parent)    │          │  (Child)      │
+    └───────────┘       │  ┌──────────┐│          │  ┌──────────┐ │
+                        │  │ErrorBound││          │  │ErrorBound│ │
+                        │  └──────────┘│          │  └──────────┘ │
+                        │ DashboardHdr │          │ LetterGrid    │
+                        │  ├─►LangToggle│         │  └─►LetterCard│
+                        │  └─►ProfileMenu│        │  ├─►ChildHarakatBar│
+                        │    └►ConfirmDialog│     │  ├─►HarakatIndicator│
+                        │ ProfileList  │          │               │
+                        │  ├─►ProfileEditor│      │ AudioEngine   │
+                        │  └─►ChildModeToggle│    │ (singleton)   │
+                        │              │          └───────┬───────┘
+                        │ (child route)│                  │
+                        │ /dashboard/  │          ┌───────▼───────┐
+                        │ profiles/$id │          │ /learn/reading│
+                        │  /letters    │          │  (Child)      │
+                        │  └─►Letter   │          │  ┌──────────┐ │
+                        │     ToggleGrd│          │  │ErrorBound│ │
+                        │     ├─►Harakat│         │  └──────────┘ │
+                        │     │ Selector│         │ GroupPills    │
+                        └──────────────┘          │ GroupHeader   │
+                                                  │ ReadingGrid   │
+                                                  │  └─►ReadingCell│
+                                                  │ ReadingActions│
+                                                  └───────────────┘
                                                 ┌───────▼───────┐
                                                 │ /learn/reading│
                                                 │  (Child)      │

@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useMatchRoute,
+  useNavigate,
+} from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validateSessionFn } from '~/server/auth-fns';
 import { deleteProfileFn } from '~/server/profiles';
@@ -33,17 +39,14 @@ export const Route = createFileRoute('/dashboard')({
 });
 
 function DashboardPage() {
+  const matchRoute = useMatchRoute();
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const setChildMode = useAuthStore((state) => state.setChildMode);
   const pushToast = useUiStore((state) => state.pushToast);
-
-  // ProfileEditor state
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingProfile, setEditingProfile] = useState<ProfileCard | undefined>(undefined);
-
-  // ConfirmDialog state
   const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
   const deleteConfirmOpen = deleteProfileId !== null;
 
@@ -57,6 +60,20 @@ function DashboardPage() {
       pushToast({ variant: 'error', message: err.message ?? 'Could not save changes.' });
     },
   });
+
+  // When a child route (e.g. /dashboard/profiles/$id/letters) is active,
+  // render just the <Outlet /> so the child's component appears instead.
+  const isOnChildRoute = matchRoute({ to: '/dashboard/profiles/$id/letters' });
+  if (isOnChildRoute) {
+    return (
+      <ErrorBoundary>
+        <div className="min-h-screen bg-background-warm">
+          <DashboardHeader />
+          <Outlet />
+        </div>
+      </ErrorBoundary>
+    );
+  }
 
   function handleStartLearning(profileId: string) {
     setChildMode(profileId);

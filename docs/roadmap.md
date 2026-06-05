@@ -24,8 +24,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-12  | Polish, Docker & Deployment          | T-10, T-11             | Medium     | 4–6h        | ✅ Complete |
 | T-13  | Child Mode Parent Gate & Flow Polish | T-11, T-08             | Medium     | 3–5h        | ✅ Complete |
 | T-14  | Reading Practice Visual Alignment    | T-10                   | Low        | 1–2h        | ✅ Complete |
+| T-15  | Parent Dashboard De-clutter          | T-05, T-06             | Medium     | 4–6h        | ✅ Complete |
 
-\***\*All 14 tracks complete.** Total effort: ~40–65 hours\*\*
+\***\*All 15 tracks complete.** Total effort: ~44–71 hours\*\*
 
 ### Implementation Status
 
@@ -47,6 +48,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                         |
 | T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)               |
 | T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
+| T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -896,24 +898,79 @@ Bring the reading practice screen visual language in line with the rest of the w
 
 ---
 
+### T-15: Parent Dashboard De-clutter ✅
+
+**Dependencies:** T-05 (Parent Dashboard & Child Profiles), T-06 (Letter Toggle Management)
+**Status:** ✅ Complete ([`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/))
+
+**Description:**
+Mobile-first restructure of the parent dashboard: replace the sidebar with a top app bar, extract letter management to a dedicated deep-linkable route, add a profile dropdown menu with sign-out confirmation, and simplify the ProfileList from accordion-based to card-based navigation.
+
+**PRD Ref:** §4 — Module 4 (Parent Dashboard — Letter Management), REQ-4.1 through REQ-4.6
+**TDD Ref:** §19 (Parent Dashboard De-clutter)
+
+**Key Deliverables (all delivered):**
+
+- [x] `DashboardHeader` — Top app bar with title, language toggle, and ProfileMenu dropdown (replaces sidebar)
+- [x] `ProfileMenu` — Radix DropdownMenu with "Manage Letters" link, sign-out button with `ConfirmDialog` (i18n'd)
+- [x] `/dashboard/profiles/$id/letters` — Dedicated route for per-profile letter management (deep-linkable from profile cards)
+- [x] `ProfileList` — Simplified to card-only (no accordion), each card links to the dedicated letters route
+- [x] Dashboard `/` route renders `<Outlet />` for child routes, keeping DashboardHeader persistent
+- [x] Skeleton loaders (3-card) for Dashboard placeholder state
+- [x] Empty state uses AlifLamp avatar instead of generic Lucide icon
+- [x] Favicon added (`public/favicon.svg`)
+- [x] `-dashboard.test.tsx` — Proper router mocking for test isolation
+- [x] 23 new tests (DashboardHeader, ProfileMenu, ProfileList, dashboard route, letters route), full suite passing
+
+**Key Decisions:**
+
+- DashboardHeader replaces the sidebar entirely — better mobile-first UX
+- ProfileMenu uses ConfirmDialog for sign-out (prevents accidental logout)
+- Dedicated `/dashboard/profiles/$id/letters` route enables deep-linking and back navigation
+- Dashboard layout conditionally renders Outlet when a child route is active
+- Skeleton loaders match card layout to reduce layout shift
+- Favicon added for production polish
+
+**Edge Cases (all covered):**
+
+- Direct navigation to `/dashboard/profiles/$id/letters` works (deep-link)
+- ProfileMenu dropdown closes on outside click (Radix default)
+- ConfirmDialog for sign-out is i18n'd (EN + ID)
+- DashboardHeader renders correctly on both `/dashboard` and child routes
+- Empty profile state shows friendly message with AlifLamp avatar
+
+**Verification (all passing):**
+
+- Mobile-first layout renders correctly on small screens
+- ProfileMenu dropdown navigates to letters route and triggers sign-out
+- Dedicated letters route renders within dashboard layout with DashboardHeader
+- ProfileList shows skeleton loaders while data loads
+- Empty state shows polished illustration
+- **All tests pass**, `pnpm typecheck` clean, `pnpm lint` clean
+- Code review completed (archived)
+
+---
+
 ## Track Dependencies Graph
 
 ```
  T-01 (Scaffolding)  ── ✅
  ├── T-02 (Database) ── ✅
  │    ├── T-03 (Auth) ── ✅
- │    │    ├── T-05 (Dashboard & Profiles) ✅
- │    │    │    ├── T-06 (Letter Toggles) ✅
- │    │    │    │    ├── T-08 (Child Grid) ✅
- │    │    │    │    │    └── T-10 (Reading Practice) ✅ ──┐
- │    │    │    │    └── T-11 (Child Mode) ✅ ─────────────┤
- │    │    │    └── T-11 (Child Mode) ✅ ──────────────────┤
- │    │    └── T-11 (Child Mode) ✅ ───────────────────────┤
- │    └── T-07 (Harakat) ✅ ───────────────────────────────┤
- │                                                         │
- T-03b (Code Quality) ── ✅                                 │
- T-04 (i18n — parallel to T-02/T-03) ✅                     │
- T-09 (Audio — parallel to T-02/T-03) ✅                    │
+ │    │    ├── T-05 (Dashboard & Profiles) ✅ ──┐
+ │    │    │    ├── T-06 (Letter Toggles) ✅ ────┤
+ │    │    │    │    ├── T-08 (Child Grid) ✅ ───┤
+ │    │    │    │    │    └── T-10 (Reading Practice) ✅ ─┐
+ │    │    │    │    │                                    │
+ │    │    │    │    └── T-15 (Dashboard De-clutter) ✅ ──┤
+ │    │    │    │                                          │
+ │    │    │    └── T-11 (Child Mode) ✅ ─────────────────┤
+ │    │    └── T-11 (Child Mode) ✅ ──────────────────────┤
+ │    └── T-07 (Harakat) ✅ ──────────────────────────────┤
+ │                                                        │
+ T-03b (Code Quality) ── ✅                                │
+ T-04 (i18n — parallel to T-02/T-03) ✅                    │
+ T-09 (Audio — parallel to T-02/T-03) ✅                   │
                                                               ▼
                                                          T-12 (Polish & Deploy) ✅
                                                                                                                      │
@@ -922,6 +979,9 @@ Bring the reading practice screen visual language in line with the rest of the w
                                                                                                                       │
                                                                                                                       ▼
                                                                                                                T-14 (Reading Practice Visual Alignment) ✅
+                                                                                                                      │
+                                                                                                                      ▼
+                                                                                                               T-15 (Parent Dashboard De-clutter) ✅
 ```
 
 ## Track Format

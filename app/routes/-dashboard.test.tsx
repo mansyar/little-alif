@@ -2,12 +2,30 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
+import type { ReactNode, AnchorHTMLAttributes } from 'react';
 
 // ── Mocks ──────────────────────────────────────────────────────────────
 
 const mockListProfiles = vi.fn().mockResolvedValue([]);
 const mockValidateSession = vi.fn();
+
+vi.mock('@tanstack/react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+  return {
+    ...actual,
+    Link: ({
+      children,
+      ...props
+    }: AnchorHTMLAttributes<HTMLAnchorElement> & { children: ReactNode }) => (
+      <a {...props}>{children}</a>
+    ),
+    // Return a function that always returns undefined (no child route matched)
+    useMatchRoute: () => () => undefined,
+    // Render nothing for Outlet
+    Outlet: () => null,
+  };
+});
 
 vi.mock('~/server/profiles', () => ({
   listProfilesFn: () => mockListProfiles() as Promise<unknown>,
