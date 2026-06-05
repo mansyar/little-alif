@@ -92,7 +92,7 @@ describe('ProfileList', () => {
     vi.clearAllMocks();
   });
 
-  it('shows loading spinner while fetching', async () => {
+  it('shows 3 skeleton cards with animate-pulse while loading', async () => {
     mockListProfiles.mockReturnValue(
       new Promise<typeof mockProfiles>(() => {
         /* never resolves */
@@ -102,7 +102,19 @@ describe('ProfileList', () => {
     const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
       wrapper: createWrapper(),
     });
-    expect(container.querySelector('.animate-spin')).toBeTruthy();
+
+    // Should render 3 skeleton placeholder cards under a grid
+    const skeletonCards = container.querySelectorAll('.animate-pulse');
+    expect(skeletonCards.length).toBe(3);
+
+    // Each skeleton card should have avatar circle and text line placeholders
+    skeletonCards.forEach((card) => {
+      const placeholderDivs = card.querySelectorAll('.rounded-full');
+      expect(placeholderDivs.length).toBeGreaterThanOrEqual(1);
+    });
+
+    // No spinner should be present
+    expect(container.querySelector('.animate-spin')).toBeFalsy();
   }, 15000);
 
   it('shows empty state when no profiles exist', async () => {

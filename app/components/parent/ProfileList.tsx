@@ -36,8 +36,25 @@ export function ProfileList({ onEdit, onDelete, onStartLearning }: ProfileListPr
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-sand-dark border-t-green" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex min-h-[140px] animate-pulse flex-col rounded-large bg-white p-5 shadow-card"
+          >
+            <div className="mb-3 flex items-center gap-4">
+              <div className="h-14 w-14 rounded-full bg-sand-light" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-24 rounded bg-sand-light" />
+                <div className="h-3 w-16 rounded bg-sand-light" />
+              </div>
+            </div>
+            <div className="mt-auto flex items-center gap-2 border-t border-sand-light pt-3">
+              <div className="h-4 w-20 rounded bg-sand-light" />
+              <div className="ml-auto h-4 w-16 rounded bg-sand-light" />
+            </div>
+          </div>
+        ))}
       </div>
     );
   }
