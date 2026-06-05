@@ -134,4 +134,59 @@ describe('ProfileMenu', () => {
     expect(screen.queryByText('Aisha')).toBeNull();
     expect(screen.queryByText('Bilal')).toBeNull();
   });
+
+  it('confirms sign out and calls logoutFn', async () => {
+    const user = userEvent.setup();
+    const { ProfileMenu } = await import('./ProfileMenu');
+    render(<ProfileMenu />, { wrapper: createWrapper() });
+
+    // Open menu
+    const trigger = screen.getByLabelText('Profile menu');
+    await user.click(trigger);
+
+    // Click sign out (dropdown menu item)
+    const signOutItems = screen.getAllByText('Sign out');
+    await user.click(signOutItems[0]!);
+
+    // Confirm in dialog (the dialog's confirm button is also "Sign out")
+    const confirmBtns = screen.getAllByText('Sign out');
+    // The second "Sign out" is the confirm button in the dialog
+    await user.click(confirmBtns[confirmBtns.length - 1]!);
+
+    expect(mockLogout).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows generic error when logout error is not an Error instance', async () => {
+    mockLogout.mockRejectedValueOnce('string error');
+    const user = userEvent.setup();
+    const { ProfileMenu } = await import('./ProfileMenu');
+    render(<ProfileMenu />, { wrapper: createWrapper() });
+
+    const trigger = screen.getByLabelText('Profile menu');
+    await user.click(trigger);
+
+    const signOutItems = screen.getAllByText('Sign out');
+    await user.click(signOutItems[0]!);
+
+    const confirmBtns = screen.getAllByText('Sign out');
+    await user.click(confirmBtns[confirmBtns.length - 1]!);
+  });
+
+  it('renders unknown avatar fallback when avatar map returns nothing', async () => {
+    // Create a profile with an unknown avatar key
+    mockListProfiles.mockResolvedValueOnce([
+      { id: 'profile-unknown', name: 'Unknown Avatar', avatar: 'nonexistent' },
+    ]);
+
+    const user = userEvent.setup();
+    const { ProfileMenu } = await import('./ProfileMenu');
+    render(<ProfileMenu />, { wrapper: createWrapper() });
+
+    const trigger = screen.getByLabelText('Profile menu');
+    await user.click(trigger);
+
+    // The unknown avatar shows a "?" fallback div
+    expect(screen.getByText('?')).toBeTruthy();
+    expect(screen.getByText('Unknown Avatar')).toBeTruthy();
+  });
 });

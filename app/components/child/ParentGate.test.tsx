@@ -292,4 +292,81 @@ describe('ParentGate', () => {
     const dialogClass = dialog.className + ' ' + (overlay?.className ?? '');
     expect(dialogClass).toMatch(/z-60|z-\[60\]/);
   });
+
+  it('pointerLeave cancels a pending long-press without opening the menu', async () => {
+    vi.useFakeTimers();
+    const { ParentGate } = await import('./ParentGate');
+    render(<ParentGate onExit={vi.fn()} onSwitchChild={vi.fn()} />);
+
+    const button = screen.getByLabelText('Parent menu');
+
+    act(() => {
+      pressDown(button);
+    });
+
+    // Cancel by leaving
+    act(() => {
+      fireEvent.pointerLeave(button);
+    });
+
+    // Wait beyond the long-press timeout
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    // Menu should still be closed because the hold was cancelled
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    // Progress should be reset
+    expect(Number(button.getAttribute('data-progress'))).toBe(0);
+  });
+
+  it('pointerCancel cancels the long-press and resets progress', async () => {
+    vi.useFakeTimers();
+    const { ParentGate } = await import('./ParentGate');
+    render(<ParentGate onExit={vi.fn()} onSwitchChild={vi.fn()} />);
+
+    const button = screen.getByLabelText('Parent menu');
+
+    act(() => {
+      pressDown(button);
+    });
+
+    // Progress should be increasing
+    act(() => {
+      vi.advanceTimersByTime(750);
+    });
+    expect(Number(button.getAttribute('data-progress'))).toBeGreaterThan(0);
+
+    // Cancel via pointerCancel
+    act(() => {
+      fireEvent.pointerCancel(button);
+    });
+
+    // Progress should be reset
+    expect(Number(button.getAttribute('data-progress'))).toBe(0);
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('unmount during a pending hold cancels timers without error', async () => {
+    vi.useFakeTimers();
+    const { ParentGate } = await import('./ParentGate');
+    const { unmount } = render(<ParentGate onExit={vi.fn()} onSwitchChild={vi.fn()} />);
+
+    const button = screen.getByLabelText('Parent menu');
+
+    act(() => {
+      pressDown(button);
+    });
+
+    // Unmount while holding
+    act(() => {
+      unmount();
+    });
+
+    // No error should occur
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+  });
 });

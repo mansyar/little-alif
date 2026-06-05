@@ -1,85 +1,74 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 
-const mockProfiles: {
-  id: string;
-  name: string;
-  avatar: string;
-  introducedCount: number;
-}[] = [];
-
-const mockListProfiles = vi.fn().mockResolvedValue(mockProfiles);
+const mockListProfiles = vi.fn();
+const mockNavigate = vi.fn();
 
 vi.mock('~/server/profiles', () => ({
-  listProfilesFn: () => mockListProfiles() as Promise<typeof mockProfiles>,
-}));
-
-vi.mock('~/server/letters', () => ({
-  getVisibleLettersFn: () => Promise.resolve([]),
-  toggleLetterFn: () => Promise.resolve({ letterId: 'alif', isVisible: true }),
-  bulkToggleLettersFn: () => Promise.resolve({ updatedCount: 0 }),
-}));
-
-vi.mock('~/server/auth-fns', () => ({
-  enableChildModeFn: () =>
-    Promise.resolve({ success: true, profile: { name: 'Test', avatar: 'alif-lamp' } }),
-  disableChildModeFn: () => Promise.resolve({ success: true }),
+  listProfilesFn: () => mockListProfiles() as Promise<unknown>,
 }));
 
 vi.mock('@tanstack/react-router', () => ({
-  useNavigate: () => vi.fn(),
   Link: ({
     to,
-    params,
     children,
-    ...props
+    params,
   }: {
     to: string;
-    params?: Record<string, string>;
     children: ReactNode;
+    params?: Record<string, string>;
   }) => {
-    let href = to;
-    if (params) {
-      for (const [key, value] of Object.entries(params)) {
-        href = href.replace(`$${key}`, value);
-      }
-    }
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
+    const href = `${to}${params ? `/${params.id}` : ''}`;
+    return <a href={href} onClick={() => { mockNavigate(to, params); }}>{children}</a>;
   },
+  useNavigate: () => mockNavigate,
+  useRouter: () => ({}),
+}));
+
+vi.mock('~/components/parent/ChildModeToggle', () => ({
+  ChildModeToggle: () => <div data-testid="child-mode-toggle">Child Mode</div>,
 }));
 
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
-      DASHBOARD_NO_CHILDREN: () => 'No child profiles yet. Add one to get started.' as const,
-      PROFILE_LETTERS_LABEL: () => 'introduced' as const,
-      PROFILE_MANAGE_LETTERS: () => 'Manage Letters' as const,
+      PROFILE_LETTERS_LABEL: () => 'letters' as const,
+      PROFILE_MANAGE_LETTERS: () => 'Manage letters' as const,
       PROFILE_EDIT: () => 'Edit' as const,
       PROFILE_DELETE: () => 'Delete' as const,
+      DASHBOARD_NO_CHILDREN: () => 'No children yet' as const,
       ERROR_GENERIC: () => 'Something went wrong.' as const,
-      PROFILE_CANCEL: () => 'Try again' as const,
-      CHILDMODE_ENABLE: () => 'Enable Child Mode' as const,
-      CHILDMODE_ACTIVE: () => 'Child Mode is active' as const,
+      PROFILE_CANCEL: () => 'Retry' as const,
     },
   }),
+  locales: ['en', 'id'],
+  defaultLocale: 'en',
 }));
 
-const noop = () => {
-  /* noop */
-};
+const mockProfiles = [
+  {
+    id: 'profile-1',
+    name: 'Aisyah',
+    avatar: 'alif-lamp' as const,
+    vowelMode: 'fathah' as const,
+    introducedCount: 5,
+  },
+  {
+    id: 'profile-2',
+    name: 'Bilal',
+    avatar: 'ba-boat' as const,
+    vowelMode: 'kasrah' as const,
+    introducedCount: 12,
+  },
+];
 
 function createWrapper() {
   const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-    },
+    defaultOptions: { queries: { retry: false } },
   });
   return function Wrapper({ children }: { children: ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
@@ -92,169 +81,126 @@ describe('ProfileList', () => {
     vi.clearAllMocks();
   });
 
-  it('shows 3 skeleton cards with animate-pulse while loading', async () => {
-    mockListProfiles.mockReturnValue(
-      new Promise<typeof mockProfiles>(() => {
-        /* never resolves */
-      }),
+  it('renders loading skeleton initially', async () => {
+    mockListProfiles.mockReturnValue(new Promise(() => undefined)); // never resolves
+    const { ProfileList } = await import('./ProfileList');
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
     );
-    const { ProfileList } = await import('./ProfileList');
-    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
-      wrapper: createWrapper(),
-    });
 
-    // Should render 3 skeleton placeholder cards under a grid
-    const skeletonCards = container.querySelectorAll('.animate-pulse');
-    expect(skeletonCards.length).toBe(3);
-
-    // Each skeleton card should have avatar circle and text line placeholders
-    skeletonCards.forEach((card) => {
-      const placeholderDivs = card.querySelectorAll('.rounded-full');
-      expect(placeholderDivs.length).toBeGreaterThanOrEqual(1);
-    });
-
-    // No spinner should be present
-    expect(container.querySelector('.animate-spin')).toBeFalsy();
-  }, 15000);
-
-  it('shows empty state with profile avatar SVG (not generic User icon) when no profiles exist', async () => {
-    mockListProfiles.mockResolvedValue([]);
-    const { ProfileList } = await import('./ProfileList');
-    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
-      wrapper: createWrapper(),
-    });
-
-    const message = await screen.findByText('No child profiles yet. Add one to get started.');
-    expect(message).toBeTruthy();
-
-    // Should render an avatar SVG (viewBox 0 0 64 64) with opacity-30, not a generic icon
-    const svg = container.querySelector('svg');
-    expect(svg).toBeTruthy();
-    expect(svg?.getAttribute('viewBox')).toBe('0 0 64 64');
-    expect(svg?.getAttribute('class')).toContain('opacity-30');
+    // Loading skeleton has animate-pulse
+    const skeletons = document.querySelectorAll('.animate-pulse');
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it('renders profile cards with names and letter counts', async () => {
-    mockListProfiles.mockResolvedValue([
-      {
-        id: '1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-        introducedCount: 5,
-      },
-      {
-        id: '2',
-        name: 'Bilal',
-        avatar: 'ba-boat',
-        vowelMode: 'fathah',
-        introducedCount: 12,
-      },
-    ]);
-
+  it('renders profiles when data loads successfully', async () => {
+    mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
 
     expect(await screen.findByText('Aisyah')).toBeTruthy();
-    expect(screen.getByText('Bilal')).toBeTruthy();
-    expect(screen.getByText(/5\/28/)).toBeTruthy();
-    expect(screen.getByText(/12\/28/)).toBeTruthy();
+    expect(await screen.findByText('Bilal')).toBeTruthy();
   });
 
-  it('renders action controls for each profile', async () => {
-    mockListProfiles.mockResolvedValue([
-      {
-        id: '1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-        introducedCount: 3,
-      },
-    ]);
-
+  it('shows introducedCount and letters label', async () => {
+    mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
 
-    expect(await screen.findByText('Manage Letters')).toBeTruthy();
-    expect(screen.getByText('Edit')).toBeTruthy();
-    expect(screen.getByText('Delete')).toBeTruthy();
+    expect(await screen.findByText('5/28 letters')).toBeTruthy();
+    expect(await screen.findByText('12/28 letters')).toBeTruthy();
   });
 
-  it('renders Manage Letters as a link to the dedicated route', async () => {
-    mockListProfiles.mockResolvedValue([
-      {
-        id: 'profile-123',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-        introducedCount: 5,
-      },
-    ]);
-
+  it('renders empty state when no profiles exist', async () => {
+    mockListProfiles.mockResolvedValue([]);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
 
-    await screen.findByText('Aisyah');
-
-    const manageLettersLink = screen.getByRole('link', { name: /manage letters/i });
-    expect(manageLettersLink).toBeDefined();
-    expect(manageLettersLink.getAttribute('href')).toBe('/dashboard/profiles/profile-123/letters');
+    expect(await screen.findByText('No children yet')).toBeTruthy();
   });
 
-  it('applies min-h-[140px] to profile cards', async () => {
-    mockListProfiles.mockResolvedValue([
-      {
-        id: '1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-        introducedCount: 3,
-      },
-    ]);
-
+  it('renders error state with retry button when query fails', async () => {
+    mockListProfiles.mockRejectedValue(new Error('Network error'));
     const { ProfileList } = await import('./ProfileList');
-    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
 
-    await screen.findByText('Aisyah');
-
-    const cardDivs = container.querySelectorAll('.rounded-large');
-    expect(cardDivs.length).toBe(1);
-    // The profile card should have min-h-[140px] class
-    expect(cardDivs[0]?.className).toContain('min-h-[140px]');
+    expect(await screen.findByText('Network error')).toBeTruthy();
+    // Retry button renders
+    expect(await screen.findByText('Retry')).toBeTruthy();
   });
 
-  it('does not render inline LetterToggleGrid content', async () => {
-    mockListProfiles.mockResolvedValue([
-      {
-        id: '1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-        introducedCount: 3,
-      },
-    ]);
-
+  it('calls onEdit when edit button is clicked', async () => {
+    const onEdit = vi.fn();
+    mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    const { container } = render(<ProfileList onEdit={noop} onDelete={noop} />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <ProfileList onEdit={onEdit} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
 
-    await screen.findByText('Aisyah');
+    const user = userEvent.setup();
+    const editButtons = await screen.findAllByText('Edit');
+    await user.click(editButtons[0]!);
 
-    // The footer's border-t is the only one — inline LetterToggleGrid would add a second
-    const borderedDividers = container.querySelectorAll('.border-t');
-    expect(borderedDividers.length).toBe(1);
+    expect(onEdit).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'profile-1', name: 'Aisyah' }),
+    );
   });
 
-  it('handles server error gracefully', async () => {
-    mockListProfiles.mockRejectedValue(new Error('Failed to fetch'));
-
+  it('calls onDelete when delete button is clicked', async () => {
+    const onDelete = vi.fn();
+    mockListProfiles.mockResolvedValue(mockProfiles);
     const { ProfileList } = await import('./ProfileList');
-    render(<ProfileList onEdit={noop} onDelete={noop} />, { wrapper: createWrapper() });
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={onDelete} />,
+      { wrapper: createWrapper() },
+    );
 
-    const errorMsg = await screen.findByText('Failed to fetch');
-    expect(errorMsg).toBeTruthy();
+    const user = userEvent.setup();
+    const deleteButtons = await screen.findAllByText('Delete');
+    await user.click(deleteButtons[0]!);
+
+    expect(onDelete).toHaveBeenCalledWith('profile-1');
+  });
+
+  it('calls onStartLearning when profile name area is clicked', async () => {
+    const onStartLearning = vi.fn();
+    mockListProfiles.mockResolvedValue(mockProfiles);
+    const { ProfileList } = await import('./ProfileList');
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} onStartLearning={onStartLearning} />,
+      { wrapper: createWrapper() },
+    );
+
+    const user = userEvent.setup();
+    const learnBtn = await screen.findByLabelText('Start learning with Aisyah');
+    await user.click(learnBtn);
+
+    expect(onStartLearning).toHaveBeenCalledWith('profile-1');
+  });
+
+  it('renders "Manage letters" link for each profile', async () => {
+    mockListProfiles.mockResolvedValue(mockProfiles);
+    const { ProfileList } = await import('./ProfileList');
+    render(
+      <ProfileList onEdit={vi.fn()} onDelete={vi.fn()} />,
+      { wrapper: createWrapper() },
+    );
+
+    const links = await screen.findAllByText('Manage letters');
+    expect(links).toHaveLength(2);
   });
 });

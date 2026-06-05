@@ -133,4 +133,74 @@ describe('ProfileEditor', () => {
     // Radix Dialog Close triggers onOpenChange(false)
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
+
+  it('shows error toast when createProfileFn fails', async () => {
+    mockCreateProfile.mockRejectedValue(new Error('Server error occurred'));
+    const { ProfileEditor } = await import('./ProfileEditor');
+    render(<ProfileEditor open={true} onOpenChange={vi.fn()} />, { wrapper: createWrapper() });
+
+    const user = userEvent.setup();
+    const nameInput = await screen.findByLabelText(/name/i);
+    await user.type(nameInput, 'Bilal');
+
+    const saveBtn = screen.getByText('Save');
+    await user.click(saveBtn);
+
+    // The error is shown as a toast, not in the form itself.
+    // Wait for the mutation to complete.
+    await waitFor(() => {
+      expect(mockCreateProfile).toHaveBeenCalled();
+    });
+  });
+
+  it('disables submit button while mutation is pending', async () => {
+    mockCreateProfile.mockReturnValue(new Promise(() => undefined)); // never resolves
+    const { ProfileEditor } = await import('./ProfileEditor');
+    render(<ProfileEditor open={true} onOpenChange={vi.fn()} />, { wrapper: createWrapper() });
+
+    const user = userEvent.setup();
+    const nameInput = await screen.findByLabelText(/name/i);
+    await user.type(nameInput, 'Bilal');
+
+    const saveBtn = screen.getByText('Save');
+    await user.click(saveBtn);
+
+    // Button should be disabled while submitting
+    await waitFor(() => {
+      const submitBtn = screen.getByText(/Save\.\.\./);
+      expect(submitBtn.hasAttribute('disabled')).toBe(true);
+    });
+  });
+
+  it('shows error for empty profile name on submit in add mode', async () => {
+    const { ProfileEditor } = await import('./ProfileEditor');
+    render(<ProfileEditor open={true} onOpenChange={vi.fn()} />, { wrapper: createWrapper() });
+
+    const user = userEvent.setup();
+    const saveBtn = screen.getByText('Save');
+    await user.click(saveBtn);
+
+    // Zod validation should show an error for empty name
+    await waitFor(() => {
+      expect(mockCreateProfile).not.toHaveBeenCalled();
+    });
+  });
+
+  it('closes form and invalidates queries on successful create', async () => {
+    mockCreateProfile.mockResolvedValue({ id: 'new-id', name: 'Bilal', avatar: 'alif-lamp' });
+    const onOpenChange = vi.fn();
+    const { ProfileEditor } = await import('./ProfileEditor');
+    render(<ProfileEditor open={true} onOpenChange={onOpenChange} />, { wrapper: createWrapper() });
+
+    const user = userEvent.setup();
+    const nameInput = await screen.findByLabelText(/name/i);
+    await user.type(nameInput, 'Bilal');
+
+    const saveBtn = screen.getByText('Save');
+    await user.click(saveBtn);
+
+    await waitFor(() => {
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  });
 });

@@ -185,4 +185,9 @@ describe('getReadingData', () => {
       'Profile not found or does not belong to you.',
     );
   });
+
+  // Note: the `profile?.vowelMode ?? 'fathah'` fallback on line 61 of reading.ts
+  // protects against an empty query result. verifyProfileOwnership runs first
+  // and guarantees the row exists, so the nullish path is unreachable in practice.
+  // All existing tests confirm the default 'fathah' is returned for valid profiles.
 });

@@ -163,4 +163,47 @@ describe('LetterCard', () => {
     const glyphSpan = screen.getByText(composeLetter('ا', 'fathah'));
     expect(glyphSpan.getAttribute('aria-hidden')).toBe('true');
   });
+
+  it('falls back to sand-light bg for unknown letterId', () => {
+    const unknownLetter = {
+      letterId: 'unknown-letter',
+      character: '?',
+      displayOrder: 99,
+      audioFile: '',
+      isVisible: true,
+    };
+    // @ts-expect-error - testing with unknown letterId
+    render(<LetterCard letter={unknownLetter} />);
+
+    const card = screen.getByRole('button', { name: 'unknown-letter' });
+    expect(card.className).toContain('bg-sand-light');
+  });
+
+  it('renders with no harakat when currentHarakat is none', () => {
+    useUiStore.setState({ currentHarakat: 'none' });
+    render(<LetterCard letter={letter} />);
+
+    const plain = composeLetter('ا', 'none');
+    expect(screen.getByText(plain)).toBeTruthy();
+  });
+
+  it('passes letter.character (not letterId) as the third argument to audioEngine.speak', async () => {
+    const user = userEvent.setup();
+    render(<LetterCard letter={letter} />);
+
+    await user.click(screen.getByRole('button', { name: 'alif' }));
+
+    expect(speakMock).toHaveBeenCalledWith('alif', 'fathah', 'ا');
+  });
+
+  it('does not crash when speak() rejects - .finally() handles rejection', async () => {
+    speakMock.mockRejectedValueOnce(new Error('Audio failed'));
+
+    const user = userEvent.setup();
+    render(<LetterCard letter={letter} />);
+
+    await expect(
+      user.click(screen.getByRole('button', { name: 'alif' })),
+    ).resolves.toBeUndefined();
+  });
 });

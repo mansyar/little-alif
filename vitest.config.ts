@@ -34,6 +34,8 @@ export default defineConfig({
         'app/**/*.gen.ts',
         'app/**/i18n-util.ts',
         'app/**/i18n-util.async.ts',
+        'app/**/i18n-util.sync.ts',
+        'app/**/i18n-react.tsx',
         'app/**/i18n-types.ts',
         // Drizzle table definitions are declarative data, not executable code.
         // v8 reports 0% functions because sqliteTable(...) returns table
@@ -42,12 +44,12 @@ export default defineConfig({
         'app/db/auth-schema.ts',
       ],
       thresholds: {
-        // workflow.md target: >70% code coverage for all modules.
+        // Target: ≥80% code coverage for all modules.
         // Drizzle schema files are excluded above (declarative data).
-        lines: 70,
-        statements: 70,
-        branches: 70,
-        functions: 70,
+        lines: 80,
+        statements: 80,
+        branches: 80,
+        functions: 80,
       },
     },
   },

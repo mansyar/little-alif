@@ -6,7 +6,7 @@
 1. **The Plan is the Source of Truth:** All work must be tracked in `plan.md`
 2. **The Tech Stack is Deliberate:** Changes to the tech stack must be documented in `tech-stack.md` _before_ implementation
 3. **Test-Driven Development:** Write unit tests before implementing functionality
-4. **High Code Coverage:** Aim for >70% code coverage for all modules
+4. **High Code Coverage:** Aim for >80% code coverage for all modules
 5. **User Experience First:** Every decision should prioritize user experience
 6. **Non-Interactive & CI-Aware:** Prefer non-interactive commands. Use `CI=true` for watch-mode tools (tests, linters) to ensure single execution.
 
@@ -70,7 +70,7 @@ All tasks follow a strict lifecycle:
    pytest --cov=app --cov-report=html
    ```
 
-   Target: >70% coverage for new code. The specific tools and commands will vary by language and framework.
+   Target: >80% coverage for new code. The specific tools and commands will vary by language and framework.
 
 7. **Document Deviations:** If implementation differs from tech stack:
    - **STOP** implementation
@@ -175,7 +175,7 @@ All tasks follow a strict lifecycle:
 Before marking any task complete, verify:
 
 - [ ] All tests pass
-- [ ] Code coverage meets requirements (>70%)
+- [ ] Code coverage meets requirements (>80%)
 - [ ] Code follows project's code style guidelines (as defined in `code_styleguides/`)
 - [ ] All public functions/methods are documented (e.g., docstrings, JSDoc, GoDoc)
 - [ ] Type safety is enforced (e.g., type hints, TypeScript types, Go types)
@@ -295,7 +295,7 @@ Before requesting review:
 3. **Testing**
    - Unit tests comprehensive
    - Integration tests pass
-   - Coverage adequate (>70%)
+   - Coverage adequate (>80%)
 
 4. **Security**
    - No hardcoded secrets
@@ -391,7 +391,7 @@ A task is complete when:
 ### Pre-Deployment Checklist
 
 - [ ] All tests passing
-- [ ] Coverage >70%
+- [ ] Coverage >80%
 - [ ] No linting errors
 - [ ] Mobile testing complete
 - [ ] Environment variables configured
