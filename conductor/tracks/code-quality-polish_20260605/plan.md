@@ -43,7 +43,7 @@
 
 ---
 
-## Phase 2: Reading Practice i18n [checkpoint: <pending>]
+## Phase 2: Reading Practice i18n [checkpoint: a45b4b5]
 
 **Goal:** Localize 5 reading practice action labels with EN/ID i18n keys.
 
