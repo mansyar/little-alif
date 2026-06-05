@@ -191,10 +191,6 @@ type RootTranslation = {
 	 */
 	READING_RANDOMIZE: string
 	/**
-	 * P​a​t​t​e​r​n
-	 */
-	READING_PATTERN_LABEL: string
-	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_GENERIC: string
@@ -385,10 +381,6 @@ export type TranslationFunctions = {
 	 * Randomize
 	 */
 	READING_RANDOMIZE: () => LocalizedString
-	/**
-	 * Pattern
-	 */
-	READING_PATTERN_LABEL: () => LocalizedString
 	/**
 	 * Something went wrong. Please try again.
 	 */

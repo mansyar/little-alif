@@ -60,7 +60,6 @@ const en = {
   READING_DONE: 'Done',
   READING_NEXT_GROUP: 'Next Group',
   READING_RANDOMIZE: 'Randomize',
-  READING_PATTERN_LABEL: 'Pattern',
 
   // Errors
   ERROR_GENERIC: 'Something went wrong. Please try again.',

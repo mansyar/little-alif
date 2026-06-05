@@ -60,7 +60,6 @@ const id = {
   READING_DONE: 'Selesai',
   READING_NEXT_GROUP: 'Grup Berikutnya',
   READING_RANDOMIZE: 'Acak Vokal',
-  READING_PATTERN_LABEL: 'Pola',
 
   // Errors
   ERROR_GENERIC: 'Terjadi kesalahan. Silakan coba lagi.',
