@@ -71,11 +71,6 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
     <div role="grid" aria-rowcount={6} className="flex flex-col gap-2">
       {rows.map((row, rowIndex) => (
         <div key={rowIndex}>
-          {rowIndex === 0 && (
-            <div aria-hidden="true" className="text-sm text-text-muted mb-1">
-              Pattern
-            </div>
-          )}
           <div role="row" className="flex flex-wrap gap-2" aria-rowindex={rowIndex + 1}>
             {row.cells.map((cell, cellIndex) => (
               <ReadingCell

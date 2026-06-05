@@ -66,18 +66,11 @@ describe('ReadingGrid', () => {
     expect(rows).toHaveLength(6);
   });
 
-  it('row 0 has the Pattern label; rows 1-5 do not', async () => {
+  it('does not render the Pattern label anywhere', async () => {
     const { ReadingGrid } = await import('./ReadingGrid');
     render(<ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />);
 
-    const patternLabels = screen.getAllByText('Pattern');
-    expect(patternLabels).toHaveLength(1);
-
-    const rows = screen.getAllByRole('row');
-    expect(rows).toHaveLength(6);
-
-    const firstRowParent = rows[0]!.parentElement;
-    expect(firstRowParent?.querySelector('[aria-hidden="true"]')?.textContent).toBe('Pattern');
+    expect(screen.queryByText('Pattern')).toBeNull();
   });
 
   it('container has role grid with aria-rowcount 6', async () => {
@@ -139,16 +132,6 @@ describe('ReadingGrid', () => {
     const callsAfter = mockCell.mock.calls;
     const lastBatchIndex = callsAfter.length - 18; // last 18 calls are from rerender
     expect(callsAfter[lastBatchIndex]![0].vowelMode).toBe('kasrah');
-  });
-
-  it('Pattern label is aria-hidden', async () => {
-    const { ReadingGrid } = await import('./ReadingGrid');
-    const { container } = render(
-      <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
-    );
-
-    const pattern = container.querySelector('[aria-hidden="true"]');
-    expect(pattern?.textContent).toBe('Pattern');
   });
 
   it('randomHarakats applies per-cell random vowels instead of currentHarakat', async () => {

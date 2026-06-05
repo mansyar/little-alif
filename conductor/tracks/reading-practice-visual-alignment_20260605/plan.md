@@ -55,14 +55,14 @@
 **Files:** `app/components/child/reading/ReadingGrid.tsx`, `app/components/child/reading/ReadingGrid.test.tsx`
 **Test changes needed** — ReadingGrid.test.tsx has 2 tests asserting Pattern label exists.
 
-- [ ] **Task:** Remove "Pattern" label text from ReadingGrid
-  - [ ] **[Red]** Update `ReadingGrid.test.tsx`:
+- [x] **Task:** Remove "Pattern" label text from ReadingGrid
+  - [x] **[Red]** Update `ReadingGrid.test.tsx`:
     - Replace the "row 0 has the Pattern label" test with a "no Pattern label anywhere" test (assert `screen.queryByText('Pattern')` is `null`)
     - Remove the "Pattern label is aria-hidden" test entirely
     - Confirm the new "no Pattern" test FAILS
-  - [ ] **[Green]** Remove the Pattern `<div>` from `ReadingGrid.tsx` (lines ~73-77)
-  - [ ] Verify all tests pass
-- [ ] **Task:** Conductor — User Manual Verification 'Remove Pattern Label' (Protocol in workflow.md)
+  - [x] **[Green]** Remove the Pattern `<div>` from `ReadingGrid.tsx` (lines ~73-77)
+  - [x] Verify all tests pass
+- [x] **Task:** Conductor — User Manual Verification 'Remove Pattern Label' (Protocol in workflow.md)
 
 ---
 
