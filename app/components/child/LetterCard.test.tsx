@@ -172,7 +172,6 @@ describe('LetterCard', () => {
       audioFile: '',
       isVisible: true,
     };
-    // @ts-expect-error - testing with unknown letterId
     render(<LetterCard letter={unknownLetter} />);
 
     const card = screen.getByRole('button', { name: 'unknown-letter' });
@@ -202,8 +201,6 @@ describe('LetterCard', () => {
     const user = userEvent.setup();
     render(<LetterCard letter={letter} />);
 
-    await expect(
-      user.click(screen.getByRole('button', { name: 'alif' })),
-    ).resolves.toBeUndefined();
+    await expect(user.click(screen.getByRole('button', { name: 'alif' }))).resolves.toBeUndefined();
   });
 });
