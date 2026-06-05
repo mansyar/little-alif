@@ -22,18 +22,18 @@ export function ReadingActions({
         type="button"
         aria-label="Randomize vowel"
         onClick={onRandomizeHarakat}
-        className="min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform flex items-center gap-2"
+        className="min-h-[56px] px-4 rounded-small bg-white border border-sand-dark hover:bg-sand-light active:scale-95 transition-transform flex items-center gap-2"
       >
-        <Dices className="h-5 w-5" aria-hidden="true" />
+        <Dices className="h-5 w-5 text-green" aria-hidden="true" />
         <span>Random</span>
       </button>
       <button
         type="button"
         aria-label="Shuffle rows"
         onClick={onShuffle}
-        className="min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform flex items-center gap-2"
+        className="min-h-[56px] px-4 rounded-small bg-white border border-sand-dark hover:bg-sand-light active:scale-95 transition-transform flex items-center gap-2"
       >
-        <Shuffle className="h-5 w-5" aria-hidden="true" />
+        <Shuffle className="h-5 w-5 text-green" aria-hidden="true" />
         <span>Shuffle</span>
       </button>
       {groups.length > 1 && (
@@ -41,9 +41,9 @@ export function ReadingActions({
           type="button"
           aria-label="Next group"
           onClick={onNext}
-          className="min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform flex items-center gap-2"
+          className="min-h-[56px] px-4 rounded-small bg-white border border-sand-dark hover:bg-sand-light active:scale-95 transition-transform flex items-center gap-2"
         >
-          <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          <ChevronRight className="h-5 w-5 text-green" aria-hidden="true" />
           <span>Next Group</span>
         </button>
       )}
@@ -51,9 +51,9 @@ export function ReadingActions({
         type="button"
         aria-label="Done reading practice"
         onClick={onDone}
-        className="min-h-[56px] px-4 rounded-lg bg-white border border-gray-200 active:scale-95 transition-transform flex items-center gap-2"
+        className="min-h-[56px] px-4 rounded-small bg-white border border-sand-dark hover:bg-sand-light active:scale-95 transition-transform flex items-center gap-2"
       >
-        <Check className="h-5 w-5" aria-hidden="true" />
+        <Check className="h-5 w-5 text-green" aria-hidden="true" />
         <span>Done</span>
       </button>
     </div>
