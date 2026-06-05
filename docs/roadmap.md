@@ -23,28 +23,30 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-11  | Child Mode                           | T-03, T-05             | Low        | 2–3h        | ✅ Complete |
 | T-12  | Polish, Docker & Deployment          | T-10, T-11             | Medium     | 4–6h        | ✅ Complete |
 | T-13  | Child Mode Parent Gate & Flow Polish | T-11, T-08             | Medium     | 3–5h        | ✅ Complete |
+| T-14  | Reading Practice Visual Alignment    | T-10                   | Low        | 1–2h        | ✅ Complete |
 
-\***\*All 13 tracks complete.** Total effort: ~39–63 hours\*\*
+\***\*All 14 tracks complete.** Total effort: ~40–65 hours\*\*
 
 ### Implementation Status
 
-| ID    | Title                                  | Status      | Archived Track                                                                                     |
-| ----- | -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------- |
-| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
-| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
-| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
-| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                             |
-| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                 |
-| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                     |
-| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                         |
-| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                       |
-| T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                   |
-| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                           |
-| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                       |
-| T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)                     |
-| T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                 |
-| T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                           |
-| T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/) |
+| ID    | Title                                  | Status      | Archived Track                                                                                                   |
+| ----- | -------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------- |
+| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
+| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
+| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
+| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                           |
+| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                               |
+| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                   |
+| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                       |
+| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                                     |
+| T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                 |
+| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                         |
+| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                                     |
+| T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)                                   |
+| T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                               |
+| T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                         |
+| T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)               |
+| T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -849,6 +851,51 @@ Replace the text "Back" link on child routes (`/learn`, `/learn/reading`) with a
 
 ---
 
+### T-14: Reading Practice Visual Alignment ✅
+
+**Dependencies:** T-10 (Reading Practice)
+**Status:** ✅ Complete ([`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/))
+
+**Description:**
+Bring the reading practice screen visual language in line with the rest of the warm-toned app. Replace cold-gray Tailwind defaults with the project's design-system tokens. Unify button radii. Fix the GroupHeader label fallback bug so internal letter IDs are never exposed to the UI.
+
+**PRD Ref:** §4 — Module 8 (Reading Practice visual polish)
+**TDD Ref:** §5 (Reading Practice components — token alignment)
+
+**Key Deliverables (all delivered):**
+
+- [x] **Phase 1 (ReadingCell.tsx):** `bg-gray-50` → `bg-sand-light`, `rounded-lg` → `rounded-small`, `data-[flashed=true]:bg-emerald-200` → `data-[flashed=true]:bg-green-light`
+- [x] **Phase 2 (ReadingActions.tsx):** All 4 buttons use `border-sand-dark`, `rounded-small`, `hover:bg-sand-light`, and `text-green` for Lucide icons
+- [x] **Phase 3 (GroupPills.tsx):** Active: `bg-green text-white`, Complete: `border-green text-green-dark bg-white`, Incomplete: `border-sand-dark text-text-muted bg-white`; removed `cursor-not-allowed`
+- [x] **Phase 4 (ReadingGrid.tsx):** Removed "Pattern" label div and its 2 test assertions
+- [x] **Phase 5 (reading.ts):** `getCharById` return type `string → string|undefined`; fallback uses first successfully resolved character in group; new test confirms Arabic characters when resolver returns undefined
+
+**Key Decisions:**
+
+- No new Tailwind default color classes (`gray-`, `emerald-`, `amber-`) introduced in reading-practice components
+- GroupPills active state matches HarakatSelector styling for visual consistency
+- Pattern label removed entirely — the systematic row's predictable ordering is the visual signal
+- Flash animation timing left unchanged (confirmed working)
+
+**Edge Cases (all covered):**
+
+- `getCharById` returns `undefined` → fallback uses first valid character in group (never exposes raw IDs)
+- GroupPills incomplete state uses `aria-disabled` instead of `cursor-not-allowed` for accessibility
+- All 73 reading-related tests pass (6 test files), 442/442 full suite
+
+**Verification (all passing):**
+
+- All reading-practice components use only design-system tokens
+- GroupPills active state matches `bg-green text-white`
+- GroupHeader always shows Arabic glyphs (never Latin IDs)
+- Pattern label removed from ReadingGrid
+- New test covers `getCharById` undefined fallback
+- **442 tests passing** across 55 test files
+- `pnpm typecheck` clean, `pnpm lint` clean
+- Code review completed (archived)
+
+---
+
 ## Track Dependencies Graph
 
 ```
@@ -870,8 +917,11 @@ Replace the text "Back" link on child routes (`/learn`, `/learn/reading`) with a
                                                               ▼
                                                          T-12 (Polish & Deploy) ✅
                                                                                                                      │
-                                                                                                                     ▼
-                                                                                                              T-13 (Parent Gate) ✅
+                                                                                                                      ▼
+                                                                                                               T-13 (Parent Gate) ✅
+                                                                                                                      │
+                                                                                                                      ▼
+                                                                                                               T-14 (Reading Practice Visual Alignment) ✅
 ```
 
 ## Track Format

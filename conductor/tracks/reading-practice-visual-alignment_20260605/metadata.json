@@ -1,8 +1,0 @@
-{
-  "track_id": "reading-practice-visual-alignment_20260605",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-06-05T12:20:00Z",
-  "updated_at": "2026-06-05T12:20:00Z",
-  "description": "Reading Practice Visual Alignment — Replace cold grays with design-system tokens, unify radii, fix GroupHeader label fallback"
-}

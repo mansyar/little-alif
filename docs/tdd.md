@@ -1,8 +1,8 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.7 (T-13 — Child Mode Parent Gate & Flow Polish complete)
-**Based on:** PRD v1.6
+**Version:** 1.8 (T-14 — Reading Practice Visual Alignment complete)
+**Based on:** PRD v1.8
 
 ### Implementation Status
 
@@ -27,6 +27,7 @@
 | 15  | Error Handling                       | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
 | 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
 | 17  | Parent Gate & Child Switcher         | ✅ Implemented            | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                                                                                                                                                                                                    |
+| 18  | Reading Practice Visual Alignment    | ✅ Implemented            | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/)                                                                                                                                                                                                      |
 
 ---
 
