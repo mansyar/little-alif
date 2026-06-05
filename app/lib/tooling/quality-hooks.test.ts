@@ -88,34 +88,24 @@ describe('Tooling: Oxlint', () => {
   });
 });
 
-describe('Tooling: Husky + lint-staged', () => {
+describe('Tooling: Husky pre-commit', () => {
   it('has a .husky/pre-commit hook', () => {
     expect(existsSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'))).toBe(true);
   });
 
-  it('.husky/pre-commit invokes pnpm lint-staged', () => {
+  it('.husky/pre-commit runs oxlint', () => {
     const raw = readFileSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'), 'utf-8');
-    expect(raw).toContain('pnpm lint-staged');
+    expect(raw).toContain('oxlint');
   });
 
-  it('.husky/pre-commit also runs the project-wide typecheck after lint-staged', () => {
+  it('.husky/pre-commit runs oxfmt', () => {
     const raw = readFileSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'), 'utf-8');
-    // typecheck lives outside the per-file glob because tsc always runs on the full project.
-    expect(raw).toMatch(/pnpm\s+lint-staged[\s\S]*pnpm\s+typecheck/);
+    expect(raw).toContain('oxfmt');
   });
 
-  it('package.json lint-staged block maps *.{ts,tsx} to eslint+prettier (no tsc)', () => {
-    const pkg = readJson<PackageJson>('package.json');
-    const tsCommands = pkg['lint-staged']?.['*.{ts,tsx}'] ?? [];
-    expect(tsCommands).toContain('eslint --fix');
-    expect(tsCommands).toContain('prettier --write');
-    expect(tsCommands).not.toContain('tsc --noEmit');
-  });
-
-  it('package.json lint-staged block maps *.{json,md,css} to prettier --write', () => {
-    const pkg = readJson<PackageJson>('package.json');
-    const textCommands = pkg['lint-staged']?.['*.{json,md,css}'] ?? [];
-    expect(textCommands).toContain('prettier --write');
+  it('.husky/pre-commit runs typecheck after linting', () => {
+    const raw = readFileSync(path.join(PROJECT_ROOT, '.husky', 'pre-commit'), 'utf-8');
+    expect(raw).toMatch(/oxlint[\s\S]*oxfmt[\s\S]*pnpm\s+typecheck/);
   });
 
   it('package.json typecheck script uses --incremental for fast pre-commit runs', () => {
@@ -131,10 +121,10 @@ describe('Tooling: Husky + lint-staged', () => {
 
 describe('Tooling: package.json scripts', () => {
   it.each([
-    ['format', 'prettier --write'],
-    ['format:check', 'prettier --check'],
-    ['lint', 'eslint'],
-    ['lint:fix', 'eslint . --fix'],
+    ['format', 'oxfmt --write'],
+    ['format:check', 'oxfmt --check'],
+    ['lint', 'oxlint'],
+    ['lint:fix', 'oxlint --fix'],
   ])('script "%s" invokes "%s"', (scriptName, expectedSubstring) => {
     const pkg = readJson<PackageJson>('package.json');
     const script = pkg.scripts?.[scriptName] ?? '';
