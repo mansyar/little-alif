@@ -41,11 +41,16 @@ function installMockEnvironment() {
   // Mock Audio
   const audioMock = createMockAudio();
   const origAudio = globalThis.Audio;
-  const MockAudio = vi.fn((url?: string) => {
+  const MockAudio = vi.fn(function (
+    this: typeof Audio & { prototype: { play: () => Promise<void> } },
+    url?: string,
+  ) {
     if (url) audioMock.setSrc(url);
     return audioMock.audio;
   }) as unknown as typeof Audio & { prototype: { play: () => Promise<void> } };
-  MockAudio.prototype.play = vi.fn(() => Promise.resolve());
+  MockAudio.prototype.play = vi.fn(function () {
+    return Promise.resolve();
+  });
   globalThis.Audio = MockAudio;
 
   // Mock SpeechSynthesis
@@ -60,7 +65,7 @@ function installMockEnvironment() {
     onerror: (() => void) | null;
   }[] = [];
 
-  const MockUtterance = vi.fn((text?: string) => {
+  const MockUtterance = vi.fn(function (this: SpeechSynthesisUtterance, text?: string) {
     const instance = {
       text: text ?? '',
       rate: 1,
@@ -214,7 +219,9 @@ describe('AudioEngine speak – Web Speech fallback', () => {
 
   it('falls back to Web Speech when play() rejects (autoplay block)', async () => {
     // Simulate browser blocking the first play() call
-    env.audioMock.audio.play = vi.fn(() => Promise.reject(new Error('play blocked')));
+    env.audioMock.audio.play = vi.fn(function () {
+      return Promise.reject(new Error('play blocked'));
+    });
 
     const speakPromise = engine.speak('ba', 'fathah', 'ب');
 

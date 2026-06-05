@@ -21,15 +21,9 @@ export default defineConfig({
     // other when many test files run in the same pool. Limiting to 3 keeps
     // wall-clock time reasonable while reducing per-test contention.
     maxConcurrency: 10,
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        maxThreads: 3,
-        minThreads: 1,
-      },
-    },
+    maxWorkers: 3,
     coverage: {
-      provider: 'v8',
+      provider: 'istanbul',
       reporter: ['text', 'html'],
       include: ['app/**/*.{ts,tsx}'],
       exclude: [
