@@ -20,25 +20,25 @@
   - [x] Verify Oxfmt reads .prettierrc natively — NO, needs separate config
   - [x] Create Oxfmt-specific config via `oxfmt --migrate prettier` → .oxfmtrc.json
   - [x] Verify .prettierignore is compatible — YES, oxfmt reads it by default
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (cbffdaa)
 
 ## Phase 2: Lint Parity Verification
 
-- [ ] Task: Run full-project oxlint and collect results
-  - [ ] `oxlint .` — capture all warnings/errors
-  - [ ] Compare against current ESLint output to identify regressions
-  - [ ] Adjust .oxlintrc.json rules for any false positives
+- [x] Task: Run full-project oxlint and collect results
+  - [x] `oxlint .` — 0 errors, 0 warnings on 131 files with 86 rules
+  - [x] Compare against ESLint output — identical (0 errors, 0 warnings)
+  - [x] No adjustments needed — full lint parity achieved
 - [ ] Task: Fix or suppress any genuine new findings
   - [ ] Apply `--fix` where auto-fixable
   - [ ] Add inline comments for intentional non-issues
   - [ ] Iterate until `oxlint . --deny-warnings` exits 0
-- [ ] Task: Update quality-hooks.test.ts for oxlint
-  - [ ] Replace ESLint existence/validation tests with oxlint equivalents
-  - [ ] Update expected config file references
-- [ ] Task: Verify oxlint with type-aware rules
-  - [ ] Run `oxlint-tsgolint` to verify type-aware linting works
-  - [ ] Address any tsgo compatibility issues (e.g., paths/baseUrl resolution)
-  - [ ] Fall back to type-unaware oxlint if tsgolint has issues, document tradeoff
+- [x] Task: Update quality-hooks.test.ts for oxlint (commit a9fdee9)
+  - [x] Replace ESLint existence/validation tests with oxlint equivalents
+  - [x] Update expected config file references
+- [x] Task: Verify oxlint with type-aware rules (verified during Phase 1 & 2)
+  - [x] oxlint 1.68.0 natively supports `--type-aware` — works perfectly (0 errors)
+  - [x] `tsgolint` CLI warns its entrypoint is unsupported; oxlint native `--type-aware` is the correct path
+  - [x] Config-based `typeAware: true` in .oxlintrc.json also works
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Lint Parity Verification' (Protocol in workflow.md)
 
 ## Phase 3: Format Parity Verification
