@@ -25,8 +25,11 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-13  | Child Mode Parent Gate & Flow Polish | T-11, T-08             | Medium     | 3–5h        | ✅ Complete |
 | T-14  | Reading Practice Visual Alignment    | T-10                   | Low        | 1–2h        | ✅ Complete |
 | T-15  | Parent Dashboard De-clutter          | T-05, T-06             | Medium     | 4–6h        | ✅ Complete |
+| T-16  | Code Quality Polish                  | T-02, T-10             | Low        | ~1h         | ⬜ Planned  |
+| T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ⬜ Planned  |
+| T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ⬜ Planned  |
 
-\***\*All 15 tracks complete.** Total effort: ~44–71 hours\*\*
+\***\*15 tracks complete, 3 planned (T-16–T-18).** Delivered effort: ~44–71 hours\*\*
 
 ### Implementation Status
 
@@ -49,8 +52,11 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)               |
 | T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
 | T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
+| T-16  | Code Quality Polish                    | ⬜ Planned  | —                                                                                                                |
+| T-17  | Infrastructure & Audio Polish          | ⬜ Planned  | —                                                                                                                |
+| T-18  | Error Classification System            | ⬜ Planned  | —                                                                                                                |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features.
 
 ---
 
@@ -951,37 +957,206 @@ Mobile-first restructure of the parent dashboard: replace the sidebar with a top
 
 ---
 
+### T-16: Code Quality Polish
+
+**Dependencies:** T-02 (Database Schema), T-10 (Reading Practice)
+**Status:** ⬜ Planned
+**Complexity:** Low
+**Est. Effort:** ~1h
+
+**Description:**
+Bundle of small code quality fixes. Extract the 28-letter ID enum from its current duplication across 5+ files into a single shared config so renames no longer require coordinated multi-file changes. Also localize the reading practice button labels (Shuffle, Done, Next Group, Randomize) via existing i18n keys so parent-co-use text respects the parent's language preference.
+
+**PRD Ref:** §7 (Database Schema), §4 — REQ-4.6 (Bilingual UI)
+**TDD Ref:** §6 (Schema Definitions), §9 (Bilingual UI Implementation)
+
+**Key Deliverables:**
+
+- [ ] **Letter ID source of truth:**
+  - [ ] Create `app/lib/constants/letters.ts` exporting `LETTER_IDS` array and derived type
+  - [ ] Update `app/db/schema.ts`, `app/lib/validations/letters.ts`, `app/db/seed.ts`, and `LetterCard.tsx` to import from the shared source
+  - [ ] Verify `pnpm typecheck`, `pnpm test`, `pnpm lint` pass
+- [ ] **Reading practice i18n:**
+  - [ ] Add 5 keys to EN/ID translation files: `READING_SHUFFLE`, `READING_DONE`, `READING_NEXT_GROUP`, `READING_RANDOMIZE`, `READING_PATTERN_LABEL`
+  - [ ] Run `pnpm i18n` to regenerate type files
+  - [ ] Update `ReadingActions.tsx` and `GroupPills.tsx` to use `LL.*()` calls instead of hardcoded strings
+  - [ ] Update component tests for i18n wrappers
+  - [ ] Verify `pnpm test`, `pnpm typecheck`, `pnpm lint` pass
+
+**Key Decisions:**
+
+- Constants file lives at `app/lib/constants/letters.ts` (co-located with other lib modules)
+- Reading practice keys follow `SCREAMING_SNAKE_CASE` convention matching existing i18n keys
+- Child-facing glyphs and icons remain untouched (no i18n needed for the child UI)
+- Both fixes are independent — can be done in any order within the same track
+
+**Edge Cases:**
+
+- Already-seeded databases have `letter_id` values as strings — renaming any letter ID requires a migration
+- Missing Indonesian key → falls back to English (typesafe-i18n built-in behavior)
+
+**Verification:**
+
+- `LETTER_IDS` is defined in exactly one place, all imports point there
+- Toggle locale to ID → reading practice buttons show Indonesian text
+- `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
+- Existing tests pass unchanged (updated for i18n wrappers where needed)
+
+---
+
+### T-17: Infrastructure & Audio Polish
+
+**Dependencies:** T-12 (Polish, Docker & Deployment)
+**Status:** ⬜ Planned
+**Complexity:** Low
+**Est. Effort:** ~1.5-2h
+
+**Description:**
+Improve production infrastructure and self-hosting ergonomics. Break the only circular dependency in the code graph (`auth-fns.ts` ↔ `profiles.ts`), add a Docker health check endpoint for orchestrator monitoring, document the GCP TTS audio generation setup, and provide a free `edge-tts` alternative for self-hosters who don't use GCP.
+
+**PRD Ref:** §8 (Non-Functional Requirements)
+**TDD Ref:** §12 (Deployment Configuration), §7 (Audio Architecture)
+
+**Key Deliverables:**
+
+- [ ] **Break circular dependency:**
+  - [ ] Extract `getProfileUserId(db, profileId)` inline in `buildChildSession()` or into a lean utility
+  - [ ] Remove import of `profiles.ts` from `auth-fns.ts`
+  - [ ] Verify `codebase_graph_circular` reports zero cycles
+- [ ] **Docker health check:**
+  - [ ] Create `app/routes/api/health.ts` returning `200 { status: "ok" }` — no auth, no DB query
+  - [ ] Add `healthcheck` to `docker-compose.yml`: HTTP GET to `/api/health`, 30s interval, 3 retries
+- [ ] **Audio generation documentation & alternative:**
+  - [ ] Write clear GCP setup guide in `docs/audio-setup.md` (project creation, API enable, gcloud auth)
+  - [ ] (Optional) Write `scripts/generate-audio-edge.ts` using `edge-tts` (free, no GCP needed)
+  - [ ] Add `pnpm generate:audio:edge` script to `package.json` (if implemented)
+  - [ ] Note downloadable archive option for users who want zero setup
+
+**Key Decisions:**
+
+- Health endpoint is a static file route (no DB call) — a failing DB should not prevent liveness detection
+- Circular dep fix is by extraction, not by moving functions — preserves responsibility boundaries
+- `edge-tts` is optional — GCP remains the primary path; if quality is poor, skip and only improve docs
+- Audio file naming convention stays unchanged (`{letterId}_{vowelMode}.mp3`)
+
+**Edge Cases:**
+
+- No audio files present → AudioEngine falls back to Web Speech API (existing behavior — no crash)
+- Health endpoint called without env vars → still returns 200 (liveness check, not config check)
+- `fetch` unavailable in older Node → use `http.get` in healthcheck command
+- Partial audio files → engine plays what exists, falls back for the rest
+
+**Verification:**
+
+- `codebase_graph_circular` reports zero cycles
+- `docker compose up` shows health status as `healthy`
+- `curl localhost:3000/api/health` returns `200`
+- Self-hoster with no GCP account can follow the doc and produce audio within 15 minutes
+- `pnpm test`, `pnpm typecheck` pass
+
+---
+
+### T-18: Error Classification System
+
+**Dependencies:** T-12 (Polish, Docker & Deployment — toast system)
+**Status:** ⬜ Planned
+**Complexity:** Medium
+**Est. Effort:** ~1-2h
+
+**Description:**
+Server function errors currently surface as generic "Something went wrong" toasts. Create a lightweight error classification system with typed error codes that maps to contextual toast messages, so the parent sees useful hints like "Connection lost. Check your internet." instead of a vague failure.
+
+**PRD Ref:** §8 (Non-Functional Requirements — error handling)
+**TDD Ref:** §13 (Error Handling — toast + error boundary)
+
+**Key Deliverables:**
+
+- [ ] Define `ServerFunctionError` class with `ErrorCode` enum (`VALIDATION | AUTH | NOT_FOUND | LIMIT_EXCEEDED | NETWORK | UNKNOWN`) and `userMessage` field
+- [ ] Update server function handlers to throw typed errors instead of generic `Error('message')`
+- [ ] Create `useTypedMutation` wrapper around `useMutation` that catches `ServerFunctionError` and dispatches `pushToast` with the right variant
+- [ ] Map error codes to toast variants:
+
+  | Error Code       | Toast Variant | Message Pattern                             |
+  | ---------------- | ------------- | ------------------------------------------- |
+  | `VALIDATION`     | `info`        | "Check your input and try again."           |
+  | `AUTH`           | `error`       | "Please sign in again."                     |
+  | `NOT_FOUND`      | `info`        | "Item not found. It may have been deleted." |
+  | `LIMIT_EXCEEDED` | `error`       | "Maximum reached."                          |
+  | `NETWORK`        | `error`       | "Connection lost. Check your internet."     |
+  | `UNKNOWN`        | `error`       | "Something went wrong. Please try again."   |
+
+- [ ] Add i18n keys for common error messages
+- [ ] Update existing toast-wired components (LetterToggleGrid, ProfileEditor, HarakatSelector)
+- [ ] Write unit tests for error classification and `useTypedMutation`
+- [ ] Verify `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
+
+**Key Decisions:**
+
+- Lightweight class extending `Error` with a `code` property — not a full Result/Option type monad
+- `useTypedMutation` is a thin wrapper, not a replacement for TanStack Query's `useMutation`
+- Auth errors trigger redirect + toast (already partially handled by middleware)
+- Error messages are user-facing and concise — debug logs go to `console.error`
+- `NETWORK` code covers `fetch` transport failures caught by server function client
+
+**Edge Cases:**
+
+- Multiple errors in rapid succession → each gets its own toast (existing stacking behavior)
+- Error with no matching code → falls back to `UNKNOWN` (no crash)
+- Server function throws a non-classified error → caught by `ErrorBoundary`, toast shows generic message
+- Network disconnected mid-mutation → client detects `TypeError: Failed to fetch` → `NETWORK` code
+
+**Verification:**
+
+- Toggle a letter while offline → "Connection lost" toast appears
+- Delete a profile that was already deleted → "Item not found" toast
+- Try to create a 5th profile → "Maximum reached" toast
+- Try to toggle a non-owned profile → "Please sign in again" toast
+- All existing tests pass (non-breaking — old `Error` subclasses still work)
+- New tests cover error classification + `useTypedMutation`
+
+---
+
 ## Track Dependencies Graph
 
 ```
  T-01 (Scaffolding)  ── ✅
- ├── T-02 (Database) ── ✅
- │    ├── T-03 (Auth) ── ✅
- │    │    ├── T-05 (Dashboard & Profiles) ✅ ──┐
- │    │    │    ├── T-06 (Letter Toggles) ✅ ────┤
- │    │    │    │    ├── T-08 (Child Grid) ✅ ───┤
- │    │    │    │    │    └── T-10 (Reading Practice) ✅ ─┐
- │    │    │    │    │                                    │
- │    │    │    │    └── T-15 (Dashboard De-clutter) ✅ ──┤
- │    │    │    │                                          │
- │    │    │    └── T-11 (Child Mode) ✅ ─────────────────┤
- │    │    └── T-11 (Child Mode) ✅ ──────────────────────┤
- │    └── T-07 (Harakat) ✅ ──────────────────────────────┤
- │                                                        │
- T-03b (Code Quality) ── ✅                                │
- T-04 (i18n — parallel to T-02/T-03) ✅                    │
- T-09 (Audio — parallel to T-02/T-03) ✅                   │
-                                                              ▼
-                                                         T-12 (Polish & Deploy) ✅
-                                                                                                                     │
-                                                                                                                      ▼
-                                                                                                               T-13 (Parent Gate) ✅
-                                                                                                                      │
-                                                                                                                      ▼
-                                                                                                               T-14 (Reading Practice Visual Alignment) ✅
-                                                                                                                      │
-                                                                                                                      ▼
-                                                                                                               T-15 (Parent Dashboard De-clutter) ✅
+ ├── T-02 (Database) ── ✅ ───────────────┐
+ │    ├── T-03 (Auth) ── ✅               │
+ │    │    ├── T-05 (Dashboard) ✅ ───────┤
+ │    │    │    ├── T-06 (Toggles) ✅ ────┤
+ │    │    │    │    ├── T-08 (Grid) ✅ ──┤
+ │    │    │    │    │    └── T-10 (Reading) ✅
+ │    │    │    │    │    │    └── T-16 (Code
+ │    │    │    │    │    │         Quality) ⬜
+ │    │    │    │    │                    │
+ │    │    │    │    └── T-15 (De-clutter) ✅
+ │    │    │    │                         │
+ │    │    │    └── T-11 (Child Mode) ✅ ─┤
+ │    │    │                              │
+ │    │    └── T-16 (Code Quality) ⬜ ────┤
+ │    └── T-07 (Harakat) ✅ ─────────────┤
+ │                                        │
+ T-03b (Code Quality) ── ✅               │
+ T-04 (i18n — parallel) ✅                │
+ T-09 (Audio — parallel) ✅               │
+                                             ▼
+                                        T-12 (Polish & Deploy) ✅
+                                             │
+                                   ┌────────┼─────────┐
+                                   ▼        ▼         ▼
+                            T-17 (Infra  T-18 (Error   └── T-16
+                             & Audio) ⬜  Classify) ⬜      (cont.)
+                                   │
+                                   ▼
+                            T-13 (Parent Gate) ✅
+                                   │
+                                   ▼
+                            T-14 (Reading Visual
+                                 Alignment) ✅
+                                   │
+                                   ▼
+                            T-15 (Dashboard
+                                 De-clutter) ✅
 ```
 
 ## Track Format
