@@ -5,12 +5,12 @@
 **Files:** `app/components/child/reading/ReadingCell.tsx`
 **No test changes needed** — ReadingCell.test.tsx does not assert color/radius class names.
 
-- [ ] **Task:** Update ReadingCell.tsx class names
-  - [ ] Replace `bg-gray-50` → `bg-sand-light`
-  - [ ] Replace `rounded-lg` → `rounded-small`
-  - [ ] Replace `data-[flashed=true]:bg-emerald-200` → `data-[flashed=true]:bg-green-light`
-  - [ ] Run `pnpm test` to confirm no regressions
-- [ ] **Task:** Conductor — User Manual Verification 'ReadingCell Token Replacement' (Protocol in workflow.md)
+- [x] **Task:** Update ReadingCell.tsx class names (6857353)
+  - [x] Replace `bg-gray-50` → `bg-sand-light`
+  - [x] Replace `rounded-lg` → `rounded-small`
+  - [x] Replace `data-[flashed=true]:bg-emerald-200` → `data-[flashed=true]:bg-green-light`
+  - [x] Run `pnpm test` to confirm no regressions
+- [x] **Task:** Conductor — User Manual Verification 'ReadingCell Token Replacement' (Protocol in workflow.md)
 
 ---
 
