@@ -5,7 +5,7 @@
 
 ---
 
-## Phase 1: Letter ID Source of Truth
+## Phase 1: Letter ID Source of Truth [checkpoint: f4203f3]
 
 **Goal:** Move `LETTER_IDS` + `LetterId` + `LETTER_BG_COLORS` to `app/lib/constants/letters.ts` as the canonical source. Update all 14 consumers.
 
