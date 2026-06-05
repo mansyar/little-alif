@@ -12,6 +12,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-02  | Database Schema & Seed Data          | T-01                   | Low        | 2–3h        | ✅ Complete |
 | T-03  | Authentication (Better Auth)         | T-02                   | Medium     | 3–5h        | ✅ Complete |
 | —     | Code Quality Tooling                 | T-01                   | Low        | 1–2h        | ✅ Complete |
+| —     | Oxlint Migration                     | —                      | Low        | ~2h         | ✅ Complete |
 | T-04  | i18n Setup                           | T-01                   | Low        | 1–2h        | ✅ Complete |
 | T-05  | Parent Dashboard & Child Profiles    | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
 | T-06  | Letter Toggle Management             | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
@@ -29,7 +30,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ⬜ Planned  |
 | T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ⬜ Planned  |
 
-\***\*16 tracks complete, 2 planned (T-17–T-18).** Delivered effort: ~44–71 hours\*\*
+\***\*17 tracks complete, 2 planned (T-17–T-18).** Delivered effort: ~46–73 hours\*\*
 
 ### Implementation Status
 
@@ -39,6 +40,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
 | T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
 | —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                           |
+| —     | Oxlint + Oxfmt Migration               | ✅ Complete | [`oxlint_migration_20260605`](../conductor/archive/oxlint_migration_20260605/)                                 |
 | T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                               |
 | T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                   |
 | T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                       |
@@ -56,7 +58,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-17  | Infrastructure & Audio Polish          | ⬜ Planned  | —                                                                                                                |
 | T-18  | Error Classification System            | ⬜ Planned  | —                                                                                                                |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) is now complete.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) is now complete.
 
 ---
 
@@ -198,7 +200,9 @@ Integrate Better Auth for email/password authentication. Configure session manag
 ### T-03b: Code Quality Tooling (Prettier, ESLint, Husky) ✅
 
 **Dependencies:** T-01
-**Status:** ✅ Complete (`code-quality_20260601`)
+**Status:** ✅ Complete (`code-quality_20260601`) — **Superseded by Oxlint Migration (`oxlint_migration_20260605`)**
+
+> **Note:** This track established the original ESLint + Prettier + lint-staged pipeline. It was fully replaced in the Oxlint Migration track, which migrated to **Oxlint 1.68** (86 rules, type-aware) + **Oxfmt 0.53** with a simplified pre-commit hook (`oxlint --fix . && oxfmt --write . && pnpm typecheck`). The migration removed 9 dependencies (eslint, prettier, typescript-eslint, etc.) and 3 config files (eslint.config.js, .prettierrc, .prettierignore).
 
 **Description:**
 Establish a Git pre-commit hook pipeline that enforces TypeScript type-checking, ESLint linting, and Prettier formatting on staged files before commits can be created. This track was added as a bonus tooling track not present in the original roadmap.

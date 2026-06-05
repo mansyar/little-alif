@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.10 (T-16 — Code Quality Polish complete)
+**Version:** 1.11 (Oxlint migration complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -25,7 +25,7 @@
 | 13  | Performance Budgets                  | ✅ Implemented            | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                                                                                                                                                                                                                      |
 | 14  | Deployment Configuration             | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
 | 15  | Error Handling                       | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
-| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
+| 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/), [`oxlint_migration_20260605`](../conductor/archive/oxlint_migration_20260605/)                                                                                                                                                                |
 | 17  | Parent Gate & Child Switcher         | ✅ Implemented            | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                                                                                                                                                                                                    |
 | 18  | Reading Practice Visual Alignment    | ✅ Implemented            | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/)                                                                                                                                                                                                      |
 | 19  | Parent Dashboard De-clutter          | ✅ Implemented            | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)                                                                                                                                                                                                                    |
