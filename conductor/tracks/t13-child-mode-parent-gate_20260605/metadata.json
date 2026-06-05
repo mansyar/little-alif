@@ -1,8 +1,0 @@
-{
-  "track_id": "t13-child-mode-parent-gate_20260605",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-06-05T07:17:37Z",
-  "updated_at": "2026-06-05T07:17:37Z",
-  "description": "T-13: Child Mode Parent Gate & Flow Polish. Replace the 'Back' text link on /learn and /learn/reading with a hidden lock-icon parent gate (Lucide Lock, top-right, low contrast). Unlocked by long-press 1.5s or 3 taps in 1s, shows a parent menu with Switch child and Exit options. Adds a ChildSwitcher overlay for swapping profiles mid-session."
-}

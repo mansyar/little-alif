@@ -6,43 +6,45 @@ This document defines the **Conductor tracks** that will be created during devel
 
 ## Track Overview
 
-| ID    | Title                             | Depends On             | Complexity | Est. Effort | Status      |
-| ----- | --------------------------------- | ---------------------- | ---------- | ----------- | ----------- |
-| T-01  | Project Scaffolding & Config      | —                      | Low        | 1–2h        | ✅ Complete |
-| T-02  | Database Schema & Seed Data       | T-01                   | Low        | 2–3h        | ✅ Complete |
-| T-03  | Authentication (Better Auth)      | T-02                   | Medium     | 3–5h        | ✅ Complete |
-| —     | Code Quality Tooling              | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-04  | i18n Setup                        | T-01                   | Low        | 1–2h        | ✅ Complete |
-| T-05  | Parent Dashboard & Child Profiles | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
-| T-06  | Letter Toggle Management          | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
-| T-07  | Vowel Mode (Harakat)              | T-02                   | Low        | 2–3h        | ✅ Complete |
-| T-08  | Child Letter Grid                 | T-06, T-07, T-09       | Medium     | 4–6h        | ✅ Complete |
-| T-09  | Audio Service (Web Speech API)    | T-01                   | Low        | 2–3h        | ✅ Complete |
-| T-09b | Audio Preloader (Idle Warm-up)    | T-09                   | Low        | 1h          | ✅ Complete |
-| T-10  | Reading Practice (Iqra' Mode)     | T-06, T-07, T-08, T-09 | High       | 5–8h        | ✅ Complete |
-| T-11  | Child Mode                        | T-03, T-05             | Low        | 2–3h        | ✅ Complete |
-| T-12  | Polish, Docker & Deployment       | T-10, T-11             | Medium     | 4–6h        | ✅ Complete |
+| ID    | Title                                | Depends On             | Complexity | Est. Effort | Status      |
+| ----- | ------------------------------------ | ---------------------- | ---------- | ----------- | ----------- |
+| T-01  | Project Scaffolding & Config         | —                      | Low        | 1–2h        | ✅ Complete |
+| T-02  | Database Schema & Seed Data          | T-01                   | Low        | 2–3h        | ✅ Complete |
+| T-03  | Authentication (Better Auth)         | T-02                   | Medium     | 3–5h        | ✅ Complete |
+| —     | Code Quality Tooling                 | T-01                   | Low        | 1–2h        | ✅ Complete |
+| T-04  | i18n Setup                           | T-01                   | Low        | 1–2h        | ✅ Complete |
+| T-05  | Parent Dashboard & Child Profiles    | T-02, T-03             | Medium     | 4–6h        | ✅ Complete |
+| T-06  | Letter Toggle Management             | T-02, T-03, T-05       | Medium     | 3–5h        | ✅ Complete |
+| T-07  | Vowel Mode (Harakat)                 | T-02                   | Low        | 2–3h        | ✅ Complete |
+| T-08  | Child Letter Grid                    | T-06, T-07, T-09       | Medium     | 4–6h        | ✅ Complete |
+| T-09  | Audio Service (Web Speech API)       | T-01                   | Low        | 2–3h        | ✅ Complete |
+| T-09b | Audio Preloader (Idle Warm-up)       | T-09                   | Low        | 1h          | ✅ Complete |
+| T-10  | Reading Practice (Iqra' Mode)        | T-06, T-07, T-08, T-09 | High       | 5–8h        | ✅ Complete |
+| T-11  | Child Mode                           | T-03, T-05             | Low        | 2–3h        | ✅ Complete |
+| T-12  | Polish, Docker & Deployment          | T-10, T-11             | Medium     | 4–6h        | ✅ Complete |
+| T-13  | Child Mode Parent Gate & Flow Polish | T-11, T-08             | Medium     | 3–5h        | ✅ Complete |
 
-\***\*All 12 tracks complete.** Total effort: ~36–58 hours\*\*
+\***\*All 13 tracks complete.** Total effort: ~39–63 hours\*\*
 
 ### Implementation Status
 
-| ID    | Title                                  | Status      | Archived Track                                                                   |
-| ----- | -------------------------------------- | ----------- | -------------------------------------------------------------------------------- |
-| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
-| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
-| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)             |
-| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)           |
-| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)               |
-| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)   |
-| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)       |
-| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                     |
-| T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
-| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)         |
-| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)     |
-| T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)   |
-| T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)               |
-| T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)         |
+| ID    | Title                                  | Status      | Archived Track                                                                                     |
+| ----- | -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------- |
+| T-01  | Project Scaffolding & Config           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
+| T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
+| T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                               |
+| —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                             |
+| T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                 |
+| T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                     |
+| T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                         |
+| T-07  | Vowel Mode (Harakat)                   | ✅ Complete | [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                       |
+| T-08  | Child Letter Grid                      | ✅ Complete | [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                   |
+| T-09  | Audio Service (Web Speech API)         | ✅ Complete | [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                           |
+| T-09b | Audio Preloader (Idle Warm-up)         | ✅ Complete | [`audio-preloader_20260602`](../conductor/archive/audio-preloader_20260602/)                       |
+| T-10  | Reading Practice (Iqra' Mode)          | ✅ Complete | [`reading-practice_20260603`](../conductor/archive/reading-practice_20260603/)                     |
+| T-11  | Child Mode                             | ✅ Complete | [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                 |
+| T-12  | Polish, Docker & Deployment            | ✅ Complete | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                           |
+| T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/) |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline.
 
@@ -788,6 +790,65 @@ Final polish: audio MP3 generation, error handling, toast notifications, Docker 
 
 ---
 
+### T-13: Child Mode Parent Gate & Flow Polish ✅
+
+**Dependencies:** T-11 (Child Mode), T-08 (Child Letter Grid)
+**Status:** ✅ Complete ([`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/))
+
+**Description:**
+Replace the text "Back" link on child routes (`/learn`, `/learn/reading`) with a hidden gesture-based Parent Gate. A low-contrast lock icon in the top-right corner of the child header is invisible to children in normal use (40% muted text opacity) but unlockable by a parent via two gestures: long-press for 1.5s, or three taps within 1s. Unlocking opens a parent menu with two options: **Switch child** (opens a ChildSwitcher overlay listing other profiles) and **Exit to parent dashboard** (clears child-mode cookie, navigates to `/dashboard` or `/login`).
+
+**PRD Ref:** §4 — Module 9 (Parent Gate)
+
+**New Files Created:**
+
+- `app/lib/utils/parent-gate.ts` — Gesture timing constants (LONG_PRESS_MS=1500, TAP_WINDOW_MS=1000, TAP_COUNT=3)
+- `app/lib/utils/parent-gate.test.ts` — 4 tests for constants
+- `app/lib/hooks/useParentGateHandlers.ts` — Shared `handleExit` / `handleSwitchChild` hook
+- `app/lib/hooks/useParentGateHandlers.test.ts` — 6 tests for handler logic
+- `app/components/child/ParentGate.tsx` — Lock icon + SVG progress ring + Radix Dialog menu (z-60)
+- `app/components/child/ParentGate.test.tsx` — 13 tests covering long-press, 3-tap, disabled, menu interactions
+- `app/components/parent/ChildSwitcher.tsx` — Profile picker overlay (Radix Dialog, z-70) with query + mutation
+- `app/components/parent/ChildSwitcher.test.tsx` — 8 tests covering empty state, single/multi profile selection
+- `app/server/profiles.ts` — `listProfilesForSwitch` pure helper + `listProfilesForSwitchFn` server function
+
+**Files Modified:**
+
+- `app/routes/learn.tsx` — Replaced `<Link to="/dashboard">Back</Link>` with `<ParentGate>` + `<ChildSwitcher>`
+- `app/routes/learn/reading.tsx` — Same pattern
+- `app/routes/learn.test.tsx` — Removed "Back" assertions, added ParentGate assertions
+- `app/routes/learn/reading.test.tsx` — Same pattern
+- `app/server/profiles.test.ts` — Added `listProfilesForSwitch` tests
+- `vitest.config.ts` — Increased testTimeout to 60s, capped workers to 3 threads
+
+**Key Decisions:**
+
+- `useAuthStore.getState()` read on demand (not subscription) to avoid re-render churn
+- Progress ring animated via SVG `strokeDasharray` (60fps, `requestAnimationFrame`-driven)
+- Parent session validated via `validateSessionFn()` server call (not in-memory `user` field)
+- `ChildSwitcher` filters out the currently-active profile — single-child households see empty state
+- Both `ParentGate` menu and `ChildSwitcher` use Radix Dialog at z-60 and z-70 respectively (above LetterDetail's z-50)
+
+**Edge Cases:**
+
+- Hold < 1.5s then release → no menu, no tap registered
+- Tap 3× with >1s between → no menu (tap window expired)
+- Pointer drift off icon during hold → clean cancel (no stuck progress)
+- `handleExit` with parent JWT present → routes to `/dashboard`
+- `handleExit` with no parent JWT (child-only session) → routes to `/login`
+- `ChildSwitcher` loading → spinner; error → empty state with close button
+- Only 1 profile → empty state shown (no other children to switch to)
+- Fallback avatar (`?` div) if avatar key not found in `AVATAR_MAP`
+
+**Verification (all passing):**
+
+- **442 tests passing** across 55 test files
+- T-13 specific files: 97–100% line coverage
+- `pnpm typecheck` clean, `pnpm lint` clean, `pnpm format:check` clean
+- Code review completed (archived)
+
+---
+
 ## Track Dependencies Graph
 
 ```
@@ -807,7 +868,10 @@ Final polish: audio MP3 generation, error handling, toast notifications, Docker 
  T-04 (i18n — parallel to T-02/T-03) ✅                     │
  T-09 (Audio — parallel to T-02/T-03) ✅                    │
                                                               ▼
-                                                        T-12 (Polish & Deploy) ✅
+                                                         T-12 (Polish & Deploy) ✅
+                                                                                                                     │
+                                                                                                                     ▼
+                                                                                                              T-13 (Parent Gate) ✅
 ```
 
 ## Track Format

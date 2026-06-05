@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.6 (T-12 — Polish, Docker & Deployment complete)
+**Version:** 1.7 (T-13 — Child Mode Parent Gate & Flow Polish complete)
 **Based on:** PRD v1.6
 
 ### Implementation Status
@@ -26,6 +26,7 @@
 | 14  | Deployment Configuration             | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
 | 15  | Error Handling                       | ✅ Implemented            | [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                                                                                                                                                                                              |
 | 16  | Code Quality & Tooling               | ✅ Implemented            | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                                                                                                                                                                                                |
+| 17  | Parent Gate & Child Switcher         | ✅ Implemented            | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                                                                                                                                                                                                    |
 
 ---
 
@@ -54,7 +55,8 @@ little-alif/
 │   │   │   ├── AvatarPicker.tsx     # Avatar selection grid
 │   │   │   ├── LetterToggleGrid.tsx # 28-letter grid (Radix Switch per letter)
 │   │   │   ├── HarakatSelector.tsx  # Vowel mode selector (parent toggle screen)
-│   │   │   └── ChildModeToggle.tsx  # Enable/disable child mode for a profile
+│   │   │   ├── ChildModeToggle.tsx  # Enable/disable child mode for a profile
+│   │   │   └── ChildSwitcher.tsx    # Mid-session profile picker overlay (Radix Dialog, z-70)
 │   │   ├── child/
 │   │   │   ├── LetterGrid.tsx       # The child's letter exploration grid
 │   │   │   ├── LetterCard.tsx       # Single letter card (glyph + tap handler)
@@ -62,6 +64,7 @@ little-alif/
 │   │   │   ├── ChildHarakatBar.tsx  # Vowel mode buttons for the child grid
 │   │   │   ├── EmptyState.tsx       # "No letters yet" illustration
 │   │   │   ├── ProfileBadge.tsx     # Shows the active child's avatar + name
+│   │   │   ├── ParentGate.tsx       # Hidden lock icon + progress ring + parent menu (Radix Dialog, z-60)
 │   │   │   └── reading/
 │   │   │       ├── ReadingGrid.tsx       # The 6-row reading practice grid
 │   │   │       ├── ReadingCell.tsx       # Single tappable cell in the grid
@@ -96,7 +99,10 @@ little-alif/
 │   │   │   ├── profiles.ts          # Zod schemas for profile CRUD
 │   │   │   └── letters.ts           # Zod schemas for letter toggles
 │   │   └── utils/
-│   │       └── cn.ts                # Tailwind class merge utility
+│   │       ├── cn.ts                # Tailwind class merge utility
+│   │       └── parent-gate.ts       # Gesture timing constants (LONG_PRESS_MS, TAP_WINDOW_MS, TAP_COUNT)
+│   │   └── hooks/
+│   │       └── useParentGateHandlers.ts # Shared handleExit/handleSwitchChild hook for child routes
 │   ├── stores/
 │   │   ├── auth-store.ts            # Auth + child mode state
 │   │   ├── child-store.ts           # Active child profile + letters
@@ -239,6 +245,12 @@ getActiveProfileFn({ profileId: string })
   // Requires: valid JWT (parent) OR child-mode cookie (matches profileId)
   // Used by /learn route to populate ProfileBadge without embedding PII
   // in the child-mode cookie. Throws if profile is missing or not owned.
+
+listProfilesForSwitchFn()
+  → Array<{ id: string, name: string, avatar: AvatarKey }>
+  // Requires: valid JWT (parent only — children cannot enumerate profiles)
+  // Used by ChildSwitcher overlay to list non-active profiles.
+  // Pure helper: listProfilesForSwitch(db, userId) returns public-safe shape.
 ```
 
 ### Letters (`app/server/letters.ts`)

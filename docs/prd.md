@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.6 (T-12 — Polish, Docker & Deployment complete)
+**Version:** 1.7 (T-13 — Child Mode Parent Gate & Flow Polish complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -24,23 +24,24 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 
 ### Development Status
 
-| Area                     | Status      | Details                                                                                                                                                                       |
-| ------------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Project Scaffolding**  | ✅ Complete | TanStack Start + Tailwind v4 + Radix UI + Zustand. See [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                   |
-| **Database Schema**      | ✅ Complete | Drizzle ORM + SQLite — `profiles`, `letters`, `letter_toggles` tables. 28 letters seeded.                                                                                     |
-| **Authentication**       | ✅ Complete | Better Auth — register, login, logout, session management, CSRF, route protection.                                                                                            |
-| **Code Quality Tooling** | ✅ Complete | Prettier, ESLint v9 (flat config), Husky + lint-staged pre-commit hooks. See [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                           |
-| **Parent Dashboard**     | ✅ Complete | Profile CRUD, avatar selection, child mode toggle. See [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                         |
-| **Letter Toggle Mgmt**   | ✅ Complete | ON/OFF switches per letter per child. See [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                                          |
-| **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                  |
-| **Child Letter Grid**    | ✅ Complete | Touch grid, audio playback, empty state, ProfileBadge, disabled Reading Practice button. See [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/) |
-| **Audio Service**        | ✅ Complete | Hybrid: pre-recorded MP3 (Google Cloud TTS) + Web Speech fallback. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                               |
-| **Audio Generation**     | ✅ Complete | Build-time script generates 112 MP3 files via Google Cloud TTS (`ar-XA`). See [`hybrid-audio_20260604`](../conductor/archive/audio-preloader_20260602/)                       |
-| **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                |
-| **Child Mode**           | ✅ Complete | Cookie-based auth bypass for kids. See [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                                                     |
-| **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                      |
-| **Docker / Deploy**      | ✅ Complete | Multi-stage Dockerfile, docker-compose, custom server entry. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                     |
-| **Error Handling**       | ✅ Complete | Error boundaries on all routes, toast notifications for server errors. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                           |
+| Area                     | Status      | Details                                                                                                                                                                                                              |
+| ------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Project Scaffolding**  | ✅ Complete | TanStack Start + Tailwind v4 + Radix UI + Zustand. See [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                                                                          |
+| **Database Schema**      | ✅ Complete | Drizzle ORM + SQLite — `profiles`, `letters`, `letter_toggles` tables. 28 letters seeded.                                                                                                                            |
+| **Authentication**       | ✅ Complete | Better Auth — register, login, logout, session management, CSRF, route protection.                                                                                                                                   |
+| **Code Quality Tooling** | ✅ Complete | Prettier, ESLint v9 (flat config), Husky + lint-staged pre-commit hooks. See [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                                                  |
+| **Parent Dashboard**     | ✅ Complete | Profile CRUD, avatar selection, child mode toggle. See [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                                                                |
+| **Letter Toggle Mgmt**   | ✅ Complete | ON/OFF switches per letter per child. See [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                                                                                 |
+| **Vowel Mode (Harakat)** | ✅ Complete | Unicode diacritic rendering, parent/child selectors, precomposed fallbacks. See [`harakat_20260602`](../conductor/archive/harakat_20260602/)                                                                         |
+| **Child Letter Grid**    | ✅ Complete | Touch grid, audio playback, empty state, ProfileBadge, disabled Reading Practice button. See [`child-letter-grid_20260603`](../conductor/archive/child-letter-grid_20260603/)                                        |
+| **Audio Service**        | ✅ Complete | Hybrid: pre-recorded MP3 (Google Cloud TTS) + Web Speech fallback. See [`audio-service_20260602`](../conductor/archive/audio-service_20260602/)                                                                      |
+| **Audio Generation**     | ✅ Complete | Build-time script generates 112 MP3 files via Google Cloud TTS (`ar-XA`). See [`hybrid-audio_20260604`](../conductor/archive/audio-preloader_20260602/)                                                              |
+| **Reading Practice**     | ✅ Complete | Iqra' Mode — 6-row grid, systematic + shuffled                                                                                                                                                                       |
+| **Child Mode**           | ✅ Complete | Cookie-based auth bypass for kids. See [`child-mode_20260604`](../conductor/archive/child-mode_20260604/)                                                                                                            |
+| **i18n**                 | ✅ Complete | English + Indonesian parent UI via typesafe-i18n. See [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                                                                             |
+| **Docker / Deploy**      | ✅ Complete | Multi-stage Dockerfile, docker-compose, custom server entry. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                            |
+| **Error Handling**       | ✅ Complete | Error boundaries on all routes, toast notifications for server errors. See [`polish-deploy_20260604`](../conductor/archive/polish-deploy_20260604/)                                                                  |
+| **Parent Gate**          | ✅ Complete | Hidden lock icon on child routes (long-press 1.5s or 3-tap unlock), parent menu, mid-session child switching. See [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/) |
 
 ---
 
@@ -219,6 +220,8 @@ A unified SSR application deployed inside a single Docker container. TanStack St
 - Build-time audio generation script (Google Cloud TTS, 112 MP3 files)
 - Child Mode for one profile per device
 - Bilingual parent UI (English + Indonesian)
+- Hidden parent gate on child routes (lock icon, long-press or 3-tap unlock)
+- Mid-session child switching from the parent menu
 
 ### Out of Scope (Phase 2 / Future)
 
@@ -343,7 +346,7 @@ CREATE INDEX idx_letters_order ON letters(display_order);
 [App opens]
         │
         ▼
-[Child Mode detected?] ──No──▶ [Parent Gate]
+[Child Mode detected?] ──No──▶ [Parent Login]
         │ Yes
         ▼
 [Letter Grid (only parent-introduced letters)]
@@ -352,6 +355,10 @@ CREATE INDEX idx_letters_order ON letters(display_order);
         ├── Tap letter → Hear pronunciation → Auto-return to grid
         ├── Tap letter → Hear pronunciation → Auto-return to grid
         ├── (Repeat exploration)
+        │
+        ├── [Lock icon (hidden)] ──Hold 1.5s or 3-tap──▶ [Parent Menu]
+        │       ├── "Switch child" → [ChildSwitcher] → Tap another profile → /learn
+        │       └── "Exit to dashboard" → Clear child cookie → /dashboard or /login
         │
         └── "Reading Practice" button
                 │
