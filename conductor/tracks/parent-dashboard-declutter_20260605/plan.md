@@ -73,3 +73,7 @@
 - [x] Run lint: `pnpm lint` — clean ✅
 - [x] Update `plan.md` with implementation notes and commit SHAs
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions be0fadf
