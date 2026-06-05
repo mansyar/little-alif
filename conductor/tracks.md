@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Reading Practice Visual Alignment**
+- [x] **Track: Reading Practice Visual Alignment**
       _Link: [./tracks/reading-practice-visual-alignment_20260605/](./tracks/reading-practice-visual-alignment_20260605/)_
