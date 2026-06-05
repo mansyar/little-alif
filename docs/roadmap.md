@@ -25,11 +25,11 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-13  | Child Mode Parent Gate & Flow Polish | T-11, T-08             | Medium     | 3–5h        | ✅ Complete |
 | T-14  | Reading Practice Visual Alignment    | T-10                   | Low        | 1–2h        | ✅ Complete |
 | T-15  | Parent Dashboard De-clutter          | T-05, T-06             | Medium     | 4–6h        | ✅ Complete |
-| T-16  | Code Quality Polish                  | T-02, T-10             | Low        | ~1h         | ⬜ Planned  |
+| T-16  | Code Quality Polish                  | T-02, T-10             | Low        | ~1h         | ✅ Complete |
 | T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ⬜ Planned  |
 | T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ⬜ Planned  |
 
-\***\*15 tracks complete, 3 planned (T-16–T-18).** Delivered effort: ~44–71 hours\*\*
+\***\*16 tracks complete, 2 planned (T-17–T-18).** Delivered effort: ~44–71 hours\*\*
 
 ### Implementation Status
 
@@ -52,11 +52,11 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-13  | Child Mode Parent Gate & Flow Polish   | ✅ Complete | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)               |
 | T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
 | T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
-| T-16  | Code Quality Polish                    | ⬜ Planned  | —                                                                                                                |
+| T-16  | Code Quality Polish                    | ✅ Complete | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                             |
 | T-17  | Infrastructure & Audio Polish          | ⬜ Planned  | —                                                                                                                |
 | T-18  | Error Classification System            | ⬜ Planned  | —                                                                                                                |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) is now complete.
 
 ---
 

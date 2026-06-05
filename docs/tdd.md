@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.9 (T-15 — Parent Dashboard De-clutter complete)
+**Version:** 1.10 (T-16 — Code Quality Polish complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -29,6 +29,7 @@
 | 17  | Parent Gate & Child Switcher         | ✅ Implemented            | [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                                                                                                                                                                                                    |
 | 18  | Reading Practice Visual Alignment    | ✅ Implemented            | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/)                                                                                                                                                                                                      |
 | 19  | Parent Dashboard De-clutter          | ✅ Implemented            | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)                                                                                                                                                                                                                    |
+| 20  | Code Quality Polish                  | ✅ Implemented            | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                                                                                                                                                                                                                                  |
 
 ---
 

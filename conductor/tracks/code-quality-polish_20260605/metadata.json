@@ -1,8 +1,0 @@
-{
-  "track_id": "code-quality-polish_20260605",
-  "type": "refactor",
-  "status": "new",
-  "created_at": "2026-06-05T20:01:28Z",
-  "updated_at": "2026-06-05T20:01:28Z",
-  "description": "T-16: Code Quality Polish — Letter ID source of truth consolidation + reading practice i18n"
-}
