@@ -65,9 +65,9 @@
   - [x] Update `-reading.test.tsx` with i18n mock + updated aria-label queries
   - [x] Verify `pnpm typecheck` passes
 
-- [ ] **Task 2.4: Update GroupPills.tsx**
-  - [ ] Replace hardcoded "Pattern" label with `LL.READING_PATTERN_LABEL()` in `GroupPills.tsx` (if that label exists — verify first)
-  - [ ] Verify `pnpm typecheck` passes
+- [x] **Task 2.4: Update GroupPills.tsx** _(no-op)_
+  - [x] Verified — no "Pattern" label exists in `GroupPills.tsx`. Hardcoded strings (`aria-label "Group"` and `title "Needs 3 letters"`) not covered by the 5 new keys; deferred.
+  - [x] Verify `pnpm typecheck` passes
 
 - [ ] **Task 2.5: Update component tests**
   - [ ] Wrap `ReadingActions` and `GroupPills` tests in `<I18nContext.Provider>` where needed
