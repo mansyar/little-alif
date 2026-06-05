@@ -2,8 +2,9 @@
 
 ## Phase 1: Setup & Configuration
 
-- [~] Task: Install oxlint, oxfmt, and oxlint-tsgolint
-  - [~] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
+- [x] Task: Install oxlint, oxfmt, and oxlint-tsgolint (2c3e5e5)
+  - [x] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
+  - Note: oxlint 1.68.0 natively supports `--type-aware` — tsgolint CLI is unsupported, use oxlint's native flag instead.
 - [ ] Task: Run migration tool to generate initial .oxlintrc.json
   - [ ] `npx @oxlint/migrate` to convert eslint.config.js → .oxlintrc.json
   - [ ] Review unsupported rules logged by the migration tool
