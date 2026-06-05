@@ -1,0 +1,71 @@
+# Implementation Plan: Address Server Function Test Coverage Gap
+
+## Phase 1: Auth Functions Coverage (`app/server/auth-fns.test.ts`)
+
+- [ ] Task: Write tests for `buildChildSession` helper
+    - [ ] Test: returns null when cookie verification fails (invalid/tampered cookie)
+    - [ ] Test: returns null when profile not found in DB
+    - [ ] Test: returns session-like object with correct shape when valid
+    - [ ] Test: child session user has `isChild: true` and correct `childProfileId`
+- [ ] Task: Write tests for `registerFn` error handling
+    - [ ] Test: APIError is caught and re-thrown as plain Error
+    - [ ] Test: non-APIError exceptions pass through unchanged
+- [ ] Task: Write tests for `loginFn` error handling
+    - [ ] Test: APIError is caught and re-thrown as plain Error
+    - [ ] Test: non-APIError exceptions pass through unchanged
+- [ ] Task: Write tests for `enableChildMode` helper
+    - [ ] Test: returns `{ name, avatar }` for an owned profile
+    - [ ] Test: throws when profile not owned by user
+- [ ] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines
+- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+
+## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
+
+- [ ] Task: Write tests for `listProfilesFn` wrapper
+    - [ ] Test: calls `requireParentSession` and throws for child session
+    - [ ] Test: delegates to `listProfiles` with correct userId
+- [ ] Task: Write tests for `createProfileFn` wrapper
+    - [ ] Test: throws for unauthenticated session
+    - [ ] Test: throws for child session (parent required)
+- [ ] Task: Write tests for `updateProfileFn` wrapper
+    - [ ] Test: throws for unauthenticated session
+    - [ ] Test: throws for child session (parent required)
+- [ ] Task: Write tests for `deleteProfileFn` wrapper
+    - [ ] Test: throws for unauthenticated session
+    - [ ] Test: clears child-mode cookie when deleted profile matches cookie
+- [ ] Task: Write tests for `getActiveProfileFn` wrapper
+    - [ ] Test: throws for null session
+    - [ ] Test: calls `authorizeChildAccess` with correct profileId
+- [ ] Task: Write tests for `listProfilesForSwitchFn` wrapper
+    - [ ] Test: throws for child session (parent required)
+- [ ] Task: Run `pnpm test:coverage` and verify `profiles.ts` ≥80% stmts/branch/funcs/lines
+- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+
+## Phase 3: Letters Server Function Wrappers (`app/server/letters.test.ts`)
+
+- [ ] Task: Write tests for `getVisibleLettersFn` wrapper
+    - [ ] Test: throws for null session (unauthenticated)
+    - [ ] Test: calls `authorizeChildAccess` with correct profileId
+- [ ] Task: Write tests for `toggleLetterFn` wrapper
+    - [ ] Test: throws for unauthenticated session
+    - [ ] Test: throws for child session (parent required)
+- [ ] Task: Write tests for `bulkToggleLettersFn` wrapper
+    - [ ] Test: throws for unauthenticated session
+    - [ ] Test: throws for child session (parent required)
+- [ ] Task: Run `pnpm test:coverage` and verify `letters.ts` ≥80% stmts/branch/funcs/lines
+- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+
+## Phase 4: Reading Server Function Wrapper (`app/server/reading.test.ts`)
+
+- [ ] Task: Write tests for `getReadingDataFn` wrapper
+    - [ ] Test: throws for null session (unauthenticated)
+    - [ ] Test: calls `authorizeChildAccess` with correct profileId
+    - [ ] Test: delegates to `getReadingData` with correct userId and profileId
+- [ ] Task: Run `pnpm test:coverage` and verify `reading.ts` ≥80% stmts/branch/funcs/lines
+- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+
+## Phase 5: Final Verification
+
+- [ ] Task: Run full test suite (`pnpm test`) — verify 484+ tests pass, no regressions
+- [ ] Task: Run `pnpm test:coverage` — verify all 4 target files ≥80% across all metrics
+- [ ] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md)

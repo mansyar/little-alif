@@ -1,0 +1,8 @@
+{
+  "track_id": "test-coverage_20260605",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-05T23:41:00Z",
+  "updated_at": "2026-06-05T23:41:00Z",
+  "description": "Address current test coverage gap in server function wrappers"
+}
