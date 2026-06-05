@@ -28,7 +28,7 @@
 - [x] Verify tests pass [b332550]
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
-## Phase 2: Dedicated Letter Management Route [checkpoint: pending]
+## Phase 2: Dedicated Letter Management Route [checkpoint: 4e12ad3]
 
 ### Task 2.1: Create letter management route
 
@@ -50,7 +50,7 @@
 
 - [x] No remaining references to removed props (expandedProfileId, onToggleLetters) found in codebase
 - [x] All 58 test files, 458 tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2' (deferred — will be done in Phase 3 final verification)
 
 ## Phase 3: Polish & Empty State
 
