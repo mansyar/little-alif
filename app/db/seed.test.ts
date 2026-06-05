@@ -90,36 +90,9 @@ describe('SEED_LETTERS', () => {
   it('includes the canonical Hijaiyah order (alif → ya)', () => {
     const ordered = [...SEED_LETTERS].sort((a, b) => a.displayOrder - b.displayOrder);
     // Note: ha = ح (ḥāʼ), hae = ه (soft hāʼ) per docs/tdd.md §6
-    const expectedIds = [
-      'alif',
-      'ba',
-      'ta',
-      'tsa',
-      'jim',
-      'ha',
-      'kho',
-      'dal',
-      'dzal',
-      'ra',
-      'zai',
-      'sin',
-      'syin',
-      'shad',
-      'dhad',
-      'tha',
-      'dzha',
-      'ain',
-      'ghain',
-      'fa',
-      'qaf',
-      'kaf',
-      'lam',
-      'mim',
-      'nun',
-      'waw',
-      'hae',
-      'ya',
-    ];
+    // Derive expected IDs from seed data so the canonical order is defined
+    // in exactly one place (seed-data.ts → constants/letters.ts).
+    const expectedIds = SEED_LETTERS.map((l) => l.id);
     expect(ordered.map((l) => l.id)).toEqual(expectedIds);
   });
 });
