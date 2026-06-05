@@ -8,9 +8,9 @@
 
 ### Task 1.2: Implement DashboardHeader component
 
-- [ ] Write failing tests for `DashboardHeader` (renders title, language toggle, profile menu trigger)
-- [ ] Implement `app/components/parent/DashboardHeader.tsx`
-- [ ] Verify tests pass
+- [x] Write failing tests for `DashboardHeader` (renders title, language toggle, profile menu trigger) [4973f82]
+- [x] Implement `app/components/parent/DashboardHeader.tsx` [4973f82]
+- [x] Verify tests pass [4973f82]
 
 ### Task 1.3: Implement ProfileMenu component
 
