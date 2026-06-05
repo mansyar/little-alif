@@ -32,6 +32,7 @@ vi.mock('~/lib/i18n', () => ({
       PROFILE_NAME: () => 'Profiles' as const,
       DASHBOARD_SIGN_OUT: () => 'Sign out' as const,
       DASHBOARD_SIGNING_OUT: () => 'Signing out\u2026' as const,
+      DASHBOARD_SIGN_OUT_CONFIRM: () => 'Are you sure you want to sign out?' as const,
       ERROR_GENERIC: () => 'Something went wrong.' as const,
       PROFILE_CANCEL: () => 'Cancel' as const,
     },

@@ -26,6 +26,17 @@ vi.mock('@tanstack/react-router', () => ({
   }),
 }));
 
+const mockGetActiveProfile = vi.fn().mockResolvedValue({
+  id: mockProfileId,
+  name: 'Test Child',
+  avatar: 'alif-lamp',
+  vowelMode: 'kasrah' as const,
+});
+
+vi.mock('~/server/profiles', () => ({
+  getActiveProfileFn: () => mockGetActiveProfile() as Promise<unknown>,
+}));
+
 vi.mock('~/server/auth-fns', () => ({
   validateSessionFn: () => mockValidateSession() as Promise<unknown>,
 }));
@@ -72,7 +83,7 @@ describe('Letter management route (/dashboard/profiles/$id/letters)', () => {
     expect(backLink.getAttribute('href')).toBe('/dashboard');
   });
 
-  it('renders the LetterToggleGrid with the profile ID from URL params', async () => {
+  it('renders the LetterToggleGrid with the profile ID and vowelMode from URL params', async () => {
     const { Route } = await import('./profiles.$id.letters');
     const Component = Route.options.component;
 
@@ -82,9 +93,9 @@ describe('Letter management route (/dashboard/profiles/$id/letters)', () => {
 
     render(React.createElement(Component), { wrapper: createWrapper() });
 
-    const grid = await screen.findByTestId('letter-toggle-grid');
+    // Wait for the grid to show the profile's actual vowelMode (kasrah), not hardcoded 'fathah'
+    const grid = await screen.findByText(`Grid for ${mockProfileId} (kasrah)`);
     expect(grid).toBeTruthy();
-    expect(grid.textContent).toContain(mockProfileId);
   });
 
   it('has auth guard that redirects when session is null', async () => {

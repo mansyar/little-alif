@@ -22,6 +22,7 @@ const id = {
   DASHBOARD_NO_CHILDREN: 'Belum ada profil anak. Tambahkan satu untuk memulai.',
   DASHBOARD_SIGN_OUT: 'Keluar',
   DASHBOARD_SIGNING_OUT: 'Keluar\u2026',
+  DASHBOARD_SIGN_OUT_CONFIRM: 'Apakah Anda yakin ingin keluar?',
 
   // Letters
   LETTERS_SHOW: 'Tampilkan',

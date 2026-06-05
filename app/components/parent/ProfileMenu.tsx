@@ -110,7 +110,7 @@ export function ProfileMenu() {
         open={signOutOpen}
         onOpenChange={setSignOutOpen}
         title={LL.DASHBOARD_SIGN_OUT()}
-        message="Are you sure you want to sign out?"
+        message={LL.DASHBOARD_SIGN_OUT_CONFIRM()}
         confirmLabel={LL.DASHBOARD_SIGN_OUT()}
         cancelLabel={LL.PROFILE_CANCEL()}
         onConfirm={handleSignOut}

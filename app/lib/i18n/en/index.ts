@@ -22,6 +22,7 @@ const en = {
   DASHBOARD_NO_CHILDREN: 'No child profiles yet. Add one to get started.',
   DASHBOARD_SIGN_OUT: 'Sign out',
   DASHBOARD_SIGNING_OUT: 'Signing out\u2026',
+  DASHBOARD_SIGN_OUT_CONFIRM: 'Are you sure you want to sign out?',
 
   // Letters
   LETTERS_SHOW: 'Show',

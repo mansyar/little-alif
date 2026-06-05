@@ -87,6 +87,10 @@ type RootTranslation = {
 	 */
 	DASHBOARD_SIGNING_OUT: string
 	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​i​g​n​ ​o​u​t​?
+	 */
+	DASHBOARD_SIGN_OUT_CONFIRM: string
+	/**
 	 * S​h​o​w
 	 */
 	LETTERS_SHOW: string
@@ -257,6 +261,10 @@ export type TranslationFunctions = {
 	 * Signing out…
 	 */
 	DASHBOARD_SIGNING_OUT: () => LocalizedString
+	/**
+	 * Are you sure you want to sign out?
+	 */
+	DASHBOARD_SIGN_OUT_CONFIRM: () => LocalizedString
 	/**
 	 * Show
 	 */
