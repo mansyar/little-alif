@@ -32,11 +32,11 @@
 
 ### Task 2.1: Create letter management route
 
-- [ ] Write failing tests for `/dashboard/profiles/$id/letters` route (renders LetterToggleGrid, has back link)
-- [ ] Create `app/routes/dashboard/profiles.$id.letters.tsx`
-- [ ] Render `LetterToggleGrid` with profileId from URL params
-- [ ] Add "← Back to Profiles" link in page header
-- [ ] Verify tests pass
+- [x] Write failing tests for `/dashboard/profiles/$id/letters` route (renders LetterToggleGrid, has back link)
+- [x] Create `app/routes/dashboard/profiles.$id.letters.tsx` [4973f82]
+- [x] Render `LetterToggleGrid` with profileId from URL params [4973f82]
+- [x] Add "← Back to Profiles" link in page header [4973f82]
+- [x] Verify tests pass [fcf07fb]
 
 ### Task 2.2: Simplify ProfileList
 
