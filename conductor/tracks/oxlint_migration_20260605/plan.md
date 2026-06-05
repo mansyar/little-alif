@@ -2,8 +2,8 @@
 
 ## Phase 1: Setup & Configuration
 
-- [ ] Task: Install oxlint, oxfmt, and oxlint-tsgolint
-  - [ ] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
+- [~] Task: Install oxlint, oxfmt, and oxlint-tsgolint
+  - [~] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
 - [ ] Task: Run migration tool to generate initial .oxlintrc.json
   - [ ] `npx @oxlint/migrate` to convert eslint.config.js → .oxlintrc.json
   - [ ] Review unsupported rules logged by the migration tool
