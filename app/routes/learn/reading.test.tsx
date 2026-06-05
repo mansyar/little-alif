@@ -121,7 +121,6 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for data to load — components should appear
-    expect(await screen.findByText('Pattern')).toBeTruthy();
     expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
     expect(await screen.findByLabelText('Done reading practice')).toBeTruthy();
 
@@ -190,7 +189,7 @@ describe('Reading route (/learn/reading)', () => {
     await userEvent.setup().click(screen.getByText('Try again'));
 
     // After successful retry, the components should appear
-    expect(await screen.findByText('Pattern')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
   });
 
   it('clicks Next Group to navigate to next group and wraps around', async () => {
@@ -204,7 +203,7 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for data load
-    expect(await screen.findByText('Pattern')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
     expect(await screen.findByRole('tab', { name: 'Group 1: ا ب ت' })).toBeTruthy(); // Group 1 pills
     expect(await screen.findByRole('tab', { name: 'Group 2: ث' })).toBeTruthy(); // Group 2 pill (incomplete, but still rendered)
 
@@ -226,7 +225,7 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    expect(await screen.findByText('Pattern')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
 
     await userEvent.setup().click(screen.getByLabelText('Done reading practice'));
 
@@ -241,7 +240,7 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    expect(await screen.findByText('Pattern')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
 
     await userEvent.setup().click(screen.getByLabelText('Shuffle rows'));
 
@@ -258,7 +257,7 @@ describe('Reading route (/learn/reading)', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    await screen.findByText('Pattern');
+    await screen.findByLabelText('Shuffle rows');
 
     // Toggle to kasrah via uiStore
     act(() => {
@@ -322,7 +321,7 @@ describe('Reading route (/learn/reading)', () => {
     render(<Component />, { wrapper: createWrapper() });
 
     // Wait for the page to render
-    expect(await screen.findByText('Pattern')).toBeTruthy();
+    expect(await screen.findByLabelText('Shuffle rows')).toBeTruthy();
 
     // The "Back" text link (replaced by ParentGate) should not be present in the header.
     const links = screen.queryAllByRole('link');

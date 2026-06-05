@@ -86,6 +86,6 @@
 
 ## Final Verification
 
-- [ ] **Task:** Run full test suite: `pnpm test` — all 365+ tests pass
-- [ ] **Task:** Run type checker: `pnpm typecheck` — clean
-- [ ] **Task:** Run linter: `pnpm lint` — clean
+- [x] **Task:** Run full test suite: `pnpm test` — all 442 tests pass
+- [x] **Task:** Run type checker: `pnpm typecheck` — clean
+- [x] **Task:** Run linter: `pnpm lint` — clean
