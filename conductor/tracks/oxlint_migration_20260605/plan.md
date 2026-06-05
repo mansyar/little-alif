@@ -5,14 +5,15 @@
 - [x] Task: Install oxlint, oxfmt, and oxlint-tsgolint (2c3e5e5)
   - [x] `pnpm add -D --save-exact oxlint oxfmt oxlint-tsgolint`
   - Note: oxlint 1.68.0 natively supports `--type-aware` — tsgolint CLI is unsupported, use oxlint's native flag instead.
-- [ ] Task: Run migration tool to generate initial .oxlintrc.json
-  - [ ] `npx @oxlint/migrate` to convert eslint.config.js → .oxlintrc.json
-  - [ ] Review unsupported rules logged by the migration tool
-- [ ] Task: Finalize .oxlintrc.json
-  - [ ] Verify plugins: eslint, typescript, react, unicorn, oxc are enabled
-  - [ ] Configure ignorePatterns matching current ESLint ignores
-  - [ ] Enable type-aware linting config for oxlint-tsgolint
-  - [ ] Set rule severities to match current behavior (warn/error parity)
+- [x] Task: Run migration tool to generate initial .oxlintrc.json (2accc35)
+  - [x] `npx @oxlint/migrate` to convert eslint.config.js → .oxlintrc.json
+  - [x] Review unsupported rules logged by the migration tool
+- [x] Task: Finalize .oxlintrc.json (2accc35)
+  - [x] Verify plugins: eslint, typescript, react, unicorn, oxc are enabled
+  - [x] Configure ignorePatterns matching current ESLint ignores
+  - [x] Enable type-aware linting config for oxlint-tsgolint
+  - [x] Set rule severities to match current behavior (warn/error parity)
+  - [x] Fix tsconfig.json `baseUrl` to avoid tsgolint error
 - [ ] Task: Finalize .oxlintignore
   - [ ] Create .oxlintignore with same patterns as existing ESLint ignores
 - [ ] Task: Configure Oxfmt
