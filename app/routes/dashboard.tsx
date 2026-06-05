@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutFn, validateSessionFn } from '~/server/auth-fns';
+import { validateSessionFn } from '~/server/auth-fns';
 import { deleteProfileFn } from '~/server/profiles';
 import { useI18nContext } from '~/lib/i18n';
-import { LanguageToggle } from '~/components/parent/LanguageToggle';
+import { DashboardHeader } from '~/components/parent/DashboardHeader';
 import { ProfileList } from '~/components/parent/ProfileList';
 import { ProfileEditor } from '~/components/parent/ProfileEditor';
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
@@ -24,7 +24,7 @@ export const Route = createFileRoute('/dashboard')({
   beforeLoad: async () => {
     const session = await validateSessionFn();
     if (session === null) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router idiom: throw the redirect sentinel
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router idiom
       throw redirect({ to: '/login', search: { redirect: '/dashboard' } });
     }
     return { user: session.user };
@@ -38,14 +38,10 @@ function DashboardPage() {
   const navigate = useNavigate();
   const setChildMode = useAuthStore((state) => state.setChildMode);
   const pushToast = useUiStore((state) => state.pushToast);
-  const [signingOut, setSigningOut] = useState(false);
 
   // ProfileEditor state
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingProfile, setEditingProfile] = useState<ProfileCard | undefined>(undefined);
-
-  // Letter toggle grid expand/collapse (accordion)
-  const [expandedProfileId, setExpandedProfileId] = useState<string | null>(null);
 
   // ConfirmDialog state
   const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
@@ -87,54 +83,14 @@ function DashboardPage() {
     }
   }
 
-  async function handleLogout() {
-    setSigningOut(true);
-    try {
-      await logoutFn();
-      window.location.href = '/';
-    } catch (err) {
-      setSigningOut(false);
-      pushToast({
-        variant: 'error',
-        message: err instanceof Error ? err.message : 'Connection error',
-      });
-    }
-  }
-
   return (
     <ErrorBoundary>
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className="flex w-64 shrink-0 flex-col border-r border-sand-light bg-white px-5 py-8">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-text-dark">{LL.DASHBOARD_TITLE()}</h1>
-          </div>
+      <div className="min-h-screen bg-background-warm">
+        <DashboardHeader />
 
-          <nav className="flex flex-col gap-2">
-            <span className="rounded-small bg-sand-light px-3 py-2 text-sm font-semibold text-text-dark">
-              {LL.PROFILE_NAME()}
-            </span>
-          </nav>
-
-          <div className="mt-auto flex flex-col gap-3">
-            <LanguageToggle />
-            <button
-              type="button"
-              onClick={() => {
-                void handleLogout();
-              }}
-              disabled={signingOut}
-              className="rounded-small px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
-            >
-              {signingOut ? LL.DASHBOARD_SIGNING_OUT() : LL.DASHBOARD_SIGN_OUT()}
-            </button>
-          </div>
-        </aside>
-
-        {/* Main content */}
-        <main className="flex-1 px-8 py-8">
+        <main className="mx-auto max-w-4xl px-4 py-8 sm:px-8">
           <header className="mb-8 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-text-dark">{LL.PROFILE_NAME()}</h2>
+            <h1 className="text-xl font-semibold text-text-dark">{LL.PROFILE_NAME()}</h1>
             <button
               type="button"
               onClick={handleAddChild}
@@ -148,10 +104,6 @@ function DashboardPage() {
             onEdit={handleEdit}
             onDelete={handleDelete}
             onStartLearning={handleStartLearning}
-            expandedProfileId={expandedProfileId}
-            onToggleLetters={(profileId) =>
-              setExpandedProfileId((prev) => (prev === profileId ? null : profileId))
-            }
           />
         </main>
 

@@ -18,27 +18,36 @@ vi.mock('~/server/auth-fns', () => ({
   logoutFn: vi.fn(),
 }));
 
+vi.mock('~/components/parent/DashboardHeader', () => ({
+  DashboardHeader: () => (
+    <div data-testid="dashboard-header">
+      <span>Dashboard</span>
+      <button type="button">Bahasa Indonesia</button>
+    </div>
+  ),
+}));
+
+vi.mock('~/components/parent/ProfileList', () => ({
+  ProfileList: () => <div data-testid="profile-list">Profile list</div>,
+}));
+
+vi.mock('~/components/parent/ProfileEditor', () => ({
+  ProfileEditor: () => null,
+}));
+
+vi.mock('~/components/ui/ConfirmDialog', () => ({
+  ConfirmDialog: () => null,
+}));
+
 vi.mock('~/lib/i18n', () => ({
   useI18nContext: () => ({
     LL: {
       DASHBOARD_TITLE: () => 'Dashboard' as const,
       DASHBOARD_ADD_CHILD: () => 'Add Child' as const,
-      DASHBOARD_NO_CHILDREN: () => 'No child profiles yet. Add one to get started.' as const,
-      DASHBOARD_SIGN_OUT: () => 'Sign out' as const,
-      DASHBOARD_SIGNING_OUT: () => 'Signing out\u2026' as const,
       PROFILE_NAME: () => 'Child Profiles' as const,
-      PROFILE_LETTERS_LABEL: () => 'introduced' as const,
-      PROFILE_MANAGE_LETTERS: () => 'Manage Letters' as const,
-      PROFILE_EDIT: () => 'Edit' as const,
       PROFILE_DELETE: () => 'Delete' as const,
       PROFILE_DELETE_CONFIRM: () => 'Are you sure you want to delete this profile?' as const,
       PROFILE_CANCEL: () => 'Cancel' as const,
-      PROFILE_ADD_TITLE: () => 'Add Child Profile' as const,
-      PROFILE_EDIT_TITLE: () => 'Edit Child Profile' as const,
-      PROFILE_SAVE: () => 'Save' as const,
-      PROFILE_AVATAR: () => 'Avatar' as const,
-      ERROR_GENERIC: () => 'Something went wrong.' as const,
-      LOCALE_SWITCH: () => 'Bahasa Indonesia' as const,
     },
   }),
   locales: ['en', 'id'],
@@ -62,7 +71,7 @@ describe('Dashboard route', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the sidebar with dashboard title', { timeout: 10000 }, async () => {
+  it('renders DashboardHeader with title instead of sidebar', { timeout: 10000 }, async () => {
     const { Route } = await import('./dashboard');
     const Component = Route.options.component;
 
@@ -76,18 +85,18 @@ describe('Dashboard route', () => {
       </QueryClientProvider>,
     );
 
-    // Sidebar title
+    // DashboardHeader is present with the title
     expect(await screen.findByText('Dashboard')).toBeTruthy();
 
-    // Sidebar contains Sign out
-    expect(screen.getByText('Sign out')).toBeTruthy();
+    // No sidebar should exist (no direct "Sign out" button — it's in dropdown)
+    expect(screen.queryByRole('complementary')).toBeNull();
 
-    // "Child Profiles" appears twice: sidebar nav + header — use getAllByText
+    // "Child Profiles" appears once as the main section heading (no sidebar nav)
     const childProfileElements = screen.getAllByText('Child Profiles');
-    expect(childProfileElements.length).toBe(2);
+    expect(childProfileElements).toHaveLength(1);
   });
 
-  it('renders the locale toggle and "Add Child" button', { timeout: 10000 }, async () => {
+  it('renders language toggle and "Add Child" button', { timeout: 10000 }, async () => {
     const { Route } = await import('./dashboard');
     const Component = Route.options.component;
 
@@ -101,10 +110,27 @@ describe('Dashboard route', () => {
       </QueryClientProvider>,
     );
 
-    // "Bahasa Indonesia" rendered by LanguageToggle — assert it exists
+    // Language toggle rendered by DashboardHeader
     expect(await screen.findByText('Bahasa Indonesia')).toBeTruthy();
 
     // Add Child button in main content
     expect(screen.getByText('Add Child')).toBeTruthy();
+  });
+
+  it('renders ProfileList component', { timeout: 10000 }, async () => {
+    const { Route } = await import('./dashboard');
+    const Component = Route.options.component;
+
+    if (!Component) {
+      throw new Error('Dashboard route has no component');
+    }
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Component />
+      </QueryClientProvider>,
+    );
+
+    expect(await screen.findByTestId('profile-list')).toBeTruthy();
   });
 });
