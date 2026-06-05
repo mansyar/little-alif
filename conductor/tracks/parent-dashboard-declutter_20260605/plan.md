@@ -4,7 +4,7 @@
 
 ### Task 1.1: Install @radix-ui/react-dropdown-menu dependency
 
-- [ ] Install `@radix-ui/react-dropdown-menu` package via pnpm
+- [x] Install `@radix-ui/react-dropdown-menu` package via pnpm [28fd76a]
 
 ### Task 1.2: Implement DashboardHeader component
 
