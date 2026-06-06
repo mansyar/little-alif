@@ -18,9 +18,9 @@
     "lint": "oxlint . --deny-warnings",
     "lint:fix": "oxlint --fix . --deny-warnings",
     "prepare": "husky",
-    "db:push": "drizzle-kit push --force",
+    "db:push": "drizzle-kit push --force --config drizzle.config.ts",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx app/db/seed.ts",
+    "db:seed": "node --import tsx app/db/seed.ts",
     "generate:audio": "tsx scripts/generate-audio.ts"
   },
   "dependencies": {
