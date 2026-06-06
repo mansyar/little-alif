@@ -1,6 +1,6 @@
 # Implementation Plan: Address Server Function Test Coverage Gap
 
-## Phase 1: Auth Functions Coverage (`app/server/auth-fns.test.ts`)
+## Phase 1: Auth Functions Coverage (`app/server/auth-fns.test.ts`) [checkpoint: 24781d5]
 
 - [x] Task: Write tests for `buildChildSession` helper
     - [x] Test: returns null when cookie verification fails (invalid/tampered cookie)
@@ -19,7 +19,7 @@
     - [x] Test: returns `{ name, avatar }` for an owned profile
     - [x] Test: throws when profile not owned by user
 - [x] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines (8c785be)
-- [~] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (24781d5)
 
 ## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
 
