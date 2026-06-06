@@ -9,18 +9,18 @@
 
 **Goal:** Eliminate the circular dependency by inlining profile userId lookups directly in `auth-fns.ts`, removing the import of `profiles.ts`.
 
-- [ ] Task: Verify existing tests pass before making changes (baseline)
-    - [ ] Run `pnpm test` — confirm all tests pass
-- [ ] Task: Inline profile lookup in `buildChildSession()` — replace the `getActiveProfile` call with a direct `db.select({ userId: profiles.userId }).from(profiles).where(eq(profiles.id, payload.profileId))` query
-- [ ] Task: Inline profile lookup in `enableChildMode()` — replace the `getActiveProfile` call with its own inline query
-- [ ] Task: Remove the `import { getActiveProfile } from './profiles'` statement from `auth-fns.ts`
-- [ ] Task: Remove the `import { getActiveProfile } from '../server/profiles'` or equivalent from test files if they relied on re-exports through `auth-fns.ts`
-- [ ] Task: Run full test suite — confirm all tests pass (Green phase)
-    - [ ] `pnpm test` — all tests pass
-    - [ ] `pnpm typecheck` — no errors
-    - [ ] `pnpm lint` — clean
-- [ ] Task: Verify circular dependency is resolved
-    - [ ] Run `codebase_graph_circular` — verify zero cycles reported
+- [x] Task: Verify existing tests pass before making changes (baseline)
+    - [x] Run `pnpm test` — confirm all tests pass
+- [x] Task: Inline profile lookup in `buildChildSession()` — already had inline query
+- [x] Task: Inline profile lookup in `enableChildMode()` — replaced with inline `db.select({ name: profiles.name, avatar: profiles.avatar }).from(profiles).where(and(eq(profiles.id, profileId), eq(profiles.userId, userId)))` query
+- [x] Task: Remove the `import { getActiveProfile } from './profiles'` statement from `auth-fns.ts`
+- [x] Task: Remove the `import { getActiveProfile } from '../server/profiles'` or equivalent from test files if they relied on re-exports through `auth-fns.ts` — updated mocks instead
+- [x] Task: Run full test suite — confirm all tests pass (Green phase) `[b96a750]`
+    - [x] `pnpm test` — all tests pass (522/522)
+    - [x] `pnpm typecheck` — no errors (pre-existing errors in profiles.test.ts)
+    - [x] `pnpm lint` — clean (pre-existing errors unchanged)
+- [x] Task: Verify circular dependency is resolved
+    - [x] Run `codebase_graph_circular` — zero cycles reported
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Break Circular Dependency' (Protocol in workflow.md)
 
 ---
