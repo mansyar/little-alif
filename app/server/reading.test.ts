@@ -235,7 +235,9 @@ describe('getReadingDataFn', () => {
     expect((result as { letters: unknown[] }).letters).toHaveLength(2);
     expect(result).toEqual({
       letters: [
+        // eslint-disable-next-line typescript/no-unsafe-assignment
         { letterId: 'alif', character: expect.any(String) },
+        // eslint-disable-next-line typescript/no-unsafe-assignment
         { letterId: 'ba', character: expect.any(String) },
       ],
       vowelMode: 'fathah',

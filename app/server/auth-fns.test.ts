@@ -356,6 +356,7 @@ describe('registerFn', () => {
 
     expect(mockSignUp).toHaveBeenCalledWith({
       body: { name: 'test', email: 'test@example.com', password: 'password123' },
+      // eslint-disable-next-line typescript/no-unsafe-assignment
       headers: expect.any(Headers),
       returnHeaders: true,
     });
@@ -456,6 +457,7 @@ describe('loginFn', () => {
 
     expect(mockSignIn).toHaveBeenCalledWith({
       body: { email: 'test@example.com', password: 'password123' },
+      // eslint-disable-next-line typescript/no-unsafe-assignment
       headers: expect.any(Headers),
       returnHeaders: true,
     });
@@ -553,6 +555,7 @@ describe('enableChildModeFn', () => {
     const { validateSessionFn } = await import('./auth-fns');
     const result = await (validateSessionFn as unknown as () => Promise<unknown>)();
     expect(result).toEqual(
+      // eslint-disable-next-line typescript/no-unsafe-assignment
       expect.objectContaining({ user: expect.objectContaining({ id: 'user-1' }) }),
     );
   });
@@ -676,6 +679,7 @@ describe('disableChildModeFn', () => {
 
     expect(result).toEqual({ success: true });
     expect(mockSignOut).toHaveBeenCalledWith({
+      // eslint-disable-next-line typescript/no-unsafe-assignment
       headers: expect.any(Headers),
     });
   });
@@ -719,6 +723,7 @@ describe('disableChildModeFn', () => {
     // email to '' and token to '' — the expected shape reflects the actual function behavior
     const mockChildSession = {
       user: { id: 'parent-1', email: '', isChild: true as const, childProfileId: 'profile-1' },
+      // eslint-disable-next-line typescript/no-unsafe-assignment
       session: expect.objectContaining({ token: '', userId: 'parent-1' }),
     };
     vi.doMock('@tanstack/react-start', () => ({

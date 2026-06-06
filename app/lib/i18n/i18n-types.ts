@@ -203,23 +203,23 @@ type RootTranslation = {
 	 */
 	ERROR_SHORT_PASSWORD: string
 	/**
-	 * P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​i​n​p​u​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 * C​h​e​c​k​ ​y​o​u​r​ ​i​n​p​u​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_VALIDATION: string
 	/**
-	 * P​l​e​a​s​e​ ​s​i​g​n​ ​i​n​ ​a​g​a​i​n​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 * P​l​e​a​s​e​ ​s​i​g​n​ ​i​n​ ​a​g​a​i​n​.
 	 */
 	ERROR_AUTH: string
 	/**
-	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​t​a​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​f​o​u​n​d​.
+	 * I​t​e​m​ ​n​o​t​ ​f​o​u​n​d​.​ ​I​t​ ​m​a​y​ ​h​a​v​e​ ​b​e​e​n​ ​d​e​l​e​t​e​d​.
 	 */
 	ERROR_NOT_FOUND: string
 	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​l​i​m​i​t​.
+	 * M​a​x​i​m​u​m​ ​r​e​a​c​h​e​d​.
 	 */
 	ERROR_LIMIT_EXCEEDED: string
 	/**
-	 * A​ ​n​e​t​w​o​r​k​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​c​o​n​n​e​c​t​i​o​n​.
+	 * C​o​n​n​e​c​t​i​o​n​ ​l​o​s​t​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​.
 	 */
 	ERROR_NETWORK: string
 	/**
@@ -418,23 +418,23 @@ export type TranslationFunctions = {
 	 */
 	ERROR_SHORT_PASSWORD: () => LocalizedString
 	/**
-	 * Please check your input and try again.
+	 * Check your input and try again.
 	 */
 	ERROR_VALIDATION: () => LocalizedString
 	/**
-	 * Please sign in again to continue.
+	 * Please sign in again.
 	 */
 	ERROR_AUTH: () => LocalizedString
 	/**
-	 * The requested data could not be found.
+	 * Item not found. It may have been deleted.
 	 */
 	ERROR_NOT_FOUND: () => LocalizedString
 	/**
-	 * You have reached the maximum limit.
+	 * Maximum reached.
 	 */
 	ERROR_LIMIT_EXCEEDED: () => LocalizedString
 	/**
-	 * A network error occurred. Please check your connection.
+	 * Connection lost. Check your internet.
 	 */
 	ERROR_NETWORK: () => LocalizedString
 	/**
