@@ -1,5 +1,5 @@
 # =============================================================================
-# Stage 1: Dependencies
+# Stage 1: Dependencies (all — dev needed for build)
 # =============================================================================
 FROM node:20-alpine AS deps
 
@@ -13,6 +13,20 @@ COPY package.json pnpm-lock.yaml ./
 
 # Install production + dev dependencies (dev is needed for build stage)
 RUN pnpm install --frozen-lockfile
+
+# =============================================================================
+# Stage 1b: Production dependencies only
+# =============================================================================
+FROM node:20-alpine AS deps-prod
+
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
+
+COPY package.json pnpm-lock.yaml ./
+
+# Production deps only — skips vitest, typescript, eslint, etc.
+RUN pnpm install --frozen-lockfile --prod
 
 # =============================================================================
 # Stage 2: Build
@@ -30,7 +44,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy source code
 COPY . .
 
-# Build the app (SSR output goes to .output/)
+# Build the app (outputs to dist/client + dist/server)
 ENV NODE_ENV=production
 RUN pnpm build
 
@@ -44,8 +58,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install curl for Docker health checks + pnpm for DB operations
-RUN apk add --no-cache curl
+# Install curl for Docker health checks, tini for signal handling,
+# and pnpm for DB operations (db:push, db:seed)
+RUN apk add --no-cache curl tini
 RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
 
 # Copy production build artifacts
@@ -54,8 +69,8 @@ COPY --from=build /app/dist ./dist
 # Copy public assets (audio files, etc.)
 COPY --from=build /app/public ./public
 
-# Copy node_modules (production only — no devDependencies needed at runtime)
-COPY --from=build /app/node_modules ./node_modules
+# Copy production-only node_modules (no devDependencies)
+COPY --from=deps-prod /app/node_modules ./node_modules
 
 # Copy package.json for metadata (not strictly needed but conventional)
 COPY --from=build /app/package.json ./
@@ -77,6 +92,16 @@ RUN addgroup -g 1001 -S app && adduser -S app -u 1001 -G app
 RUN chown -R app:app /app
 USER app
 
+# NOTE: .env is intentionally NOT copied — secrets come from
+# docker-compose.yml environment: or Coolify env vars.
+
 EXPOSE 3000
+
+# Health check (defense-in-depth — docker-compose also has one)
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+# tini as PID 1 for proper signal handling (graceful shutdown on SIGTERM)
+ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["node", "docker/server-entry.mjs"]
