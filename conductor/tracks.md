@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-| ID  | Title | Status | Folder |
-| --- | ----- | ------ | ------ |
-| vite-8-upgrade | Upgrade to Vite 8 | In Progress | [tracks/vite-8-upgrade](./tracks/vite-8-upgrade/) |
+| ID             | Title             | Status      | Folder                                            |
+| -------------- | ----------------- | ----------- | ------------------------------------------------- |
+| vite-8-upgrade | Upgrade to Vite 8 | Completed | [tracks/vite-8-upgrade](./tracks/vite-8-upgrade/) |
