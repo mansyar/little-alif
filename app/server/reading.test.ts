@@ -194,10 +194,7 @@ describe('getReadingDataFn', () => {
       .update(letterToggles)
       .set({ isVisible: true })
       .where(eq(letterToggles.letterId, 'alif'));
-    await db
-      .update(letterToggles)
-      .set({ isVisible: true })
-      .where(eq(letterToggles.letterId, 'ba'));
+    await db.update(letterToggles).set({ isVisible: true }).where(eq(letterToggles.letterId, 'ba'));
 
     vi.doMock('@tanstack/react-start', () => ({
       createServerFn: vi.fn(() => ({

@@ -295,9 +295,7 @@ describe('registerFn', () => {
     mockSignUp.mockRejectedValueOnce(apiErr);
 
     const { registerFn } = await import('./auth-fns');
-    const promise = (
-      registerFn as unknown as (input: { data: unknown }) => Promise<unknown>
-    )({
+    const promise = (registerFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
       data: { email: 'test@example.com', password: 'password123' },
     });
     await expect(promise).rejects.toMatchObject({
@@ -396,9 +394,7 @@ describe('loginFn', () => {
     mockSignIn.mockRejectedValueOnce(apiErr);
 
     const { loginFn } = await import('./auth-fns');
-    const promise = (
-      loginFn as unknown as (input: { data: unknown }) => Promise<unknown>
-    )({
+    const promise = (loginFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
       data: { email: 'test@example.com', password: 'wrong' },
     });
     await expect(promise).rejects.toMatchObject({

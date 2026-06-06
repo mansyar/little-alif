@@ -181,9 +181,7 @@ describe('LetterToggleGrid', () => {
   });
 
   it('shows error toast with ServerFunctionError message when toggleLetterFn returns classified error', async () => {
-    mockToggleLetter.mockRejectedValue(
-      new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH'),
-    );
+    mockToggleLetter.mockRejectedValue(new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH'));
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
     render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {

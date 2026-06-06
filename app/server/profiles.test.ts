@@ -302,9 +302,10 @@ describe('deleteProfile', () => {
       avatar: 'ba-boat',
     });
 
-    await expect(deleteProfile(db, 'non-owner-del', profile.id)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(deleteProfile(db, 'non-owner-del', profile.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 });
 
@@ -339,16 +340,18 @@ describe('getActiveProfile (pure helper)', () => {
       avatar: 'ba-boat',
     });
 
-    await expect(getActiveProfile(db, 'someone-else', profile.id)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getActiveProfile(db, 'someone-else', profile.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 
   it('throws when the profile id does not exist', async () => {
     const fakeId = '123e4567-e89b-12d3-a456-426614174000';
-    await expect(getActiveProfile(db, userId, fakeId)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getActiveProfile(db, userId, fakeId)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 
   it('returns the updated vowelMode when set via updateProfile', async () => {
@@ -472,9 +475,10 @@ describe('listProfilesFn', () => {
     }));
 
     const { listProfilesFn } = await import('./profiles');
-    await expect(
-      (listProfilesFn as unknown as () => Promise<unknown>)(),
-    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
+    await expect((listProfilesFn as unknown as () => Promise<unknown>)()).rejects.toMatchObject({
+      code: 'AUTH',
+      userMessage: 'ERROR_AUTH',
+    });
   });
 
   it('delegates to listProfiles for valid parent session', async () => {

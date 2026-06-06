@@ -26,11 +26,7 @@ export class ServerFunctionError extends Error {
   readonly code: ErrorCode;
   readonly userMessage: string;
 
-  constructor(
-    code: ErrorCode,
-    userMessage: string,
-    options?: ErrorOptions,
-  ) {
+  constructor(code: ErrorCode, userMessage: string, options?: ErrorOptions) {
     super(userMessage, options);
     this.name = 'ServerFunctionError';
     this.code = code;

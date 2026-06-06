@@ -41,40 +41,43 @@ export function ProfileEditor({ open, onOpenChange, profile }: ProfileEditorProp
     onOpenChange(open);
   }
 
-  const mutation = useTypedMutation({
-    mutationFn: async () => {
-      if (isEdit && profile) {
-        const payload: UpdateProfileInput = {
-          profileId: profile.id,
-          name,
-          avatar: avatar ?? undefined,
-        };
-        const result = updateProfileSchema.safeParse(payload);
-        if (!result.success) {
-          setFieldErrors(formatZodErrors(result.error));
-          return;
+  const mutation = useTypedMutation(
+    {
+      mutationFn: async () => {
+        if (isEdit && profile) {
+          const payload: UpdateProfileInput = {
+            profileId: profile.id,
+            name,
+            avatar: avatar ?? undefined,
+          };
+          const result = updateProfileSchema.safeParse(payload);
+          if (!result.success) {
+            setFieldErrors(formatZodErrors(result.error));
+            return;
+          }
+          setFieldErrors({});
+          return updateProfileFn({ data: result.data });
+        } else {
+          const payload: CreateProfileInput = {
+            name,
+            avatar: avatar ?? 'alif-lamp',
+          };
+          const result = createProfileSchema.safeParse(payload);
+          if (!result.success) {
+            setFieldErrors(formatZodErrors(result.error));
+            return;
+          }
+          setFieldErrors({});
+          return createProfileFn({ data: result.data });
         }
-        setFieldErrors({});
-        return updateProfileFn({ data: result.data });
-      } else {
-        const payload: CreateProfileInput = {
-          name,
-          avatar: avatar ?? 'alif-lamp',
-        };
-        const result = createProfileSchema.safeParse(payload);
-        if (!result.success) {
-          setFieldErrors(formatZodErrors(result.error));
-          return;
-        }
-        setFieldErrors({});
-        return createProfileFn({ data: result.data });
-      }
+      },
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+        onOpenChange(false);
+      },
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
-      onOpenChange(false);
-    },
-  }, LL);
+    LL,
+  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -64,12 +64,12 @@ Write a clear GCP setup guide for self-hosters who want to generate the 112 MP3 
 
 ## Key Decisions
 
-| #   | Decision                                                           | Rationale                                                               |
-| --- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| KD-1 | Health endpoint is a static file route (no DB call)                | A failing DB should not prevent liveness detection                      |
-| KD-2 | Circular dep fix by inlining, not by moving functions              | Preserves responsibility boundaries, minimal diff                       |
-| KD-3 | GCP docs only; no edge-tts script                                  | Per user preference — GCP remains the primary path                      |
-| KD-4 | Audio file naming convention stays unchanged                       | `{letterId}_{vowelMode}.mp3` — backward compatible                      |
+| #    | Decision                                              | Rationale                                          |
+| ---- | ----------------------------------------------------- | -------------------------------------------------- |
+| KD-1 | Health endpoint is a static file route (no DB call)   | A failing DB should not prevent liveness detection |
+| KD-2 | Circular dep fix by inlining, not by moving functions | Preserves responsibility boundaries, minimal diff  |
+| KD-3 | GCP docs only; no edge-tts script                     | Per user preference — GCP remains the primary path |
+| KD-4 | Audio file naming convention stays unchanged          | `{letterId}_{vowelMode}.mp3` — backward compatible |
 
 ---
 

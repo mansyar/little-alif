@@ -46,11 +46,7 @@ describe('ServerFunctionError', () => {
 
   it('should accept and propagate an optional cause', () => {
     const cause = new Error('Underlying DB error');
-    const err = new ServerFunctionError(
-      ErrorCode.VALIDATION,
-      'Invalid data',
-      { cause },
-    );
+    const err = new ServerFunctionError(ErrorCode.VALIDATION, 'Invalid data', { cause });
     expect(err.cause).toBe(cause);
   });
 

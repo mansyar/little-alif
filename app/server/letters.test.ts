@@ -167,9 +167,10 @@ describe('getVisibleLetters', () => {
   it('rejects access to a profile owned by another user', async () => {
     const profile = await createTestProfile(db, OTHER_USER);
 
-    await expect(getVisibleLetters(db, TEST_USER, profile.id)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getVisibleLetters(db, TEST_USER, profile.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 });
 
@@ -361,7 +362,11 @@ describe('toggleLetterFn', () => {
     const { toggleLetterFn } = await import('./letters');
     await expect(
       (toggleLetterFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId: '00000000-0000-0000-0000-000000000002', letterId: 'alif', isVisible: true },
+        data: {
+          profileId: '00000000-0000-0000-0000-000000000002',
+          letterId: 'alif',
+          isVisible: true,
+        },
       }),
     ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
@@ -394,7 +399,11 @@ describe('toggleLetterFn', () => {
     const { toggleLetterFn } = await import('./letters');
     await expect(
       (toggleLetterFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId: '00000000-0000-0000-0000-000000000002', letterId: 'ba', isVisible: true },
+        data: {
+          profileId: '00000000-0000-0000-0000-000000000002',
+          letterId: 'ba',
+          isVisible: true,
+        },
       }),
     ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
@@ -429,7 +438,11 @@ describe('bulkToggleLettersFn', () => {
     const { bulkToggleLettersFn } = await import('./letters');
     await expect(
       (bulkToggleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId: '00000000-0000-0000-0000-000000000003', letterIds: ['alif', 'ba'], isVisible: true },
+        data: {
+          profileId: '00000000-0000-0000-0000-000000000003',
+          letterIds: ['alif', 'ba'],
+          isVisible: true,
+        },
       }),
     ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
@@ -462,7 +475,11 @@ describe('bulkToggleLettersFn', () => {
     const { bulkToggleLettersFn } = await import('./letters');
     await expect(
       (bulkToggleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId: '00000000-0000-0000-0000-000000000003', letterIds: ['alif', 'ba'], isVisible: true },
+        data: {
+          profileId: '00000000-0000-0000-0000-000000000003',
+          letterIds: ['alif', 'ba'],
+          isVisible: true,
+        },
       }),
     ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });

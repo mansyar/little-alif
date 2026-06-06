@@ -21,13 +21,16 @@ export function ProfileMenu() {
     queryFn: () => listProfilesFn(),
   });
 
-  const logoutMutation = useTypedMutation({
-    mutationFn: () => logoutFn(),
-    onSuccess: () => {
-      void queryClient.clear();
-      window.location.href = '/login';
+  const logoutMutation = useTypedMutation(
+    {
+      mutationFn: () => logoutFn(),
+      onSuccess: () => {
+        void queryClient.clear();
+        window.location.href = '/login';
+      },
     },
-  }, LL);
+    LL,
+  );
 
   function handleSignOut() {
     logoutMutation.mutate();

@@ -22,12 +22,15 @@ export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelector
     dammah: LL.HARAKAT_DAMMAH(),
   };
 
-  const updateMutation = useTypedMutation({
-    mutationFn: (vowelMode: VowelMode) => updateProfileFn({ data: { profileId, vowelMode } }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+  const updateMutation = useTypedMutation(
+    {
+      mutationFn: (vowelMode: VowelMode) => updateProfileFn({ data: { profileId, vowelMode } }),
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      },
     },
-  }, LL);
+    LL,
+  );
 
   return (
     <div className="mb-4">

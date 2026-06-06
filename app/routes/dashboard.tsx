@@ -49,13 +49,16 @@ function DashboardPage() {
   const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
   const deleteConfirmOpen = deleteProfileId !== null;
 
-  const deleteMutation = useTypedMutation({
-    mutationFn: (profileId: string) => deleteProfileFn({ data: { profileId } }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
-      setDeleteProfileId(null);
+  const deleteMutation = useTypedMutation(
+    {
+      mutationFn: (profileId: string) => deleteProfileFn({ data: { profileId } }),
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+        setDeleteProfileId(null);
+      },
     },
-  }, LL);
+    LL,
+  );
 
   // When a child route (e.g. /dashboard/profiles/$id/letters) is active,
   // render just the <Outlet /> so the child's component appears instead.

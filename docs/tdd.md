@@ -1860,24 +1860,24 @@ removeToast(id: string) => void;
 
 ### Error Matrix
 
-| Scenario                                     | UX                                                  | Layer              |
-| -------------------------------------------- | --------------------------------------------------- | ------------------ |
-| Auth session expired                         | Silent redirect to `/login`                         | Router             |
-| Route rendering crash                        | Full-page "Try Again" fallback                      | ErrorBoundary      |
-| Server function network error                | Toast: "Connection lost. Check your internet."      | useTypedMutation   |
-| Auth failure (session invalid)               | Toast: "Please sign in again." + redirect           | useTypedMutation   |
-| Validation failure                           | Toast: "Check your input and try again." (info)     | useTypedMutation   |
-| Resource not found                           | Toast: "Item not found. It may have been deleted."  | useTypedMutation   |
-| Business limit exceeded                      | Toast: "Maximum reached."                           | useTypedMutation   |
-| Unclassified server error                    | Toast: "Something went wrong. Please try again."    | useTypedMutation   |
-| Audio file not found                         | Silent — skip playback                              | AudioEngine        |
-| Letter toggle save fails                     | Toast error via useTypedMutation                    | useTypedMutation   |
-| Profile creation exceeds 4                   | Toast: "Maximum reached."                           | useTypedMutation   |
-| Vowel mode save fails                        | Toast error via useTypedMutation                    | useTypedMutation   |
-| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | Component          |
-| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | Component          |
-| SQLite write failure                         | Toast: "Something went wrong." (UNKNOWN)            | useTypedMutation   |
-| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | Middleware         |
+| Scenario                                     | UX                                                  | Layer            |
+| -------------------------------------------- | --------------------------------------------------- | ---------------- |
+| Auth session expired                         | Silent redirect to `/login`                         | Router           |
+| Route rendering crash                        | Full-page "Try Again" fallback                      | ErrorBoundary    |
+| Server function network error                | Toast: "Connection lost. Check your internet."      | useTypedMutation |
+| Auth failure (session invalid)               | Toast: "Please sign in again." + redirect           | useTypedMutation |
+| Validation failure                           | Toast: "Check your input and try again." (info)     | useTypedMutation |
+| Resource not found                           | Toast: "Item not found. It may have been deleted."  | useTypedMutation |
+| Business limit exceeded                      | Toast: "Maximum reached."                           | useTypedMutation |
+| Unclassified server error                    | Toast: "Something went wrong. Please try again."    | useTypedMutation |
+| Audio file not found                         | Silent — skip playback                              | AudioEngine      |
+| Letter toggle save fails                     | Toast error via useTypedMutation                    | useTypedMutation |
+| Profile creation exceeds 4                   | Toast: "Maximum reached."                           | useTypedMutation |
+| Vowel mode save fails                        | Toast error via useTypedMutation                    | useTypedMutation |
+| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | Component        |
+| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | Component        |
+| SQLite write failure                         | Toast: "Something went wrong." (UNKNOWN)            | useTypedMutation |
+| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | Middleware       |
 
 ---
 
@@ -1889,12 +1889,12 @@ Server function errors use a typed classification system (`ServerFunctionError` 
 
 ```typescript
 export type ErrorCode =
-  | 'VALIDATION'      // Input validation failures
-  | 'AUTH'            // Authentication/authorization failures
-  | 'NOT_FOUND'       // Resource not found
-  | 'LIMIT_EXCEEDED'  // Business rule limits (e.g., max 4 profiles)
-  | 'NETWORK'         // Transport-level failures (fetch errors)
-  | 'UNKNOWN';        // Fallback for unclassified errors
+  | 'VALIDATION' // Input validation failures
+  | 'AUTH' // Authentication/authorization failures
+  | 'NOT_FOUND' // Resource not found
+  | 'LIMIT_EXCEEDED' // Business rule limits (e.g., max 4 profiles)
+  | 'NETWORK' // Transport-level failures (fetch errors)
+  | 'UNKNOWN'; // Fallback for unclassified errors
 
 export class ServerFunctionError extends Error {
   code: ErrorCode;
@@ -1958,10 +1958,10 @@ export function useTypedMutation<TData, TVariables>(
 
 All server function handlers throw `ServerFunctionError` with appropriate codes:
 
-| Current Message                                | Error Code      |
-| ---------------------------------------------- | --------------- |
+| Current Message                                | Error Code       |
+| ---------------------------------------------- | ---------------- |
 | "Maximum of 4 child profiles reached."         | `LIMIT_EXCEEDED` |
-| "Profile not found or does not belong to you." | `NOT_FOUND`     |
+| "Profile not found or does not belong to you." | `NOT_FOUND`      |
 | "Unauthenticated."                             | `AUTH`           |
 | "Unauthorized. Parent session required."       | `AUTH`           |
 | Better Auth APIError rethrows                  | `AUTH`           |

@@ -98,12 +98,12 @@ ls public/audio/letters/ba_kasrah.mp3
 
 Each file follows the pattern `{letterId}_{vowelMode}.mp3`:
 
-| Pattern | Example | Description |
-|---------|---------|-------------|
-| `{letterId}.mp3` | `alif.mp3` | Plain letter (no diacritic) |
-| `{letterId}_fathah.mp3` | `ba_fathah.mp3` | Letter with fathah (َ) |
-| `{letterId}_kasrah.mp3` | `ta_kasrah.mp3` | Letter with kasrah (ِ) |
-| `{letterId}_dammah.mp3` | `tsa_dammah.mp3` | Letter with dammah (ُ) |
+| Pattern                 | Example          | Description                 |
+| ----------------------- | ---------------- | --------------------------- |
+| `{letterId}.mp3`        | `alif.mp3`       | Plain letter (no diacritic) |
+| `{letterId}_fathah.mp3` | `ba_fathah.mp3`  | Letter with fathah (َ)      |
+| `{letterId}_kasrah.mp3` | `ta_kasrah.mp3`  | Letter with kasrah (ِ)      |
+| `{letterId}_dammah.mp3` | `tsa_dammah.mp3` | Letter with dammah (ُ)      |
 
 ## Troubleshooting
 

@@ -10,8 +10,7 @@ import type { ReactNode } from 'react';
 const mockPushToast = vi.fn();
 
 vi.mock('~/stores/ui-store', () => ({
-  useUiStore: (selector: (state: unknown) => unknown) =>
-    selector({ pushToast: mockPushToast }),
+  useUiStore: (selector: (state: unknown) => unknown) => selector({ pushToast: mockPushToast }),
 }));
 
 // ── Helpers ────────────────────────────────────────────────────────────
@@ -51,9 +50,7 @@ describe('useTypedMutation', () => {
   });
 
   it('calls pushToast with error variant and message for ServerFunctionError(AUTH)', async () => {
-    mockMutationFn.mockRejectedValueOnce(
-      new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH'),
-    );
+    mockMutationFn.mockRejectedValueOnce(new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH'));
 
     const { useTypedMutation } = await import('./useTypedMutation');
     const { result } = renderHook(
@@ -68,7 +65,9 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+      await result.current.mutateAsync(undefined).catch(() => {
+        /* expected rejection */
+      });
     });
 
     expect(mockPushToast).toHaveBeenCalledTimes(1);
@@ -96,7 +95,9 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+      await result.current.mutateAsync(undefined).catch(() => {
+        /* expected rejection */
+      });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
@@ -123,7 +124,9 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+      await result.current.mutateAsync(undefined).catch(() => {
+        /* expected rejection */
+      });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
@@ -148,7 +151,9 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+      await result.current.mutateAsync(undefined).catch(() => {
+        /* expected rejection */
+      });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
@@ -173,7 +178,9 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+      await result.current.mutateAsync(undefined).catch(() => {
+        /* expected rejection */
+      });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({

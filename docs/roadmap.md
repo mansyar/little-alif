@@ -40,7 +40,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-02  | Database Schema & Seed Data            | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
 | T-03  | Authentication (Better Auth)           | ✅ Complete | [`scaffolding_20260531`](../conductor/archive/scaffolding_20260531/)                                             |
 | —     | Code Quality (Prettier, ESLint, Husky) | ✅ Complete | [`code-quality_20260601`](../conductor/archive/code-quality_20260601/)                                           |
-| —     | Oxlint + Oxfmt Migration               | ✅ Complete | [`oxlint_migration_20260605`](../conductor/archive/oxlint_migration_20260605/)                                 |
+| —     | Oxlint + Oxfmt Migration               | ✅ Complete | [`oxlint_migration_20260605`](../conductor/archive/oxlint_migration_20260605/)                                   |
 | T-04  | i18n Setup                             | ✅ Complete | [`i18n-setup_20260602`](../conductor/archive/i18n-setup_20260602/)                                               |
 | T-05  | Parent Dashboard & Child Profiles      | ✅ Complete | [`parent-dashboard_20260602`](../conductor/archive/parent-dashboard_20260602/)                                   |
 | T-06  | Letter Toggle Management               | ✅ Complete | [`letter-toggles_20260602`](../conductor/archive/letter-toggles_20260602/)                                       |
@@ -55,8 +55,8 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
 | T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
 | T-16  | Code Quality Polish                    | ✅ Complete | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                             |
-| T-17  | Infrastructure & Audio Polish          | ✅ Complete | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                 |
-| T-18  | Error Classification System            | ✅ Complete | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/) |
+| T-17  | Infrastructure & Audio Polish          | ✅ Complete | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                               |
+| T-18  | Error Classification System            | ✅ Complete | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                           |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete.
 

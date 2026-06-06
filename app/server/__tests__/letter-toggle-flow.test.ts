@@ -273,8 +273,9 @@ describe('letter toggle integration flow', () => {
     ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
 
     // User B cannot view User A's letters
-    await expect(getVisibleLetters(db, USER_B, profile.id)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getVisibleLetters(db, USER_B, profile.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 });

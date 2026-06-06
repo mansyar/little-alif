@@ -176,15 +176,17 @@ describe('getReadingData', () => {
   it('throws when the profile does not belong to the calling user', async () => {
     const profile = await createTestProfile(db, OTHER_USER);
 
-    await expect(getReadingData(db, TEST_USER, profile.id)).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getReadingData(db, TEST_USER, profile.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 
   it('throws when the profile does not exist', async () => {
-    await expect(getReadingData(db, TEST_USER, 'nonexistent-uuid-12345')).rejects.toMatchObject(
-      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
-    );
+    await expect(getReadingData(db, TEST_USER, 'nonexistent-uuid-12345')).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 
   // Note: the `profile?.vowelMode ?? 'fathah'` fallback on line 61 of reading.ts

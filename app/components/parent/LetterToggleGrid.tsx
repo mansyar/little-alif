@@ -29,14 +29,17 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     queryFn: () => getVisibleLettersFn({ data: { profileId } }),
   });
 
-  const toggleMutation = useTypedMutation({
-    mutationFn: ({ letterId, isVisible }: { letterId: LetterId; isVisible: boolean }) =>
-      toggleLetterFn({ data: { profileId, letterId, isVisible } }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
-      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+  const toggleMutation = useTypedMutation(
+    {
+      mutationFn: ({ letterId, isVisible }: { letterId: LetterId; isVisible: boolean }) =>
+        toggleLetterFn({ data: { profileId, letterId, isVisible } }),
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
+        void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      },
     },
-  }, LL);
+    LL,
+  );
 
   // Debounce individual toggles: rapid clicks produce a single server call after 300ms
   const debouncedToggle = useDebouncedCallback(
@@ -50,14 +53,17 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     300,
   );
 
-  const bulkMutation = useTypedMutation({
-    mutationFn: ({ isVisible }: { isVisible: boolean }) =>
-      bulkToggleLettersFn({ data: { profileId, letterIds: [...LETTER_IDS], isVisible } }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
-      void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+  const bulkMutation = useTypedMutation(
+    {
+      mutationFn: ({ isVisible }: { isVisible: boolean }) =>
+        bulkToggleLettersFn({ data: { profileId, letterIds: [...LETTER_IDS], isVisible } }),
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
+        void queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      },
     },
-  }, LL);
+    LL,
+  );
 
   if (isLoading) {
     return (

@@ -1,4 +1,8 @@
-import { useMutation, type UseMutationOptions, type UseMutationResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  type UseMutationOptions,
+  type UseMutationResult,
+} from '@tanstack/react-query';
 import { ServerFunctionError, ERROR_TOAST_VARIANT } from '~/lib/errors';
 import { useUiStore } from '~/stores/ui-store';
 

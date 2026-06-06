@@ -6,12 +6,12 @@ The `app/server/` directory has the lowest test coverage in the project. The pur
 
 ## Target Files
 
-| File | Current Stmt% | Current Branch% | Current Funcs% |
-|------|---------------|-----------------|----------------|
-| `app/server/auth-fns.ts` | 37.5 | 56.7 | 53.8 |
-| `app/server/letters.ts` | 56.3 | 75 | 70 |
-| `app/server/profiles.ts` | 54.4 | 68.8 | 64.7 |
-| `app/server/reading.ts` | 64.7 | 62.5 | 80 |
+| File                     | Current Stmt% | Current Branch% | Current Funcs% |
+| ------------------------ | ------------- | --------------- | -------------- |
+| `app/server/auth-fns.ts` | 37.5          | 56.7            | 53.8           |
+| `app/server/letters.ts`  | 56.3          | 75              | 70             |
+| `app/server/profiles.ts` | 54.4          | 68.8            | 64.7           |
+| `app/server/reading.ts`  | 64.7          | 62.5            | 80             |
 
 ## Functional Requirements
 
