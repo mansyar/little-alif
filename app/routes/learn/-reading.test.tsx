@@ -139,7 +139,7 @@ describe('Reading route (/learn/reading)', () => {
     // Grid renders 6 rows
     const rows = document.querySelectorAll('[role="row"]');
     expect(rows).toHaveLength(6);
-  }, 15000);
+  });
 
   it('redirects to /learn when fewer than 3 letters', async () => {
     mockGetReadingData.mockResolvedValue(READING_DATA_TWO);
