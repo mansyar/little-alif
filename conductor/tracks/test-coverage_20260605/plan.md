@@ -19,7 +19,7 @@
     - [x] Test: returns `{ name, avatar }` for an owned profile
     - [x] Test: throws when profile not owned by user
 - [x] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines (8c785be)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
 
