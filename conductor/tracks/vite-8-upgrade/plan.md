@@ -94,6 +94,7 @@ pnpm dev
 ```
 
 **Verify:** Dev server starts without errors. Test:
+
 - Landing page loads
 - Login/register works
 - Dashboard loads
@@ -117,13 +118,14 @@ pnpm build
 **Status:** [x] Added Vite 8 with Rolldown + Oxc info to Development Tools section.
 
 Update the Development Tools section to reflect Vite 8:
+
 - Change "Vite 7" references to "Vite 8"
 - Note Rolldown + Oxc as the bundler/transformer
 - Note native tsconfig paths support
 
 ### Task 3.2: Commit and document
 
-**Status:** [~]
+**Status:** [x] Committed as d925a68. Git note attached with task summary.
 
 - Commit all changes with message: `chore(build): upgrade to Vite 8`
 - Follow Conductor workflow for task completion
