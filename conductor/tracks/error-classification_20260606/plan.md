@@ -53,23 +53,23 @@
 
 ## Phase 3: Client-Side Integration
 
-- [~] Task: Create `useTypedMutation` hook (`app/lib/hooks/useTypedMutation.ts`)
-    - [ ] Thin wrapper around TanStack Query `useMutation`
-    - [ ] On error: detect `ServerFunctionError`, resolve variant from `ERROR_TOAST_VARIANT`, resolve message via passed `LL`, dispatch `pushToast`
-    - [ ] Non-`ServerFunctionError` falls back to `UNKNOWN` → `ERROR_UNKNOWN` toast
-    - [ ] Write unit tests: ServerFunctionError handling, non-classified Error fallback, UNKNOWN default, multiple consecutive errors
-    - [ ] Verify: `pnpm test` passes
-- [ ] Task: Update ErrorBoundary (`app/components/ui/ErrorBoundary.tsx`)
-    - [ ] In `componentDidCatch`: check `error instanceof ServerFunctionError`, store `userMessage` in state
-    - [ ] Render `userMessage` instead of generic text when available
-    - [ ] Update tests to verify contextual message display
-    - [ ] Verify: `pnpm test` passes
-- [ ] Task: Update toast-wired components to use `useTypedMutation`
-    - [ ] `app/components/parent/LetterToggleGrid.tsx` — replace manual `pushToast` in toggle + bulk mutations
-    - [ ] `app/components/parent/ProfileEditor.tsx` — replace manual `pushToast` in create/update mutations
-    - [ ] `app/components/parent/HarakatSelector.tsx` — replace manual `pushToast`
-    - [ ] `app/components/parent/ProfileMenu.tsx` — replace manual `pushToast` in sign-out error
-    - [ ] `app/routes/dashboard.tsx` — replace manual `pushToast` in delete mutation
-    - [ ] Write integration tests for at least 2 components verifying toast variant + message correctness
-    - [ ] Verify: `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Create `useTypedMutation` hook (`app/lib/hooks/useTypedMutation.ts`)
+    - [x] Thin wrapper around TanStack Query `useMutation`
+    - [x] On error: detect `ServerFunctionError`, resolve variant from `ERROR_TOAST_VARIANT`, resolve message via passed `LL`, dispatch `pushToast`
+    - [x] Non-`ServerFunctionError` falls back to `UNKNOWN` → `ERROR_UNKNOWN` toast
+    - [x] Write unit tests: ServerFunctionError handling, non-classified Error fallback, UNKNOWN default, multiple consecutive errors
+    - [x] Verify: `pnpm test` passes
+- [x] Task: Update ErrorBoundary (`app/components/ui/ErrorBoundary.tsx`)
+    - [x] In `componentDidCatch`: check `error instanceof ServerFunctionError`, store `userMessage` in state
+    - [x] Render `userMessage` instead of generic text when available
+    - [x] Update tests to verify contextual message display
+    - [x] Verify: `pnpm test` passes
+- [x] Task: Update toast-wired components to use `useTypedMutation` [072c74c]
+    - [x] `app/components/parent/LetterToggleGrid.tsx` — replace manual `pushToast` in toggle + bulk mutations
+    - [x] `app/components/parent/ProfileEditor.tsx` — replace manual `pushToast` in create/update mutations
+    - [x] `app/components/parent/HarakatSelector.tsx` — replace manual `pushToast`
+    - [x] `app/components/parent/ProfileMenu.tsx` — replace manual `pushToast` in sign-out error
+    - [x] `app/routes/dashboard.tsx` — replace manual `pushToast` in delete mutation
+    - [x] Write integration tests for at least 2 components verifying toast variant + message correctness
+    - [x] Verify: `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md) [072c74c]
