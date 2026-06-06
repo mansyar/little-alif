@@ -146,7 +146,7 @@ describe('getReadingDataFn', () => {
       (getReadingDataFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000001' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('calls authorizeChildAccess with correct profileId for parent session', async () => {
@@ -183,7 +183,7 @@ describe('getReadingDataFn', () => {
       (getReadingDataFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId },
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
   });
 
   it('delegates to getReadingData with correct userId and profileId', async () => {

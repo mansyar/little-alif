@@ -176,14 +176,14 @@ describe('getReadingData', () => {
   it('throws when the profile does not belong to the calling user', async () => {
     const profile = await createTestProfile(db, OTHER_USER);
 
-    await expect(getReadingData(db, TEST_USER, profile.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getReadingData(db, TEST_USER, profile.id)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 
   it('throws when the profile does not exist', async () => {
-    await expect(getReadingData(db, TEST_USER, 'nonexistent-uuid-12345')).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getReadingData(db, TEST_USER, 'nonexistent-uuid-12345')).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 

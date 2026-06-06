@@ -43,7 +43,7 @@
     - [ ] Server function wrappers: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
     - [ ] Write/update unit tests
     - [ ] Verify: `pnpm test` passes
-- [ ] Task: Update `app/server/reading.ts`
+- [x] Task: Update `app/server/reading.ts`
     - [ ] Server function wrapper: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
     - [ ] Write/update unit tests
     - [ ] Verify: `pnpm test` passes

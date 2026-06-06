@@ -4,6 +4,7 @@ import { getDb, type DbClient } from '~/db';
 import { profiles, letters, letterToggles } from '~/db/schema';
 import { type VowelMode } from '~/lib/utils/harakat';
 import { getReadingDataSchema } from '~/lib/validations/reading';
+import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { authorizeChildAccess, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
@@ -32,7 +33,7 @@ async function verifyProfileOwnership(
     .then((rows) => rows[0] ?? null);
 
   if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 }
 
@@ -91,7 +92,7 @@ export const getReadingDataFn = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     if (session === null) {
-      throw new Error('Unauthenticated.');
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
     const db = getDb();
