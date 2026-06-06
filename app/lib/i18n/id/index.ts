@@ -65,6 +65,12 @@ const id = {
   ERROR_GENERIC: 'Terjadi kesalahan. Silakan coba lagi.',
   ERROR_INVALID_EMAIL: 'Masukkan alamat surel yang valid.',
   ERROR_SHORT_PASSWORD: 'Kata sandi minimal 8 karakter.',
+  ERROR_VALIDATION: 'Periksa kembali masukan Anda.',
+  ERROR_AUTH: 'Silakan masuk lagi untuk melanjutkan.',
+  ERROR_NOT_FOUND: 'Data yang diminta tidak ditemukan.',
+  ERROR_LIMIT_EXCEEDED: 'Anda telah mencapai batas maksimum.',
+  ERROR_NETWORK: 'Terjadi kesalahan jaringan. Periksa koneksi Anda.',
+  ERROR_UNKNOWN: 'Terjadi kesalahan. Silakan coba lagi.',
 } satisfies Translation;
 
 export default id;

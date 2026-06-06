@@ -65,6 +65,12 @@ const en = {
   ERROR_GENERIC: 'Something went wrong. Please try again.',
   ERROR_INVALID_EMAIL: 'Please enter a valid email address.',
   ERROR_SHORT_PASSWORD: 'Password must be at least 8 characters.',
+  ERROR_VALIDATION: 'Please check your input and try again.',
+  ERROR_AUTH: 'Please sign in again to continue.',
+  ERROR_NOT_FOUND: 'The requested data could not be found.',
+  ERROR_LIMIT_EXCEEDED: 'You have reached the maximum limit.',
+  ERROR_NETWORK: 'A network error occurred. Please check your connection.',
+  ERROR_UNKNOWN: 'Something went wrong. Please try again.',
 } satisfies BaseTranslation;
 
 export default en;
