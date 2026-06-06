@@ -6,7 +6,7 @@
 
 ---
 
-## Phase 1: Error Type System & i18n Keys
+## Phase 1: Error Type System & i18n Keys [checkpoint: d6f1349]
 
 - [x] Task: Create Error Type System (`app/lib/errors/index.ts`)
     - [ ] Define `ErrorCode` string enum: VALIDATION, AUTH, NOT_FOUND, LIMIT_EXCEEDED, NETWORK, UNKNOWN
