@@ -21,7 +21,7 @@
     - [x] `pnpm lint` — clean (pre-existing errors unchanged)
 - [x] Task: Verify circular dependency is resolved
     - [x] Run `codebase_graph_circular` — zero cycles reported
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Break Circular Dependency' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Break Circular Dependency' (Protocol in workflow.md) ✅ User approved
 
 ---
 
@@ -29,34 +29,17 @@
 
 **Goal:** Create a lightweight health check route and wire it into Docker Compose.
 
-- [ ] Task: Write failing tests for health endpoint (Red phase)
-    - [ ] Create `app/routes/api/health.test.ts` with test that verifies:
-        - Returns 200 status
-        - Returns JSON body `{ status: "ok" }`
-        - Responds without auth headers
-    - [ ] Run test — confirm failure (route does not exist)
-- [ ] Task: Create `app/routes/api/health.ts`
-    - [ ] Simple GET route returning `{ status: "ok" }` with 200 status
-    - [ ] No auth middleware
-    - [ ] No DB queries
-- [ ] Task: Run tests — confirm health endpoint tests pass (Green phase)
-- [ ] Task: Update `docker-compose.yml` with healthcheck directive
-    - [ ] Add `healthcheck` block under the `app` service:
-      ```yaml
-      healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-        interval: 30s
-        timeout: 10s
-        retries: 3
-        start_period: 15s
-      ```
-- [ ] Task: Add `curl` to the Dockerfile if not already present
-    - [ ] Check if `curl` is available in the `node:20-alpine` runner image
-    - [ ] If not, add `RUN apk add --no-cache curl` in the runner stage
-- [ ] Task: Run full test suite — all tests pass
-    - [ ] `pnpm test` — all tests pass
-    - [ ] `pnpm typecheck` — no errors
-    - [ ] `pnpm lint` — clean
+- [x] Task: Write failing tests for health endpoint (Red phase) `[5c3fac4]`
+    - [x] Create `app/routes/api/health.test.ts` with test that verifies expected behavior
+    - [x] Run test — confirms module doesn't exist (red phase passes)
+- [x] Task: Create `app/routes/api/health.ts`
+    - [x] Simple GET route returning `{ status: "ok" }` with 200 status
+    - [x] No auth middleware
+    - [x] No DB queries
+- [x] Task: Run tests — confirm health endpoint tests pass (Green phase) — 3/3 pass
+- [x] Task: Update `docker-compose.yml` with healthcheck directive
+- [x] Task: Add `curl` to the Dockerfile
+- [x] Task: Run full test suite — all 525 tests pass
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Docker Health Check Endpoint' (Protocol in workflow.md)
 
 ---
@@ -65,27 +48,29 @@
 
 **Goal:** Write clear GCP setup guide so self-hosters can generate the 112 MP3 audio files.
 
-- [ ] Task: Create `docs/audio-setup.md`
-    - [ ] Section 1: Prerequisites (GCP account, billing enabled, gcloud CLI installed)
-    - [ ] Section 2: GCP Project Setup (create project, enable Cloud Text-to-Speech API)
-    - [ ] Section 3: Authentication (create service account, download key, `gcloud auth application-default-login`)
-    - [ ] Section 4: Generate Audio (run `pnpm generate:audio`)
-    - [ ] Section 5: Verification (check `public/audio/` directory for 112 files)
-    - [ ] Section 6: Troubleshooting (common issues: quota limits, auth errors, missing files)
-    - [ ] Section 7: Downloadable Archive (note about pre-generated archive option for zero-setup users)
-- [ ] Task: Verify documentation is consistent with existing scripts
-    - [ ] Check existing `scripts/generate-audio.ts` to ensure docs match actual behavior
-    - [ ] Verify audio file naming convention is documented correctly (`{letterId}_{vowelMode}.mp3`)
-- [ ] Task: Run `pnpm test`, `pnpm typecheck`, `pnpm lint` — all pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Audio Generation Documentation' (Protocol in workflow.md)
+- [x] Task: Create `docs/audio-setup.md` `[77007f7]`
+    - [x] Section 1: Prerequisites (GCP account, billing enabled, gcloud CLI installed)
+    - [x] Section 2: GCP Project Setup (create project, enable Cloud Text-to-Speech API)
+    - [x] Section 3: Authentication (service account, ADC, `gcloud auth application-default-login`)
+    - [x] Section 4: Generate Audio (run `pnpm generate:audio`)
+    - [x] Section 5: Verification (check `public/audio/` directory for 112 files)
+    - [x] Section 6: Troubleshooting (common issues: quota limits, auth errors, missing files)
+    - [x] Section 7: Downloadable Archive (note about pre-generated archive option)
+- [x] Task: Verify documentation is consistent with existing scripts
+    - [x] Checked existing `scripts/generate-audio.ts` — docs match actual behavior
+    - [x] Audio file naming convention documented correctly (`{letterId}_{vowelMode}.mp3`)
+- [x] Task: Run `pnpm test` (525/525 pass), `pnpm typecheck` (only pre-existing errors), `pnpm lint` (only pre-existing errors)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Audio Generation Documentation' ✅ User approved
 
 ---
 
 ## Phase 4: Final Verification
 
-- [ ] Task: Run `codebase_graph_circular` — confirm zero cycles
-- [ ] Task: Run full verification suite
-    - [ ] `pnpm test` — all tests pass
-    - [ ] `pnpm typecheck` — no TypeScript errors
-    - [ ] `pnpm lint` — clean
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Verification' (Protocol in workflow.md)
+## Phase 4: Final Verification
+
+- [x] Task: Run `codebase_graph_circular` — zero cycles confirmed
+- [x] Task: Run full verification suite
+    - [x] `pnpm test` — all tests pass (525/525)
+    - [x] `pnpm typecheck` — only pre-existing errors remain
+    - [x] `pnpm lint` — only pre-existing errors remain
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Verification' ✅ User approved
