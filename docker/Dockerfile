@@ -26,7 +26,8 @@ RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
 COPY package.json pnpm-lock.yaml ./
 
 # Production deps only — skips vitest, typescript, eslint, etc.
-RUN pnpm install --frozen-lockfile --prod
+# --ignore-scripts skips the "prepare" hook (husky) which is dev-only
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 
 # =============================================================================
 # Stage 2: Build
