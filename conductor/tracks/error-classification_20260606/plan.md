@@ -23,31 +23,31 @@
 
 ---
 
-## Phase 2: Server Function Error Classification
+## Phase 2: Server Function Error Classification [checkpoint: ed6a7f0]
 
 - [x] Task: Update `app/server/auth-fns.ts`
-    - [ ] Replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
-    - [ ] Replace `throw new Error('Unauthorized. Parent session required.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
-    - [ ] Replace `throw new Error('Unauthorized.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
-    - [ ] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`
-    - [ ] Update Better Auth `APIError` catch to throw `ServerFunctionError('AUTH', 'ERROR_AUTH', err)`
-    - [ ] Write/update unit tests verifying ServerFunctionError is thrown with correct codes
-    - [ ] Verify: `pnpm test` passes
+    - [x] Replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
+    - [x] Replace `throw new Error('Unauthorized. Parent session required.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
+    - [x] Replace `throw new Error('Unauthorized.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
+    - [x] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`
+    - [x] Update Better Auth `APIError` catch to throw `ServerFunctionError('AUTH', 'ERROR_AUTH', err)`
+    - [x] Write/update unit tests verifying ServerFunctionError is thrown with correct codes
+    - [x] Verify: `pnpm test` passes
 - [x] Task: Update `app/server/profiles.ts`
-    - [ ] Replace `throw new Error('Maximum of 4 child profiles reached.')` → `ServerFunctionError('LIMIT_EXCEEDED', 'ERROR_LIMIT_EXCEEDED')`
-    - [ ] Replace `throw new Error('Failed to create profile.')` → `ServerFunctionError('UNKNOWN', 'ERROR_UNKNOWN')`
-    - [ ] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`
-    - [ ] Write/update unit tests verifying ServerFunctionError is thrown
-    - [ ] Verify: `pnpm test` passes
+    - [x] Replace `throw new Error('Maximum of 4 child profiles reached.')` → `ServerFunctionError('LIMIT_EXCEEDED', 'ERROR_LIMIT_EXCEEDED')`
+    - [x] Replace `throw new Error('Failed to create profile.')` → `ServerFunctionError('UNKNOWN', 'ERROR_UNKNOWN')`
+    - [x] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`
+    - [x] Write/update unit tests verifying ServerFunctionError is thrown
+    - [x] Verify: `pnpm test` passes
 - [x] Task: Update `app/server/letters.ts`
-    - [ ] Server function wrappers: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
-    - [ ] Write/update unit tests
-    - [ ] Verify: `pnpm test` passes
+    - [x] Server function wrappers: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
+    - [x] Write/update unit tests
+    - [x] Verify: `pnpm test` passes
 - [x] Task: Update `app/server/reading.ts`
-    - [ ] Server function wrapper: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
-    - [ ] Write/update unit tests
-    - [ ] Verify: `pnpm test` passes
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+    - [x] Server function wrapper: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
+    - [x] Write/update unit tests
+    - [x] Verify: `pnpm test` passes
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ---
 
