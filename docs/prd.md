@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.11 (Oxlint migration complete)
+**Version:** 1.12 (Infrastructure & Audio Polish complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -45,6 +45,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Parent Gate**                       | ✅ Complete | Hidden lock icon on child routes (long-press 1.5s or 3-tap unlock), parent menu, mid-session child switching. See [`t13-child-mode-parent-gate_20260605`](../conductor/archive/t13-child-mode-parent-gate_20260605/)                                      |
 | **Parent Dashboard De-clutter**       | ✅ Complete | Mobile-first restructure: sidebar replaced with top app bar, dedicated letter management route, profile dropdown menu with sign-out confirmation. See [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)  |
 | **Code Quality Polish**               | ✅ Complete | Canonical `LETTER_IDS`/`LetterId`/`LETTER_BG_COLORS` extracted to `app/lib/constants/letters.ts`. Reading practice actions localized with 4 i18n keys (EN + ID). See [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/) |
+| **Infrastructure & Audio Polish**     | ✅ Complete | Circular dependency `auth-fns.ts` ↔ `profiles.ts` resolved. Docker health check endpoint (`/api/health`) with compose healthcheck. GCP audio generation setup documented in `docs/audio-setup.md`. See [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/) |
 
 ---
 

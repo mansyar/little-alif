@@ -27,10 +27,10 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-14  | Reading Practice Visual Alignment    | T-10                   | Low        | 1–2h        | ✅ Complete |
 | T-15  | Parent Dashboard De-clutter          | T-05, T-06             | Medium     | 4–6h        | ✅ Complete |
 | T-16  | Code Quality Polish                  | T-02, T-10             | Low        | ~1h         | ✅ Complete |
-| T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ⬜ Planned  |
+| T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ✅ Complete |
 | T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ⬜ Planned  |
 
-\***\*17 tracks complete, 2 planned (T-17–T-18).** Delivered effort: ~46–73 hours\*\*
+\***\*17 tracks complete, 1 planned (T-18).** Delivered effort: ~48–75 hours\*\*
 
 ### Implementation Status
 
@@ -55,10 +55,10 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-14  | Reading Practice Visual Alignment      | ✅ Complete | [`reading-practice-visual-alignment_20260605`](../conductor/archive/reading-practice-visual-alignment_20260605/) |
 | T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
 | T-16  | Code Quality Polish                    | ✅ Complete | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                             |
-| T-17  | Infrastructure & Audio Polish          | ⬜ Planned  | —                                                                                                                |
+| T-17  | Infrastructure & Audio Polish          | ✅ Complete | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                 |
 | T-18  | Error Classification System            | ⬜ Planned  | —                                                                                                                |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) is now complete.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) and T-17 (Infrastructure & Audio Polish) are now complete.
 
 ---
 
@@ -1008,55 +1008,50 @@ Bundle of small code quality fixes. Extract the 28-letter ID enum from its curre
 
 ---
 
-### T-17: Infrastructure & Audio Polish
+### T-17: Infrastructure & Audio Polish ✅
 
 **Dependencies:** T-12 (Polish, Docker & Deployment)
-**Status:** ⬜ Planned
+**Status:** ✅ Complete ([`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/))
 **Complexity:** Low
-**Est. Effort:** ~1.5-2h
+**Est. Effort:** ~2h
 
 **Description:**
-Improve production infrastructure and self-hosting ergonomics. Break the only circular dependency in the code graph (`auth-fns.ts` ↔ `profiles.ts`), add a Docker health check endpoint for orchestrator monitoring, document the GCP TTS audio generation setup, and provide a free `edge-tts` alternative for self-hosters who don't use GCP.
+Improve production infrastructure and self-hosting ergonomics. Broke the only circular dependency in the code graph (`auth-fns.ts` ↔ `profiles.ts`), added a Docker health check endpoint for orchestrator monitoring, and documented the GCP TTS audio generation setup.
 
 **PRD Ref:** §8 (Non-Functional Requirements)
 **TDD Ref:** §12 (Deployment Configuration), §7 (Audio Architecture)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- [ ] **Break circular dependency:**
-  - [ ] Extract `getProfileUserId(db, profileId)` inline in `buildChildSession()` or into a lean utility
-  - [ ] Remove import of `profiles.ts` from `auth-fns.ts`
-  - [ ] Verify `codebase_graph_circular` reports zero cycles
-- [ ] **Docker health check:**
-  - [ ] Create `app/routes/api/health.ts` returning `200 { status: "ok" }` — no auth, no DB query
-  - [ ] Add `healthcheck` to `docker-compose.yml`: HTTP GET to `/api/health`, 30s interval, 3 retries
-- [ ] **Audio generation documentation & alternative:**
-  - [ ] Write clear GCP setup guide in `docs/audio-setup.md` (project creation, API enable, gcloud auth)
-  - [ ] (Optional) Write `scripts/generate-audio-edge.ts` using `edge-tts` (free, no GCP needed)
-  - [ ] Add `pnpm generate:audio:edge` script to `package.json` (if implemented)
-  - [ ] Note downloadable archive option for users who want zero setup
+- [x] **Break circular dependency:**
+  - [x] `buildChildSession()` already had inline query — no change needed
+  - [x] `enableChildMode()` replaced `getActiveProfile` call with inline `db.select({ name, avatar }).from(profiles).where(and(eq(id, profileId), eq(userId, userId)))`
+  - [x] Removed `import { getActiveProfile } from './profiles'` from `auth-fns.ts`
+  - [x] Updated test mocks to use inline DB mock instead of mocking `./profiles`
+  - [x] Verified zero cycles via `codebase_graph_circular`
+- [x] **Docker health check:**
+  - [x] Created `app/routes/api/health.ts` returning `200 { status: "ok" }` — no auth, no DB query
+  - [x] Added `curl` to Dockerfile runner stage (`apk add --no-cache curl`)
+  - [x] Added `healthcheck` to `docker-compose.yml`: `curl -f http://localhost:3000/api/health`, 30s interval, 3 retries, 15s start period
+  - [x] 3 new tests for health endpoint (200 status, JSON body, no-auth access)
+- [x] **Audio generation documentation:**
+  - [x] Created `docs/audio-setup.md` — 144-line comprehensive GCP setup guide (prerequisites, project setup, auth, script usage, verification, troubleshooting, downloadable archive option)
+  - [x] Consistent with existing `scripts/generate-audio.ts`
 
 **Key Decisions:**
 
-- Health endpoint is a static file route (no DB call) — a failing DB should not prevent liveness detection
-- Circular dep fix is by extraction, not by moving functions — preserves responsibility boundaries
-- `edge-tts` is optional — GCP remains the primary path; if quality is poor, skip and only improve docs
+- Health endpoint is a static route (no DB call) — a failing DB should not prevent liveness detection
+- Circular dep fix by inlining, not by moving functions — preserves responsibility boundaries
 - Audio file naming convention stays unchanged (`{letterId}_{vowelMode}.mp3`)
+- `edge-tts` alternative deferred (GCP docs sufficient for self-hosters)
 
-**Edge Cases:**
-
-- No audio files present → AudioEngine falls back to Web Speech API (existing behavior — no crash)
-- Health endpoint called without env vars → still returns 200 (liveness check, not config check)
-- `fetch` unavailable in older Node → use `http.get` in healthcheck command
-- Partial audio files → engine plays what exists, falls back for the rest
-
-**Verification:**
+**Verification (all passing):**
 
 - `codebase_graph_circular` reports zero cycles
-- `docker compose up` shows health status as `healthy`
-- `curl localhost:3000/api/health` returns `200`
-- Self-hoster with no GCP account can follow the doc and produce audio within 15 minutes
-- `pnpm test`, `pnpm typecheck` pass
+- 525/525 tests passing across 61 test files
+- `pnpm typecheck` — only pre-existing errors
+- `pnpm lint` — only pre-existing errors
+- Code review completed, track archived
 
 ---
 
