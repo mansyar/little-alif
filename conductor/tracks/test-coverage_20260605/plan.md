@@ -21,7 +21,7 @@
 - [x] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines (8c785be)
 - [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (24781d5)
 
-## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
+## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`) [checkpoint: f5e43e7]
 
 - [x] Task: Write tests for `listProfilesFn` wrapper
     - [x] Test: calls `requireParentSession` and throws for child session
@@ -41,7 +41,7 @@
 - [x] Task: Write tests for `listProfilesForSwitchFn` wrapper
     - [x] Test: throws for child session (parent required)
 - [x] Task: Run `pnpm test:coverage` and verify `profiles.ts` ≥80% stmts/branch/funcs/lines (6eeb6ce)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) (f5e43e7)
 
 ## Phase 3: Letters Server Function Wrappers (`app/server/letters.test.ts`)
 
