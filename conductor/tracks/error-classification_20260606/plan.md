@@ -53,7 +53,7 @@
 
 ## Phase 3: Client-Side Integration
 
-- [ ] Task: Create `useTypedMutation` hook (`app/lib/hooks/useTypedMutation.ts`)
+- [~] Task: Create `useTypedMutation` hook (`app/lib/hooks/useTypedMutation.ts`)
     - [ ] Thin wrapper around TanStack Query `useMutation`
     - [ ] On error: detect `ServerFunctionError`, resolve variant from `ERROR_TOAST_VARIANT`, resolve message via passed `LL`, dispatch `pushToast`
     - [ ] Non-`ServerFunctionError` falls back to `UNKNOWN` → `ERROR_UNKNOWN` toast
