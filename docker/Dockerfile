@@ -44,8 +44,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install curl for Docker health checks
+# Install curl for Docker health checks + pnpm for DB operations
 RUN apk add --no-cache curl
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
 
 # Copy production build artifacts
 COPY --from=build /app/dist ./dist
@@ -58,6 +59,12 @@ COPY --from=build /app/node_modules ./node_modules
 
 # Copy package.json for metadata (not strictly needed but conventional)
 COPY --from=build /app/package.json ./
+
+# Copy source files needed for DB operations (drizzle-kit push, seed)
+COPY --from=build /app/drizzle.config.ts ./
+COPY --from=build /app/tsconfig.json ./
+COPY --from=build /app/app/db ./app/db
+COPY --from=build /app/app/lib/constants ./app/lib/constants
 
 # Copy the server entry wrapper
 COPY docker/server-entry.mjs ./docker/server-entry.mjs
