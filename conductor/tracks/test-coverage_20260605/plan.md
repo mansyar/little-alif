@@ -23,24 +23,24 @@
 
 ## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
 
-- [ ] Task: Write tests for `listProfilesFn` wrapper
-    - [ ] Test: calls `requireParentSession` and throws for child session
-    - [ ] Test: delegates to `listProfiles` with correct userId
-- [ ] Task: Write tests for `createProfileFn` wrapper
-    - [ ] Test: throws for unauthenticated session
-    - [ ] Test: throws for child session (parent required)
-- [ ] Task: Write tests for `updateProfileFn` wrapper
-    - [ ] Test: throws for unauthenticated session
-    - [ ] Test: throws for child session (parent required)
-- [ ] Task: Write tests for `deleteProfileFn` wrapper
-    - [ ] Test: throws for unauthenticated session
-    - [ ] Test: clears child-mode cookie when deleted profile matches cookie
-- [ ] Task: Write tests for `getActiveProfileFn` wrapper
-    - [ ] Test: throws for null session
-    - [ ] Test: calls `authorizeChildAccess` with correct profileId
-- [ ] Task: Write tests for `listProfilesForSwitchFn` wrapper
-    - [ ] Test: throws for child session (parent required)
-- [ ] Task: Run `pnpm test:coverage` and verify `profiles.ts` ≥80% stmts/branch/funcs/lines
+- [x] Task: Write tests for `listProfilesFn` wrapper
+    - [x] Test: calls `requireParentSession` and throws for child session
+    - [x] Test: delegates to `listProfiles` with correct userId
+- [x] Task: Write tests for `createProfileFn` wrapper
+    - [x] Test: throws for unauthenticated session
+    - [x] Test: throws for child session (parent required)
+- [x] Task: Write tests for `updateProfileFn` wrapper
+    - [x] Test: throws for unauthenticated session
+    - [x] Test: throws for child session (parent required)
+- [x] Task: Write tests for `deleteProfileFn` wrapper
+    - [x] Test: throws for unauthenticated session
+    - [x] Test: clears child-mode cookie when deleted profile matches cookie
+- [x] Task: Write tests for `getActiveProfileFn` wrapper
+    - [x] Test: throws for null session
+    - [x] Test: calls `authorizeChildAccess` with correct profileId
+- [x] Task: Write tests for `listProfilesForSwitchFn` wrapper
+    - [x] Test: throws for child session (parent required)
+- [x] Task: Run `pnpm test:coverage` and verify `profiles.ts` ≥80% stmts/branch/funcs/lines (6eeb6ce)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: Letters Server Function Wrappers (`app/server/letters.test.ts`)
