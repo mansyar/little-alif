@@ -45,16 +45,16 @@
 
 ## Phase 3: Letters Server Function Wrappers (`app/server/letters.test.ts`)
 
-- [ ] Task: Write tests for `getVisibleLettersFn` wrapper
-    - [ ] Test: throws for null session (unauthenticated)
-    - [ ] Test: calls `authorizeChildAccess` with correct profileId
-- [ ] Task: Write tests for `toggleLetterFn` wrapper
-    - [ ] Test: throws for unauthenticated session
-    - [ ] Test: throws for child session (parent required)
-- [ ] Task: Write tests for `bulkToggleLettersFn` wrapper
-    - [ ] Test: throws for unauthenticated session
-    - [ ] Test: throws for child session (parent required)
-- [ ] Task: Run `pnpm test:coverage` and verify `letters.ts` ≥80% stmts/branch/funcs/lines
+- [x] Task: Write tests for `getVisibleLettersFn` wrapper
+    - [x] Test: throws for null session (unauthenticated)
+    - [x] Test: calls `authorizeChildAccess` with correct profileId
+- [x] Task: Write tests for `toggleLetterFn` wrapper
+    - [x] Test: throws for unauthenticated session
+    - [x] Test: throws for child session (parent required)
+- [x] Task: Write tests for `bulkToggleLettersFn` wrapper
+    - [x] Test: throws for unauthenticated session
+    - [x] Test: throws for child session (parent required)
+- [x] Task: Run `pnpm test:coverage` and verify `letters.ts` ≥80% stmts/branch/funcs/lines (100% all metrics) ✅
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ## Phase 4: Reading Server Function Wrapper (`app/server/reading.test.ts`)
