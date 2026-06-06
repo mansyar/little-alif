@@ -125,16 +125,18 @@ describe('enableChildMode (pure helper)', () => {
       })
       .returning();
 
-    await expect(enableChildMode(db, USER_ID, profile!.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
-    );
+    await expect(enableChildMode(db, USER_ID, profile!.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 
   it('throws when the profile does not exist', async () => {
     const fakeId = '123e4567-e89b-12d3-a456-426614174000';
-    await expect(enableChildMode(db, USER_ID, fakeId)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
-    );
+    await expect(enableChildMode(db, USER_ID, fakeId)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 });
 

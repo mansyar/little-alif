@@ -25,7 +25,7 @@
 
 ## Phase 2: Server Function Error Classification
 
-- [ ] Task: Update `app/server/auth-fns.ts`
+- [x] Task: Update `app/server/auth-fns.ts`
     - [ ] Replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
     - [ ] Replace `throw new Error('Unauthorized. Parent session required.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
     - [ ] Replace `throw new Error('Unauthorized.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`

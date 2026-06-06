@@ -474,7 +474,7 @@ describe('listProfilesFn', () => {
     const { listProfilesFn } = await import('./profiles');
     await expect(
       (listProfilesFn as unknown as () => Promise<unknown>)(),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('delegates to listProfiles for valid parent session', async () => {
@@ -543,7 +543,7 @@ describe('createProfileFn', () => {
       (createProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { name: 'Test', avatar: 'ba-boat' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('throws for child session (parent required)', async () => {
@@ -576,7 +576,7 @@ describe('createProfileFn', () => {
       (createProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { name: 'Test', avatar: 'ba-boat' },
       }),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });
 
@@ -611,7 +611,7 @@ describe('updateProfileFn', () => {
       (updateProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000001', name: 'NewName' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('throws for child session (parent required)', async () => {
@@ -644,7 +644,7 @@ describe('updateProfileFn', () => {
       (updateProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000001', name: 'NewName' },
       }),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });
 
@@ -682,7 +682,7 @@ describe('deleteProfileFn', () => {
       (deleteProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000002' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('clears child-mode cookie when deleted profile matches cookie', async () => {
@@ -846,6 +846,6 @@ describe('listProfilesForSwitchFn', () => {
     const { listProfilesForSwitchFn } = await import('./profiles');
     await expect(
       (listProfilesForSwitchFn as unknown as () => Promise<unknown>)(),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });

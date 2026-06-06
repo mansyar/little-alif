@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { APIError } from 'better-auth';
+import { ServerFunctionError, ErrorCode } from '~/lib/errors';
 import { deriveNameFromEmail, buildCookieHeader } from './auth-fns';
 
 const authMocks = vi.hoisted(() => ({
@@ -58,19 +59,22 @@ describe('buildCookieHeader', () => {
   });
 });
 
-describe('APIError → Error transformation (mirrors registerFn/loginFn catch)', () => {
+describe('APIError → ServerFunctionError transformation (mirrors registerFn/loginFn catch)', () => {
   function translate(err: unknown): unknown {
     if (err instanceof APIError) {
-      return new Error(err.message);
+      return new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH', { cause: err });
     }
     return err;
   }
 
-  it('wraps APIError in a plain Error with the original message', () => {
+  it('wraps APIError in a ServerFunctionError with AUTH code and cause', () => {
     const apiErr = new APIError('BAD_REQUEST', { message: 'Email taken' });
     const out = translate(apiErr);
+    expect(out).toBeInstanceOf(ServerFunctionError);
     expect(out).toBeInstanceOf(Error);
-    expect((out as Error).message).toBe('Email taken');
+    expect((out as ServerFunctionError).code).toBe(ErrorCode.AUTH);
+    expect((out as ServerFunctionError).userMessage).toBe('ERROR_AUTH');
+    expect((out as ServerFunctionError).cause).toBe(apiErr);
   });
 
   it('preserves non-APIError exceptions', () => {
@@ -108,20 +112,18 @@ describe('getAuth singleton', () => {
 });
 
 describe('requireParentSession', () => {
-  it('throws "Unauthenticated." when session is null', async () => {
+  it('throws ServerFunctionError(AUTH) when session is null', async () => {
     const { requireParentSession } = await import('./auth-fns');
-    expect(() => requireParentSession(null)).toThrow('Unauthenticated.');
+    expect(() => requireParentSession(null)).toThrow(ServerFunctionError);
   });
 
-  it('throws "Parent session required." when session is a child session', async () => {
+  it('throws ServerFunctionError(AUTH) when session is a child session', async () => {
     const { requireParentSession } = await import('./auth-fns');
     const childSession = {
       user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
       session: { token: '' },
     };
-    expect(() => requireParentSession(childSession)).toThrow(
-      'Unauthorized. Parent session required.',
-    );
+    expect(() => requireParentSession(childSession)).toThrow(ServerFunctionError);
   });
 
   it('passes (no throw) for a valid parent JWT session', async () => {
@@ -143,12 +145,18 @@ describe('authorizeChildAccess', () => {
     expect(() => authorizeChildAccess(childSession, 'child-1')).not.toThrow();
   });
 
-  it('throws "Unauthorized." when child session profileId mismatches', async () => {
+  it('throws ServerFunctionError(AUTH) when child session profileId mismatches', async () => {
     const { authorizeChildAccess } = await import('./auth-fns');
     const childSession = {
       user: { id: 'parent-1', isChild: true, childProfileId: 'child-1' },
     };
-    expect(() => authorizeChildAccess(childSession, 'child-2')).toThrow('Unauthorized.');
+    expect(() => authorizeChildAccess(childSession, 'child-2')).toThrow(ServerFunctionError);
+    try {
+      authorizeChildAccess(childSession, 'child-2');
+    } catch (e) {
+      expect((e as ServerFunctionError).code).toBe(ErrorCode.AUTH);
+      expect((e as ServerFunctionError).userMessage).toBe('ERROR_AUTH');
+    }
   });
 
   it('passes (no-op) for a parent session', async () => {
@@ -268,7 +276,7 @@ describe('registerFn', () => {
     vi.restoreAllMocks();
   });
 
-  it('APIError is caught and re-thrown as plain Error', async () => {
+  it('APIError is caught and re-thrown as ServerFunctionError(AUTH)', async () => {
     const mockAuth = { api: { signUpEmail: mockSignUp } };
     vi.doMock('./auth', () => ({ getAuth: () => mockAuth }));
     vi.doMock('@tanstack/react-start', () => ({
@@ -283,14 +291,19 @@ describe('registerFn', () => {
       setCookie: vi.fn(),
     }));
 
-    mockSignUp.mockRejectedValueOnce(new APIError('BAD_REQUEST', { message: 'Email taken' }));
+    const apiErr = new APIError('BAD_REQUEST', { message: 'Email taken' });
+    mockSignUp.mockRejectedValueOnce(apiErr);
 
     const { registerFn } = await import('./auth-fns');
-    await expect(
-      (registerFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { email: 'test@example.com', password: 'password123' },
-      }),
-    ).rejects.toThrow('Email taken');
+    const promise = (
+      registerFn as unknown as (input: { data: unknown }) => Promise<unknown>
+    )({
+      data: { email: 'test@example.com', password: 'password123' },
+    });
+    await expect(promise).rejects.toMatchObject({
+      code: ErrorCode.AUTH,
+      userMessage: 'ERROR_AUTH',
+    });
   });
 
   it('non-APIError exceptions pass through unchanged', async () => {
@@ -363,7 +376,7 @@ describe('loginFn', () => {
     vi.restoreAllMocks();
   });
 
-  it('APIError is caught and re-thrown as plain Error', async () => {
+  it('APIError is caught and re-thrown as ServerFunctionError(AUTH)', async () => {
     const mockAuth = { api: { signInEmail: mockSignIn } };
     vi.doMock('./auth', () => ({ getAuth: () => mockAuth }));
     vi.doMock('@tanstack/react-start', () => ({
@@ -378,16 +391,19 @@ describe('loginFn', () => {
       setCookie: vi.fn(),
     }));
 
-    mockSignIn.mockRejectedValueOnce(
-      new APIError('UNAUTHORIZED', { message: 'Invalid credentials' }),
-    );
+    const apiErr = new APIError('UNAUTHORIZED', { message: 'Invalid credentials' });
+    mockSignIn.mockRejectedValueOnce(apiErr);
 
     const { loginFn } = await import('./auth-fns');
-    await expect(
-      (loginFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { email: 'test@example.com', password: 'wrong' },
-      }),
-    ).rejects.toThrow('Invalid credentials');
+    const promise = (
+      loginFn as unknown as (input: { data: unknown }) => Promise<unknown>
+    )({
+      data: { email: 'test@example.com', password: 'wrong' },
+    });
+    await expect(promise).rejects.toMatchObject({
+      code: ErrorCode.AUTH,
+      userMessage: 'ERROR_AUTH',
+    });
   });
 
   it('non-APIError exceptions pass through unchanged', async () => {
@@ -474,7 +490,7 @@ describe('enableChildMode', () => {
     expect(result).toEqual({ name: 'Aisyah', avatar: 'alif-lamp' });
   });
 
-  it('throws when profile not owned by user', async () => {
+  it('throws ServerFunctionError(NOT_FOUND) when profile not owned by user', async () => {
     vi.doMock('~/lib/utils/child-mode.server', () => ({
       verifyChildModeCookie: vi.fn(),
       signChildModeCookie: vi.fn(),
@@ -487,9 +503,11 @@ describe('enableChildMode', () => {
     vi.doMock('~/db', () => ({ getDb: () => mockDb }));
 
     const { enableChildMode } = await import('./auth-fns');
-    await expect(enableChildMode(mockDb as never, 'user-1', 'other-profile')).rejects.toThrow(
-      'Profile not found or does not belong to you.',
-    );
+    const promise = enableChildMode(mockDb as never, 'user-1', 'other-profile');
+    await expect(promise).rejects.toMatchObject({
+      code: ErrorCode.NOT_FOUND,
+      userMessage: 'ERROR_NOT_FOUND',
+    });
   });
 });
 
@@ -587,7 +605,7 @@ describe('enableChildModeFn', () => {
     );
   });
 
-  it('throws when session is null (unauthenticated)', async () => {
+  it('throws ServerFunctionError(AUTH) when session is null (unauthenticated)', async () => {
     vi.doMock('@tanstack/react-start', () => ({
       createServerFn: vi.fn(() => ({
         inputValidator: vi.fn().mockReturnThis(),
@@ -608,11 +626,15 @@ describe('enableChildModeFn', () => {
     }));
 
     const { enableChildModeFn } = await import('./auth-fns');
-    await expect(
-      (enableChildModeFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId: '550e8400-e29b-41d4-a716-446655440000' },
-      }),
-    ).rejects.toThrow('Unauthenticated.');
+    const promise = (
+      enableChildModeFn as unknown as (input: { data: unknown }) => Promise<unknown>
+    )({
+      data: { profileId: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+    await expect(promise).rejects.toMatchObject({
+      code: ErrorCode.AUTH,
+      userMessage: 'ERROR_AUTH',
+    });
   });
 });
 

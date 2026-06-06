@@ -2,10 +2,11 @@ import { APIError } from 'better-auth';
 import { createServerFn } from '@tanstack/react-start';
 import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
-import { getDb, type DbClient } from '~/db';
-import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
 import { and, eq } from 'drizzle-orm';
+import { getDb, type DbClient } from '~/db';
 import { profiles } from '~/db/schema';
+import { ErrorCode, ServerFunctionError } from '~/lib/errors';
+import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
 import { getAuth } from './auth';
 
 /**
@@ -48,7 +49,7 @@ export const registerFn = createServerFn({ method: 'POST' })
       return result.response.user;
     } catch (err) {
       if (err instanceof APIError) {
-        throw new Error(err.message);
+        throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH', { cause: err });
       }
       throw err;
     }
@@ -72,7 +73,7 @@ export const loginFn = createServerFn({ method: 'POST' })
       return result.response.user;
     } catch (err) {
       if (err instanceof APIError) {
-        throw new Error(err.message);
+        throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH', { cause: err });
       }
       throw err;
     }
@@ -179,10 +180,10 @@ export function requireParentSession(
   session: { user: Record<string, unknown> } | null,
 ): asserts session is { user: { id: string } } {
   if (session === null) {
-    throw new Error('Unauthenticated.');
+    throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
   }
   if (session.user.isChild === true) {
-    throw new Error('Unauthorized. Parent session required.');
+    throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
   }
 }
 
@@ -204,7 +205,7 @@ export function authorizeChildAccess(
 ): void {
   if (session.user.isChild === true) {
     if (session.user.childProfileId !== profileId) {
-      throw new Error('Unauthorized.');
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
   }
 }
@@ -228,7 +229,7 @@ export async function enableChildMode(
     .then((rows) => rows[0] ?? null);
 
   if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 
   return { name: profile.name, avatar: profile.avatar };

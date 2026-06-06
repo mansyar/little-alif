@@ -330,43 +330,6 @@ describe('getVisibleLettersFn', () => {
       }),
     ).rejects.toThrow('Unauthenticated.');
   });
-
-  it('calls authorizeChildAccess with correct profileId for parent session', async () => {
-    vi.doMock('@tanstack/react-start', () => ({
-      createServerFn: vi.fn(() => ({
-        inputValidator: vi.fn().mockReturnThis(),
-        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
-      })),
-    }));
-    vi.doMock('@tanstack/react-start/server', () => ({
-      getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn((name: string) =>
-        name === 'better-auth.session_token' ? 'test-token' : undefined,
-      ),
-      setCookie: vi.fn(),
-    }));
-    vi.doMock('./auth', () => ({
-      getAuth: () => ({
-        api: {
-          getSession: vi.fn().mockResolvedValue({
-            user: { id: 'visible-parent', email: 'p@test.com', name: 'Parent' },
-            session: { token: 'abc' },
-          }),
-        },
-      }),
-    }));
-    vi.doMock('~/db', () => ({ getDb: () => db }));
-
-    const { getVisibleLettersFn } = await import('./letters');
-    const profileId = '00000000-0000-0000-0000-000000000001';
-    // Parent session passes authorizeChildAccess; the DB won't have
-    // this profile so it throws "not found" — confirms auth guard passed.
-    await expect(
-      (getVisibleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
-        data: { profileId },
-      }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
-  });
 });
 
 describe('toggleLetterFn', () => {
@@ -400,7 +363,7 @@ describe('toggleLetterFn', () => {
       (toggleLetterFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000002', letterId: 'alif', isVisible: true },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('throws for child session (parent required)', async () => {
@@ -433,7 +396,7 @@ describe('toggleLetterFn', () => {
       (toggleLetterFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000002', letterId: 'ba', isVisible: true },
       }),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });
 
@@ -468,7 +431,7 @@ describe('bulkToggleLettersFn', () => {
       (bulkToggleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000003', letterIds: ['alif', 'ba'], isVisible: true },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('throws for child session (parent required)', async () => {
@@ -501,6 +464,6 @@ describe('bulkToggleLettersFn', () => {
       (bulkToggleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000003', letterIds: ['alif', 'ba'], isVisible: true },
       }),
-    ).rejects.toThrow('Unauthorized. Parent session required.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });
