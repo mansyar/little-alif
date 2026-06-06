@@ -36,7 +36,7 @@ const MOCK_LL = {
   ERROR_UNKNOWN: () => 'Something went wrong.',
 } as const;
 
-const mockMutationFn = vi.fn();
+const mockMutationFn = vi.fn<() => Promise<unknown>>();
 
 // ── Tests ──────────────────────────────────────────────────────────────
 
@@ -68,7 +68,7 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      result.current.mutate(undefined);
+      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
     });
 
     expect(mockPushToast).toHaveBeenCalledTimes(1);
@@ -96,7 +96,7 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      result.current.mutate(undefined);
+      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
@@ -123,7 +123,7 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      result.current.mutate(undefined);
+      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
@@ -148,12 +148,37 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      result.current.mutate(undefined);
+      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
     });
 
     expect(mockPushToast).toHaveBeenCalledWith({
       variant: 'error',
       message: 'Something went wrong.',
+    });
+  });
+
+  it('maps TypeError: Failed to fetch to ERROR_NETWORK toast', async () => {
+    mockMutationFn.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+
+    const { useTypedMutation } = await import('./useTypedMutation');
+    const { result } = renderHook(
+      () =>
+        useTypedMutation(
+          {
+            mutationFn: () => mockMutationFn(),
+          },
+          MOCK_LL,
+        ),
+      { wrapper: createWrapper() },
+    );
+
+    await act(async () => {
+      await result.current.mutateAsync(undefined).catch(() => { /* expected rejection */ });
+    });
+
+    expect(mockPushToast).toHaveBeenCalledWith({
+      variant: 'error',
+      message: 'Connection lost.',
     });
   });
 
@@ -171,7 +196,7 @@ describe('useTypedMutation', () => {
     );
 
     await act(async () => {
-      result.current.mutate(undefined);
+      await result.current.mutateAsync(undefined);
     });
 
     expect(mockPushToast).not.toHaveBeenCalled();

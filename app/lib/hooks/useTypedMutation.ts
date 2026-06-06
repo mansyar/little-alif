@@ -1,5 +1,5 @@
 import { useMutation, type UseMutationOptions, type UseMutationResult } from '@tanstack/react-query';
-import { ServerFunctionError, ERROR_TOAST_VARIANT, type ErrorCode } from '~/lib/errors';
+import { ServerFunctionError, ERROR_TOAST_VARIANT } from '~/lib/errors';
 import { useUiStore } from '~/stores/ui-store';
 
 /**
@@ -28,12 +28,19 @@ export function useTypedMutation<TData, TVariables = void, TContext = unknown>(
 
   return useMutation({
     ...options,
-    onError: (error: Error, variables: TVariables, context: TContext | undefined) => {
+    onError: (error: Error, _variables: TVariables, _context: TContext | undefined) => {
       if (error instanceof ServerFunctionError) {
-        const variant = ERROR_TOAST_VARIANT[error.code as ErrorCode] ?? 'error';
+        const variant = ERROR_TOAST_VARIANT[error.code] ?? 'error';
         const resolveMessage = LL[error.userMessage];
         const message = typeof resolveMessage === 'function' ? resolveMessage() : error.userMessage;
         pushToast({ variant, message });
+      } else if (error instanceof TypeError && error.message.includes('fetch')) {
+        const networkResolver = LL.ERROR_NETWORK;
+        const networkMessage =
+          typeof networkResolver === 'function'
+            ? networkResolver()
+            : 'A network error occurred. Please check your connection.';
+        pushToast({ variant: 'error', message: networkMessage });
       } else {
         const fallbackResolver = LL.ERROR_UNKNOWN;
         const fallbackMessage =
