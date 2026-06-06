@@ -1,7 +1,7 @@
 # =============================================================================
 # Stage 1: Dependencies (all — dev needed for build)
 # =============================================================================
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN pnpm install --frozen-lockfile
 # =============================================================================
 # Stage 1b: Production dependencies only
 # =============================================================================
-FROM node:20-alpine AS deps-prod
+FROM node:24-alpine AS deps-prod
 
 WORKDIR /app
 
@@ -32,7 +32,7 @@ RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 # =============================================================================
 # Stage 2: Build
 # =============================================================================
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -52,7 +52,7 @@ RUN pnpm build
 # =============================================================================
 # Stage 3: Runner (production)
 # =============================================================================
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
