@@ -2,21 +2,23 @@
 
 ## Phase 1: Auth Functions Coverage (`app/server/auth-fns.test.ts`)
 
-- [ ] Task: Write tests for `buildChildSession` helper
-    - [ ] Test: returns null when cookie verification fails (invalid/tampered cookie)
-    - [ ] Test: returns null when profile not found in DB
-    - [ ] Test: returns session-like object with correct shape when valid
-    - [ ] Test: child session user has `isChild: true` and correct `childProfileId`
-- [ ] Task: Write tests for `registerFn` error handling
-    - [ ] Test: APIError is caught and re-thrown as plain Error
-    - [ ] Test: non-APIError exceptions pass through unchanged
-- [ ] Task: Write tests for `loginFn` error handling
-    - [ ] Test: APIError is caught and re-thrown as plain Error
-    - [ ] Test: non-APIError exceptions pass through unchanged
-- [ ] Task: Write tests for `enableChildMode` helper
-    - [ ] Test: returns `{ name, avatar }` for an owned profile
-    - [ ] Test: throws when profile not owned by user
-- [ ] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines
+- [x] Task: Write tests for `buildChildSession` helper
+    - [x] Test: returns null when cookie verification fails (invalid/tampered cookie)
+    - [x] Test: returns null when profile not found in DB
+    - [x] Test: returns session-like object with correct shape when valid
+    - [x] Test: child session user has `isChild: true` and correct `childProfileId`
+- [x] Task: Write tests for `registerFn` error handling
+    - [x] Test: APIError is caught and re-thrown as plain Error
+    - [x] Test: non-APIError exceptions pass through unchanged
+    - [x] Test: delegates to auth.api.signUpEmail with correct parameters
+- [x] Task: Write tests for `loginFn` error handling
+    - [x] Test: APIError is caught and re-thrown as plain Error
+    - [x] Test: non-APIError exceptions pass through unchanged
+    - [x] Test: delegates to auth.api.signInEmail with correct parameters
+- [x] Task: Write tests for `enableChildMode` helper
+    - [x] Test: returns `{ name, avatar }` for an owned profile
+    - [x] Test: throws when profile not owned by user
+- [x] Task: Run `pnpm test:coverage` and verify `auth-fns.ts` ≥80% stmts/branch/funcs/lines (8c785be)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Profiles Server Function Wrappers (`app/server/profiles.test.ts`)
