@@ -462,35 +462,32 @@ describe('enableChildMode', () => {
       verifyChildModeCookie: vi.fn(),
       signChildModeCookie: vi.fn(),
     }));
-    vi.doMock('~/db', () => ({ getDb: () => ({ __fakeDb: true }) }));
-    vi.doMock('./profiles', () => ({
-      getActiveProfile: vi.fn().mockResolvedValue({
-        id: 'profile-1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-      }),
-    }));
+    const mockDb = {
+      select: vi.fn().mockReturnThis(),
+      from: vi.fn().mockReturnThis(),
+      where: vi.fn().mockResolvedValue([{ name: 'Aisyah', avatar: 'alif-lamp' }]),
+    };
+    vi.doMock('~/db', () => ({ getDb: () => mockDb }));
 
     const { enableChildMode } = await import('./auth-fns');
-    const result = await enableChildMode({} as never, 'user-1', 'profile-1');
+    const result = await enableChildMode(mockDb as never, 'user-1', 'profile-1');
     expect(result).toEqual({ name: 'Aisyah', avatar: 'alif-lamp' });
   });
 
-  it('throws when profile not owned by user (via getActiveProfile)', async () => {
+  it('throws when profile not owned by user', async () => {
     vi.doMock('~/lib/utils/child-mode.server', () => ({
       verifyChildModeCookie: vi.fn(),
       signChildModeCookie: vi.fn(),
     }));
-    vi.doMock('~/db', () => ({ getDb: () => ({ __fakeDb: true }) }));
-    vi.doMock('./profiles', () => ({
-      getActiveProfile: vi
-        .fn()
-        .mockRejectedValue(new Error('Profile not found or does not belong to you.')),
-    }));
+    const mockDb = {
+      select: vi.fn().mockReturnThis(),
+      from: vi.fn().mockReturnThis(),
+      where: vi.fn().mockResolvedValue([]),
+    };
+    vi.doMock('~/db', () => ({ getDb: () => mockDb }));
 
     const { enableChildMode } = await import('./auth-fns');
-    await expect(enableChildMode({} as never, 'user-1', 'other-profile')).rejects.toThrow(
+    await expect(enableChildMode(mockDb as never, 'user-1', 'other-profile')).rejects.toThrow(
       'Profile not found or does not belong to you.',
     );
   });
@@ -570,15 +567,12 @@ describe('enableChildModeFn', () => {
       verifyChildModeCookie: vi.fn(),
       signChildModeCookie: vi.fn().mockReturnValue('signed-cookie-value'),
     }));
-    vi.doMock('~/db', () => ({ getDb: () => ({}) }));
-    vi.doMock('./profiles', () => ({
-      getActiveProfile: vi.fn().mockResolvedValue({
-        id: 'profile-1',
-        name: 'Aisyah',
-        avatar: 'alif-lamp',
-        vowelMode: 'fathah',
-      }),
-    }));
+    const mockDb = {
+      select: vi.fn().mockReturnThis(),
+      from: vi.fn().mockReturnThis(),
+      where: vi.fn().mockResolvedValue([{ name: 'Aisyah', avatar: 'alif-lamp' }]),
+    };
+    vi.doMock('~/db', () => ({ getDb: () => mockDb }));
 
     const { enableChildModeFn } = await import('./auth-fns');
     const result = await (

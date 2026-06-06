@@ -4,10 +4,9 @@ import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
 import { getDb, type DbClient } from '~/db';
 import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { profiles } from '~/db/schema';
 import { getAuth } from './auth';
-import { getActiveProfile } from './profiles';
 
 /**
  * Pure helper — derives a display name from the email local-part.
@@ -214,15 +213,24 @@ export function authorizeChildAccess(
 
 /**
  * Validate profile ownership and return the data needed to sign a child-mode
- * cookie. Reuses `getActiveProfile` from the profiles module to ensure
- * consistent ownership checks.
+ * cookie. Uses inline profile query to avoid a circular dependency with the
+ * profiles module.
  */
 export async function enableChildMode(
   db: DbClient,
   userId: string,
   profileId: string,
 ): Promise<{ name: string; avatar: string }> {
-  const profile = await getActiveProfile(db, userId, profileId);
+  const profile = await db
+    .select({ name: profiles.name, avatar: profiles.avatar })
+    .from(profiles)
+    .where(and(eq(profiles.id, profileId), eq(profiles.userId, userId)))
+    .then((rows) => rows[0] ?? null);
+
+  if (!profile) {
+    throw new Error('Profile not found or does not belong to you.');
+  }
+
   return { name: profile.name, avatar: profile.avatar };
 }
 
