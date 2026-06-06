@@ -202,6 +202,30 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​m​u​s​t​ ​b​e​ ​a​t​ ​l​e​a​s​t​ ​8​ ​c​h​a​r​a​c​t​e​r​s​.
 	 */
 	ERROR_SHORT_PASSWORD: string
+	/**
+	 * P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​i​n​p​u​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_VALIDATION: string
+	/**
+	 * P​l​e​a​s​e​ ​s​i​g​n​ ​i​n​ ​a​g​a​i​n​ ​t​o​ ​c​o​n​t​i​n​u​e​.
+	 */
+	ERROR_AUTH: string
+	/**
+	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​t​a​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​f​o​u​n​d​.
+	 */
+	ERROR_NOT_FOUND: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​l​i​m​i​t​.
+	 */
+	ERROR_LIMIT_EXCEEDED: string
+	/**
+	 * A​ ​n​e​t​w​o​r​k​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​c​o​n​n​e​c​t​i​o​n​.
+	 */
+	ERROR_NETWORK: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_UNKNOWN: string
 }
 
 export type TranslationFunctions = {
@@ -393,6 +417,30 @@ export type TranslationFunctions = {
 	 * Password must be at least 8 characters.
 	 */
 	ERROR_SHORT_PASSWORD: () => LocalizedString
+	/**
+	 * Please check your input and try again.
+	 */
+	ERROR_VALIDATION: () => LocalizedString
+	/**
+	 * Please sign in again to continue.
+	 */
+	ERROR_AUTH: () => LocalizedString
+	/**
+	 * The requested data could not be found.
+	 */
+	ERROR_NOT_FOUND: () => LocalizedString
+	/**
+	 * You have reached the maximum limit.
+	 */
+	ERROR_LIMIT_EXCEEDED: () => LocalizedString
+	/**
+	 * A network error occurred. Please check your connection.
+	 */
+	ERROR_NETWORK: () => LocalizedString
+	/**
+	 * Something went wrong. Please try again.
+	 */
+	ERROR_UNKNOWN: () => LocalizedString
 }
 
 export type Formatters = {}

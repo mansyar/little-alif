@@ -8,18 +8,18 @@
 
 ## Phase 1: Error Type System & i18n Keys
 
-- [ ] Task: Create Error Type System (`app/lib/errors/index.ts`)
+- [x] Task: Create Error Type System (`app/lib/errors/index.ts`)
     - [ ] Define `ErrorCode` string enum: VALIDATION, AUTH, NOT_FOUND, LIMIT_EXCEEDED, NETWORK, UNKNOWN
     - [ ] Define `ServerFunctionError` class extending `Error` with `code`, `userMessage`, and optional `cause`
     - [ ] Define `ERROR_TOAST_VARIANT` mapping object (ErrorCode → 'error' | 'info')
     - [ ] Write unit tests: class instantiation, instanceof check, code property, cause propagation, UNKNOWN fallback
     - [ ] Verify: `pnpm test` passes for new error tests
-- [ ] Task: Add 6 i18n error keys (EN + ID)
+- [x] Task: Add 6 i18n error keys (EN + ID)
     - [ ] Add keys to `app/lib/i18n/en/index.ts`: ERROR_VALIDATION, ERROR_AUTH, ERROR_NOT_FOUND, ERROR_LIMIT_EXCEEDED, ERROR_NETWORK, ERROR_UNKNOWN
     - [ ] Add keys to `app/lib/i18n/id/index.ts`: Indonesian translations for all 6
     - [ ] Run `pnpm i18n` to regenerate type files
     - [ ] Verify: `pnpm typecheck` passes with new keys
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ---
 

@@ -4,7 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Error Classification System**
+- [~] **Track: Error Classification System**
 *Link: [./tracks/error-classification_20260606/](./tracks/error-classification_20260606/)*
 
 
