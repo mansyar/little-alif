@@ -4,6 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Infrastructure & Audio Polish**
-*Link: [./tracks/infra-audio-polish_20260606/](./tracks/infra-audio-polish_20260606/)*
+
 
