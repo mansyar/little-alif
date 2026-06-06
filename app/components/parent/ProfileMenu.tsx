@@ -2,12 +2,11 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { logoutFn } from '~/server/auth-fns';
 import { listProfilesFn } from '~/server/profiles';
 import { useI18nContext } from '~/lib/i18n';
-import { useUiStore } from '~/stores/ui-store';
+import { useTypedMutation } from '~/lib/hooks/useTypedMutation';
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
 import { AVATAR_MAP } from './avatars';
 
@@ -15,7 +14,6 @@ export function ProfileMenu() {
   const { LL } = useI18nContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const pushToast = useUiStore((state) => state.pushToast);
   const [signOutOpen, setSignOutOpen] = useState(false);
 
   const { data: profiles } = useQuery({
@@ -23,19 +21,13 @@ export function ProfileMenu() {
     queryFn: () => listProfilesFn(),
   });
 
-  const logoutMutation = useMutation({
+  const logoutMutation = useTypedMutation({
     mutationFn: () => logoutFn(),
     onSuccess: () => {
       void queryClient.clear();
       window.location.href = '/login';
     },
-    onError: (err: Error) => {
-      pushToast({
-        variant: 'error',
-        message: err instanceof Error ? err.message : LL.ERROR_GENERIC(),
-      });
-    },
-  });
+  }, LL);
 
   function handleSignOut() {
     logoutMutation.mutate();

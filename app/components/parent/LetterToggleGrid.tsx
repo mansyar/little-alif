@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Switch from '@radix-ui/react-switch';
 import { getVisibleLettersFn, toggleLetterFn, bulkToggleLettersFn } from '~/server/letters';
 import { LETTER_IDS } from '~/lib/constants/letters';
@@ -8,7 +8,7 @@ import { useI18nContext } from '~/lib/i18n';
 import type { VisibleLetter } from '~/server/letters';
 import { useDebouncedCallback } from '~/lib/utils/useDebouncedCallback';
 import type { VowelMode } from '~/lib/utils/harakat';
-import { useUiStore } from '~/stores/ui-store';
+import { useTypedMutation } from '~/lib/hooks/useTypedMutation';
 import { HarakatSelector } from './HarakatSelector';
 
 interface LetterToggleGridProps {
@@ -19,8 +19,6 @@ interface LetterToggleGridProps {
 export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps) {
   const { LL } = useI18nContext();
   const queryClient = useQueryClient();
-  const pushToast = useUiStore((state) => state.pushToast);
-
   const {
     data: letters,
     isLoading,
@@ -31,17 +29,14 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     queryFn: () => getVisibleLettersFn({ data: { profileId } }),
   });
 
-  const toggleMutation = useMutation({
+  const toggleMutation = useTypedMutation({
     mutationFn: ({ letterId, isVisible }: { letterId: LetterId; isVisible: boolean }) =>
       toggleLetterFn({ data: { profileId, letterId, isVisible } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
-    onError: (err: Error) => {
-      pushToast({ variant: 'error', message: err.message ?? LL.ERROR_GENERIC() });
-    },
-  });
+  }, LL);
 
   // Debounce individual toggles: rapid clicks produce a single server call after 300ms
   const debouncedToggle = useDebouncedCallback(
@@ -55,17 +50,14 @@ export function LetterToggleGrid({ profileId, vowelMode }: LetterToggleGridProps
     300,
   );
 
-  const bulkMutation = useMutation({
+  const bulkMutation = useTypedMutation({
     mutationFn: ({ isVisible }: { isVisible: boolean }) =>
       bulkToggleLettersFn({ data: { profileId, letterIds: [...LETTER_IDS], isVisible } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['visibleLetters', profileId] });
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
-    onError: (err: Error) => {
-      pushToast({ variant: 'error', message: err.message ?? LL.ERROR_GENERIC() });
-    },
-  });
+  }, LL);
 
   if (isLoading) {
     return (

@@ -1,10 +1,10 @@
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { updateProfileFn } from '~/server/profiles';
 import { VOWEL_MODES } from '~/lib/utils/harakat';
 import type { VowelMode } from '~/lib/utils/harakat';
 import { useI18nContext } from '~/lib/i18n';
-import { useUiStore } from '~/stores/ui-store';
+import { useTypedMutation } from '~/lib/hooks/useTypedMutation';
 
 interface HarakatSelectorProps {
   profileId: string;
@@ -14,7 +14,6 @@ interface HarakatSelectorProps {
 export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelectorProps) {
   const queryClient = useQueryClient();
   const { LL } = useI18nContext();
-  const pushToast = useUiStore((state) => state.pushToast);
 
   const LABELS: Record<VowelMode, string> = {
     none: LL.HARAKAT_PLAIN(),
@@ -23,15 +22,12 @@ export function HarakatSelector({ profileId, currentVowelMode }: HarakatSelector
     dammah: LL.HARAKAT_DAMMAH(),
   };
 
-  const updateMutation = useMutation({
+  const updateMutation = useTypedMutation({
     mutationFn: (vowelMode: VowelMode) => updateProfileFn({ data: { profileId, vowelMode } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
     },
-    onError: (err: Error) => {
-      pushToast({ variant: 'error', message: err.message ?? 'Could not update vowel mode.' });
-    },
-  });
+  }, LL);
 
   return (
     <div className="mb-4">

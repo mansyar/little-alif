@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
+import { ServerFunctionError, ErrorCode } from '~/lib/errors';
+import { useUiStore } from '~/stores/ui-store';
 
 const mockUpdateProfile = vi.fn();
 let queryClient: QueryClient;
@@ -19,6 +21,8 @@ vi.mock('~/lib/i18n', () => ({
       HARAKAT_FATHAH: () => 'Fathah' as const,
       HARAKAT_KASRAH: () => 'Kasrah' as const,
       HARAKAT_DAMMAH: () => 'Dammah' as const,
+      ERROR_VALIDATION: () => 'Check your input and try again.',
+      ERROR_UNKNOWN: () => 'Something went wrong.',
     },
   }),
 }));
@@ -36,6 +40,7 @@ describe('HarakatSelector', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    useUiStore.setState({ toasts: [] });
   });
 
   it('renders all four vowel mode options', async () => {
@@ -88,8 +93,11 @@ describe('HarakatSelector', () => {
     });
   });
 
-  it('handles update failure gracefully via error toast', async () => {
-    mockUpdateProfile.mockRejectedValueOnce(new Error('Update failed'));
+  it('shows error toast with ServerFunctionError message and info variant for VALIDATION code', async () => {
+    mockUpdateProfile.mockRejectedValueOnce(
+      new ServerFunctionError(ErrorCode.VALIDATION, 'ERROR_VALIDATION'),
+    );
+    useUiStore.setState({ toasts: [] });
     const { HarakatSelector } = await import('./HarakatSelector');
     render(<HarakatSelector profileId="profile-1" currentVowelMode="fathah" />, {
       wrapper: createWrapper(),
@@ -99,9 +107,31 @@ describe('HarakatSelector', () => {
     const kasrahItem = screen.getByLabelText('Kasrah');
     await user.click(kasrahItem);
 
-    // Should not throw to the user — error is swallowed by toast
-    await vi.waitFor(() => {
-      expect(mockUpdateProfile).toHaveBeenCalled();
+    await waitFor(() => {
+      const toasts = useUiStore.getState().toasts;
+      expect(toasts).toHaveLength(1);
+      expect(toasts[0]!.message).toBe('Check your input and try again.');
+      expect(toasts[0]!.variant).toBe('info');
+    });
+  });
+
+  it('handles update failure gracefully via unknown error toast', async () => {
+    mockUpdateProfile.mockRejectedValueOnce(new Error('Update failed'));
+    useUiStore.setState({ toasts: [] });
+    const { HarakatSelector } = await import('./HarakatSelector');
+    render(<HarakatSelector profileId="profile-1" currentVowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
+
+    const user = userEvent.setup();
+    const kasrahItem = screen.getByLabelText('Kasrah');
+    await user.click(kasrahItem);
+
+    await waitFor(() => {
+      const toasts = useUiStore.getState().toasts;
+      expect(toasts).toHaveLength(1);
+      expect(toasts[0]!.message).toBe('Something went wrong.');
+      expect(toasts[0]!.variant).toBe('error');
     });
   });
 

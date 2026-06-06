@@ -1,4 +1,4 @@
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions, type UseMutationResult } from '@tanstack/react-query';
 import { ServerFunctionError, ERROR_TOAST_VARIANT, type ErrorCode } from '~/lib/errors';
 import { useUiStore } from '~/stores/ui-store';
 
@@ -20,10 +20,10 @@ import { useUiStore } from '~/stores/ui-store';
  * mutation.mutate();
  * ```
  */
-export function useTypedMutation<TData, TVariables, TContext>(
+export function useTypedMutation<TData, TVariables = void, TContext = unknown>(
   options: Omit<UseMutationOptions<TData, Error, TVariables, TContext>, 'onError'>,
   LL: Record<string, () => string>,
-) {
+): UseMutationResult<TData, Error, TVariables, TContext> {
   const pushToast = useUiStore((state) => state.pushToast);
 
   return useMutation({

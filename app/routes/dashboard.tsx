@@ -6,17 +6,17 @@ import {
   useMatchRoute,
   useNavigate,
 } from '@tanstack/react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { validateSessionFn } from '~/server/auth-fns';
 import { deleteProfileFn } from '~/server/profiles';
 import { useI18nContext } from '~/lib/i18n';
+import { useTypedMutation } from '~/lib/hooks/useTypedMutation';
 import { DashboardHeader } from '~/components/parent/DashboardHeader';
 import { ProfileList } from '~/components/parent/ProfileList';
 import { ProfileEditor } from '~/components/parent/ProfileEditor';
 import { ConfirmDialog } from '~/components/ui/ConfirmDialog';
 import { ErrorBoundary } from '~/components/ui/ErrorBoundary';
 import { useAuthStore } from '~/stores/auth-store';
-import { useUiStore } from '~/stores/ui-store';
 import type { AvatarKey } from '~/db/schema';
 
 interface ProfileCard {
@@ -44,22 +44,18 @@ function DashboardPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const setChildMode = useAuthStore((state) => state.setChildMode);
-  const pushToast = useUiStore((state) => state.pushToast);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingProfile, setEditingProfile] = useState<ProfileCard | undefined>(undefined);
   const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
   const deleteConfirmOpen = deleteProfileId !== null;
 
-  const deleteMutation = useMutation({
+  const deleteMutation = useTypedMutation({
     mutationFn: (profileId: string) => deleteProfileFn({ data: { profileId } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['profiles'] });
       setDeleteProfileId(null);
     },
-    onError: (err: Error) => {
-      pushToast({ variant: 'error', message: err.message ?? 'Could not save changes.' });
-    },
-  });
+  }, LL);
 
   // When a child route (e.g. /dashboard/profiles/$id/letters) is active,
   // render just the <Outlet /> so the child's component appears instead.

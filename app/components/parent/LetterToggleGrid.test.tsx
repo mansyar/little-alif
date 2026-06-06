@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import type { VisibleLetter } from '~/server/letters';
 import { LETTER_IDS } from '~/lib/constants/letters';
 import { useUiStore } from '~/stores/ui-store';
+import { ServerFunctionError, ErrorCode } from '~/lib/errors';
 
 const mockProfileId = 'test-profile-id';
 
@@ -85,6 +86,8 @@ vi.mock('~/lib/i18n', () => ({
       HARAKAT_FATHAH: () => 'Fathah',
       HARAKAT_KASRAH: () => 'Kasrah',
       HARAKAT_DAMMAH: () => 'Dammah',
+      ERROR_AUTH: () => 'Please sign in again.',
+      ERROR_UNKNOWN: () => 'Something went wrong.',
     },
   }),
 }));
@@ -177,8 +180,10 @@ describe('LetterToggleGrid', () => {
     });
   });
 
-  it('pushes error toast when toggleLetterFn fails', async () => {
-    mockToggleLetter.mockRejectedValue(new Error('Toggle failed'));
+  it('shows error toast with ServerFunctionError message when toggleLetterFn returns classified error', async () => {
+    mockToggleLetter.mockRejectedValue(
+      new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH'),
+    );
 
     const { LetterToggleGrid } = await import('./LetterToggleGrid');
     render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
@@ -189,11 +194,30 @@ describe('LetterToggleGrid', () => {
     const user = userEvent.setup();
     await user.click(switches[0]!);
 
-    // Wait for debounce to trigger the mutation and error toast
     await waitFor(() => {
       const toasts = useUiStore.getState().toasts;
       expect(toasts).toHaveLength(1);
-      expect(toasts[0]!.message).toBe('Toggle failed');
+      expect(toasts[0]!.message).toBe('Please sign in again.');
+      expect(toasts[0]!.variant).toBe('error');
+    });
+  });
+
+  it('shows unknown error toast when toggleLetterFn fails with plain Error', async () => {
+    mockToggleLetter.mockRejectedValue(new Error('Network failure'));
+
+    const { LetterToggleGrid } = await import('./LetterToggleGrid');
+    render(<LetterToggleGrid profileId={mockProfileId} vowelMode="fathah" />, {
+      wrapper: createWrapper(),
+    });
+
+    const switches = await screen.findAllByRole('switch');
+    const user = userEvent.setup();
+    await user.click(switches[0]!);
+
+    await waitFor(() => {
+      const toasts = useUiStore.getState().toasts;
+      expect(toasts).toHaveLength(1);
+      expect(toasts[0]!.message).toBe('Something went wrong.');
       expect(toasts[0]!.variant).toBe('error');
     });
   });
