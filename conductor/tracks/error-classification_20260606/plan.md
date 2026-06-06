@@ -51,7 +51,7 @@
 
 ---
 
-## Phase 3: Client-Side Integration
+## Phase 3: Client-Side Integration [checkpoint: 62e5d44]
 
 - [x] Task: Create `useTypedMutation` hook (`app/lib/hooks/useTypedMutation.ts`)
     - [x] Thin wrapper around TanStack Query `useMutation`
