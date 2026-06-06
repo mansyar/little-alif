@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.13 (Error Classification System complete)
+**Version:** 1.14 (Security Hardening complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -32,6 +32,7 @@
 | 20  | Code Quality Polish                  | ✅ Implemented            | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                                                                                                                                                                                                                                  |
 | 21  | Infrastructure & Audio Polish        | ✅ Implemented            | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                                                                                                                                                                                                                    |
 | 22  | Error Classification System          | ✅ Implemented            | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                                                                                                                                                                                                                                |
+| 23  | Security Hardening                   | ✅ Implemented            | [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)                                                                                                                                                                                                                                             |
 
 ---
 
@@ -182,10 +183,10 @@ beforeLoad →
 ```
 Name: child_mode
 Value: signed({ profileId: string, expires: number })
-HttpOnly: false (readable by JS for UX hints)
+HttpOnly: true (prevents client-side JS access — store tracks childProfileId via server response)
 Secure: true in production
 SameSite: Lax
-Max-Age: indefinite (no expiry — cleared on parent logout)
+Max-Age: 2,592,000 (30 days)
 ```
 
 ---
@@ -1722,7 +1723,7 @@ This prevents lint/format tools from fighting with the typesafe-i18n generator's
 
 ### Dockerfile (`docker/Dockerfile`)
 
-Multi-stage build: deps → build → runner. Three distinct stages minimize the final image size.
+Multi-stage build: deps → build → runner. Three distinct stages minimize the final image size. Runner stage uses a non-root user (`app:1001`) for security.
 
 ```dockerfile
 # Stage 1: Dependencies
@@ -1782,6 +1783,10 @@ volumes:
 ### server-entry.mjs (`docker/server-entry.mjs`)
 
 A custom Node.js HTTP server that serves static assets from `public/` and delegates all other requests to the TanStack Start SSR handler. Ships as an ES module (`.mjs`) to avoid CommonJS/ESM conflicts.
+
+**Security features (T-19):**
+- Path traversal prevention: resolved path must stay within `CLIENT_DIR` (returns 403 otherwise)
+- Security headers on all responses: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-XSS-Protection: 0`, `Content-Security-Policy` (self + Google Fonts + unsafe-inline/eval for TanStack Start hydration)
 
 ### Environment Variables
 
@@ -1979,6 +1984,76 @@ All server function handlers throw `ServerFunctionError` with appropriate codes:
 - `useTypedMutation` wraps `useMutation`, doesn't replace it
 - Network errors detected client-side via `TypeError: Failed to fetch` → `NETWORK` code
 - Backward compatible — old `Error` subclasses still work, uncaught errors fall through to `UNKNOWN`
+
+---
+
+## 16. Security Hardening (T-19)
+
+Security hardening addressing vulnerabilities identified in the 2026-06-07 audit. Covers Docker deployment, authentication, database schema, and client-side security.
+
+### Path Traversal Prevention
+
+`docker/server-entry.mjs` resolves the file path and verifies it stays within `CLIENT_DIR` before serving. Returns 403 for any path that escapes the allowed directory.
+
+### Child-Mode Cookie Hardening
+
+- `httpOnly: true` — prevents client-side JS access (store tracks `childProfileId` via server function response)
+- `secure: true` in production
+- `maxAge: 2,592,000` (30 days, reduced from 365 days)
+
+### HMAC Secret Fail-Fast
+
+`getSecret()` in `app/lib/utils/child-mode.server.ts` throws immediately if neither `CHILD_MODE_SECRET` nor `BETTER_AUTH_SECRET` is set. Prevents silent misconfiguration where cookies are signed with an empty string.
+
+### Rate Limiting
+
+In-memory rate limiter (`app/lib/utils/rate-limit.ts`) applied to `registerFn` and `loginFn`:
+
+- 5 attempts per minute per IP
+- IP extracted from `x-forwarded-for` header or `req.socket.remoteAddress`
+- Returns `ServerFunctionError(ErrorCode.AUTH)` on limit exceeded
+
+No external dependencies (Redis, etc.) — appropriate for single-parent deployment.
+
+### Security Headers
+
+Added to all responses in `docker/server-entry.mjs`:
+
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `X-XSS-Protection: 0`
+- `Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; connect-src 'self'`
+
+> TanStack Start's SSR + hydration requires `'unsafe-inline'` and `'unsafe-eval'` for scripts. This is a known limitation of CSP with Vite-based frameworks.
+
+### Open Redirect Prevention
+
+`login.tsx` `validateSearch` validates the `redirect` parameter:
+
+- Must start with `/`
+- Must not start with `//` (prevents `//evil.com` redirects)
+- Falls back to `/dashboard` if invalid
+
+### Docker Non-Root User
+
+Runner stage creates `app` user (UID 1001) and runs as non-root:
+
+```dockerfile
+RUN addgroup -g 1001 -S app && adduser -S app -u 1001 -G app
+RUN chown -R app:app /app
+USER app
+```
+
+### Database Schema Improvements
+
+- `profiles.userId` now has explicit FK constraint: `.references(() => user.id, { onDelete: 'cascade' })`
+- Added index `idx_profiles_user_id` on `profiles.userId`
+
+### Accessibility Improvements
+
+- `--color-text-muted` changed from `#8a8a9a` to `#6b6b7b` (~4.6:1 contrast on warm background) for WCAG AA compliance
+- Added `@media (prefers-reduced-motion: reduce)` media query to disable animations
 
 ---
 

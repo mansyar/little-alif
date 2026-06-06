@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.13 (Error Classification System complete)
+**Version:** 1.14 (Security Hardening complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -47,6 +47,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Code Quality Polish**               | ✅ Complete | Canonical `LETTER_IDS`/`LetterId`/`LETTER_BG_COLORS` extracted to `app/lib/constants/letters.ts`. Reading practice actions localized with 4 i18n keys (EN + ID). See [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                                                                   |
 | **Infrastructure & Audio Polish**     | ✅ Complete | Circular dependency `auth-fns.ts` ↔ `profiles.ts` resolved. Docker health check endpoint (`/api/health`) with compose healthcheck. GCP audio generation setup documented in `docs/audio-setup.md`. See [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                   |
 | **Error Classification System**       | ✅ Complete | Typed error codes (`ServerFunctionError` with `ErrorCode` enum) replacing generic `Error('message')` in all server functions. `useTypedMutation` hook auto-dispatches contextual, bilingual toasts. 6 i18n error keys (EN + ID). See [`error-classification_20260606`](../conductor/archive/error-classification_20260606/) |
+| **Security Hardening**                | ✅ Complete | Path traversal fix, hardened child-mode cookie (httpOnly + secure), HMAC fail-fast, rate limiting on auth endpoints, security headers (CSP, X-Frame-Options), open redirect prevention, Docker non-root user, FK constraint on profiles.userId, WCAG AA contrast fix, prefers-reduced-motion. See [`t19-security-hardening`](../conductor/archive/t19-security-hardening/) |
 
 ---
 
@@ -316,7 +317,7 @@ CREATE INDEX idx_letters_order ON letters(display_order);
 | **First Paint**      | Time to first meaningful paint (empty cache)                                                                                        | < 2s                |
 | **Data Persistence** | SQLite file survives container rebuilds                                                                                             | Docker volume mount |
 | **Accessibility**    | High contrast; respects prefers-reduced-motion; Radix UI primitives ensure keyboard navigation and screen reader support by default | WCAG AA             |
-| **Security**         | All parent routes protected; CSRF protection via Better Auth; session cookies HttpOnly + Secure                                     | OWASP Top 10        |
+| **Security**         | All parent routes protected; CSRF protection via Better Auth; session cookies HttpOnly + Secure; child-mode cookie HttpOnly + Secure; rate limiting on auth endpoints (5/min per IP); security headers (CSP, X-Frame-Options, X-Content-Type-Options); path traversal prevention; open redirect validation | OWASP Top 10        |
 
 ---
 
