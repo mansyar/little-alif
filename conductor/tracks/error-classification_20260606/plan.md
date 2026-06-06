@@ -33,7 +33,7 @@
     - [ ] Update Better Auth `APIError` catch to throw `ServerFunctionError('AUTH', 'ERROR_AUTH', err)`
     - [ ] Write/update unit tests verifying ServerFunctionError is thrown with correct codes
     - [ ] Verify: `pnpm test` passes
-- [ ] Task: Update `app/server/profiles.ts`
+- [x] Task: Update `app/server/profiles.ts`
     - [ ] Replace `throw new Error('Maximum of 4 child profiles reached.')` → `ServerFunctionError('LIMIT_EXCEEDED', 'ERROR_LIMIT_EXCEEDED')`
     - [ ] Replace `throw new Error('Failed to create profile.')` → `ServerFunctionError('UNKNOWN', 'ERROR_UNKNOWN')`
     - [ ] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`

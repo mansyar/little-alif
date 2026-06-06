@@ -187,7 +187,7 @@ describe('createProfile', () => {
         name: 'TooMany',
         avatar: 'ba-boat',
       }),
-    ).rejects.toThrow('Maximum of 4 child profiles reached.');
+    ).rejects.toMatchObject({ code: 'LIMIT_EXCEEDED', userMessage: 'ERROR_LIMIT_EXCEEDED' });
   });
 
   it('defaults vowelMode to fathah', async () => {
@@ -246,7 +246,7 @@ describe('updateProfile', () => {
         profileId: profile.id,
         name: 'Hacked',
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
   });
 });
 
@@ -302,8 +302,8 @@ describe('deleteProfile', () => {
       avatar: 'ba-boat',
     });
 
-    await expect(deleteProfile(db, 'non-owner-del', profile.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(deleteProfile(db, 'non-owner-del', profile.id)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 });
@@ -339,15 +339,15 @@ describe('getActiveProfile (pure helper)', () => {
       avatar: 'ba-boat',
     });
 
-    await expect(getActiveProfile(db, 'someone-else', profile.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getActiveProfile(db, 'someone-else', profile.id)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 
   it('throws when the profile id does not exist', async () => {
     const fakeId = '123e4567-e89b-12d3-a456-426614174000';
-    await expect(getActiveProfile(db, userId, fakeId)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getActiveProfile(db, userId, fakeId)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 
@@ -768,7 +768,7 @@ describe('getActiveProfileFn', () => {
       (getActiveProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000003' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 
   it('calls authorizeChildAccess with correct profileId for parent session', async () => {
@@ -806,7 +806,7 @@ describe('getActiveProfileFn', () => {
       (getActiveProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId },
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
   });
 });
 

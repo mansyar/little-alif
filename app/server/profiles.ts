@@ -12,6 +12,7 @@ import {
   getActiveProfileSchema,
 } from '~/lib/validations/profiles';
 import type { CreateProfileInput, UpdateProfileInput } from '~/lib/validations/profiles';
+import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { authorizeChildAccess, requireParentSession, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
@@ -53,7 +54,7 @@ export async function createProfile(db: DbClient, userId: string, data: CreatePr
     .then((rows) => rows[0]?.count ?? 0);
 
   if (existingCount >= 4) {
-    throw new Error('Maximum of 4 child profiles reached.');
+    throw new ServerFunctionError(ErrorCode.LIMIT_EXCEEDED, 'ERROR_LIMIT_EXCEEDED');
   }
 
   const [inserted] = await db
@@ -66,7 +67,7 @@ export async function createProfile(db: DbClient, userId: string, data: CreatePr
     .returning();
 
   if (!inserted) {
-    throw new Error('Failed to create profile.');
+    throw new ServerFunctionError(ErrorCode.UNKNOWN, 'ERROR_UNKNOWN');
   }
 
   // Seed 28 letter_toggles (all OFF by default)
@@ -91,7 +92,7 @@ export async function updateProfile(db: DbClient, userId: string, data: UpdatePr
     .then((rows) => rows[0] ?? null);
 
   if (!existing) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 
   const updateData: Record<string, string | SQL<unknown> | undefined> = {};
@@ -127,7 +128,7 @@ export async function deleteProfile(db: DbClient, userId: string, profileId: str
     .then((rows) => rows[0] ?? null);
 
   if (!existing) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 
   await db.delete(profiles).where(eq(profiles.id, profileId));
@@ -154,7 +155,7 @@ export async function getActiveProfile(db: DbClient, userId: string, profileId: 
     .then((rows) => rows[0] ?? null);
 
   if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 
   return profile;
@@ -254,7 +255,7 @@ export const getActiveProfileFn = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     if (session === null) {
-      throw new Error('Unauthenticated.');
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
     const db = getDb();
