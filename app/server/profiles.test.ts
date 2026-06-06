@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeAll, afterAll, beforeEach } from 'vitest';
+import { describe, expect, it, vi, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { eq } from 'drizzle-orm';
@@ -433,5 +433,419 @@ describe('listProfilesForSwitch (pure helper)', () => {
     const result = await listProfilesForSwitch(db, userId);
     expect(result).toHaveLength(1);
     expect(result[0]!.name).toBe('Mine');
+  });
+});
+
+// ─── Server Function Wrapper Tests ─────────────────────────────────────
+
+describe('listProfilesFn', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for child session (parent required)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: () => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
+            session: { token: '' },
+          }),
+        },
+      }),
+    }));
+
+    const { listProfilesFn } = await import('./profiles');
+    await expect(
+      (listProfilesFn as unknown as () => Promise<unknown>)(),
+    ).rejects.toThrow('Unauthorized. Parent session required.');
+  });
+
+  it('delegates to listProfiles for valid parent session', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: () => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'list-profiles-parent', email: 'p@test.com', name: 'Parent' },
+            session: { token: 'abc' },
+          }),
+        },
+      }),
+    }));
+    vi.doMock('~/db', () => ({ getDb: () => db }));
+
+    const { listProfilesFn } = await import('./profiles');
+    const result = await (listProfilesFn as unknown as () => Promise<unknown>)();
+    expect(result).toEqual([]);
+  });
+});
+
+describe('createProfileFn', () => {
+  const wrapperUserId = 'wrapper-create-profile';
+
+  beforeEach(async () => {
+    vi.resetModules();
+    await db.delete(profiles).where(eq(profiles.userId, wrapperUserId));
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for unauthenticated session (null)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn(),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: { getSession: vi.fn().mockResolvedValue(null) },
+      }),
+    }));
+
+    const { createProfileFn } = await import('./profiles');
+    await expect(
+      (createProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { name: 'Test', avatar: 'ba-boat' },
+      }),
+    ).rejects.toThrow('Unauthenticated.');
+  });
+
+  it('throws for child session (parent required)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
+            session: { token: '' },
+          }),
+        },
+      }),
+    }));
+
+    const { createProfileFn } = await import('./profiles');
+    await expect(
+      (createProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { name: 'Test', avatar: 'ba-boat' },
+      }),
+    ).rejects.toThrow('Unauthorized. Parent session required.');
+  });
+});
+
+describe('updateProfileFn', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for unauthenticated session (null)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn(),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: { getSession: vi.fn().mockResolvedValue(null) },
+      }),
+    }));
+
+    const { updateProfileFn } = await import('./profiles');
+    await expect(
+      (updateProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { profileId: '00000000-0000-0000-0000-000000000001', name: 'NewName' },
+      }),
+    ).rejects.toThrow('Unauthenticated.');
+  });
+
+  it('throws for child session (parent required)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
+            session: { token: '' },
+          }),
+        },
+      }),
+    }));
+
+    const { updateProfileFn } = await import('./profiles');
+    await expect(
+      (updateProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { profileId: '00000000-0000-0000-0000-000000000001', name: 'NewName' },
+      }),
+    ).rejects.toThrow('Unauthorized. Parent session required.');
+  });
+});
+
+describe('deleteProfileFn', () => {
+  const wrapperUserId = 'wrapper-delete-profile';
+
+  beforeEach(async () => {
+    vi.resetModules();
+    await db.delete(profiles).where(eq(profiles.userId, wrapperUserId));
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for unauthenticated session (null)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn(),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: { getSession: vi.fn().mockResolvedValue(null) },
+      }),
+    }));
+
+    const { deleteProfileFn } = await import('./profiles');
+    await expect(
+      (deleteProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { profileId: '00000000-0000-0000-0000-000000000002' },
+      }),
+    ).rejects.toThrow('Unauthenticated.');
+  });
+
+  it('clears child-mode cookie when deleted profile matches cookie', async () => {
+    const [profile] = await db
+      .insert(profiles)
+      .values({
+        userId: wrapperUserId,
+        name: 'CookieChild',
+        avatar: 'ba-boat',
+      })
+      .returning();
+
+    const mockSetCookie = vi.fn();
+
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) => {
+        if (name === 'better-auth.session_token') return 'test-token';
+        if (name === 'child_mode') return 'signed-cookie';
+        return undefined;
+      }),
+      setCookie: mockSetCookie,
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: wrapperUserId, email: 'p@test.com', name: 'Parent' },
+            session: { token: 'abc' },
+          }),
+        },
+      }),
+    }));
+    vi.doMock('~/db', () => ({ getDb: () => db }));
+    vi.doMock('~/lib/utils/child-mode.server', () => ({
+      verifyChildModeCookie: vi.fn().mockReturnValue({ profileId: profile.id }),
+    }));
+
+    const { deleteProfileFn } = await import('./profiles');
+    const result = await (
+      deleteProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>
+    )({ data: { profileId: profile.id } });
+
+    expect(result).toEqual({ success: true });
+    expect(mockSetCookie).toHaveBeenCalledWith('child_mode', '', { maxAge: 0, path: '/' });
+  });
+});
+
+describe('getActiveProfileFn', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for null session (unauthenticated)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn(),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: { getSession: vi.fn().mockResolvedValue(null) },
+      }),
+    }));
+
+    const { getActiveProfileFn } = await import('./profiles');
+    await expect(
+      (getActiveProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { profileId: '00000000-0000-0000-0000-000000000003' },
+      }),
+    ).rejects.toThrow('Unauthenticated.');
+  });
+
+  it('calls authorizeChildAccess with correct profileId for parent session', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: (args: { data: unknown }) => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'active-parent', email: 'p@test.com', name: 'Parent' },
+            session: { token: 'abc' },
+          }),
+        },
+      }),
+    }));
+    vi.doMock('~/db', () => ({ getDb: () => db }));
+
+    const { getActiveProfileFn } = await import('./profiles');
+    const profileId = '00000000-0000-0000-0000-000000000003';
+    // Parent session allows any profileId via authorizeChildAccess; the DB
+    // won't have this profile so it throws "not found" — that's fine, it
+    // means we passed the auth guard.
+    await expect(
+      (getActiveProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
+        data: { profileId },
+      }),
+    ).rejects.toThrow('Profile not found or does not belong to you.');
+  });
+});
+
+describe('listProfilesForSwitchFn', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('throws for child session (parent required)', async () => {
+    vi.doMock('@tanstack/react-start', () => ({
+      createServerFn: vi.fn(() => ({
+        inputValidator: vi.fn().mockReturnThis(),
+        handler: vi.fn((fn: () => Promise<unknown>) => fn),
+      })),
+    }));
+    vi.doMock('@tanstack/react-start/server', () => ({
+      getRequest: () => ({ headers: new Headers() }),
+      getCookie: vi.fn((name: string) =>
+        name === 'better-auth.session_token' ? 'test-token' : undefined,
+      ),
+      setCookie: vi.fn(),
+    }));
+    vi.doMock('./auth', () => ({
+      getAuth: () => ({
+        api: {
+          getSession: vi.fn().mockResolvedValue({
+            user: { id: 'parent-1', email: '', isChild: true, childProfileId: 'child-1' },
+            session: { token: '' },
+          }),
+        },
+      }),
+    }));
+
+    const { listProfilesForSwitchFn } = await import('./profiles');
+    await expect(
+      (listProfilesForSwitchFn as unknown as () => Promise<unknown>)(),
+    ).rejects.toThrow('Unauthorized. Parent session required.');
   });
 });
