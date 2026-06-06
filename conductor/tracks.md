@@ -4,6 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-| ID   | Title                             | Status         | Folder                                                       |
-| ---- | --------------------------------- | -------------- | ------------------------------------------------------------ |
-| T-19 | Security Hardening & Code Quality | 🟢 Complete | [`t19-security-hardening`](./tracks/t19-security-hardening/) |
+| ID | Title | Status | Folder |
+| ---- | --------------------------------- | ----------- | ------------------------------------------------------------ |
