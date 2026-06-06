@@ -724,13 +724,13 @@ describe('deleteProfileFn', () => {
     }));
     vi.doMock('~/db', () => ({ getDb: () => db }));
     vi.doMock('~/lib/utils/child-mode.server', () => ({
-      verifyChildModeCookie: vi.fn().mockReturnValue({ profileId: profile.id }),
+      verifyChildModeCookie: vi.fn().mockReturnValue({ profileId: profile!.id }),
     }));
 
     const { deleteProfileFn } = await import('./profiles');
     const result = await (
       deleteProfileFn as unknown as (input: { data: unknown }) => Promise<unknown>
-    )({ data: { profileId: profile.id } });
+    )({ data: { profileId: profile!.id } });
 
     expect(result).toEqual({ success: true });
     expect(mockSetCookie).toHaveBeenCalledWith('child_mode', '', { maxAge: 0, path: '/' });
