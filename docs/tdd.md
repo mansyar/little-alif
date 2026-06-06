@@ -32,7 +32,7 @@
 | 20  | Code Quality Polish                  | ✅ Implemented            | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                                                                                                                                                                                                                                  |
 | 21  | Infrastructure & Audio Polish        | ✅ Implemented            | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                                                                                                                                                                                                                    |
 | 22  | Error Classification System          | ✅ Implemented            | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                                                                                                                                                                                                                                |
-| 23  | Security Hardening                   | ✅ Implemented            | [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)                                                                                                                                                                                                                                             |
+| 23  | Security Hardening                   | ✅ Implemented            | [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)                                                                                                                                                                                                                                              |
 
 ---
 
@@ -1785,6 +1785,7 @@ volumes:
 A custom Node.js HTTP server that serves static assets from `public/` and delegates all other requests to the TanStack Start SSR handler. Ships as an ES module (`.mjs`) to avoid CommonJS/ESM conflicts.
 
 **Security features (T-19):**
+
 - Path traversal prevention: resolved path must stay within `CLIENT_DIR` (returns 403 otherwise)
 - Security headers on all responses: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-XSS-Protection: 0`, `Content-Security-Policy` (self + Google Fonts + unsafe-inline/eval for TanStack Start hydration)
 
