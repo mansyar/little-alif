@@ -261,7 +261,7 @@ describe('letter toggle integration flow', () => {
         letterId: 'ba',
         isVisible: true,
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
 
     // User B cannot bulk toggle User A's profile
     await expect(
@@ -270,11 +270,11 @@ describe('letter toggle integration flow', () => {
         letterIds: ['alif', 'ba'],
         isVisible: true,
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
 
     // User B cannot view User A's letters
-    await expect(getVisibleLetters(db, USER_B, profile.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getVisibleLetters(db, USER_B, profile.id)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 });

@@ -167,8 +167,8 @@ describe('getVisibleLetters', () => {
   it('rejects access to a profile owned by another user', async () => {
     const profile = await createTestProfile(db, OTHER_USER);
 
-    await expect(getVisibleLetters(db, TEST_USER, profile.id)).rejects.toThrow(
-      'Profile not found or does not belong to you.',
+    await expect(getVisibleLetters(db, TEST_USER, profile.id)).rejects.toMatchObject(
+      { code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' },
     );
   });
 });
@@ -227,7 +227,7 @@ describe('toggleLetter', () => {
         letterId: 'ba',
         isVisible: true,
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
   });
 });
 
@@ -291,7 +291,7 @@ describe('bulkToggleLetters', () => {
         letterIds: ['alif', 'ba'],
         isVisible: true,
       }),
-    ).rejects.toThrow('Profile not found or does not belong to you.');
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', userMessage: 'ERROR_NOT_FOUND' });
   });
 });
 
@@ -328,7 +328,7 @@ describe('getVisibleLettersFn', () => {
       (getVisibleLettersFn as unknown as (input: { data: unknown }) => Promise<unknown>)({
         data: { profileId: '00000000-0000-0000-0000-000000000001' },
       }),
-    ).rejects.toThrow('Unauthenticated.');
+    ).rejects.toMatchObject({ code: 'AUTH', userMessage: 'ERROR_AUTH' });
   });
 });
 

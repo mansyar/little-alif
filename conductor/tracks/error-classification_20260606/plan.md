@@ -39,7 +39,7 @@
     - [ ] Replace `throw new Error('Profile not found...')` → `ServerFunctionError('NOT_FOUND', 'ERROR_NOT_FOUND')`
     - [ ] Write/update unit tests verifying ServerFunctionError is thrown
     - [ ] Verify: `pnpm test` passes
-- [ ] Task: Update `app/server/letters.ts`
+- [x] Task: Update `app/server/letters.ts`
     - [ ] Server function wrappers: replace `throw new Error('Unauthenticated.')` → `ServerFunctionError('AUTH', 'ERROR_AUTH')`
     - [ ] Write/update unit tests
     - [ ] Verify: `pnpm test` passes

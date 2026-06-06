@@ -9,6 +9,7 @@ import {
   type ToggleLetterInput,
   type BulkToggleLettersInput,
 } from '~/lib/validations/letters';
+import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { authorizeChildAccess, requireParentSession, validateSessionFn } from './auth-fns';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
@@ -40,7 +41,7 @@ async function verifyProfileOwnership(
     .then((rows) => rows[0] ?? null);
 
   if (!profile) {
-    throw new Error('Profile not found or does not belong to you.');
+    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
   }
 }
 
@@ -154,7 +155,7 @@ export const getVisibleLettersFn = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     if (session === null) {
-      throw new Error('Unauthenticated.');
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
     const db = getDb();
