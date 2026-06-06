@@ -300,10 +300,11 @@ describe('Learn route', () => {
 
     render(<Component />, { wrapper: createWrapper() });
 
-    const readingLink = await screen.findByText('Reading Practice');
-    expect(readingLink).toBeTruthy();
-    expect(readingLink.hasAttribute('disabled')).toBe(true);
-    expect(readingLink.getAttribute('to')).toBe('/learn/reading');
+    const readingButton = await screen.findByText('Reading Practice');
+    expect(readingButton).toBeTruthy();
+    expect(readingButton.tagName).toBe('BUTTON');
+    expect(readingButton.hasAttribute('disabled')).toBe(true);
+    expect(readingButton.getAttribute('aria-disabled')).toBe('true');
   });
 
   it('enables the Reading Practice link when 3 or more letters are visible', async () => {

@@ -6,6 +6,7 @@ import { type VowelMode } from '~/lib/utils/harakat';
 import { getReadingDataSchema } from '~/lib/validations/reading';
 import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { authorizeChildAccess, validateSessionFn } from './auth-fns';
+import { verifyProfileOwnership } from './helpers';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
@@ -15,26 +16,6 @@ import { authorizeChildAccess, validateSessionFn } from './auth-fns';
 export interface ReadingData {
   letters: { letterId: string; character: string }[];
   vowelMode: VowelMode;
-}
-
-/**
- * Verify that the given profile belongs to the given user.
- * Throws if not found or not owned.
- */
-async function verifyProfileOwnership(
-  db: DbClient,
-  userId: string,
-  profileId: string,
-): Promise<void> {
-  const profile = await db
-    .select()
-    .from(profiles)
-    .where(and(eq(profiles.id, profileId), eq(profiles.userId, userId)))
-    .then((rows) => rows[0] ?? null);
-
-  if (!profile) {
-    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
-  }
 }
 
 /**

@@ -52,6 +52,14 @@ const server = createServer(async (req, res) => {
       // Try to serve from dist/client/
       let filePath = join(CLIENT_DIR, url.pathname);
 
+      // Path traversal prevention: ensure resolved path stays within CLIENT_DIR
+      const resolvedPath = resolve(filePath);
+      if (!resolvedPath.startsWith(CLIENT_DIR)) {
+        res.writeHead(403);
+        res.end();
+        return;
+      }
+
       // If the path has no extension, try index.html (for client-side routing)
       if (!extname(url.pathname)) {
         const indexFile = join(filePath, 'index.html');
@@ -73,6 +81,21 @@ const server = createServer(async (req, res) => {
         return;
       }
     }
+
+    // ----- Security Headers -----
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-XSS-Protection', '0');
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+        "img-src 'self' data:; " +
+        "connect-src 'self';",
+    );
 
     // ----- SSR / Server Functions -----
     const headers = new Headers();

@@ -8,6 +8,7 @@ import { profiles } from '~/db/schema';
 import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { enableChildModeSchema, loginSchema, registerSchema } from '~/lib/validations/auth';
 import { getAuth } from './auth';
+import { checkRateLimit, getClientIp } from '~/lib/utils/rate-limit';
 
 /**
  * Pure helper — derives a display name from the email local-part.
@@ -34,8 +35,13 @@ export function buildCookieHeader(token: string): string {
 export const registerFn = createServerFn({ method: 'POST' })
   .inputValidator(registerSchema)
   .handler(async ({ data }) => {
-    const auth = getAuth();
     const request = getRequest();
+    const ip = getClientIp(request);
+    if (!checkRateLimit(`register:${ip}`, 5, 60_000)) {
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
+    }
+
+    const auth = getAuth();
     try {
       const result = await auth.api.signUpEmail({
         body: {
@@ -62,8 +68,13 @@ export const registerFn = createServerFn({ method: 'POST' })
 export const loginFn = createServerFn({ method: 'POST' })
   .inputValidator(loginSchema)
   .handler(async ({ data }) => {
-    const auth = getAuth();
     const request = getRequest();
+    const ip = getClientIp(request);
+    if (!checkRateLimit(`login:${ip}`, 5, 60_000)) {
+      throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
+    }
+
+    const auth = getAuth();
     try {
       const result = await auth.api.signInEmail({
         body: { email: data.email, password: data.password },
@@ -252,10 +263,11 @@ export const enableChildModeFn = createServerFn({ method: 'POST' })
     const { signChildModeCookie } = await import('~/lib/utils/child-mode.server');
     const cookieValue = signChildModeCookie(data.profileId, name, avatar);
     setCookie('child_mode', cookieValue, {
-      httpOnly: false,
-      maxAge: 31_536_000,
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 30,
       sameSite: 'lax',
       path: '/',
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return { success: true, profile: { name, avatar } };

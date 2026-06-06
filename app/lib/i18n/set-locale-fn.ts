@@ -15,6 +15,7 @@ export const setLocaleCookie = createServerFn({ method: 'POST' })
       maxAge: YEAR_IN_SECONDS,
       path: '/',
       sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
     });
     return { success: true };
   });

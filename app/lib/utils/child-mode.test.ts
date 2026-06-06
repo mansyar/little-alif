@@ -75,6 +75,14 @@ describe('verifyChildModeCookie', () => {
     expect(verifyChildModeCookie(`not-json.${sig}`)).toBeNull();
   });
 
+  it('throws when no secret is available (neither env var set)', () => {
+    delete process.env.CHILD_MODE_SECRET;
+    delete process.env.BETTER_AUTH_SECRET;
+    expect(() => signChildModeCookie('p1', 'Aisha', 'alif-lamp')).toThrow(
+      /CHILD_MODE_SECRET or BETTER_AUTH_SECRET must be set/,
+    );
+  });
+
   it('falls back to BETTER_AUTH_SECRET when CHILD_MODE_SECRET is not set', () => {
     delete process.env.CHILD_MODE_SECRET;
     process.env.BETTER_AUTH_SECRET = 'fallback-secret-at-least-32-chars!!';

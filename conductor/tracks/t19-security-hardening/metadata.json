@@ -1,0 +1,28 @@
+{
+  "id": "t19-security-hardening",
+  "title": "Security Hardening & Code Quality Fixes",
+  "status": "in-progress",
+  "dependencies": ["T-12", "T-18"],
+  "complexity": "medium",
+  "estimatedEffort": "3-5h",
+  "createdAt": "2026-06-07",
+  "auditDate": "2026-06-07",
+  "auditCommit": "ddd58fc",
+  "phases": [
+    {
+      "name": "Phase 1: Critical & High Security Fixes",
+      "tasks": 7,
+      "estimatedEffort": "1-2h"
+    },
+    {
+      "name": "Phase 2: Medium Security & Code Quality",
+      "tasks": 7,
+      "estimatedEffort": "1-2h"
+    },
+    {
+      "name": "Phase 3: Low Priority & Polish",
+      "tasks": 6,
+      "estimatedEffort": "1h"
+    }
+  ]
+}

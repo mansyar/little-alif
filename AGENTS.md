@@ -97,7 +97,7 @@ pnpm build            # production build
 ### Code Patterns
 
 - **TDD:** Write failing test → implement → pass → (refactor). Tests live next to source files as `*.test.ts`/`*.test.tsx`.
-- **Coverage target:** >70% lines/statements/branches/functions (`vitest.config.ts` sets thresholds). Routes and generated files excluded.
+- **Coverage target:** ≥80% lines/statements/branches/functions (`vitest.config.ts` sets thresholds). Routes and generated files excluded.
 - **Server functions:** Always `createServerFn({ method: 'GET'|'POST' })` with `.inputValidator(zodSchema)`. Pure helper functions take `(db, userId, ...)` for testability.
 - **Auth guards:** Use `requireParentSession(session)` for parent-only, `authorizeChildAccess(session, profileId)` for child-mode.
 - **UUID generation:** `crypto.randomUUID()` in schema `$defaultFn`. All profile IDs are UUIDs (validated by Zod schemas).

@@ -62,6 +62,11 @@ COPY --from=build /app/package.json ./
 # Copy the server entry wrapper
 COPY docker/server-entry.mjs ./docker/server-entry.mjs
 
+# Run as non-root user for security
+RUN addgroup -g 1001 -S app && adduser -S app -u 1001 -G app
+RUN chown -R app:app /app
+USER app
+
 EXPOSE 3000
 
 CMD ["node", "docker/server-entry.mjs"]

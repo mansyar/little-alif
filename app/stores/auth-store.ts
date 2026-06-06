@@ -39,6 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set((state) => ({
       childProfileId: profileId,
       mode: profileId ? 'child' : state.user ? 'parent' : null,
+      isAuthenticated: profileId ? true : state.isAuthenticated,
     })),
   clear: () =>
     set({

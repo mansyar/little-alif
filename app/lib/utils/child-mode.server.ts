@@ -23,9 +23,17 @@ export interface ChildModePayload {
 /**
  * Derive the HMAC secret from environment variables.
  * Prefers `CHILD_MODE_SECRET`; falls back to `BETTER_AUTH_SECRET`.
+ * Throws at startup if neither is set to prevent silent misconfiguration.
  */
 function getSecret(): string {
-  return process.env.CHILD_MODE_SECRET ?? process.env.BETTER_AUTH_SECRET ?? '';
+  const secret = process.env.CHILD_MODE_SECRET ?? process.env.BETTER_AUTH_SECRET;
+  if (!secret) {
+    throw new Error(
+      'CHILD_MODE_SECRET or BETTER_AUTH_SECRET must be set. ' +
+        'Child-mode cookie signing requires a secret.',
+    );
+  }
+  return secret;
 }
 
 /**

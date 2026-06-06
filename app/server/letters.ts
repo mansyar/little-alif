@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import { and, eq, sql } from 'drizzle-orm';
 import { getDb, type DbClient } from '~/db';
-import { profiles, letters, letterToggles } from '~/db/schema';
+import { letters, letterToggles } from '~/db/schema';
 import {
   getVisibleLettersSchema,
   toggleLetterSchema,
@@ -11,6 +11,7 @@ import {
 } from '~/lib/validations/letters';
 import { ErrorCode, ServerFunctionError } from '~/lib/errors';
 import { authorizeChildAccess, requireParentSession, validateSessionFn } from './auth-fns';
+import { verifyProfileOwnership } from './helpers';
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
@@ -23,26 +24,6 @@ export interface VisibleLetter {
   displayOrder: number;
   audioFile: string;
   isVisible: boolean;
-}
-
-/**
- * Verify that the given profile belongs to the given user.
- * Throws if not found or not owned.
- */
-async function verifyProfileOwnership(
-  db: DbClient,
-  userId: string,
-  profileId: string,
-): Promise<void> {
-  const profile = await db
-    .select()
-    .from(profiles)
-    .where(and(eq(profiles.id, profileId), eq(profiles.userId, userId)))
-    .then((rows) => rows[0] ?? null);
-
-  if (!profile) {
-    throw new ServerFunctionError(ErrorCode.NOT_FOUND, 'ERROR_NOT_FOUND');
-  }
 }
 
 /**
@@ -94,6 +75,7 @@ export async function toggleLetter(db: DbClient, userId: string, data: ToggleLet
     .insert(letterToggles)
     .values({
       profileId: data.profileId,
+      // sql template ensures parameterized query for the foreign key value
       letterId: sql`${data.letterId}`,
       isVisible: data.isVisible,
     })
@@ -127,6 +109,7 @@ export async function bulkToggleLetters(
     .values(
       data.letterIds.map((letterId) => ({
         profileId: data.profileId,
+        // sql template ensures parameterized query for each foreign key value
         letterId: sql`${letterId}`,
         isVisible: data.isVisible,
       })),

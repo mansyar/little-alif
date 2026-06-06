@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, uniqueIndex, index } from 'drizzle-orm/sqlite-core';
 import type { LetterId } from '~/lib/constants/letters';
+import { user } from './auth-schema';
 
 export type { LetterId };
 
@@ -31,17 +32,25 @@ export type AvatarKey = (typeof AVATAR_KEYS)[number];
  * Profile: a child configuration under a parent user.
  * Deletion cascades to letter_toggles (Drizzle `onDelete: 'cascade'`).
  */
-export const profiles = sqliteTable('profiles', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text('user_id').notNull(),
-  name: text('name').notNull(),
-  avatar: text('avatar').notNull().$type<AvatarKey>(),
-  vowelMode: text('vowel_mode', { enum: VOWEL_MODES }).notNull().default('fathah'),
-  createdAt: text('created_at').default(sql`(datetime('now'))`),
-  updatedAt: text('updated_at').default(sql`(datetime('now'))`),
-});
+export const profiles = sqliteTable(
+  'profiles',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    avatar: text('avatar').notNull().$type<AvatarKey>(),
+    vowelMode: text('vowel_mode', { enum: VOWEL_MODES }).notNull().default('fathah'),
+    createdAt: text('created_at').default(sql`(datetime('now'))`),
+    updatedAt: text('updated_at').default(sql`(datetime('now'))`),
+  },
+  (table) => ({
+    idxUserId: index('idx_profiles_user_id').on(table.userId),
+  }),
+);
 
 /**
  * Letters: the 28-letter Hijaiyah master table.

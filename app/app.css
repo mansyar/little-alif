@@ -14,7 +14,7 @@
   --color-background-warm: #faf8f5;
   --color-card: #ffffff;
   --color-text-dark: #1a1a2e;
-  --color-text-muted: #8a8a9a;
+  --color-text-muted: #6b6b7b;
 
   /* Border radius (custom names; the Tailwind default --radius is also kept) */
   --radius-small: 10px;
@@ -45,5 +45,15 @@
 
   .font-arabic {
     font-family: var(--font-arabic);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

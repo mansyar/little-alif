@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { audioEngine } from '~/lib/audio/audio-engine';
 import { composeLetter } from '~/lib/utils/harakat';
 import { type LetterId, LETTER_BG_COLORS } from '~/lib/constants/letters';
@@ -27,8 +28,10 @@ interface LetterCardProps {
  * The `currentHarakat` is read at render time from `useUiStore` (DD-6). When
  * the child switches vowel mode via the harakat bar, all cards re-render
  * reactively with the new composed glyph (FR-9).
+ *
+ * Memoized to prevent re-renders when unrelated store fields change.
  */
-export function LetterCard({ letter }: LetterCardProps) {
+export const LetterCard = memo(function LetterCard({ letter }: LetterCardProps) {
   const currentHarakat = useUiStore((state) => state.currentHarakat);
   const setSelectedLetter = useUiStore((state) => state.setSelectedLetter);
 
@@ -54,4 +57,4 @@ export function LetterCard({ letter }: LetterCardProps) {
       <span aria-hidden="true">{glyph}</span>
     </button>
   );
-}
+});

@@ -17,6 +17,9 @@ import { authorizeChildAccess, requireParentSession, validateSessionFn } from '.
 
 // ─── Pure helper functions (unit-testable) ────────────────────────────
 
+/** Maximum number of child profiles allowed per parent account. */
+const MAX_PROFILES_PER_PARENT = 4;
+
 /**
  * List all profiles for a given user, including the count of visible
  * (introduced) letters per profile.
@@ -53,7 +56,7 @@ export async function createProfile(db: DbClient, userId: string, data: CreatePr
     .where(eq(profiles.userId, userId))
     .then((rows) => rows[0]?.count ?? 0);
 
-  if (existingCount >= 4) {
+  if (existingCount >= MAX_PROFILES_PER_PARENT) {
     throw new ServerFunctionError(ErrorCode.LIMIT_EXCEEDED, 'ERROR_LIMIT_EXCEEDED');
   }
 

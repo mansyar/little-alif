@@ -7,8 +7,10 @@ import { LanguageToggle } from '~/components/parent/LanguageToggle';
 export const Route = createFileRoute('/login')({
   validateSearch: (search: Record<string, unknown>) => {
     const redirect = search.redirect;
+    const isValidRedirect =
+      typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//');
     return {
-      redirect: typeof redirect === 'string' ? redirect : '/dashboard',
+      redirect: isValidRedirect ? redirect : '/dashboard',
     };
   },
   component: LoginPage,

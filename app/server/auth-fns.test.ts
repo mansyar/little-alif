@@ -600,7 +600,13 @@ describe('enableChildModeFn', () => {
     expect(mockSetCookie).toHaveBeenCalledWith(
       'child_mode',
       'signed-cookie-value',
-      expect.objectContaining({ httpOnly: false, maxAge: 31_536_000, sameSite: 'lax', path: '/' }),
+      expect.objectContaining({
+        httpOnly: true,
+        maxAge: 2_592_000,
+        sameSite: 'lax',
+        path: '/',
+        secure: false,
+      }),
     );
   });
 

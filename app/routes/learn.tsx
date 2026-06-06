@@ -154,13 +154,23 @@ function LearnContent({ profileId }: LearnContentProps) {
       </div>
 
       <div className="flex justify-center px-4 py-6">
-        <Link
-          to="/learn/reading"
-          disabled={!canStartReading}
-          className="rounded-large bg-green px-6 py-3 text-white font-bold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Reading Practice
-        </Link>
+        {canStartReading ? (
+          <Link
+            to="/learn/reading"
+            className="rounded-large bg-green px-6 py-3 text-white font-bold transition-opacity"
+          >
+            Reading Practice
+          </Link>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="rounded-large bg-green px-6 py-3 text-white font-bold opacity-50 cursor-not-allowed"
+            aria-disabled="true"
+          >
+            Reading Practice
+          </button>
+        )}
       </div>
     </main>
   );
