@@ -73,3 +73,15 @@
     - [x] Write integration tests for at least 2 components verifying toast variant + message correctness
     - [x] Verify: `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
 - [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md) [072c74c]
+
+---
+
+## Phase: Review Fixes
+
+- [x] Task: Apply review suggestions [7b14e62]
+    - [x] Fix lint errors: unused params, unnecessary cast, no-empty-function
+    - [x] Add network error detection (NFR-4: TypeError: Failed to fetch → NETWORK)
+    - [x] Remove `public` modifier from ServerFunctionError (style guide)
+    - [x] Fix ERROR_TOAST_VARIANT type safety (Record<ErrorCode, ...>)
+    - [x] Align i18n wording with spec (EN + ID)
+    - [x] Verify: `pnpm test` (552 passed), `pnpm typecheck` (clean)
