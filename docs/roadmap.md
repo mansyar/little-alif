@@ -30,8 +30,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ✅ Complete |
 | T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ✅ Complete |
 | T-19  | Security Hardening & Code Quality    | T-12, T-18             | Medium     | ~3-5h       | ✅ Complete |
+| T-20  | Vite 8 Upgrade                       | T-01                   | Low        | ~1-2h       | ✅ Complete |
 
-\***\*19 tracks complete.** Delivered effort: ~52–82 hours\*\*
+\***\*20 tracks complete.** Delivered effort: ~53–84 hours\*\*
 
 ### Implementation Status
 
@@ -59,8 +60,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-17  | Infrastructure & Audio Polish          | ✅ Complete | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                               |
 | T-18  | Error Classification System            | ✅ Complete | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                           |
 | T-19  | Security Hardening & Code Quality      | ✅ Complete | [`t19-security-hardening`](../conductor/tracks/t19-security-hardening/)                                          |
+| T-20  | Vite 8 Upgrade                         | ✅ Complete | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                         |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies.
 
 ---
 
@@ -1172,6 +1174,41 @@ Address security vulnerabilities and code quality issues identified in the compr
 
 ---
 
+### T-20: Vite 8 Upgrade ✅
+
+**Dependencies:** T-01 (Project Scaffolding)
+**Status:** ✅ Complete ([`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/))
+**Complexity:** Low
+**Est. Effort:** ~1-2h
+
+**Description:**
+Upgrade the build toolchain from Vite 7 to Vite 8, which replaces esbuild with Rolldown (Rust-based bundler) and Oxc (Rust-based transformer). Remove the `vite-tsconfig-paths` and `vinxi` dependencies in favor of Vite 8's native `resolve.tsconfigPaths` support.
+
+**Key Deliverables (all delivered):**
+
+- [x] `vite` upgraded from ^7 to ^8 (8.0.16)
+- [x] `@vitejs/plugin-react` upgraded from ^4 to ^6 (6.0.2)
+- [x] Removed `vite-tsconfig-paths` dependency
+- [x] Removed `vinxi` dependency
+- [x] `vite.config.ts` — replaced `tsconfigPaths()` plugin with `resolve: { tsconfigPaths: true }`
+- [x] `vitest.config.ts` — added `resolve.alias` for `~` path (Vitest uses own Vite instance)
+- [x] `conductor/tech-stack.md` updated with Vite 8 info
+
+**Key Decisions:**
+
+- Vitest needs explicit `resolve.alias` because it uses its own Vite instance and doesn't inherit `resolve.tsconfigPaths` from `vite.config.ts`
+- `vinxi` was unused (leftover from early scaffolding) — safe to remove
+- Vite 8's Rolldown bundler produces identical output to esbuild but with faster builds
+
+**Verification (all passing):**
+
+- `pnpm typecheck` clean
+- All 561 tests passing across 65 test files
+- `pnpm build` succeeds (client: 1.10s, SSR: 842ms)
+- Vite 8.0.16 confirmed in build output
+
+---
+
 ## Track Dependencies Graph
 
 ```
@@ -1195,6 +1232,7 @@ Address security vulnerabilities and code quality issues identified in the compr
  T-03b (Code Quality) ── ✅               │
  T-04 (i18n — parallel) ✅                │
  T-09 (Audio — parallel) ✅               │
+ T-20 (Vite 8 Upgrade) ✅                │
                                              ▼
                                         T-12 (Polish & Deploy) ✅
                                              │

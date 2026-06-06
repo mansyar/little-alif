@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.14 (Security Hardening complete)
+**Version:** 1.15 (Vite 8 Upgrade complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -33,6 +33,7 @@
 | 21  | Infrastructure & Audio Polish        | ✅ Implemented            | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                                                                                                                                                                                                                    |
 | 22  | Error Classification System          | ✅ Implemented            | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                                                                                                                                                                                                                                |
 | 23  | Security Hardening                   | ✅ Implemented            | [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)                                                                                                                                                                                                                                              |
+| 24  | Vite 8 Upgrade                       | ✅ Implemented            | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                                                                                                                                                                                                                              |
 
 ---
 
