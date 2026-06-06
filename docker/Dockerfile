@@ -44,6 +44,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Install curl for Docker health checks
+RUN apk add --no-cache curl
+
 # Copy production build artifacts
 COPY --from=build /app/dist ./dist
 

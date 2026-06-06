@@ -13,6 +13,12 @@ services:
       - CHILD_MODE_SECRET=${CHILD_MODE_SECRET:-}
     volumes:
       - little-alif-data:/app/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     restart: unless-stopped
 
 volumes:
