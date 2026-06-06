@@ -1,8 +1,0 @@
-{
-  "track_id": "error-classification_20260606",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-06-06T23:26:00Z",
-  "updated_at": "2026-06-06T23:26:00Z",
-  "description": "Error Classification System — Server function errors currently surface as generic 'Something went wrong' toasts. Create a lightweight error classification system with typed error codes that maps to contextual, bilingual toast messages."
-}

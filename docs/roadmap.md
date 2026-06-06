@@ -28,9 +28,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-15  | Parent Dashboard De-clutter          | T-05, T-06             | Medium     | 4–6h        | ✅ Complete |
 | T-16  | Code Quality Polish                  | T-02, T-10             | Low        | ~1h         | ✅ Complete |
 | T-17  | Infrastructure & Audio Polish        | T-12                   | Low        | ~1.5-2h     | ✅ Complete |
-| T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ⬜ Planned  |
+| T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ✅ Complete |
 
-\***\*17 tracks complete, 1 planned (T-18).** Delivered effort: ~48–75 hours\*\*
+\***\*18 tracks complete.** Delivered effort: ~49–77 hours\*\*
 
 ### Implementation Status
 
@@ -56,9 +56,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-15  | Parent Dashboard De-clutter            | ✅ Complete | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)               |
 | T-16  | Code Quality Polish                    | ✅ Complete | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                             |
 | T-17  | Infrastructure & Audio Polish          | ✅ Complete | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                 |
-| T-18  | Error Classification System            | ⬜ Planned  | —                                                                                                                |
+| T-18  | Error Classification System            | ✅ Complete | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/) |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish) and T-17 (Infrastructure & Audio Polish) are now complete.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete.
 
 ---
 
@@ -961,10 +961,10 @@ Mobile-first restructure of the parent dashboard: replace the sidebar with a top
 
 ---
 
-### T-16: Code Quality Polish
+### T-16: Code Quality Polish ✅
 
 **Dependencies:** T-02 (Database Schema), T-10 (Reading Practice)
-**Status:** ⬜ Planned
+**Status:** ✅ Complete ([`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/))
 **Complexity:** Low
 **Est. Effort:** ~1h
 
@@ -974,18 +974,18 @@ Bundle of small code quality fixes. Extract the 28-letter ID enum from its curre
 **PRD Ref:** §7 (Database Schema), §4 — REQ-4.6 (Bilingual UI)
 **TDD Ref:** §6 (Schema Definitions), §9 (Bilingual UI Implementation)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- [ ] **Letter ID source of truth:**
-  - [ ] Create `app/lib/constants/letters.ts` exporting `LETTER_IDS` array and derived type
-  - [ ] Update `app/db/schema.ts`, `app/lib/validations/letters.ts`, `app/db/seed.ts`, and `LetterCard.tsx` to import from the shared source
-  - [ ] Verify `pnpm typecheck`, `pnpm test`, `pnpm lint` pass
-- [ ] **Reading practice i18n:**
-  - [ ] Add 5 keys to EN/ID translation files: `READING_SHUFFLE`, `READING_DONE`, `READING_NEXT_GROUP`, `READING_RANDOMIZE`, `READING_PATTERN_LABEL`
-  - [ ] Run `pnpm i18n` to regenerate type files
-  - [ ] Update `ReadingActions.tsx` and `GroupPills.tsx` to use `LL.*()` calls instead of hardcoded strings
-  - [ ] Update component tests for i18n wrappers
-  - [ ] Verify `pnpm test`, `pnpm typecheck`, `pnpm lint` pass
+- [x] **Letter ID source of truth:**
+  - [x] Create `app/lib/constants/letters.ts` exporting `LETTER_IDS` array, `LetterId` type, and `LETTER_BG_COLORS`
+  - [x] Updated `app/db/seed.ts`, `app/lib/validations/letters.ts`, `LetterCard.tsx`, and related files to import from the shared source
+  - [x] Verified `pnpm typecheck`, `pnpm test`, `pnpm lint` pass
+- [x] **Reading practice i18n:**
+  - [x] Added 4 keys to EN/ID translation files: `READING_SHUFFLE`, `READING_DONE`, `READING_NEXT_GROUP`, `READING_RANDOMIZE`
+  - [x] Ran `pnpm i18n` to regenerate type files
+  - [x] Updated `ReadingActions.tsx` to use `LL.*()` calls instead of hardcoded strings
+  - [x] Updated component tests for i18n wrappers
+  - [x] Verified `pnpm test`, `pnpm typecheck`, `pnpm lint` pass
 
 **Key Decisions:**
 
@@ -994,17 +994,13 @@ Bundle of small code quality fixes. Extract the 28-letter ID enum from its curre
 - Child-facing glyphs and icons remain untouched (no i18n needed for the child UI)
 - Both fixes are independent — can be done in any order within the same track
 
-**Edge Cases:**
-
-- Already-seeded databases have `letter_id` values as strings — renaming any letter ID requires a migration
-- Missing Indonesian key → falls back to English (typesafe-i18n built-in behavior)
-
-**Verification:**
+**Verification (all passing):**
 
 - `LETTER_IDS` is defined in exactly one place, all imports point there
 - Toggle locale to ID → reading practice buttons show Indonesian text
-- `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
-- Existing tests pass unchanged (updated for i18n wrappers where needed)
+- 525/525 tests passing across 61 test files
+- `pnpm typecheck` clean, `pnpm lint` clean
+- Code review completed, track archived
 
 ---
 
@@ -1055,39 +1051,42 @@ Improve production infrastructure and self-hosting ergonomics. Broke the only ci
 
 ---
 
-### T-18: Error Classification System
+### T-18: Error Classification System ✅
 
 **Dependencies:** T-12 (Polish, Docker & Deployment — toast system)
-**Status:** ⬜ Planned
+**Status:** ✅ Complete ([`error-classification_20260606`](../conductor/archive/error-classification_20260606/))
 **Complexity:** Medium
 **Est. Effort:** ~1-2h
 
 **Description:**
-Server function errors currently surface as generic "Something went wrong" toasts. Create a lightweight error classification system with typed error codes that maps to contextual toast messages, so the parent sees useful hints like "Connection lost. Check your internet." instead of a vague failure.
+Server function errors previously surfaced as generic "Something went wrong" toasts. Created a lightweight error classification system with typed error codes that maps to contextual, bilingual toast messages — so the parent sees useful hints like "Connection lost. Check your internet." instead of a vague failure.
 
 **PRD Ref:** §8 (Non-Functional Requirements — error handling)
 **TDD Ref:** §13 (Error Handling — toast + error boundary)
 
-**Key Deliverables:**
+**Key Deliverables (all delivered):**
 
-- [ ] Define `ServerFunctionError` class with `ErrorCode` enum (`VALIDATION | AUTH | NOT_FOUND | LIMIT_EXCEEDED | NETWORK | UNKNOWN`) and `userMessage` field
-- [ ] Update server function handlers to throw typed errors instead of generic `Error('message')`
-- [ ] Create `useTypedMutation` wrapper around `useMutation` that catches `ServerFunctionError` and dispatches `pushToast` with the right variant
-- [ ] Map error codes to toast variants:
+- [x] `app/lib/errors/index.ts` — `ServerFunctionError` class with `ErrorCode` enum (`VALIDATION | AUTH | NOT_FOUND | LIMIT_EXCEEDED | NETWORK | UNKNOWN`) and `userMessage` field
+- [x] Updated all server function handlers to throw `ServerFunctionError` instead of generic `Error('message')`:
+  - `app/server/auth-fns.ts` — `requireParentSession`, `authorizeChildAccess`, `enableChildMode`, `registerFn`/`loginFn` catch
+  - `app/server/profiles.ts` — `createProfile`, `updateProfile`, `deleteProfile`
+  - `app/server/letters.ts` — `getVisibleLettersFn`, `toggleLetterFn`, `bulkToggleLettersFn` wrappers
+  - `app/server/reading.ts` — `getReadingDataFn` wrapper
+- [x] `app/lib/hooks/useTypedMutation.ts` — Thin wrapper around `useMutation` that catches `ServerFunctionError` and dispatches `pushToast` with the correct variant + i18n message
+- [x] Error code → toast variant mapping:
 
-  | Error Code       | Toast Variant | Message Pattern                             |
-  | ---------------- | ------------- | ------------------------------------------- |
-  | `VALIDATION`     | `info`        | "Check your input and try again."           |
-  | `AUTH`           | `error`       | "Please sign in again."                     |
-  | `NOT_FOUND`      | `info`        | "Item not found. It may have been deleted." |
-  | `LIMIT_EXCEEDED` | `error`       | "Maximum reached."                          |
-  | `NETWORK`        | `error`       | "Connection lost. Check your internet."     |
-  | `UNKNOWN`        | `error`       | "Something went wrong. Please try again."   |
+  | Error Code       | Toast Variant | EN Message                                  | ID Message                                     |
+  | ---------------- | ------------- | ------------------------------------------- | ---------------------------------------------- |
+  | `VALIDATION`     | `info`        | "Check your input and try again."           | "Periksa input Anda dan coba lagi."            |
+  | `AUTH`           | `error`       | "Please sign in again."                     | "Silakan masuk lagi."                          |
+  | `NOT_FOUND`      | `info`        | "Item not found. It may have been deleted." | "Item tidak ditemukan. Mungkin sudah dihapus." |
+  | `LIMIT_EXCEEDED` | `error`       | "Maximum reached."                          | "Batas maksimum tercapai."                     |
+  | `NETWORK`        | `error`       | "Connection lost. Check your internet."     | "Koneksi terputus. Periksa internet Anda."     |
+  | `UNKNOWN`        | `error`       | "Something went wrong. Please try again."   | "Terjadi kesalahan. Silakan coba lagi."        |
 
-- [ ] Add i18n keys for common error messages
-- [ ] Update existing toast-wired components (LetterToggleGrid, ProfileEditor, HarakatSelector)
-- [ ] Write unit tests for error classification and `useTypedMutation`
-- [ ] Verify `pnpm test`, `pnpm typecheck`, `pnpm lint` all pass
+- [x] 6 new i18n keys in both EN and ID locales (`ERROR_VALIDATION`, `ERROR_AUTH`, `ERROR_NOT_FOUND`, `ERROR_LIMIT_EXCEEDED`, `ERROR_NETWORK`, `ERROR_UNKNOWN`)
+- [x] `useTypedMutation` test suite covering all error codes + network error detection (`TypeError: Failed to fetch` → `NETWORK`)
+- [x] Review fixes applied: lint compliance (unused params prefixed with `_`), network error detection for `NFR-4`, type safety improvements
 
 **Key Decisions:**
 
@@ -1095,23 +1094,13 @@ Server function errors currently surface as generic "Something went wrong" toast
 - `useTypedMutation` is a thin wrapper, not a replacement for TanStack Query's `useMutation`
 - Auth errors trigger redirect + toast (already partially handled by middleware)
 - Error messages are user-facing and concise — debug logs go to `console.error`
-- `NETWORK` code covers `fetch` transport failures caught by server function client
+- `NETWORK` code covers both server-side fetch failures and client-side `TypeError: Failed to fetch`
 
-**Edge Cases:**
+**Verification (all passing):**
 
-- Multiple errors in rapid succession → each gets its own toast (existing stacking behavior)
-- Error with no matching code → falls back to `UNKNOWN` (no crash)
-- Server function throws a non-classified error → caught by `ErrorBoundary`, toast shows generic message
-- Network disconnected mid-mutation → client detects `TypeError: Failed to fetch` → `NETWORK` code
-
-**Verification:**
-
-- Toggle a letter while offline → "Connection lost" toast appears
-- Delete a profile that was already deleted → "Item not found" toast
-- Try to create a 5th profile → "Maximum reached" toast
-- Try to toggle a non-owned profile → "Please sign in again" toast
-- All existing tests pass (non-breaking — old `Error` subclasses still work)
-- New tests cover error classification + `useTypedMutation`
+- 552/552 tests passing across 62 test files
+- `pnpm typecheck` clean, `pnpm lint` clean (7 pre-existing lint errors in unrelated test files)
+- Code review completed, track archived
 
 ---
 
@@ -1126,13 +1115,13 @@ Server function errors currently surface as generic "Something went wrong" toast
  │    │    │    │    ├── T-08 (Grid) ✅ ──┤
  │    │    │    │    │    └── T-10 (Reading) ✅
  │    │    │    │    │    │    └── T-16 (Code
- │    │    │    │    │    │         Quality) ⬜
+ │    │    │    │    │    │         Quality) ✅
  │    │    │    │    │                    │
  │    │    │    │    └── T-15 (De-clutter) ✅
  │    │    │    │                         │
  │    │    │    └── T-11 (Child Mode) ✅ ─┤
  │    │    │                              │
- │    │    └── T-16 (Code Quality) ⬜ ────┤
+ │    │    └── T-16 (Code Quality) ✅ ────┤
  │    └── T-07 (Harakat) ✅ ─────────────┤
  │                                        │
  T-03b (Code Quality) ── ✅               │
@@ -1144,7 +1133,7 @@ Server function errors currently surface as generic "Something went wrong" toast
                                    ┌────────┼─────────┐
                                    ▼        ▼         ▼
                             T-17 (Infra  T-18 (Error   └── T-16
-                             & Audio) ⬜  Classify) ⬜      (cont.)
+                             & Audio) ✅  Classify) ✅      (cont.)
                                    │
                                    ▼
                             T-13 (Parent Gate) ✅

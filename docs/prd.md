@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.12 (Infrastructure & Audio Polish complete)
+**Version:** 1.13 (Error Classification System complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -46,6 +46,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Parent Dashboard De-clutter**       | ✅ Complete | Mobile-first restructure: sidebar replaced with top app bar, dedicated letter management route, profile dropdown menu with sign-out confirmation. See [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)  |
 | **Code Quality Polish**               | ✅ Complete | Canonical `LETTER_IDS`/`LetterId`/`LETTER_BG_COLORS` extracted to `app/lib/constants/letters.ts`. Reading practice actions localized with 4 i18n keys (EN + ID). See [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/) |
 | **Infrastructure & Audio Polish**     | ✅ Complete | Circular dependency `auth-fns.ts` ↔ `profiles.ts` resolved. Docker health check endpoint (`/api/health`) with compose healthcheck. GCP audio generation setup documented in `docs/audio-setup.md`. See [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/) |
+| **Error Classification System**       | ✅ Complete | Typed error codes (`ServerFunctionError` with `ErrorCode` enum) replacing generic `Error('message')` in all server functions. `useTypedMutation` hook auto-dispatches contextual, bilingual toasts. 6 i18n error keys (EN + ID). See [`error-classification_20260606`](../conductor/archive/error-classification_20260606/) |
 
 ---
 

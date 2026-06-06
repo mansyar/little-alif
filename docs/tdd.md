@@ -1,7 +1,7 @@
 # 🔧 Technical Design Document (TDD)
 
 **Project:** Little Alif
-**Version:** 1.12 (Infrastructure & Audio Polish complete)
+**Version:** 1.13 (Error Classification System complete)
 **Based on:** PRD v1.8
 
 ### Implementation Status
@@ -31,6 +31,7 @@
 | 19  | Parent Dashboard De-clutter          | ✅ Implemented            | [`parent-dashboard-declutter_20260605`](../conductor/archive/parent-dashboard-declutter_20260605/)                                                                                                                                                                                                                    |
 | 20  | Code Quality Polish                  | ✅ Implemented            | [`code-quality-polish_20260605`](../conductor/archive/code-quality-polish_20260605/)                                                                                                                                                                                                                                  |
 | 21  | Infrastructure & Audio Polish        | ✅ Implemented            | [`infra-audio-polish_20260606`](../conductor/archive/infra-audio-polish_20260606/)                                                                                                                                                                                                                                    |
+| 22  | Error Classification System          | ✅ Implemented            | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                                                                                                                                                                                                                                |
 
 ---
 
@@ -1859,19 +1860,125 @@ removeToast(id: string) => void;
 
 ### Error Matrix
 
-| Scenario                                     | UX                                                  | Layer         |
-| -------------------------------------------- | --------------------------------------------------- | ------------- |
-| Auth session expired                         | Silent redirect to `/login`                         | Router        |
-| Route rendering crash                        | Full-page "Try Again" fallback                      | ErrorBoundary |
-| Server function network error                | Toast: generic error + dismiss                      | Toast system  |
-| Audio file not found                         | Silent — skip playback                              | AudioEngine   |
-| Letter toggle save fails                     | Toast error + revert toggle visually                | Toast system  |
-| Profile creation exceeds 4                   | Toast: generic error                                | Toast system  |
-| Vowel mode save fails                        | Toast: generic error                                | Toast system  |
-| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | Component     |
-| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | Component     |
-| SQLite write failure                         | Toast: generic error                                | Toast system  |
-| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | Middleware    |
+| Scenario                                     | UX                                                  | Layer              |
+| -------------------------------------------- | --------------------------------------------------- | ------------------ |
+| Auth session expired                         | Silent redirect to `/login`                         | Router             |
+| Route rendering crash                        | Full-page "Try Again" fallback                      | ErrorBoundary      |
+| Server function network error                | Toast: "Connection lost. Check your internet."      | useTypedMutation   |
+| Auth failure (session invalid)               | Toast: "Please sign in again." + redirect           | useTypedMutation   |
+| Validation failure                           | Toast: "Check your input and try again." (info)     | useTypedMutation   |
+| Resource not found                           | Toast: "Item not found. It may have been deleted."  | useTypedMutation   |
+| Business limit exceeded                      | Toast: "Maximum reached."                           | useTypedMutation   |
+| Unclassified server error                    | Toast: "Something went wrong. Please try again."    | useTypedMutation   |
+| Audio file not found                         | Silent — skip playback                              | AudioEngine        |
+| Letter toggle save fails                     | Toast error via useTypedMutation                    | useTypedMutation   |
+| Profile creation exceeds 4                   | Toast: "Maximum reached."                           | useTypedMutation   |
+| Vowel mode save fails                        | Toast error via useTypedMutation                    | useTypedMutation   |
+| Reading practice: no visible letters         | Show empty state with "Ask parent to add letters"   | Component          |
+| Reading practice: single group (< 3 letters) | Show group with what's available (grid still works) | Component          |
+| SQLite write failure                         | Toast: "Something went wrong." (UNKNOWN)            | useTypedMutation   |
+| Invalid child-mode cookie                    | Clear cookie → redirect to `/login`                 | Middleware         |
+
+---
+
+## 15. Error Classification System
+
+Server function errors use a typed classification system (`ServerFunctionError` + `ErrorCode`) that replaces generic `Error('message')` throws. This enables contextual, bilingual toast messages instead of vague "Something went wrong" notifications.
+
+### Error Type System (`app/lib/errors/index.ts`)
+
+```typescript
+export type ErrorCode =
+  | 'VALIDATION'      // Input validation failures
+  | 'AUTH'            // Authentication/authorization failures
+  | 'NOT_FOUND'       // Resource not found
+  | 'LIMIT_EXCEEDED'  // Business rule limits (e.g., max 4 profiles)
+  | 'NETWORK'         // Transport-level failures (fetch errors)
+  | 'UNKNOWN';        // Fallback for unclassified errors
+
+export class ServerFunctionError extends Error {
+  code: ErrorCode;
+  userMessage: string;
+  cause?: unknown;
+
+  constructor(code: ErrorCode, userMessage: string, cause?: unknown) {
+    super(userMessage);
+    this.name = 'ServerFunctionError';
+    this.code = code;
+    this.userMessage = userMessage;
+    this.cause = cause;
+  }
+}
+```
+
+### Error Code → Toast Variant Mapping
+
+| Error Code       | Toast Variant | EN Message                                  | ID Message                                     |
+| ---------------- | ------------- | ------------------------------------------- | ---------------------------------------------- |
+| `VALIDATION`     | `info`        | "Check your input and try again."           | "Periksa input Anda dan coba lagi."            |
+| `AUTH`           | `error`       | "Please sign in again."                     | "Silakan masuk lagi."                          |
+| `NOT_FOUND`      | `info`        | "Item not found. It may have been deleted." | "Item tidak ditemukan. Mungkin sudah dihapus." |
+| `LIMIT_EXCEEDED` | `error`       | "Maximum reached."                          | "Batas maksimum tercapai."                     |
+| `NETWORK`        | `error`       | "Connection lost. Check your internet."     | "Koneksi terputus. Periksa internet Anda."     |
+| `UNKNOWN`        | `error`       | "Something went wrong. Please try again."   | "Terjadi kesalahan. Silakan coba lagi."        |
+
+### `useTypedMutation` Hook (`app/lib/hooks/useTypedMutation.ts`)
+
+A thin wrapper around TanStack Query's `useMutation` that catches `ServerFunctionError` and dispatches `pushToast` with the correct variant and i18n message:
+
+```typescript
+export function useTypedMutation<TData, TVariables>(
+  options: UseTypedMutationOptions<TData, TVariables>,
+) {
+  const { pushToast } = useUiStore();
+  const { LL } = useI18nContext();
+
+  return useMutation({
+    ...options,
+    onError: (error, variables, context) => {
+      if (error instanceof ServerFunctionError) {
+        const variant = ERROR_TOAST_VARIANT[error.code];
+        const message = getErrorMessage(error.code, LL);
+        pushToast({ variant, message });
+      } else {
+        // Fallback: detect network errors from fetch failures
+        if (error instanceof TypeError && error.message === 'Failed to fetch') {
+          pushToast({ variant: 'error', message: LL.ERROR_NETWORK() });
+        } else {
+          pushToast({ variant: 'error', message: LL.ERROR_UNKNOWN() });
+        }
+      }
+      options.onError?.(error, variables, context);
+    },
+  });
+}
+```
+
+### Server Function Error Mapping
+
+All server function handlers throw `ServerFunctionError` with appropriate codes:
+
+| Current Message                                | Error Code      |
+| ---------------------------------------------- | --------------- |
+| "Maximum of 4 child profiles reached."         | `LIMIT_EXCEEDED` |
+| "Profile not found or does not belong to you." | `NOT_FOUND`     |
+| "Unauthenticated."                             | `AUTH`           |
+| "Unauthorized. Parent session required."       | `AUTH`           |
+| Better Auth APIError rethrows                  | `AUTH`           |
+| All other server errors                        | `UNKNOWN`        |
+
+### i18n Keys
+
+6 new keys added to both EN and ID locales:
+
+- `ERROR_VALIDATION`, `ERROR_AUTH`, `ERROR_NOT_FOUND`, `ERROR_LIMIT_EXCEEDED`, `ERROR_NETWORK`, `ERROR_UNKNOWN`
+
+### Key Design Decisions
+
+- Lightweight `Error` subclass — not a full Result/Option monad
+- `useTypedMutation` wraps `useMutation`, doesn't replace it
+- Network errors detected client-side via `TypeError: Failed to fetch` → `NETWORK` code
+- Backward compatible — old `Error` subclasses still work, uncaught errors fall through to `UNKNOWN`
 
 ---
 
