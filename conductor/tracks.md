@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Address server function test coverage gap**
+- [x] **Track: Address server function test coverage gap**
 *Link: [./test-coverage_20260605/](./test-coverage_20260605/)*

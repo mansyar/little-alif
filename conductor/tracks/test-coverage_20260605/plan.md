@@ -64,10 +64,10 @@
     - [x] Test: calls `authorizeChildAccess` with correct profileId
     - [x] Test: delegates to `getReadingData` with correct userId and profileId
 - [x] Task: Run `pnpm test:coverage` and verify `reading.ts` ≥80% stmts/branch/funcs/lines (100% stmts, 87.5% branch, 100% funcs, 100% lines) ✅
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md) (3d698cf)
 
 ## Phase 5: Final Verification
 
-- [ ] Task: Run full test suite (`pnpm test`) — verify 484+ tests pass, no regressions
-- [ ] Task: Run `pnpm test:coverage` — verify all 4 target files ≥80% across all metrics
-- [ ] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md)
+- [x] Task: Run full test suite (`pnpm test`) — verify 522 tests pass across 60 files, no regressions ✅
+- [x] Task: Run `pnpm test:coverage` — verify all 4 target files ≥80% across all metrics ✅
+- [x] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md) (3d698cf)
