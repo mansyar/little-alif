@@ -62,6 +62,9 @@ COPY --from=build /app/package.json ./
 # Copy the server entry wrapper
 COPY docker/server-entry.mjs ./docker/server-entry.mjs
 
+# Ensure data directory exists for SQLite volume mount
+RUN mkdir -p /app/data
+
 # Run as non-root user for security
 RUN addgroup -g 1001 -S app && adduser -S app -u 1001 -G app
 RUN chown -R app:app /app

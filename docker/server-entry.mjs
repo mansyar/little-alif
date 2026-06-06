@@ -92,7 +92,7 @@ const server = createServer(async (req, res) => {
       "default-src 'self'; " +
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
         "font-src 'self' https://fonts.gstatic.com; " +
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; " +
         "img-src 'self' data:; " +
         "connect-src 'self';",
     );
