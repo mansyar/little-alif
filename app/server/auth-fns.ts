@@ -1,6 +1,6 @@
 import { APIError } from 'better-auth';
 import { createServerFn } from '@tanstack/react-start';
-import { getCookie, getRequest, setCookie } from '@tanstack/react-start/server';
+import { getRequest, setCookie } from '@tanstack/react-start/server';
 import { z } from 'zod';
 import { and, eq } from 'drizzle-orm';
 import { getDb, type DbClient } from '~/db';
@@ -17,15 +17,6 @@ import { checkRateLimit, getClientIp } from '~/lib/utils/rate-limit';
 export function deriveNameFromEmail(email: string): string {
   const local = email.split('@')[0] ?? '';
   return local.length > 0 ? local : 'Parent';
-}
-
-/**
- * Build the cookie header that we hand to Better Auth when we only
- * have a single session cookie value. The cookie name is what Better
- * Auth's TanStack Start integration reads on the response.
- */
-export function buildCookieHeader(token: string): string {
-  return `better-auth.session_token=${token}`;
 }
 
 /**
@@ -158,21 +149,20 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
   .inputValidator(z.object({}).optional())
   .handler(async () => {
     const auth = await getAuth();
-    const token = getCookie('better-auth.session_token');
+    const request = getRequest();
 
-    // Priority 1: parent JWT session
-    if (token !== undefined) {
-      const result = await auth.api.getSession({
-        headers: new Headers({ cookie: buildCookieHeader(token) }),
-      });
-      if (result) return result;
-    }
+    // Priority 1: parent JWT session — pass full request headers so Better Auth
+    // handles cookie name prefixing (e.g. __Secure-better-auth.session_token in
+    // production when secure cookies are enabled).
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (session) return session;
 
     // Priority 2: child-mode cookie
-    const childCookie = getCookie('child_mode');
-    if (childCookie !== undefined) {
+    const cookieHeader = request.headers.get('cookie') ?? '';
+    const childMatch = cookieHeader.match(/(?:^|;\s*)child_mode=([^;]*)/);
+    if (childMatch !== null) {
       const db = await getDb();
-      const childSession = await buildChildSession(db, childCookie);
+      const childSession = await buildChildSession(db, decodeURIComponent(childMatch[1] ?? ''));
       if (childSession) return childSession;
     }
 

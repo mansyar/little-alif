@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { APIError } from 'better-auth';
 import { ServerFunctionError, ErrorCode } from '~/lib/errors';
-import { deriveNameFromEmail, buildCookieHeader } from './auth-fns';
+import { deriveNameFromEmail } from './auth-fns';
 
 const authMocks = vi.hoisted(() => ({
   fakeDb: { __fakeDb: true },
@@ -46,16 +46,6 @@ describe('deriveNameFromEmail', () => {
 
   it('falls back to "Parent" when the email has no local-part', () => {
     expect(deriveNameFromEmail('@example.com')).toBe('Parent');
-  });
-});
-
-describe('buildCookieHeader', () => {
-  it('formats a single cookie header value', () => {
-    expect(buildCookieHeader('abc.def')).toBe('better-auth.session_token=abc.def');
-  });
-
-  it('preserves tokens containing dots, dashes, and underscores', () => {
-    expect(buildCookieHeader('a.b-c_d')).toBe('better-auth.session_token=a.b-c_d');
   });
 });
 
@@ -531,10 +521,9 @@ describe('enableChildModeFn', () => {
       })),
     }));
     vi.doMock('@tanstack/react-start/server', () => ({
-      getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn((name: string) =>
-        name === 'better-auth.session_token' ? 'test-token' : undefined,
-      ),
+      getRequest: () => ({
+        headers: new Headers({ cookie: 'better-auth.session_token=test-token' }),
+      }),
       setCookie: mockSetCookie,
     }));
     vi.doMock('./auth', () => ({
@@ -565,9 +554,7 @@ describe('enableChildModeFn', () => {
     }));
     vi.doMock('@tanstack/react-start/server', () => ({
       getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn((name: string) =>
-        name === 'better-auth.session_token' ? 'test-token' : undefined,
-      ),
+      getRequestHeaders: () => ({ cookie: 'better-auth.session_token=test-token' }),
       setCookie: mockSetCookie,
     }));
     vi.doMock('./auth', () => ({
@@ -618,8 +605,9 @@ describe('enableChildModeFn', () => {
       })),
     }));
     vi.doMock('@tanstack/react-start/server', () => ({
-      getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn(),
+      getRequest: () => ({
+        headers: new Headers({ cookie: 'better-auth.session_token=test-token' }),
+      }),
       setCookie: mockSetCookie,
     }));
     vi.doMock('./auth', () => ({
@@ -694,10 +682,9 @@ describe('disableChildModeFn', () => {
       })),
     }));
     vi.doMock('@tanstack/react-start/server', () => ({
-      getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn((name: string) =>
-        name === 'better-auth.session_token' ? 'test-token' : undefined,
-      ),
+      getRequest: () => ({
+        headers: new Headers({ cookie: 'better-auth.session_token=test-token' }),
+      }),
       setCookie: mockSetCookie,
     }));
     vi.doMock('./auth', () => ({
@@ -735,11 +722,8 @@ describe('disableChildModeFn', () => {
       })),
     }));
     vi.doMock('@tanstack/react-start/server', () => ({
-      getRequest: () => ({ headers: new Headers() }),
-      getCookie: vi.fn((name: string) => {
-        if (name === 'better-auth.session_token') return undefined;
-        if (name === 'child_mode') return 'valid-child-cookie';
-        return undefined;
+      getRequest: () => ({
+        headers: new Headers({ cookie: 'child_mode=valid-child-cookie' }),
       }),
       setCookie: vi.fn(),
     }));
