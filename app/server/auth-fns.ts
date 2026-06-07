@@ -159,7 +159,7 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
 
     // Priority 2: child-mode cookie
     const cookieHeader = request.headers.get('cookie') ?? '';
-    const childMatch = cookieHeader.match(/(?:^|;\s*)child_mode=([^;]*)/);
+    const childMatch = /(?:^|;\s*)child_mode=([^;]*)/.exec(cookieHeader);
     if (childMatch !== null) {
       const db = await getDb();
       const childSession = await buildChildSession(db, decodeURIComponent(childMatch[1] ?? ''));
