@@ -13,7 +13,7 @@
   - [x] Run `pnpm lint` and `pnpm typecheck` to verify no regressions
 - [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
-## Phase 2: Create Auto-Migration Module
+## Phase 2: Create Auto-Migration Module [checkpoint: b1cf893]
 
 - [x] Task: Create `app/db/migrate.ts` with `autoMigrate()` function (affb922)
   - [x] Write failing test in `app/db/migrate.test.ts` — verify autoMigrate runs `migrate()` from `drizzle-orm/libsql/migrator` against an in-memory SQLite database and creates the `__drizzle_migrations` table
@@ -26,7 +26,7 @@
   - [x] Write integration test — spy on `autoMigrate` to verify it is called exactly once when `getDb()` is invoked for the first time
   - [x] Write test verifying `getDb()` still returns a valid DbClient after migration runs
   - [x] Run full test suite to confirm no regressions
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: Generate & Verify Initial Migration
 
