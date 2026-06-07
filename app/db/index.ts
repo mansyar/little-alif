@@ -41,10 +41,10 @@ export function getClient(): Client {
  * On first initialization, pending Drizzle migrations are applied
  * automatically using the `autoMigrate` helper.
  */
-export function getDb(): DbClient {
+export async function getDb(): Promise<DbClient> {
   if (!_db) {
     _db = drizzle(getClient(), { schema: fullSchema });
-    void autoMigrate(_db, path.resolve(process.cwd(), 'app/db/migrations'));
+    await autoMigrate(_db, path.resolve(process.cwd(), 'app/db/migrations'));
   }
   return _db;
 }

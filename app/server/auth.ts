@@ -3,9 +3,10 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
 import { getDb } from '~/db';
 
-function buildAuth() {
+async function buildAuth() {
+  const db = await getDb();
   return betterAuth({
-    database: drizzleAdapter(getDb(), {
+    database: drizzleAdapter(db, {
       provider: 'sqlite',
     }),
     emailAndPassword: {
@@ -35,7 +36,7 @@ function buildAuth() {
   });
 }
 
-export type AuthInstance = ReturnType<typeof buildAuth>;
+export type AuthInstance = Awaited<ReturnType<typeof buildAuth>>;
 
 let _auth: AuthInstance | null = null;
 
@@ -50,7 +51,7 @@ let _auth: AuthInstance | null = null;
  * `@tanstack/react-start/server` so auth cookies land on the response
  * after sign-in / sign-out handlers.
  */
-export function getAuth(): AuthInstance {
-  _auth ??= buildAuth();
+export async function getAuth(): Promise<AuthInstance> {
+  _auth ??= await buildAuth();
   return _auth;
 }

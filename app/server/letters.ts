@@ -141,7 +141,7 @@ export const getVisibleLettersFn = createServerFn({ method: 'GET' })
       throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
-    const db = getDb();
+    const db = await getDb();
     return getVisibleLetters(db, session.user.id, data.profileId);
   });
 
@@ -154,7 +154,7 @@ export const toggleLetterFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return toggleLetter(db, session.user.id, data);
   });
 
@@ -167,6 +167,6 @@ export const bulkToggleLettersFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return bulkToggleLetters(db, session.user.id, data);
   });

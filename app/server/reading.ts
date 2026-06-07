@@ -76,6 +76,6 @@ export const getReadingDataFn = createServerFn({ method: 'GET' })
       throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
-    const db = getDb();
+    const db = await getDb();
     return getReadingData(db, session.user.id, data.profileId);
   });

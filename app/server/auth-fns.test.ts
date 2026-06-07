@@ -104,8 +104,8 @@ describe('server module smoke', () => {
 describe('getAuth singleton', () => {
   it('returns a stable auth instance across calls', async () => {
     const { getAuth } = await import('./auth');
-    const a = getAuth();
-    const b = getAuth();
+    const a = await getAuth();
+    const b = await getAuth();
     expect(a).toBe(b);
     expect(a).toBeDefined();
   });

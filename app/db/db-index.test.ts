@@ -69,7 +69,7 @@ describe('app/db/index', () => {
     libsqlMocks.createClient.mockReturnValue(fakeClient);
     const { getDb } = await import('./index');
 
-    const db = getDb();
+    const db = await getDb();
 
     // A real Drizzle instance exposes select/insert/etc.
     expect(typeof db.select).toBe('function');
@@ -84,8 +84,8 @@ describe('app/db/index', () => {
 
     const { getDb } = await import('./index');
 
-    const db1 = getDb();
-    const db2 = getDb();
+    const db1 = await getDb();
+    const db2 = await getDb();
 
     // Same instance returned
     expect(db1).toBe(db2);

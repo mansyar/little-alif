@@ -41,7 +41,7 @@ export const registerFn = createServerFn({ method: 'POST' })
       throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
 
-    const auth = getAuth();
+    const auth = await getAuth();
     try {
       const result = await auth.api.signUpEmail({
         body: {
@@ -74,7 +74,7 @@ export const loginFn = createServerFn({ method: 'POST' })
       throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
 
-    const auth = getAuth();
+    const auth = await getAuth();
     try {
       const result = await auth.api.signInEmail({
         body: { email: data.email, password: data.password },
@@ -94,7 +94,7 @@ export const loginFn = createServerFn({ method: 'POST' })
  * Sign out the current session by invalidating the session token.
  */
 export const logoutFn = createServerFn({ method: 'POST' }).handler(async () => {
-  const auth = getAuth();
+  const auth = await getAuth();
   const request = getRequest();
   await auth.api.signOut({
     headers: request.headers,
@@ -157,7 +157,7 @@ export async function buildChildSession(
 export const validateSessionFn = createServerFn({ method: 'GET' })
   .inputValidator(z.object({}).optional())
   .handler(async () => {
-    const auth = getAuth();
+    const auth = await getAuth();
     const token = getCookie('better-auth.session_token');
 
     // Priority 1: parent JWT session
@@ -171,7 +171,7 @@ export const validateSessionFn = createServerFn({ method: 'GET' })
     // Priority 2: child-mode cookie
     const childCookie = getCookie('child_mode');
     if (childCookie !== undefined) {
-      const db = getDb();
+      const db = await getDb();
       const childSession = await buildChildSession(db, childCookie);
       if (childSession) return childSession;
     }
@@ -257,7 +257,7 @@ export const enableChildModeFn = createServerFn({ method: 'POST' })
     const session = await validateSessionFn();
     requireParentSession(session);
 
-    const db = getDb();
+    const db = await getDb();
     const { name, avatar } = await enableChildMode(db, session.user.id, data.profileId);
 
     const { signChildModeCookie } = await import('~/lib/utils/child-mode.server');

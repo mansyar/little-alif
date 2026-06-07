@@ -195,7 +195,7 @@ export const listProfilesFn = createServerFn({ method: 'GET' })
   .handler(async () => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return listProfiles(db, session.user.id);
   });
 
@@ -207,7 +207,7 @@ export const createProfileFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return createProfile(db, session.user.id, data);
   });
 
@@ -219,7 +219,7 @@ export const updateProfileFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return updateProfile(db, session.user.id, data);
   });
 
@@ -231,7 +231,7 @@ export const deleteProfileFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
 
     await deleteProfile(db, session.user.id, data.profileId);
 
@@ -261,7 +261,7 @@ export const getActiveProfileFn = createServerFn({ method: 'GET' })
       throw new ServerFunctionError(ErrorCode.AUTH, 'ERROR_AUTH');
     }
     authorizeChildAccess(session, data.profileId);
-    const db = getDb();
+    const db = await getDb();
     return getActiveProfile(db, session.user.id, data.profileId);
   });
 
@@ -277,6 +277,6 @@ export const listProfilesForSwitchFn = createServerFn({ method: 'GET' })
   .handler(async () => {
     const session = await validateSessionFn();
     requireParentSession(session);
-    const db = getDb();
+    const db = await getDb();
     return listProfilesForSwitch(db, session.user.id);
   });

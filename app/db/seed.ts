@@ -9,7 +9,7 @@ import { letters } from './schema';
 import { SEED_LETTERS } from './seed-data';
 
 async function seed(): Promise<void> {
-  const db = getDb();
+  const db = await getDb();
   const existing = await db.select({ id: letters.id }).from(letters);
   const existingIds = new Set(existing.map((row) => row.id));
 
