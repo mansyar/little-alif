@@ -15,11 +15,11 @@
 
 ## Phase 2: Create Auto-Migration Module
 
-- [ ] Task: Create `app/db/migrate.ts` with `autoMigrate()` function
-  - [ ] Write failing test in `app/db/migrate.test.ts` — verify autoMigrate runs `migrate()` from `drizzle-orm/libsql/migrator` against an in-memory SQLite database and creates the `__drizzle_migrations` table
-  - [ ] Implement `autoMigrate()` — import `migrate` from `drizzle-orm/libsql/migrator`, accept a `DbClient` and `migrationsFolder` path, call `migrate()` with proper error handling
-  - [ ] Write test verifying `autoMigrate` is idempotent (calling it twice does not error)
-  - [ ] Run tests and confirm they pass
+- [x] Task: Create `app/db/migrate.ts` with `autoMigrate()` function (affb922)
+  - [x] Write failing test in `app/db/migrate.test.ts` — verify autoMigrate runs `migrate()` from `drizzle-orm/libsql/migrator` against an in-memory SQLite database and creates the `__drizzle_migrations` table
+  - [x] Implement `autoMigrate()` — import `migrate` from `drizzle-orm/libsql/migrator`, accept a `DbClient` and `migrationsFolder` path, call `migrate()` with proper error handling
+  - [x] Write test verifying `autoMigrate` is idempotent (calling it twice does not error)
+  - [x] Run tests and confirm they pass
 - [ ] Task: Integrate `autoMigrate()` into server startup via `getDb()` in `app/db/index.ts`
   - [ ] Import `autoMigrate` and call it once inside the `getDb()` lazy singleton initializer (before returning the DbClient)
   - [ ] Resolve `migrationsFolder` path relative to the project root (`path.resolve(process.cwd(), 'app/db/migrations')`)
