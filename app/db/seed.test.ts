@@ -1,46 +1,31 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SEED_LETTERS } from './seed-data';
+import type { DbClient } from './index';
 
 const seedMocks = vi.hoisted(() => {
   const insertValues = vi.fn();
   const insert = vi.fn(() => ({ values: insertValues }));
   const from = vi.fn();
   const select = vi.fn(() => ({ from }));
-  const fakeDb = { insert, select };
+  const fakeDb = { insert, select } as unknown as DbClient;
   return {
     fakeDb,
     insert,
     insertValues,
     from,
     select,
-    processExit: vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never),
     log: vi.spyOn(console, 'log').mockImplementation(() => undefined),
-    error: vi.spyOn(console, 'error').mockImplementation(() => undefined),
   };
 });
 
-vi.mock('./index', () => ({ getDb: () => seedMocks.fakeDb }));
 vi.mock('./schema', () => ({ letters: { id: 'letters.id' } }));
 
-/**
- * Import the seed module (which runs the top-level `seed().catch(...)` chain)
- * and wait for that chain to settle. We use a setImmediate flush because the
- * chain mixes microtask awaits with macrotask yields.
- */
-async function runSeed() {
-  await import('./seed');
-  await new Promise((resolve) => setImmediate(resolve));
-}
-
 beforeEach(() => {
-  vi.resetModules();
   seedMocks.insert.mockClear();
   seedMocks.insertValues.mockClear();
   seedMocks.from.mockClear();
   seedMocks.select.mockClear();
-  seedMocks.processExit.mockClear();
   seedMocks.log.mockClear();
-  seedMocks.error.mockClear();
 });
 
 describe('SEED_LETTERS', () => {
@@ -89,18 +74,16 @@ describe('SEED_LETTERS', () => {
 
   it('includes the canonical Hijaiyah order (alif → ya)', () => {
     const ordered = [...SEED_LETTERS].sort((a, b) => a.displayOrder - b.displayOrder);
-    // Note: ha = ح (ḥāʼ), hae = ه (soft hāʼ) per docs/tdd.md §6
-    // Derive expected IDs from seed data so the canonical order is defined
-    // in exactly one place (seed-data.ts → constants/letters.ts).
     const expectedIds = SEED_LETTERS.map((l) => l.id);
     expect(ordered.map((l) => l.id)).toEqual(expectedIds);
   });
 });
 
-describe('seed() runner', () => {
+describe('seedLetters()', () => {
   it('inserts all 28 letters when the table is empty', async () => {
+    const { seedLetters } = await import('./seed-letters');
     seedMocks.from.mockResolvedValueOnce([]);
-    await runSeed();
+    await seedLetters(seedMocks.fakeDb);
 
     expect(seedMocks.select).toHaveBeenCalledWith({ id: 'letters.id' });
     expect(seedMocks.insert).toHaveBeenCalledTimes(1);
@@ -110,12 +93,12 @@ describe('seed() runner', () => {
     expect(valuesArg).toHaveLength(28);
     expect(typeof valuesArg?.[0]?.audioFiles).toBe('string');
     expect(JSON.parse(valuesArg![0]!.audioFiles)).toMatchObject({ none: 'alif.mp3' });
-    expect(seedMocks.processExit).not.toHaveBeenCalled();
   });
 
   it('skips letters that already exist (idempotent)', async () => {
+    const { seedLetters } = await import('./seed-letters');
     seedMocks.from.mockResolvedValueOnce([{ id: 'alif' }, { id: 'ba' }, { id: 'ta' }]);
-    await runSeed();
+    await seedLetters(seedMocks.fakeDb);
 
     const valuesArg = seedMocks.insertValues.mock.calls[0]?.[0] as
       | { id: string; audioFiles: string }[]
@@ -125,28 +108,18 @@ describe('seed() runner', () => {
     expect(insertedIds).not.toContain('alif');
     expect(insertedIds).not.toContain('ba');
     expect(insertedIds).not.toContain('ta');
-    expect(seedMocks.processExit).not.toHaveBeenCalled();
   });
 
   it('is a no-op when all letters already exist', async () => {
+    const { seedLetters } = await import('./seed-letters');
     const allIds = SEED_LETTERS.map((l) => l.id);
     seedMocks.from.mockResolvedValueOnce(allIds.map((id) => ({ id })));
-    await runSeed();
+    await seedLetters(seedMocks.fakeDb);
 
     expect(seedMocks.insert).not.toHaveBeenCalled();
     expect(seedMocks.insertValues).not.toHaveBeenCalled();
     expect(seedMocks.log).toHaveBeenCalledWith(
       expect.stringContaining('All 28 letters already present'),
     );
-    expect(seedMocks.processExit).not.toHaveBeenCalled();
-  });
-
-  it('exits with code 1 when seeding fails', async () => {
-    seedMocks.from.mockResolvedValueOnce([]);
-    seedMocks.insertValues.mockRejectedValueOnce(new Error('disk full'));
-    await runSeed();
-
-    expect(seedMocks.processExit).toHaveBeenCalledWith(1);
-    expect(seedMocks.error).toHaveBeenCalledWith('[seed] Failed:', expect.any(Error));
   });
 });

@@ -51,19 +51,9 @@ RUN corepack enable && corepack prepare pnpm@10.29.3 --activate && \
 # Copy production build artifacts (Nitro standalone — includes all bundled deps)
 COPY --from=build /app/.output ./.output
 
-# Copy source files needed for auto-migration + seed at startup
-# autoMigrate() requires the migration SQL files (app/db/migrations/)
-# seed.ts requires the database schema + constants
-COPY --from=build /app/app/db ./app/db
-COPY --from=build /app/app/lib/constants ./app/lib/constants
-
-# Install production deps for seed.ts (needs @libsql/client, drizzle-orm, etc.)
-# Seed runs via tsx outside the Nitro standalone bundle
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile && pnpm store prune
-
-# Install tsx for running seed.ts at startup (TypeScript ESM loader)
-RUN pnpm add tsx@^4.19.2 && pnpm store prune
+# Copy migration SQL files for autoMigrate() which reads them at runtime.
+# NOTE: app source code is already bundled in .output/ by the Nitro build.
+COPY --from=build /app/app/db/migrations ./app/db/migrations
 
 # Copy startup script
 COPY docker/start.sh ./docker/start.sh

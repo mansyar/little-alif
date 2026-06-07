@@ -64,7 +64,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-20  | Vite 8 Upgrade                         | ✅ Complete | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                         |
 | —     | Drizzle SQL Migration Workflow         | ✅ Complete | [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/)                                       |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies. The Drizzle SQL Migration Workflow replaced `drizzle-kit push` with version-controlled SQL migrations via `drizzle-kit generate` + `drizzle-kit migrate`, with auto-migration on server startup.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies. The Drizzle SQL Migration Workflow replaced `drizzle-kit push` with version-controlled SQL migrations via `drizzle-kit generate` + `drizzle-kit migrate`, with auto-migration on server startup. A follow-up refactored the seed process to run inside the Nitro server via a `boot.ts` module, eliminating the separate seed step and simplifying the Docker runner stage.
 
 ---
 
@@ -1222,7 +1222,7 @@ Upgrade the build toolchain from Vite 7 to Vite 8, which replaces esbuild with R
 **TDD Ref:** §6 (Database Schema & Init)
 
 **Description:**
-Replace `drizzle-kit push`-based schema management with a proper SQL migration workflow. Generated migration files are version-controlled for traceability, and `autoMigrate()` runs on every server start to ensure the database schema is always up to date.
+Replace `drizzle-kit push`-based schema management with a proper SQL migration workflow. Generated migration files are version-controlled for traceability, and `autoMigrate()` runs on every server start to ensure the database schema is always up to date. A follow-up refactored the letter seed process to run inside the Nitro server via a `boot.ts` module, eliminating the separate Docker seed step.
 
 **Key Deliverables (all delivered):**
 
@@ -1231,14 +1231,21 @@ Replace `drizzle-kit push`-based schema management with a proper SQL migration w
 - `app/db/migrations/0000_*.sql` — Initial migration snapshot (7 tables, git-tracked)
 - `app/db/migrate.ts` — `autoMigrate()` using `drizzle-orm/libsql/migrator`
 - `app/db/index.ts` — `getDb()` now async, calls `autoMigrate()` on first invocation
-- All 565 tests passing across 66 test files
+- `app/db/boot.ts` — Server startup boot module: calls `getDb()` (migrate) then `seedLetters()` (idempotent insert)
+- `app/db/seed-letters.ts` — Pure seed function (no circular deps), reused by CLI `seed.ts`
+- `app/db/seed-data.ts` — 28-letter master data extracted from seed.ts
+- `app/router.tsx` — Top-level `import './db/boot'` triggers boot on Nitro startup
+- `docker/start.sh` — Simplified: no separate seed step, just starts the server
+- `docker/Dockerfile` — Runner stage simplified: removed tsx, production deps, unnecessary source copies
+- All 564 tests passing across 66 test files
 
 **Key Decisions:**
 
 - Migration runs on server startup before accepting requests (no separate entrypoint needed)
 - `autoMigrate()` is idempotent — Drizzle tracks applied migrations in `__drizzle_migrations` table
-- Docker deployment unchanged — the auto-migration at startup replaces the need for `docker-entrypoint` scripts
-- No `--force` flag in any production path
+- Seed process runs inside Nitro server via `boot.ts`, guarded by `NODE_ENV !== 'test'` to avoid test interference
+- `seedLetters()` is a pure function accepting `DbClient` — avoids circular dependencies with `getDb()`
+- Docker runner stage is minimal: only `.output/`, migrations folder, and start script
 
 ---
 
