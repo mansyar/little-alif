@@ -3,9 +3,9 @@
 
 ## Phase 1: Configure Migration Output & Scripts
 
-- [ ] Task: Update `drizzle.config.ts` with `out: './app/db/migrations'`
-  - [ ] Add `out` property pointing to `./app/db/migrations`
-  - [ ] Verify the config parses correctly via `pnpm drizzle-kit generate --dry-run` (if available) or `pnpm drizzle-kit --help`
+- [x] Task: Update `drizzle.config.ts` with `out: './app/db/migrations'` (fe55d2f)
+  - [x] Add `out` property pointing to `./app/db/migrations`
+  - [x] Verify the config parses correctly — `drizzle-kit generate` produced the initial migration
 - [ ] Task: Update `package.json` scripts — remove `db:push`, add `db:generate` and `db:migrate`
   - [ ] Remove the `db:push` script line
   - [ ] Add `"db:generate": "drizzle-kit generate --config drizzle.config.ts"`
@@ -44,4 +44,4 @@
   - [ ] Clean up temporary database
 - [ ] Task: Update `.gitignore` if needed — ensure `app/db/migrations/` is NOT ignored (it should be tracked)
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
-</protect>
+      </protect>
