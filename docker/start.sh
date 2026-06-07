@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# NOTE: Database migration runs automatically via autoMigrate() in app/db/index.ts
-# on server startup — no manual drizzle-kit invocation needed.
+# Seeding triggers autoMigrate() via getDb() — tables are created before data is inserted.
+# When the server starts, autoMigrate() is a no-op (migrations already applied).
 
 echo "==> Seeding database..."
 node --import tsx app/db/seed.ts
