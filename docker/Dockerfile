@@ -51,14 +51,14 @@ RUN corepack enable && corepack prepare pnpm@10.29.3 --activate && \
 # Copy production build artifacts (Nitro standalone — includes all bundled deps)
 COPY --from=build /app/.output ./.output
 
-# Copy source files needed for drizzle-kit push + seed at startup
-COPY drizzle.config.ts ./
-COPY tsconfig.json ./
+# Copy source files needed for auto-migration + seed at startup
+# autoMigrate() requires the migration SQL files (app/db/migrations/)
+# seed.ts requires the database schema + constants
 COPY --from=build /app/app/db ./app/db
 COPY --from=build /app/app/lib/constants ./app/lib/constants
 
-# Install drizzle-kit + tsx for post-deploy DB hooks
-RUN pnpm add drizzle-kit@^0.30.1 tsx@^4.19.2 && pnpm store prune
+# Install tsx for running seed.ts at startup (TypeScript ESM loader)
+RUN pnpm add tsx@^4.19.2 && pnpm store prune
 
 # Copy startup script
 COPY docker/start.sh ./docker/start.sh
