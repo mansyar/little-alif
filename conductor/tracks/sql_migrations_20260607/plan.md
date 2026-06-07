@@ -1,7 +1,7 @@
 <protect>
 # Implementation Plan: Drizzle SQL Migration Workflow
 
-## Phase 1: Configure Migration Output & Scripts
+## Phase 1: Configure Migration Output & Scripts [checkpoint: e198ecd]
 
 - [x] Task: Update `drizzle.config.ts` with `out: './app/db/migrations'` (fe55d2f)
   - [x] Add `out` property pointing to `./app/db/migrations`
