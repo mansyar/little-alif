@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Implement Drizzle SQL Migration Workflow**
-*Link: [./tracks/sql_migrations_20260607/](./tracks/sql_migrations_20260607/)*
+- [~] **Track: Implement Drizzle SQL Migration Workflow**
+  _Link: [./tracks/sql_migrations_20260607/](./tracks/sql_migrations_20260607/)_

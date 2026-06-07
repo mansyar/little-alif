@@ -20,12 +20,12 @@
   - [x] Implement `autoMigrate()` — import `migrate` from `drizzle-orm/libsql/migrator`, accept a `DbClient` and `migrationsFolder` path, call `migrate()` with proper error handling
   - [x] Write test verifying `autoMigrate` is idempotent (calling it twice does not error)
   - [x] Run tests and confirm they pass
-- [ ] Task: Integrate `autoMigrate()` into server startup via `getDb()` in `app/db/index.ts`
-  - [ ] Import `autoMigrate` and call it once inside the `getDb()` lazy singleton initializer (before returning the DbClient)
-  - [ ] Resolve `migrationsFolder` path relative to the project root (`path.resolve(process.cwd(), 'app/db/migrations')`)
-  - [ ] Write integration test — spy on `autoMigrate` to verify it is called exactly once when `getDb()` is invoked for the first time
-  - [ ] Write test verifying `getDb()` still returns a valid DbClient after migration runs
-  - [ ] Run full test suite to confirm no regressions
+- [x] Task: Integrate `autoMigrate()` into server startup via `getDb()` in `app/db/index.ts` (80f9644)
+  - [x] Import `autoMigrate` and call it once inside the `getDb()` lazy singleton initializer (before returning the DbClient)
+  - [x] Resolve `migrationsFolder` path relative to the project root (`path.resolve(process.cwd(), 'app/db/migrations')`)
+  - [x] Write integration test — spy on `autoMigrate` to verify it is called exactly once when `getDb()` is invoked for the first time
+  - [x] Write test verifying `getDb()` still returns a valid DbClient after migration runs
+  - [x] Run full test suite to confirm no regressions
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: Generate & Verify Initial Migration

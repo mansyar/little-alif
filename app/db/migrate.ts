@@ -13,9 +13,6 @@ import type { DbClient } from './index';
  * @param migrationsFolder - Absolute path to the directory containing
  *   migration SQL files and the `meta/_journal.json` manifest.
  */
-export async function autoMigrate(
-  db: DbClient,
-  migrationsFolder: string,
-): Promise<void> {
+export async function autoMigrate(db: DbClient, migrationsFolder: string): Promise<void> {
   await migrate(db, { migrationsFolder });
 }

@@ -60,4 +60,4 @@ Replace the current `drizzle-kit push`-based schema management with a proper SQL
 - Changing the database schema itself (adding/removing tables or columns).
 - Modifying the Dockerfile or docker-compose configuration.
 - Creating rollback/down migration scripts (Drizzle does not natively support down migrations via generate).
-</protect>
+  </protect>

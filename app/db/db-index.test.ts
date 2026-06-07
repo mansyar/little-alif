@@ -92,9 +92,6 @@ describe('app/db/index', () => {
     // autoMigrate called exactly once (on first getDb call)
     expect(libsqlMocks.autoMigrate).toHaveBeenCalledTimes(1);
     // autoMigrate receives two args: Drizzle instance and migrations folder path
-    expect(libsqlMocks.autoMigrate).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.any(String),
-    );
+    expect(libsqlMocks.autoMigrate).toHaveBeenCalledWith(expect.anything(), expect.any(String));
   });
 });
