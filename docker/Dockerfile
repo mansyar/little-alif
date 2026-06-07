@@ -15,21 +15,6 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # =============================================================================
-# Stage 1b: Production dependencies only
-# =============================================================================
-FROM node:24-alpine AS deps-prod
-
-WORKDIR /app
-
-RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
-
-COPY package.json pnpm-lock.yaml ./
-
-# Production deps only — skips vitest, typescript, eslint, etc.
-# --ignore-scripts skips the "prepare" hook (husky) which is dev-only
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
-
-# =============================================================================
 # Stage 2: Build
 # =============================================================================
 FROM node:24-alpine AS build
@@ -45,7 +30,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy source code
 COPY . .
 
-# Build the app (outputs to dist/client + dist/server)
+# Build the app (Nitro outputs to .output/)
 ENV NODE_ENV=production
 RUN pnpm build
 
@@ -59,31 +44,14 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install curl for Docker health checks, tini for signal handling,
-# and pnpm for DB operations (db:push, db:seed)
+# Install curl for Docker health checks, tini for signal handling
 RUN apk add --no-cache curl tini
-RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
 
-# Copy production build artifacts
-COPY --from=build /app/dist ./dist
-
-# Copy public assets (audio files, etc.)
-COPY --from=build /app/public ./public
-
-# Copy production-only node_modules (no devDependencies)
-COPY --from=deps-prod /app/node_modules ./node_modules
+# Copy production build artifacts (Nitro standalone — includes all bundled deps)
+COPY --from=build /app/.output ./.output
 
 # Copy package.json for metadata (not strictly needed but conventional)
 COPY --from=build /app/package.json ./
-
-# Copy source files needed for DB operations (drizzle-kit push, seed)
-COPY --from=build /app/drizzle.config.ts ./
-COPY --from=build /app/tsconfig.json ./
-COPY --from=build /app/app/db ./app/db
-COPY --from=build /app/app/lib/constants ./app/lib/constants
-
-# Copy the server entry wrapper
-COPY docker/server-entry.mjs ./docker/server-entry.mjs
 
 # Ensure data directory exists for SQLite volume mount
 RUN mkdir -p /app/data
@@ -105,4 +73,4 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
 # tini as PID 1 for proper signal handling (graceful shutdown on SIGTERM)
 ENTRYPOINT ["/sbin/tini", "--"]
 
-CMD ["node", "docker/server-entry.mjs"]
+CMD ["node", ".output/server/index.mjs"]

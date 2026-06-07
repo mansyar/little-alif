@@ -39,12 +39,13 @@
     "drizzle-kit": "^0.30.1",
     "drizzle-orm": "^0.38.3",
     "lucide-react": "^0.469.0",
+    "nitro": "3.0.260603-beta",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0",
     "tsx": "^4.19.2",
-    "zod": "^4.4.3",
     "typesafe-i18n": "5.26.0",
+    "zod": "^4.4.3",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
