@@ -6,11 +6,11 @@
 - [x] Task: Update `drizzle.config.ts` with `out: './app/db/migrations'` (fe55d2f)
   - [x] Add `out` property pointing to `./app/db/migrations`
   - [x] Verify the config parses correctly — `drizzle-kit generate` produced the initial migration
-- [ ] Task: Update `package.json` scripts — remove `db:push`, add `db:generate` and `db:migrate`
-  - [ ] Remove the `db:push` script line
-  - [ ] Add `"db:generate": "drizzle-kit generate --config drizzle.config.ts"`
-  - [ ] Add `"db:migrate": "drizzle-kit migrate --config drizzle.config.ts"`
-  - [ ] Run `pnpm lint` and `pnpm typecheck` to verify no regressions
+- [x] Task: Update `package.json` scripts — remove `db:push`, add `db:generate` and `db:migrate` (93eb6e5)
+  - [x] Remove the `db:push` script line
+  - [x] Add `"db:generate": "drizzle-kit generate --config drizzle.config.ts"`
+  - [x] Add `"db:migrate": "drizzle-kit migrate --config drizzle.config.ts"`
+  - [x] Run `pnpm lint` and `pnpm typecheck` to verify no regressions
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Create Auto-Migration Module
