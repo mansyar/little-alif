@@ -31,8 +31,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-18  | Error Classification System          | T-12                   | Medium     | ~1-2h       | ✅ Complete |
 | T-19  | Security Hardening & Code Quality    | T-12, T-18             | Medium     | ~3-5h       | ✅ Complete |
 | T-20  | Vite 8 Upgrade                       | T-01                   | Low        | ~1-2h       | ✅ Complete |
+| —     | Drizzle SQL Migration Workflow       | T-02, T-12             | Low        | ~1-2h       | ✅ Complete |
 
-\***\*20 tracks complete.** Delivered effort: ~53–84 hours\*\*
+\***\*21 tracks complete.** Delivered effort: ~54–86 hours\*\*
 
 ### Implementation Status
 
@@ -61,8 +62,9 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-18  | Error Classification System            | ✅ Complete | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                           |
 | T-19  | Security Hardening & Code Quality      | ✅ Complete | [`t19-security-hardening`](../conductor/tracks/t19-security-hardening/)                                          |
 | T-20  | Vite 8 Upgrade                         | ✅ Complete | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                         |
+| —     | Drizzle SQL Migration Workflow         | ✅ Complete | [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/)                                       |
 
-> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies.
+> **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies. The Drizzle SQL Migration Workflow replaced `drizzle-kit push` with version-controlled SQL migrations via `drizzle-kit generate` + `drizzle-kit migrate`, with auto-migration on server startup.
 
 ---
 
@@ -116,6 +118,8 @@ Initialize the TanStack Start project with all foundational tooling. Set up the 
 
 **Description:**
 Define all Drizzle schema files, apply migrations, and seed the 28-letter master table. Better Auth manages its own tables — only application tables need manual creation.
+
+> **Note:** The original `drizzle-kit push`-based migration was replaced by a proper SQL migration workflow in a later track. See [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/).
 
 **PRD Ref:** §7 (Database Schema)
 **TDD Ref:** §1 (Project Structure — `app/db/`), §6 (Schema Definitions)
@@ -1206,6 +1210,35 @@ Upgrade the build toolchain from Vite 7 to Vite 8, which replaces esbuild with R
 - All 561 tests passing across 65 test files
 - `pnpm build` succeeds (client: 1.10s, SSR: 842ms)
 - Vite 8.0.16 confirmed in build output
+
+---
+
+### — : Drizzle SQL Migration Workflow ✅
+
+**Dependencies:** T-02 (Database Schema), T-12 (Polish & Deploy)
+**Status:** ✅ Complete ([`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/))
+
+**PRD Ref:** §7 (Database Schema)
+**TDD Ref:** §6 (Database Schema & Init)
+
+**Description:**
+Replace `drizzle-kit push`-based schema management with a proper SQL migration workflow. Generated migration files are version-controlled for traceability, and `autoMigrate()` runs on every server start to ensure the database schema is always up to date.
+
+**Key Deliverables (all delivered):**
+
+- `drizzle.config.ts` — `out: './app/db/migrations'` configured
+- `package.json` — `db:push` removed, `db:generate` + `db:migrate` scripts added
+- `app/db/migrations/0000_*.sql` — Initial migration snapshot (7 tables, git-tracked)
+- `app/db/migrate.ts` — `autoMigrate()` using `drizzle-orm/libsql/migrator`
+- `app/db/index.ts` — `getDb()` now async, calls `autoMigrate()` on first invocation
+- All 565 tests passing across 66 test files
+
+**Key Decisions:**
+
+- Migration runs on server startup before accepting requests (no separate entrypoint needed)
+- `autoMigrate()` is idempotent — Drizzle tracks applied migrations in `__drizzle_migrations` table
+- Docker deployment unchanged — the auto-migration at startup replaces the need for `docker-entrypoint` scripts
+- No `--force` flag in any production path
 
 ---
 

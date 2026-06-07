@@ -1,8 +1,0 @@
-{
-  "track_id": "sql_migrations_20260607",
-  "type": "chore",
-  "status": "new",
-  "created_at": "2026-06-07T15:52:00Z",
-  "updated_at": "2026-06-07T15:52:00Z",
-  "description": "implement drizzle sql migration to avoid db push corruption production db"
-}

@@ -34,6 +34,7 @@
 | 22  | Error Classification System          | ✅ Implemented            | [`error-classification_20260606`](../conductor/archive/error-classification_20260606/)                                                                                                                                                                                                                                |
 | 23  | Security Hardening                   | ✅ Implemented            | [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)                                                                                                                                                                                                                                              |
 | 24  | Vite 8 Upgrade                       | ✅ Implemented            | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                                                                                                                                                                                                                              |
+| 25  | Drizzle SQL Migration Workflow       | ✅ Implemented            | [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/)                                                                                                                                                                                                                                            |
 
 ---
 
@@ -1177,17 +1178,39 @@ const SEED_LETTERS = [
 
 ### DB Initialization (`app/db/index.ts`)
 
+Migration is handled programmatically at server startup via `drizzle-orm/libsql/migrator`, replacing the old `drizzle-kit push` workflow. On every server start, `autoMigrate()` applies any pending SQL migration files from `app/db/migrations/` before the server accepts requests.
+
 ```typescript
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import * as schema from './schema';
+import { autoMigrate } from './migrate';
 
-const client = createClient({
-  url: process.env.DATABASE_URL ?? 'file:./data/little-alif.db',
-});
+let _client: ReturnType<typeof createClient> | null = null;
 
-export const db = drizzle(client, { schema });
+export async function getDb() {
+  if (!_client) {
+    _client = createClient({
+      url: process.env.DATABASE_URL ?? 'file:./data/little-alif.db',
+    });
+    await autoMigrate(_client, path.resolve(process.cwd(), 'app/db/migrations'));
+  }
+  return drizzle(_client, { schema });
+}
 ```
+
+### Auto-Migration (`app/db/migrate.ts`)
+
+```typescript
+import { migrate } from 'drizzle-orm/libsql/migrator';
+import type { DbClient } from './index';
+
+export async function autoMigrate(client: DbClient, migrationsFolder: string): Promise<void> {
+  await migrate(client, { migrationsFolder });
+}
+```
+
+Migration SQL files are generated via `pnpm db:generate` (runs `drizzle-kit generate`) and stored in `app/db/migrations/` — these are version-controlled for traceability. Running `pnpm db:migrate` (runs `drizzle-kit migrate`) can be used manually for one-off migrations outside the server lifecycle.
 
 ---
 
