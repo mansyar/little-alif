@@ -34,16 +34,6 @@ COPY . .
 ENV NODE_ENV=production
 RUN pnpm build
 
-# Generate migration SQL files from schema (for programmatic migrate() at startup)
-RUN pnpm exec drizzle-kit generate
-
-# Extract seed data to JSON (so startup script doesn't need tsx to parse TypeScript)
-RUN node --import tsx -e "\
-  import { writeFileSync } from 'node:fs'; \
-  import { SEED_LETTERS } from './app/db/seed-data'; \
-  writeFileSync('./app/db/seed-data.json', JSON.stringify(SEED_LETTERS)); \
-"
-
 # =============================================================================
 # Stage 3: Runner (production)
 # =============================================================================
@@ -54,21 +44,23 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install curl for health checks, tini for signal handling
-RUN apk add --no-cache curl tini
+# Install pnpm, curl for health checks, tini for signal handling
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate && \
+    apk add --no-cache curl tini
 
 # Copy production build artifacts (Nitro standalone — includes all bundled deps)
 COPY --from=build /app/.output ./.output
 
-# Copy migration files + seed data for startup script
-COPY --from=build /app/app/db/migrations ./app/db/migrations
-COPY --from=build /app/app/db/seed-data.json ./app/db/seed-data.json
+# Copy source files needed for drizzle-kit push + seed at startup
+COPY drizzle.config.ts ./
+COPY tsconfig.json ./
+COPY --from=build /app/app/db ./app/db
+COPY --from=build /app/app/lib/constants ./app/lib/constants
 
-# Install lightweight runtime deps for programmatic migration (no drizzle-kit/tsx)
-RUN npm install --no-save drizzle-orm@0.38.4 @libsql/client@0.14.0
+# Install drizzle-kit + tsx for post-deploy DB hooks
+RUN pnpm add drizzle-kit@^0.30.1 tsx@^4.19.2 && pnpm store prune
 
-# Copy startup scripts
-COPY docker/migrate.mjs ./docker/migrate.mjs
+# Copy startup script
 COPY docker/start.sh ./docker/start.sh
 RUN chmod +x docker/start.sh
 

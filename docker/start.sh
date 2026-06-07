@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
 
-echo "==> Running startup tasks (migrations + seed)..."
-node docker/migrate.mjs
+echo "==> Syncing database schema..."
+npx drizzle-kit push --force --config drizzle.config.ts
+
+echo "==> Seeding database..."
+node --import tsx app/db/seed.ts
 
 echo "==> Starting Nitro server..."
 exec node .output/server/index.mjs
