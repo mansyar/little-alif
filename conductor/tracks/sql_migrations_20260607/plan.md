@@ -44,4 +44,8 @@
   - [x] Clean up temporary database
 - [x] Task: Update `.gitignore` if needed — confirmed `app/db/migrations/` is NOT ignored (git-tracked)
 - [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+
+## Phase 4: Review Fixes
+
+- [x] Task: Apply review suggestions (669d87c)
       </protect>
