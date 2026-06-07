@@ -11,7 +11,7 @@
   - [x] Add `"db:generate": "drizzle-kit generate --config drizzle.config.ts"`
   - [x] Add `"db:migrate": "drizzle-kit migrate --config drizzle.config.ts"`
   - [x] Run `pnpm lint` and `pnpm typecheck` to verify no regressions
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Create Auto-Migration Module
 
