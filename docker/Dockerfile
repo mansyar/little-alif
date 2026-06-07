@@ -47,11 +47,25 @@ ENV PORT=3000
 # Install curl for Docker health checks, tini for signal handling
 RUN apk add --no-cache curl tini
 
+# Install pnpm (needed for db:push / db:seed post-deploy hooks)
+RUN corepack enable && corepack prepare pnpm@10.29.3 --activate
+
 # Copy production build artifacts (Nitro standalone — includes all bundled deps)
 COPY --from=build /app/.output ./.output
 
-# Copy package.json for metadata (not strictly needed but conventional)
+# Copy package.json and lockfile for targeted installs
 COPY --from=build /app/package.json ./
+COPY --from=build /app/pnpm-lock.yaml ./
+
+# Copy source files needed for DB operations (drizzle-kit push, seed)
+COPY --from=build /app/drizzle.config.ts ./
+COPY --from=build /app/tsconfig.json ./
+COPY --from=build /app/app/db ./app/db
+COPY --from=build /app/app/lib/constants ./app/lib/constants
+
+# Install only drizzle-kit + tsx (for post-deploy DB hooks), then clean cache
+# TODO: remove these once DB migrations are done via external tooling
+RUN pnpm add drizzle-kit@^0.30.1 tsx@^4.19.2 && pnpm store prune
 
 # Ensure data directory exists for SQLite volume mount
 RUN mkdir -p /app/data
