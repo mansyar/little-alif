@@ -57,6 +57,11 @@ COPY --from=build /app/.output ./.output
 COPY --from=build /app/app/db ./app/db
 COPY --from=build /app/app/lib/constants ./app/lib/constants
 
+# Install production deps for seed.ts (needs @libsql/client, drizzle-orm, etc.)
+# Seed runs via tsx outside the Nitro standalone bundle
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile && pnpm store prune
+
 # Install tsx for running seed.ts at startup (TypeScript ESM loader)
 RUN pnpm add tsx@^4.19.2 && pnpm store prune
 
