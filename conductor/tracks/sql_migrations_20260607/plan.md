@@ -30,18 +30,18 @@
 
 ## Phase 3: Generate & Verify Initial Migration
 
-- [ ] Task: Generate the initial migration snapshot
-  - [ ] Confirm `app/db/migrations/` directory exists (git-tracked)
-  - [ ] Run `pnpm db:generate` to produce `0000_*.sql` and `meta/` directory
-  - [ ] Verify the generated SQL file covers all 7 tables (profiles, letters, letter_toggles, user, session, account, verification)
-  - [ ] Review the generated `0000_*.sql` for correctness (no destructive DROP TABLE, CREATE TABLE IF NOT EXISTS)
-- [ ] Task: Verify migration against a fresh database
-  - [ ] Create a temporary empty database file
-  - [ ] Run `pnpm db:migrate` against it
-  - [ ] Verify all tables are created (e.g., via `pnpm db:studio` or by querying sqlite_master)
-  - [ ] Verify `__drizzle_migrations` journal table exists
-  - [ ] Run `pnpm db:migrate` a second time — confirm it is a no-op (no errors)
-  - [ ] Clean up temporary database
-- [ ] Task: Update `.gitignore` if needed — ensure `app/db/migrations/` is NOT ignored (it should be tracked)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Generate the initial migration snapshot
+  - [x] Confirm `app/db/migrations/` directory exists (git-tracked)
+  - [x] Run `pnpm db:generate` to produce `0000_*.sql` and `meta/` directory
+  - [x] Verify the generated SQL file covers all 7 tables (profiles, letters, letter_toggles, user, session, account, verification)
+  - [x] Review the generated `0000_*.sql` for correctness (no destructive DROP TABLE, CREATE TABLE IF NOT EXISTS)
+- [x] Task: Verify migration against a fresh database
+  - [x] Create a temporary empty database file
+  - [x] Run `pnpm db:migrate` against it
+  - [x] Verify all tables are created — 8 tables confirmed (7 app + __drizzle_migrations)
+  - [x] Verify `__drizzle_migrations` journal table exists
+  - [x] Run `pnpm db:migrate` a second time — confirm it is a no-op (no errors)
+  - [x] Clean up temporary database
+- [x] Task: Update `.gitignore` if needed — confirmed `app/db/migrations/` is NOT ignored (git-tracked)
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
       </protect>
