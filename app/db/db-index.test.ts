@@ -2,15 +2,21 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const libsqlMocks = vi.hoisted(() => ({
   createClient: vi.fn(),
+  autoMigrate: vi.fn(),
 }));
 
 vi.mock('@libsql/client', () => ({
   createClient: libsqlMocks.createClient,
 }));
 
+vi.mock('./migrate', () => ({
+  autoMigrate: libsqlMocks.autoMigrate,
+}));
+
 describe('app/db/index', () => {
   beforeEach(() => {
     libsqlMocks.createClient.mockReset();
+    libsqlMocks.autoMigrate.mockReset();
     delete process.env.DATABASE_URL;
     vi.resetModules();
   });
@@ -70,5 +76,25 @@ describe('app/db/index', () => {
     expect(typeof db.insert).toBe('function');
     // The underlying client was created exactly once — the singleton held.
     expect(libsqlMocks.createClient).toHaveBeenCalledTimes(1);
+  });
+
+  it('getDb calls autoMigrate exactly once on first invocation', async () => {
+    libsqlMocks.createClient.mockReturnValue({ id: 'fake' });
+    libsqlMocks.autoMigrate.mockResolvedValue(undefined);
+
+    const { getDb } = await import('./index');
+
+    const db1 = getDb();
+    const db2 = getDb();
+
+    // Same instance returned
+    expect(db1).toBe(db2);
+    // autoMigrate called exactly once (on first getDb call)
+    expect(libsqlMocks.autoMigrate).toHaveBeenCalledTimes(1);
+    // autoMigrate receives two args: Drizzle instance and migrations folder path
+    expect(libsqlMocks.autoMigrate).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(String),
+    );
   });
 });

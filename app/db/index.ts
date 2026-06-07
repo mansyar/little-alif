@@ -1,7 +1,9 @@
 import { createClient, type Client } from '@libsql/client';
 import { drizzle, type LibSQLDatabase } from 'drizzle-orm/libsql';
+import path from 'path';
 import * as authSchema from './auth-schema';
 import * as schema from './schema';
+import { autoMigrate } from './migrate';
 
 /** Combined schema: application tables + Better Auth tables. */
 const fullSchema = { ...schema, ...authSchema };
@@ -35,9 +37,15 @@ export function getClient(): Client {
  * Lazily initialize and return a singleton Drizzle DB instance.
  * The DB is bound to the combined schema (application + auth) for
  * typed query building.
+ *
+ * On first initialization, pending Drizzle migrations are applied
+ * automatically using the `autoMigrate` helper.
  */
 export function getDb(): DbClient {
-  _db ??= drizzle(getClient(), { schema: fullSchema });
+  if (!_db) {
+    _db = drizzle(getClient(), { schema: fullSchema });
+    void autoMigrate(_db, path.resolve(process.cwd(), 'app/db/migrations'));
+  }
   return _db;
 }
 
