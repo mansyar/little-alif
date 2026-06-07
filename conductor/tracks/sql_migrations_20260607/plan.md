@@ -28,7 +28,7 @@
   - [x] Run full test suite to confirm no regressions
 - [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
-## Phase 3: Generate & Verify Initial Migration
+## Phase 3: Generate & Verify Initial Migration [checkpoint: a2f3cd1]
 
 - [x] Task: Generate the initial migration snapshot
   - [x] Confirm `app/db/migrations/` directory exists (git-tracked)
@@ -38,7 +38,7 @@
 - [x] Task: Verify migration against a fresh database
   - [x] Create a temporary empty database file
   - [x] Run `pnpm db:migrate` against it
-  - [x] Verify all tables are created — 8 tables confirmed (7 app + __drizzle_migrations)
+  - [x] Verify all tables are created — 8 tables confirmed (7 app + \_\_drizzle_migrations)
   - [x] Verify `__drizzle_migrations` journal table exists
   - [x] Run `pnpm db:migrate` a second time — confirm it is a no-op (no errors)
   - [x] Clean up temporary database
