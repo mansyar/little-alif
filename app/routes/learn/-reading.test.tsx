@@ -229,7 +229,7 @@ describe('Reading route (/learn/reading)', () => {
     expect(screen.getByRole('tab', { name: 'Group 2: ث' })).toBeTruthy();
   });
 
-  it('clicks Done navigates to /learn', async () => {
+  it('clicks Done on last group shows completion overlay then navigates after animation', async () => {
     const { Route } = await import('./reading');
     const Component = Route.options.component;
 
@@ -241,6 +241,63 @@ describe('Reading route (/learn/reading)', () => {
 
     await userEvent.setup().click(screen.getByLabelText('Done'));
 
+    // Completion overlay should appear immediately
+    const overlay = await screen.findByTestId('completion-overlay');
+    const checkmark = await screen.findByTestId('completion-checkmark');
+    expect(overlay.querySelector('.animate-completionPulse')).toBeTruthy();
+    expect(checkmark.getAttribute('class')).toContain('animate-completionCheck');
+
+    // Navigation should NOT have been called yet (animation hasn't completed)
+    expect(mockNavigate).not.toHaveBeenCalled();
+
+    // Wait for navigation after 1s animation completes
+    await waitFor(
+      () => {
+        expect(mockNavigate).toHaveBeenCalledWith({ to: '/learn' });
+      },
+      { timeout: 2000 },
+    );
+  }, 3000);
+
+  it('clicks Done on non-last group navigates immediately (no completion animation)', async () => {
+    mockGetReadingData.mockResolvedValue(READING_DATA_FOUR); // 4 letters = 2 groups
+
+    const { Route } = await import('./reading');
+    const Component = Route.options.component;
+
+    if (!Component) throw new Error('Reading route has no component');
+
+    render(<Component />, { wrapper: createWrapper() });
+
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
+
+    await userEvent.setup().click(screen.getByLabelText('Done'));
+
+    // Non-last group should navigate immediately
+    expect(mockNavigate).toHaveBeenCalledWith({ to: '/learn' });
+    // No completion overlay shown
+    expect(screen.queryByTestId('completion-overlay')).toBeNull();
+  });
+
+  it('component unmount during completion animation navigates immediately', async () => {
+    const { Route } = await import('./reading');
+    const Component = Route.options.component;
+
+    if (!Component) throw new Error('Reading route has no component');
+
+    const { unmount } = render(<Component />, { wrapper: createWrapper() });
+
+    expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
+
+    await userEvent.setup().click(screen.getByLabelText('Done'));
+
+    // Completion overlay appears
+    expect(await screen.findByTestId('completion-overlay')).toBeTruthy();
+
+    // Unmount before animation completes
+    unmount();
+
+    // Navigation should have been called immediately on unmount
     expect(mockNavigate).toHaveBeenCalledWith({ to: '/learn' });
   });
 

@@ -107,16 +107,16 @@
 
 ## Phase 7: Reading Completion Acknowledgement
 
-- [ ] Task: Write tests for completion animation
-  - [ ] Test: "Done" on last group triggers animation before redirect
-  - [ ] Test: Green pulse animation plays for ~1s
-  - [ ] Test: Checkmark icon appears during animation
-  - [ ] Test: Navigation to /learn fires after animation completes
-  - [ ] Test: Component unmount during animation safely navigates immediately
-- [ ] Task: Implement completion animation in reading route
-  - [ ] Detect when `onDone` is called on the last group
-  - [ ] Add green overlay pulse + checkmark animation state
-  - [ ] After 1s timeout, navigate to `/learn`
+- [x] Task: Write tests for completion animation
+  - [x] Test: "Done" on last group triggers animation before redirect
+  - [x] Test: Green pulse animation plays for ~1s
+  - [x] Test: Checkmark icon appears during animation
+  - [x] Test: Navigation to /learn fires after animation completes
+  - [x] Test: Component unmount during animation safely navigates immediately
+- [x] Task: Implement completion animation in reading route
+  - [x] Detect when `onDone` is called on the last group
+  - [x] Add green overlay pulse + checkmark animation state
+  - [x] After 1s timeout, navigate to `/learn`
 - [ ] Task: Conductor - User Manual Verification 'Phase 7: Completion Acknowledgement' (Protocol in workflow.md)
 
 ## Verification

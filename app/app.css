@@ -96,6 +96,42 @@
   animation: pulseReplay 3s ease-in-out infinite;
 }
 
+/* ── Reading completion acknowledgement ───────────────────────────── */
+
+@keyframes completionPulse {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes completionCheck {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-completionPulse {
+  animation: completionPulse 1s ease-in-out forwards;
+}
+
+.animate-completionCheck {
+  animation: completionCheck 0.4s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

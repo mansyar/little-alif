@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
+import { Check } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { getReadingDataFn } from '~/server/reading';
 import { generateReadingGroups } from '~/lib/utils/reading';
@@ -68,6 +69,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [shuffleSeed, setShuffleSeed] = useState(0);
   const [randomHarakats, setRandomHarakats] = useState<VowelMode[][] | null>(null);
+  const [showCompletion, setShowCompletion] = useState(false);
 
   // Wrap group index setters to clear random harakat mode on group switch
   const handleGroupSelect = (index: number) => {
@@ -99,6 +101,23 @@ function ReadingContent({ profileId }: ReadingContentProps) {
     );
     return { groups: grouped, letterChars: chars };
   }, [readingQuery.data]);
+
+  // Stable ref to navigate for use in effects and timeouts
+  const navigateRef = useRef(navigate);
+  navigateRef.current = navigate;
+
+  // Cleanup: if component unmounts during completion animation, navigate immediately
+  useEffect(() => {
+    if (showCompletion) {
+      const timer = setTimeout(() => {
+        void navigateRef.current({ to: '/learn' });
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+        void navigateRef.current({ to: '/learn' });
+      };
+    }
+  }, [showCompletion]);
 
   // One-shot: sync harakat from profile data on first load only
   const initialHarakatSet = useRef(false);
@@ -209,7 +228,11 @@ function ReadingContent({ profileId }: ReadingContentProps) {
           onShuffle={() => setShuffleSeed((s) => s + 1)}
           onNext={handleNextGroup}
           onDone={() => {
-            void navigate({ to: '/learn' });
+            if (currentGroupIndex === groups.length - 1) {
+              setShowCompletion(true);
+            } else {
+              void navigate({ to: '/learn' });
+            }
           }}
           onRandomizeHarakat={() => {
             const harakatOpts: VowelMode[] = ['fathah', 'kasrah', 'dammah'];
@@ -226,6 +249,20 @@ function ReadingContent({ profileId }: ReadingContentProps) {
           }}
         />
       </div>
+
+      {showCompletion && (
+        <div
+          data-testid="completion-overlay"
+          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+        >
+          <div className="absolute inset-0 bg-green/10 animate-completionPulse" />
+          <Check
+            data-testid="completion-checkmark"
+            className="h-16 w-16 text-green animate-completionCheck relative"
+            aria-hidden="true"
+          />
+        </div>
+      )}
     </main>
   );
 }

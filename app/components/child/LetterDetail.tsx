@@ -38,13 +38,16 @@ export function LetterDetail({ visibleLetters, currentHarakat }: LetterDetailPro
     prevLetterIdRef.current = selectedLetterId;
     let cancelled = false;
 
-    audioEngine.speak(letter.letterId, currentHarakat, letter.character).then(() => {
-      if (!cancelled && useUiStore.getState().selectedLetterId === selectedLetterId) {
-        setSelectedLetter(null);
-      }
-    }).catch(() => {
-      // Ignore rejection — promise is cancelled on cleanup
-    });
+    audioEngine
+      .speak(letter.letterId, currentHarakat, letter.character)
+      .then(() => {
+        if (!cancelled && useUiStore.getState().selectedLetterId === selectedLetterId) {
+          setSelectedLetter(null);
+        }
+      })
+      .catch(() => {
+        // Ignore rejection — promise is cancelled on cleanup
+      });
 
     return () => {
       cancelled = true;

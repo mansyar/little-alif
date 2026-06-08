@@ -114,5 +114,4 @@ describe('LetterCard', () => {
     const plain = composeLetter('ا', 'none');
     expect(screen.getByText(plain)).toBeTruthy();
   });
-
 });
