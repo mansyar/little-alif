@@ -1,0 +1,8 @@
+{
+  "track_id": "ux-enhancements_20260608",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-08T10:01:00Z",
+  "updated_at": "2026-06-08T10:01:00Z",
+  "description": "UX Enhancements (v1.1) — swipeable letter overlay, reading row progress, harakat persistence, page transitions, group header speaks, completion acknowledgement, tap-replay hints"
+}
