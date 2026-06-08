@@ -106,9 +106,7 @@ describe('GroupHeader', () => {
 
   it('button has aria-label for tappable header', async () => {
     const { GroupHeader } = await import('./GroupHeader');
-    render(
-      <GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />,
-    );
+    render(<GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />);
 
     const button = screen.getByRole('button');
     expect(button.getAttribute('aria-label')).toBe('Tap to hear letter names');
@@ -146,9 +144,7 @@ describe('GroupHeader', () => {
     it('tapping calls audioEngine.speak() for each letter with vowelMode none', async () => {
       const user = userEvent.setup();
       const { GroupHeader } = await import('./GroupHeader');
-      render(
-        <GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />,
-      );
+      render(<GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />);
 
       await user.click(screen.getByRole('button'));
 
@@ -158,14 +154,20 @@ describe('GroupHeader', () => {
       });
 
       // 300ms later — second letter
-      await vi.waitFor(() => {
-        expect(speakMock).toHaveBeenCalledWith('ba', 'none', 'ب');
-      }, { timeout: 500 });
+      await vi.waitFor(
+        () => {
+          expect(speakMock).toHaveBeenCalledWith('ba', 'none', 'ب');
+        },
+        { timeout: 500 },
+      );
 
       // 600ms later — third letter
-      await vi.waitFor(() => {
-        expect(speakMock).toHaveBeenCalledWith('ta', 'none', 'ت');
-      }, { timeout: 500 });
+      await vi.waitFor(
+        () => {
+          expect(speakMock).toHaveBeenCalledWith('ta', 'none', 'ت');
+        },
+        { timeout: 500 },
+      );
     });
 
     it('incomplete groups speak only available letters', async () => {
@@ -181,9 +183,12 @@ describe('GroupHeader', () => {
         expect(speakMock).toHaveBeenCalledWith('kho', 'none', 'خ');
       });
 
-      await vi.waitFor(() => {
-        expect(speakMock).toHaveBeenCalledWith('dal', 'none', 'د');
-      }, { timeout: 500 });
+      await vi.waitFor(
+        () => {
+          expect(speakMock).toHaveBeenCalledWith('dal', 'none', 'د');
+        },
+        { timeout: 500 },
+      );
 
       expect(speakMock).toHaveBeenCalledTimes(2);
     });
@@ -191,22 +196,20 @@ describe('GroupHeader', () => {
     it('rapid retaps cancel previous sequence and start new one', async () => {
       const user = userEvent.setup();
       const { GroupHeader } = await import('./GroupHeader');
-      render(
-        <GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />,
-      );
+      render(<GroupHeader group={COMPLETE_GROUP} vowelMode="fathah" letterChars={LETTER_CHARS} />);
 
       const button = screen.getByRole('button');
 
       // First tap — await it so the click handler fires
       await user.click(button);
-      expect(cancelMock).toHaveBeenCalledTimes(1);          // cancel for clean start
+      expect(cancelMock).toHaveBeenCalledTimes(1); // cancel for clean start
       // First letter on setTimeout(0) fires after event loop pump
       await vi.waitFor(() => expect(speakMock).toHaveBeenCalledTimes(1));
 
       // Now the 300ms timeout is pending. Rapid second tap —
       // this should cancel the pending timeout and restart.
       await user.click(button);
-      expect(cancelMock).toHaveBeenCalledTimes(2);          // cancel for retap
+      expect(cancelMock).toHaveBeenCalledTimes(2); // cancel for retap
 
       // Only one new speak call (the retap's first letter)
       await vi.waitFor(() => expect(speakMock).toHaveBeenCalledTimes(2));

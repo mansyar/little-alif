@@ -65,23 +65,23 @@
   - [x] `playLetterSequence(letters: string[], getCharById)` — plays each letter with 300ms interval
   - [x] Cancel previous sequence on new tap (use `audioEngine.cancel()`)
   - [x] Use `letterId` with vowelMode='none' for isolated letter names
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Group Header Speaks' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Group Header Speaks' (Protocol in workflow.md)
 
 ## Phase 5: Reading Row Progress Indicator
 
-- [ ] Task: Write tests for row progress tracking
-  - [ ] Test: Untapped row shows no completion indicator
-  - [ ] Test: Fully tapped row shows checkmark and green border
-  - [ ] Test: Row counter updates as cells are tapped
-  - [ ] Test: Progress resets on group switch
-  - [ ] Test: Progress resets on shuffle
-- [ ] Task: Implement tap tracking in ReadingGrid
-  - [ ] Add `useRef<Set<string>>` for tapped cells keyed by `"rowIndex-cellIndex"`
-  - [ ] Pass `onCellTap(rowIndex, cellIndex)` callback to `ReadingCell`
-  - [ ] Compute completed rows from the set
-- [ ] Task: Add visual indicators
-  - [ ] Completed row: 2px green border + checkmark icon
-  - [ ] Row counter: `aria-label` only (no visible text for pre-literate children)
+- [x] Task: Write tests for row progress tracking
+  - [x] Test: Untapped row shows no completion indicator
+  - [x] Test: Fully tapped row shows checkmark and green border
+  - [x] Test: Partial row tap updates aria-label count
+  - [x] Test: Complete row has aria-label "complete"
+  - [x] Note: Progress reset on group switch/shuffle handled by key remount in route
+- [x] Task: Implement tap tracking in ReadingGrid
+  - [x] Add `useState<Set<string>>` for tapped cells keyed by `"rowIndex-cellIndex"`
+  - [x] Pass `onTap` callback to `ReadingCell` with captured rowIndex/cellIndex
+  - [x] Compute completed rows from the set
+- [x] Task: Add visual indicators
+  - [x] Completed row: 2px green border + green checkmark in circle
+  - [x] Row counter: `aria-label` only (no visible text for pre-literate children)
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Reading Row Progress' (Protocol in workflow.md)
 
 ## Phase 6: Swipeable Letter Detail Overlay

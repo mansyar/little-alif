@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useUiStore } from '~/stores/ui-store';
 import type { ReadingGroup } from '~/lib/utils/reading';
 
@@ -9,6 +10,8 @@ interface ReadingCellMockProps {
   letterId: string;
   vowelMode: string;
   letterChar: string;
+  isSystematicRow?: boolean;
+  onTap?: () => void;
 }
 
 const mockCell = vi.fn<(props: ReadingCellMockProps) => void>();
@@ -17,7 +20,11 @@ vi.mock('./ReadingCell', () => ({
   ReadingCell: (props: ReadingCellMockProps) => {
     mockCell(props);
     return (
-      <button data-testid="reading-cell" data-glyph={props.glyph}>
+      <button
+        data-testid="reading-cell"
+        data-glyph={props.glyph}
+        onClick={() => props.onTap?.()}
+      >
         {props.glyph}
       </button>
     );
@@ -172,6 +179,84 @@ describe('ReadingGrid', () => {
     expect(calls[3]![0].vowelMode).toBe('dammah');
     expect(calls[4]![0].vowelMode).toBe('dammah');
     expect(calls[5]![0].vowelMode).toBe('dammah');
+  });
+
+  // ── Row progress indicator tests ─────────────────────────────────────
+
+  it('untapped row shows no completion indicator', async () => {
+    const { ReadingGrid } = await import('./ReadingGrid');
+    const { container } = render(
+      <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
+    );
+
+    // No element should have the green border class
+    const bordered = container.querySelectorAll('.border-2');
+    expect(bordered).toHaveLength(0);
+  });
+
+  it('fully tapped row shows checkmark and green border', async () => {
+    const user = userEvent.setup();
+    const { ReadingGrid } = await import('./ReadingGrid');
+    const { container, rerender } = render(
+      <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
+    );
+
+    // Tap all cells in the first row (cells 0, 1, 2)
+    const cells = screen.getAllByTestId('reading-cell');
+    await user.click(cells[0]!);
+    await user.click(cells[1]!);
+    await user.click(cells[2]!);
+
+    // useState pick up after click
+    rerender(<ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />);
+
+    // Checkmark should appear — find the span inside the row container
+    const checkmarks = container.querySelectorAll('.rounded-full');
+    const visibleCheckmarks = Array.from(checkmarks).filter((el) => el.textContent === '✓');
+    expect(visibleCheckmarks.length).toBeGreaterThanOrEqual(1);
+
+    // Border class should appear
+    const bordered = container.querySelectorAll('.border-2');
+    expect(bordered.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('partial row tap updates aria-label with count', async () => {
+    const user = userEvent.setup();
+    const { ReadingGrid } = await import('./ReadingGrid');
+    const { rerender } = render(
+      <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
+    );
+
+    // Tap one cell in first row
+    const cells = screen.getAllByTestId('reading-cell');
+    await user.click(cells[0]!);
+
+    rerender(<ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />);
+
+    // First outer div should reflect 1 of 3 tapped
+    const outerDivs = document.querySelectorAll('[class*="rounded-large"]');
+    const firstRow = outerDivs[0];
+    expect(firstRow?.getAttribute('aria-label')).toBe('Row 1: 1 of 3 tapped');
+  });
+
+  it('complete row has aria-label indicating complete', async () => {
+    const user = userEvent.setup();
+    const { ReadingGrid } = await import('./ReadingGrid');
+    const { rerender } = render(
+      <ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />,
+    );
+
+    // Tap all 3 cells in first row
+    const cells = screen.getAllByTestId('reading-cell');
+    await user.click(cells[0]!);
+    await user.click(cells[1]!);
+    await user.click(cells[2]!);
+
+    rerender(<ReadingGrid group={THREE_LETTER_GROUP} letterChars={LETTER_CHARS} />);
+
+    const outerDivs = document.querySelectorAll('[class*="rounded-large"]');
+    const firstRow = outerDivs[0];
+    expect(firstRow?.getAttribute('aria-label')).toBe('Row 1: complete');
   });
 
   it('randomHarakats re-renders when seed changes', async () => {

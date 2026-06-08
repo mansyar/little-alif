@@ -9,6 +9,8 @@ interface ReadingCellProps {
   letterChar: string;
   /** True for cells in the first (systematic) row — enables replay-pulse hint. */
   isSystematicRow?: boolean;
+  /** Called when the cell is tapped (fires immediately, before audio completes). */
+  onTap?: () => void;
 }
 
 type ReplayPhase = 'idle' | 'flashing' | 'replay';
@@ -19,17 +21,19 @@ export function ReadingCell({
   vowelMode,
   letterChar,
   isSystematicRow = false,
+  onTap,
 }: ReadingCellProps) {
   const [replayPhase, setReplayPhase] = useState<ReplayPhase>('idle');
 
   const handleClick = useCallback(() => {
     setReplayPhase('flashing');
+    onTap?.();
     void audioEngine.speak(letterId, vowelMode, letterChar).finally(() => {
       setReplayPhase((prev) =>
         prev === 'flashing' ? (isSystematicRow ? 'replay' : 'idle') : prev,
       );
     });
-  }, [letterId, vowelMode, letterChar, isSystematicRow]);
+  }, [letterId, vowelMode, letterChar, isSystematicRow, onTap]);
 
   const flashed = replayPhase === 'flashing';
   const showReplay = replayPhase === 'replay';

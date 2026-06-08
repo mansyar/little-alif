@@ -134,6 +134,24 @@ describe('ReadingCell', () => {
     expect(spans[0]!.textContent).toBe('بَ');
   });
 
+  it('calls onTap when provided', async () => {
+    const user = userEvent.setup();
+    const onTap = vi.fn();
+    const { ReadingCell } = await import('./ReadingCell');
+    render(
+      <ReadingCell
+        glyph="بَ"
+        letterId="ba"
+        vowelMode="fathah"
+        letterChar="ب"
+        onTap={onTap}
+      />,
+    );
+
+    await user.click(screen.getByRole('button'));
+    expect(onTap).toHaveBeenCalledTimes(1);
+  });
+
   // ── Replay hint (systematic row) tests ───────────────────────────────
 
   describe('replay hint (systematic row)', () => {
