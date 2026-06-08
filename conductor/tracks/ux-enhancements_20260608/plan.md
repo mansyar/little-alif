@@ -1,121 +1,122 @@
+<protect>
 # Implementation Plan — T-21: UX Enhancements (v1.1)
 
 ## Phase 1: Persist Child's Last Harakat Selection
 
 - [ ] Task: Write tests for harakat cookie (get, set, fallback)
-    - [ ] Test: Cookie initializes from valid value on mount
-    - [ ] Test: Cookie falls back to profile vowelMode when missing/corrupt
-    - [ ] Test: Cookie updates when child taps a different harakat
-    - [ ] Test: Cookie value is a valid VowelMode
+  - [ ] Test: Cookie initializes from valid value on mount
+  - [ ] Test: Cookie falls back to profile vowelMode when missing/corrupt
+  - [ ] Test: Cookie updates when child taps a different harakat
+  - [ ] Test: Cookie value is a valid VowelMode
 - [ ] Task: Implement harakat cookie read on mount
-    - [ ] Add `readHarakatCookie(): VowelMode | null` utility
-    - [ ] Modify `ChildHarakatBar` initial read: check cookie before profile vowelMode
+  - [ ] Add `readHarakatCookie(): VowelMode | null` utility
+  - [ ] Modify `ChildHarakatBar` initial read: check cookie before profile vowelMode
 - [ ] Task: Implement harakat cookie write on change
-    - [ ] Add `writeHarakatCookie(mode: VowelMode): void` utility
-    - [ ] Wire into `setHarakat()` path so every harakat change updates the cookie
+  - [ ] Add `writeHarakatCookie(mode: VowelMode): void` utility
+  - [ ] Wire into `setHarakat()` path so every harakat change updates the cookie
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Harakat Cookie' (Protocol in workflow.md)
 
 ## Phase 2: Page Transitions
 
 - [ ] Task: Write component tests for entrance animation presence
-    - [ ] Test: `/learn` main element has animation class on mount
-    - [ ] Test: `/learn/reading` main element has animation class on mount
-    - [ ] Test: `LetterDetail` overlay has entrance animation class on open
-    - [ ] Test: `prefers-reduced-motion` disables animations (matchMedia mock)
+  - [ ] Test: `/learn` main element has animation class on mount
+  - [ ] Test: `/learn/reading` main element has animation class on mount
+  - [ ] Test: `LetterDetail` overlay has entrance animation class on open
+  - [ ] Test: `prefers-reduced-motion` disables animations (matchMedia mock)
 - [ ] Task: Add CSS keyframes to `app.css`
-    - [ ] `@keyframes fadeInUp` — opacity 0→1, translateY 8px→0, 200ms, ease-out
-    - [ ] `@keyframes bounceIn` — scale 0.9→1.0, opacity 0→1, 250ms, elastic cubic-bezier
-    - [ ] `@keyframes pulseReplay` — opacity 60→100%, 3s interval, for reading cells
-    - [ ] Respect `@media (prefers-reduced-motion: reduce)` — set `animation: none`
+  - [ ] `@keyframes fadeInUp` — opacity 0→1, translateY 8px→0, 200ms, ease-out
+  - [ ] `@keyframes bounceIn` — scale 0.9→1.0, opacity 0→1, 250ms, elastic cubic-bezier
+  - [ ] `@keyframes pulseReplay` — opacity 60→100%, 3s interval, for reading cells
+  - [ ] Respect `@media (prefers-reduced-motion: reduce)` — set `animation: none`
 - [ ] Task: Apply animations to route components
-    - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn` route
-    - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn/reading` route
-    - [ ] Add `animate-bounceIn` class to `LetterDetail` overlay on open
+  - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn` route
+  - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn/reading` route
+  - [ ] Add `animate-bounceIn` class to `LetterDetail` overlay on open
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Page Transitions' (Protocol in workflow.md)
 
 ## Phase 3: Tap-Replay Hint on Reading Cells
 
 - [ ] Task: Write tests for replay hint behavior
-    - [ ] Test: Systematic row cell shows replay pulse after first tap
-    - [ ] Test: Replay pulse does not show during green-flash state
-    - [ ] Test: Replay pulse stops on re-tap
-    - [ ] Test: Mixed row cells never show replay pulse
+  - [ ] Test: Systematic row cell shows replay pulse after first tap
+  - [ ] Test: Replay pulse does not show during green-flash state
+  - [ ] Test: Replay pulse stops on re-tap
+  - [ ] Test: Mixed row cells never show replay pulse
 - [ ] Task: Implement `data-replay` attribute logic in `ReadingCell`
-    - [ ] Track `replayPhase` state: idle → flashing → replay-pulse
-    - [ ] Set `data-replay="true"` during replay-pulse phase
-    - [ ] Clear on re-tap (re-enters flash state)
+  - [ ] Track `replayPhase` state: idle → flashing → replay-pulse
+  - [ ] Set `data-replay="true"` during replay-pulse phase
+  - [ ] Clear on re-tap (re-enters flash state)
 - [ ] Task: Add CSS animation for replay pulse
-    - [ ] `@keyframes pulseReplay` (already added in Phase 2 — verify class binding)
-    - [ ] Style `data-replay="true"` cells with the pulsing animation
+  - [ ] `@keyframes pulseReplay` (already added in Phase 2 — verify class binding)
+  - [ ] Style `data-replay="true"` cells with the pulsing animation
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Tap-Replay Hint' (Protocol in workflow.md)
 
 ## Phase 4: Group Header Speaks
 
 - [ ] Task: Write tests for group header audio playback
-    - [ ] Test: Tapping group header calls audioEngine.speak() for each letter
-    - [ ] Test: Letters play sequentially with 300ms gap
-    - [ ] Test: Rapid retaps cancel previous sequence and start new one
-    - [ ] Test: Incomplete groups (1-2 letters) speak only available letters
+  - [ ] Test: Tapping group header calls audioEngine.speak() for each letter
+  - [ ] Test: Letters play sequentially with 300ms gap
+  - [ ] Test: Rapid retaps cancel previous sequence and start new one
+  - [ ] Test: Incomplete groups (1-2 letters) speak only available letters
 - [ ] Task: Convert GroupHeader to a tappable button
-    - [ ] Change root element from `<div>` to `<button type="button">`
-    - [ ] Preserve existing visual styling (no visual change)
-    - [ ] Add `aria-label="Tap to hear letter names"`
+  - [ ] Change root element from `<div>` to `<button type="button">`
+  - [ ] Preserve existing visual styling (no visual change)
+  - [ ] Add `aria-label="Tap to hear letter names"`
 - [ ] Task: Implement sequential audio playback
-    - [ ] `playLetterSequence(letters: string[], getCharById)` — plays each letter with 300ms interval
-    - [ ] Cancel previous sequence on new tap (use `audioEngine.cancel()`)
-    - [ ] Use `letterId` with vowelMode='none' for isolated letter names
+  - [ ] `playLetterSequence(letters: string[], getCharById)` — plays each letter with 300ms interval
+  - [ ] Cancel previous sequence on new tap (use `audioEngine.cancel()`)
+  - [ ] Use `letterId` with vowelMode='none' for isolated letter names
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Group Header Speaks' (Protocol in workflow.md)
 
 ## Phase 5: Reading Row Progress Indicator
 
 - [ ] Task: Write tests for row progress tracking
-    - [ ] Test: Untapped row shows no completion indicator
-    - [ ] Test: Fully tapped row shows checkmark and green border
-    - [ ] Test: Row counter updates as cells are tapped
-    - [ ] Test: Progress resets on group switch
-    - [ ] Test: Progress resets on shuffle
+  - [ ] Test: Untapped row shows no completion indicator
+  - [ ] Test: Fully tapped row shows checkmark and green border
+  - [ ] Test: Row counter updates as cells are tapped
+  - [ ] Test: Progress resets on group switch
+  - [ ] Test: Progress resets on shuffle
 - [ ] Task: Implement tap tracking in ReadingGrid
-    - [ ] Add `useRef<Set<string>>` for tapped cells keyed by `"rowIndex-cellIndex"`
-    - [ ] Pass `onCellTap(rowIndex, cellIndex)` callback to `ReadingCell`
-    - [ ] Compute completed rows from the set
+  - [ ] Add `useRef<Set<string>>` for tapped cells keyed by `"rowIndex-cellIndex"`
+  - [ ] Pass `onCellTap(rowIndex, cellIndex)` callback to `ReadingCell`
+  - [ ] Compute completed rows from the set
 - [ ] Task: Add visual indicators
-    - [ ] Completed row: 2px green border + checkmark icon
-    - [ ] Row counter: `aria-label` only (no visible text for pre-literate children)
+  - [ ] Completed row: 2px green border + checkmark icon
+  - [ ] Row counter: `aria-label` only (no visible text for pre-literate children)
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Reading Row Progress' (Protocol in workflow.md)
 
 ## Phase 6: Swipeable Letter Detail Overlay
 
 - [ ] Task: Write tests for swipe navigation
-    - [ ] Test: Swipe left goes to next letter
-    - [ ] Test: Swipe right goes to previous letter
-    - [ ] Test: Wrap-around from last → first (and first → last)
-    - [ ] Test: Audio plays on swipe-navigated letter
-    - [ ] Test: Swipe during playback cancels previous utterance
-    - [ ] Test: Sub-threshold swipe (< 50px) does not navigate
-    - [ ] Test: Single letter: swipe is a no-op (stays on same letter)
+  - [ ] Test: Swipe left goes to next letter
+  - [ ] Test: Swipe right goes to previous letter
+  - [ ] Test: Wrap-around from last → first (and first → last)
+  - [ ] Test: Audio plays on swipe-navigated letter
+  - [ ] Test: Swipe during playback cancels previous utterance
+  - [ ] Test: Sub-threshold swipe (< 50px) does not navigate
+  - [ ] Test: Single letter: swipe is a no-op (stays on same letter)
 - [ ] Task: Add swipe handlers to LetterDetail
-    - [ ] Track `pointerDown` position (x, y) and `pointerUp` position
-    - [ ] Calculate X-axis delta; if |delta| >= 50px and horizontal > vertical, trigger navigation
-    - [ ] Update `selectedLetterId` in store to the target letter
-    - [ ] Auto-play audio for the new letter
+  - [ ] Track `pointerDown` position (x, y) and `pointerUp` position
+  - [ ] Calculate X-axis delta; if |delta| >= 50px and horizontal > vertical, trigger navigation
+  - [ ] Update `selectedLetterId` in store to the target letter
+  - [ ] Auto-play audio for the new letter
 - [ ] Task: Handle edge cases
-    - [ ] Cancel previous utterance on swipe (audioEngine.cancel())
-    - [ ] Ignore vertical swipes (deltaY > deltaX)
-    - [ ] Disable pointer events during audio playback? No — swipes should still work
+  - [ ] Cancel previous utterance on swipe (audioEngine.cancel())
+  - [ ] Ignore vertical swipes (deltaY > deltaX)
+  - [ ] Disable pointer events during audio playback? No — swipes should still work
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: Swipeable Overlay' (Protocol in workflow.md)
 
 ## Phase 7: Reading Completion Acknowledgement
 
 - [ ] Task: Write tests for completion animation
-    - [ ] Test: "Done" on last group triggers animation before redirect
-    - [ ] Test: Green pulse animation plays for ~1s
-    - [ ] Test: Checkmark icon appears during animation
-    - [ ] Test: Navigation to /learn fires after animation completes
-    - [ ] Test: Component unmount during animation safely navigates immediately
+  - [ ] Test: "Done" on last group triggers animation before redirect
+  - [ ] Test: Green pulse animation plays for ~1s
+  - [ ] Test: Checkmark icon appears during animation
+  - [ ] Test: Navigation to /learn fires after animation completes
+  - [ ] Test: Component unmount during animation safely navigates immediately
 - [ ] Task: Implement completion animation in reading route
-    - [ ] Detect when `onDone` is called on the last group
-    - [ ] Add green overlay pulse + checkmark animation state
-    - [ ] After 1s timeout, navigate to `/learn`
+  - [ ] Detect when `onDone` is called on the last group
+  - [ ] Add green overlay pulse + checkmark animation state
+  - [ ] After 1s timeout, navigate to `/learn`
 - [ ] Task: Conductor - User Manual Verification 'Phase 7: Completion Acknowledgement' (Protocol in workflow.md)
 
 ## Verification
@@ -124,3 +125,4 @@
 - [ ] Run type checker: `pnpm typecheck` — clean
 - [ ] Run linter: `pnpm lint` — no new warnings
 - [ ] Manual verification per Phase Completion protocol
+</protect>

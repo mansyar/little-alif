@@ -1,3 +1,4 @@
+<protect>
 # UX Enhancements (v1.1)
 
 ## Overview
@@ -83,14 +84,14 @@ The reading grid's systematic row cells shall subtly animate to indicate they ca
 
 ## Key Decisions
 
-| # | Decision | Rationale |
-|---|----------|-----------|
-| KD-1 | Swipe wraps around at boundaries | More playful for kids — infinite-loop feel |
-| KD-2 | Session cookie (no maxAge) for harakat | Survives refresh, dies on tab close. Simple, no expiry management |
-| KD-3 | Independent-first implementation order | Lowest-risk changes build momentum |
-| KD-4 | Pointer events for swipe (no gesture library) | Avoids adding a dependency. Well-supported on mobile |
-| KD-5 | Pure CSS for all animations | No Framer Motion or similar. Tailwind v4 keyframes |
-| KD-6 | `useRef<Set<string>>` for reading row progress | Ephemeral per-session state, no persistence needed |
+| #    | Decision                                       | Rationale                                                         |
+| ---- | ---------------------------------------------- | ----------------------------------------------------------------- |
+| KD-1 | Swipe wraps around at boundaries               | More playful for kids — infinite-loop feel                        |
+| KD-2 | Session cookie (no maxAge) for harakat         | Survives refresh, dies on tab close. Simple, no expiry management |
+| KD-3 | Independent-first implementation order         | Lowest-risk changes build momentum                                |
+| KD-4 | Pointer events for swipe (no gesture library)  | Avoids adding a dependency. Well-supported on mobile              |
+| KD-5 | Pure CSS for all animations                    | No Framer Motion or similar. Tailwind v4 keyframes                |
+| KD-6 | `useRef<Set<string>>` for reading row progress | Ephemeral per-session state, no persistence needed                |
 
 ## Non-Functional Requirements
 
@@ -119,3 +120,4 @@ The reading grid's systematic row cells shall subtly animate to indicate they ca
 8. GroupHeader plays 3 sequential audio clips on tap
 9. "Done" on last reading group shows green pulse + checkmark before redirect
 10. All existing tests pass, `pnpm typecheck` clean
+</protect>
