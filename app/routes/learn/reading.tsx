@@ -41,7 +41,7 @@ function ReadingPageContent() {
 
 function SelectChildMessage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm animate-fadeInUp">
       <p className="text-text-muted mb-8 max-w-md">
         Select a child profile from the dashboard to start reading practice.
       </p>
@@ -130,7 +130,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
   // Loading
   if (readingQuery.isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-background-warm">
+      <main className="min-h-screen flex items-center justify-center bg-background-warm animate-fadeInUp">
         <div
           className="h-8 w-8 animate-spin rounded-full border-4 border-sand-dark border-t-green"
           aria-label="Loading"
@@ -142,7 +142,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
   // Error
   if (readingQuery.isError) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm">
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm animate-fadeInUp">
         <p className="text-red-600 mb-4 max-w-md">
           {readingQuery.error instanceof Error
             ? readingQuery.error.message
@@ -170,7 +170,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-background-warm">
+    <main className="min-h-screen flex flex-col bg-background-warm animate-fadeInUp">
       <div className="flex items-center justify-between px-6 py-4 border-b border-sand-light">
         <ProfileBadge profile={null} />
         <ParentGate onExit={handleExit} onSwitchChild={handleSwitchChild} />

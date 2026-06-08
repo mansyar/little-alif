@@ -55,7 +55,7 @@ function LearnPageContent() {
 
 function SelectChildMessage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm animate-fadeInUp">
       <p className="text-text-muted mb-8 max-w-md">
         Select a child profile from the dashboard to start learning.
       </p>
@@ -90,7 +90,7 @@ function LearnContent({ profileId }: LearnContentProps) {
   // Loading: any of the two queries still pending.
   if (profileQuery.isLoading || lettersQuery.isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-background-warm">
+      <main className="min-h-screen flex items-center justify-center bg-background-warm animate-fadeInUp">
         <div
           className="h-8 w-8 animate-spin rounded-full border-4 border-sand-dark border-t-green"
           aria-label="Loading"
@@ -133,7 +133,7 @@ function LearnContent({ profileId }: LearnContentProps) {
   const canStartReading = visibleLetters.length >= 3;
 
   return (
-    <main className="min-h-screen flex flex-col bg-background-warm">
+    <main className="min-h-screen flex flex-col bg-background-warm animate-fadeInUp">
       <div className="flex items-center justify-between px-6 py-4 border-b border-sand-light">
         <ProfileBadge profile={profile ? { name: profile.name, avatar: profile.avatar } : null} />
         <ParentGate onExit={handleExit} onSwitchChild={handleSwitchChild} />
@@ -183,7 +183,7 @@ interface ErrorRetryProps {
 
 function ErrorRetry({ message, onRetry }: ErrorRetryProps) {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-background-warm animate-fadeInUp">
       <p className="text-red-600 mb-4 max-w-md">{message}</p>
       <button
         type="button"

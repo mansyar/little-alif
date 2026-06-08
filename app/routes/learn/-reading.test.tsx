@@ -324,7 +324,23 @@ describe('Reading route (/learn/reading)', () => {
     expect(await screen.findByLabelText('Parent menu')).toBeTruthy();
   });
 
-  it('does NOT render a "Back" text link in the header', async () => {
+  it('root <main> has animate-fadeInUp class when data loads', async () => {
+  const { Route } = await import('./reading');
+  const Component = Route.options.component;
+
+  if (!Component) throw new Error('Reading route has no component');
+
+  render(<Component />, { wrapper: createWrapper() });
+
+  // Wait for data to load
+  expect(await screen.findByLabelText('Shuffle')).toBeTruthy();
+
+  const main = document.querySelector('main');
+  expect(main).toBeTruthy();
+  expect(main!.className).toContain('animate-fadeInUp');
+});
+
+it('does NOT render a "Back" text link in the header', async () => {
     const { Route } = await import('./reading');
     const Component = Route.options.component;
 

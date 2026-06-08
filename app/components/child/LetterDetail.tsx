@@ -37,7 +37,7 @@ export function LetterDetail({ visibleLetters, currentHarakat }: LetterDetailPro
     <div
       role="dialog"
       aria-label={`Letter ${letter.letterId}`}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-text-dark/30"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-text-dark/30 animate-bounceIn"
     >
       <span
         aria-hidden="true"

@@ -14,7 +14,7 @@
 - [x] Task: Implement harakat cookie write on change `980b3ca`
   - [x] Add `writeHarakatCookie(mode: VowelMode): void` utility
   - [x] Wire into `setHarakat()` path so every harakat change updates the cookie
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Harakat Cookie' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Harakat Cookie' (Protocol in workflow.md)
 
 ## Phase 2: Page Transitions
 
