@@ -4,5 +4,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: UX Enhancements (v1.1)**
-  _Link: [./tracks/ux-enhancements_20260608/](./tracks/ux-enhancements_20260608/)_
