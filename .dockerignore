@@ -3,10 +3,6 @@ node_modules/
 .gitignore
 *.md
 data/
-# MP3 files live outside git, but must be included in the Docker build so the
-# AudioEngine's primary MP3 path works in production instead of falling back
-# to Web Speech API. They are present on disk after running pnpm generate:audio.
-# public/audio/
 coverage/
 dist/
 .output/

@@ -120,4 +120,4 @@ The reading grid's systematic row cells shall subtly animate to indicate they ca
 8. GroupHeader plays 3 sequential audio clips on tap
 9. "Done" on last reading group shows green pulse + checkmark before redirect
 10. All existing tests pass, `pnpm typecheck` clean
-</protect>
+    </protect>

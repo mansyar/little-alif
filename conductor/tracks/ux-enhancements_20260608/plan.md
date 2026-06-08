@@ -125,4 +125,4 @@
 - [ ] Run type checker: `pnpm typecheck` — clean
 - [ ] Run linter: `pnpm lint` — no new warnings
 - [ ] Manual verification per Phase Completion protocol
-</protect>
+      </protect>

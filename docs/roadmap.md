@@ -32,6 +32,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-19  | Security Hardening & Code Quality    | T-12, T-18             | Medium     | ~3-5h       | ✅ Complete |
 | T-20  | Vite 8 Upgrade                       | T-01                   | Low        | ~1-2h       | ✅ Complete |
 | —     | Drizzle SQL Migration Workflow       | T-02, T-12             | Low        | ~1-2h       | ✅ Complete |
+| T-21  | UX Enhancements (v1.1)               | T-08, T-10, T-07       | Medium     | 4–6h        | 🗂️ Spec     |
 
 \***\*21 tracks complete.** Delivered effort: ~54–86 hours\*\*
 
@@ -63,6 +64,7 @@ This document defines the **Conductor tracks** that will be created during devel
 | T-19  | Security Hardening & Code Quality      | ✅ Complete | [`t19-security-hardening`](../conductor/tracks/t19-security-hardening/)                                          |
 | T-20  | Vite 8 Upgrade                         | ✅ Complete | [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                         |
 | —     | Drizzle SQL Migration Workflow         | ✅ Complete | [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/)                                       |
+| T-21  | UX Enhancements (v1.1)                 | 🗂️ Spec     | —                                                                                                                |
 
 > **Note:** T-01, T-02, and T-03 were combined into a single track `scaffolding_20260531` and delivered together. The `code-quality_20260601` track (Prettier, ESLint v9, Husky, lint-staged) was added as a bonus tooling track not present in the original roadmap — it establishes the pre-commit quality pipeline. The `oxlint_migration_20260605` track replaced ESLint + Prettier with Oxlint + Oxfmt, reducing dependencies by 9 and simplifying the pre-commit hook. Tracks T-16 through T-18 are post-launch polish recommendations from the architecture review — they improve maintainability, production reliability, and self-hosting ergonomics without adding new user-facing features. T-16 (Code Quality Polish), T-17 (Infrastructure & Audio Polish), and T-18 (Error Classification System) are now complete. T-20 (Vite 8 Upgrade) migrated the build toolchain from Vite 7 (esbuild) to Vite 8 (Rolldown + Oxc) and removed unused `vite-tsconfig-paths` and `vinxi` dependencies. The Drizzle SQL Migration Workflow replaced `drizzle-kit push` with version-controlled SQL migrations via `drizzle-kit generate` + `drizzle-kit migrate`, with auto-migration on server startup. A follow-up refactored the seed process to run inside the Nitro server via a `boot.ts` module, eliminating the separate seed step and simplifying the Docker runner stage.
 
@@ -1307,3 +1309,64 @@ conductor/tracks/<track-id>/
 ```
 
 Tracks are registered in `conductor/tracks.md` (the Tracks Registry) once defined.
+
+---
+
+### T-21: UX Enhancements (v1.1)
+
+**Dependencies:** T-08 (Child Letter Grid), T-10 (Reading Practice), T-07 (Harakat)
+**Status:** 🗂️ Spec (not yet started)
+**Complexity:** Medium
+**Est. Effort:** 4–6h
+
+**Description:**
+A pack of v1.1 UX enhancements that turn the app from "functional" to "delightful." These are all client-side changes — no new database tables, no new server functions. Each enhancement is small and independently revertible.
+
+**PRD Ref:** §4 — Module 5 (Child Letter Grid), Module 8 (Reading Practice), Module 7 (Harakat)
+
+**Key Deliverables:**
+
+- [ ] **Swipeable letter detail overlay** — `LetterDetail.tsx` currently shows a static glyph that auto-dismisses. Add touch/swipe handlers (`onPointerDown`/`onPointerUp` with X-axis delta) so the child can swipe left/right to browse through `visibleLetters` sequentially. Audio auto-plays on swipe to the next letter. This turns isolated taps into a fluid exploration loop — the child taps once, then swipes through every available letter.
+
+- [ ] **Reading row progress indicator** — `ReadingGrid.tsx` renders 6 identical rows. Track which cells in each row have been tapped (local `Set` keyed by `rowIndex-cellIndex` via `useRef`). Visually distinguish completed rows (subtle green border or checkmark) and show a `"Row 3 of 6"` indicator. The first systematic row gets a subtle pulsing glow to suggest "start here."
+
+- [ ] **Persist child's last harakat selection** — `ChildHarakatBar` lives in the Zustand store and resets to `'fathah'` on page load. Persist the child's last-used harakat to a short-lived (session) cookie. On mount, check the cookie before falling back to the profile's persisted `vowelMode`. The profile-level harakat remains the authoritative default.
+
+- [ ] **Page transitions** — Add CSS fade + slight scale transitions (`animate-fadeIn` / `animate-slideUp`) to the route-level containers on `/learn` and `/learn/reading`. A small Tailwind keyframe animation for the letter detail overlay entrance (scale 0.9→1.0, opacity 0→1, elastic ease). Keeps the app from feeling abrupt.
+
+- [ ] **Group header speaks** — `GroupHeader.tsx` shows the three Arabic characters visually but is not tappable. Make it a `<button>` that, on tap, plays the three letter names sequentially via `audioEngine.speak(letterId, 'none', letterChar)` with a 300ms gap between each. The child can hear "Baa, Taa, Thaa" before starting the practice grid.
+
+- [ ] **Subtle reading completion acknowledgement** — When the child presses "Done" on the last group, instead of a silent redirect, trigger a gentle visual acknowledgement: a 1-second green pulse on the grid container and a soft checkmark animation before navigating back to `/learn`. No stars, points, or confetti — just a warm signal that the session is complete.
+
+- [ ] **Tap-replay hint on reading cells** — `ReadingCell` flashes green on tap and fades back. Add a very subtle `opacity-60` → `opacity-100` pulsing animation (3s interval) on the systematic row's cells to suggest "tap me again." Only active when the cell has been tapped at least once and is no longer in its flash state.
+
+**Key Decisions:**
+
+- All enhancements are pure client-side — no DB, no new server functions, no migration needed
+- Swipe handler uses pointer events (not a gesture library) — avoids adding a dependency
+- Reading row progress uses `useRef<Set<string>>` — ephemeral per-session reset, no persistence needed
+- Harakat cookie: session-only (`maxAge: undefined`), `sameSite: 'lax'`, client-side only
+- Page transitions use Tailwind v4's `@keyframes` in `app.css` — no Framer Motion dependency
+- Completion acknowledgement is purely CSS-driven (no setTimeout) — the "Done" button navigates via TanStack router, a small `useEffect` in the component fires the animation before unmounting
+- No gamification: no points, stars, streaks, or achievements
+
+**Edge Cases:**
+
+- Swipe during audio playback → cancel current utterance, play new letter's audio
+- Swipe past first/last letter → wrap around or clamp (decide during spec: wrapping feels more playful for kids)
+- Zero letters visible → swipe handler has nothing to iterate over (no-op, already gated)
+- Reading group with < 3 letters → GroupHeader still speaks whatever letters are present
+- Harakat cookie missing/corrupt → fall back to profile's `vowelMode` (existing behavior)
+- `prefers-reduced-motion` → respect `@media (prefers-reduced-motion)` for page transitions and overlay animations
+- Rapid group header taps during audio playback → cancel previous, start new sequence
+
+**Verification:**
+
+- Swipe left/right on letter detail cycles through visible letters with auto-audio
+- Reading grid shows row numbers and completed-row indicators
+- Child harakat survives page refresh within session
+- Letter detail overlay animates in (scale + opacity)
+- Group header plays 3 sequential audio clips on tap
+- "Done" on last reading group shows brief green pulse before redirect
+- Systematic row cells pulse subtly to indicate re-tappability
+- All 564+ existing tests still pass, `pnpm typecheck` clean
