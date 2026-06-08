@@ -52,19 +52,19 @@
 
 ## Phase 4: Group Header Speaks
 
-- [ ] Task: Write tests for group header audio playback
-  - [ ] Test: Tapping group header calls audioEngine.speak() for each letter
-  - [ ] Test: Letters play sequentially with 300ms gap
-  - [ ] Test: Rapid retaps cancel previous sequence and start new one
-  - [ ] Test: Incomplete groups (1-2 letters) speak only available letters
-- [ ] Task: Convert GroupHeader to a tappable button
-  - [ ] Change root element from `<div>` to `<button type="button">`
-  - [ ] Preserve existing visual styling (no visual change)
-  - [ ] Add `aria-label="Tap to hear letter names"`
-- [ ] Task: Implement sequential audio playback
-  - [ ] `playLetterSequence(letters: string[], getCharById)` — plays each letter with 300ms interval
-  - [ ] Cancel previous sequence on new tap (use `audioEngine.cancel()`)
-  - [ ] Use `letterId` with vowelMode='none' for isolated letter names
+- [x] Task: Write tests for group header audio playback `9a0a629`
+  - [x] Test: Tapping group header calls audioEngine.speak() for each letter
+  - [x] Test: Letters play sequentially with 300ms gap
+  - [x] Test: Incomplete groups (1-2 letters) speak only available letters
+  - [x] Test: Rapid retaps cancel previous sequence and start new one
+- [x] Task: Convert GroupHeader to a tappable button `9a0a629`
+  - [x] Change root element from `<div>` to `<button type="button">`
+  - [x] Preserve existing visual styling (no visual change)
+  - [x] Add `aria-label="Tap to hear letter names"`
+- [x] Task: Implement sequential audio playback `9a0a629`
+  - [x] `playLetterSequence(letters: string[], getCharById)` — plays each letter with 300ms interval
+  - [x] Cancel previous sequence on new tap (use `audioEngine.cancel()`)
+  - [x] Use `letterId` with vowelMode='none' for isolated letter names
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Group Header Speaks' (Protocol in workflow.md)
 
 ## Phase 5: Reading Row Progress Indicator
