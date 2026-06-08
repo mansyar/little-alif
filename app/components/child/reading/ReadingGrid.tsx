@@ -79,6 +79,7 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
                 letterId={cell.letterId}
                 vowelMode={cell.vowelMode}
                 letterChar={cell.letterChar}
+                isSystematicRow={rowIndex === 0}
               />
             ))}
           </div>

@@ -18,21 +18,21 @@
 
 ## Phase 2: Page Transitions
 
-- [ ] Task: Write component tests for entrance animation presence
-  - [ ] Test: `/learn` main element has animation class on mount
-  - [ ] Test: `/learn/reading` main element has animation class on mount
-  - [ ] Test: `LetterDetail` overlay has entrance animation class on open
-  - [ ] Test: `prefers-reduced-motion` disables animations (matchMedia mock)
-- [ ] Task: Add CSS keyframes to `app.css`
-  - [ ] `@keyframes fadeInUp` — opacity 0→1, translateY 8px→0, 200ms, ease-out
-  - [ ] `@keyframes bounceIn` — scale 0.9→1.0, opacity 0→1, 250ms, elastic cubic-bezier
-  - [ ] `@keyframes pulseReplay` — opacity 60→100%, 3s interval, for reading cells
-  - [ ] Respect `@media (prefers-reduced-motion: reduce)` — set `animation: none`
-- [ ] Task: Apply animations to route components
-  - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn` route
-  - [ ] Add `animate-fadeInUp` class to root `<main>` in `/learn/reading` route
-  - [ ] Add `animate-bounceIn` class to `LetterDetail` overlay on open
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Page Transitions' (Protocol in workflow.md)
+- [x] Task: Write component tests for entrance animation presence `c264fd3`
+  - [x] Test: `/learn` main element has animation class on mount
+  - [x] Test: `/learn/reading` main element has animation class on mount
+  - [x] Test: `LetterDetail` overlay has entrance animation class on open
+  - [x] Test: `prefers-reduced-motion` disables animations (matchMedia mock)
+- [x] Task: Add CSS keyframes to `app.css` `c264fd3`
+  - [x] `@keyframes fadeInUp` — opacity 0→1, translateY 8px→0, 200ms, ease-out
+  - [x] `@keyframes bounceIn` — scale 0.9→1.0, opacity 0→1, 250ms, elastic cubic-bezier
+  - [x] `@keyframes pulseReplay` — opacity 60→100%, 3s interval, for reading cells (reserved for Phase 3)
+  - [x] Respect `@media (prefers-reduced-motion: reduce)` — existing CSS handles zero-duration
+- [x] Task: Apply animations to route components `c264fd3`
+  - [x] Add `animate-fadeInUp` class to root `<main>` in `/learn` route
+  - [x] Add `animate-fadeInUp` class to root `<main>` in `/learn/reading` route
+  - [x] Add `animate-bounceIn` class to `LetterDetail` overlay on open
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Page Transitions' (Protocol in workflow.md)
 
 ## Phase 3: Tap-Replay Hint on Reading Cells
 

@@ -133,4 +133,91 @@ describe('ReadingCell', () => {
     expect(spans).toHaveLength(1);
     expect(spans[0]!.textContent).toBe('بَ');
   });
+
+  // ── Replay hint (systematic row) tests ───────────────────────────────
+
+  describe('replay hint (systematic row)', () => {
+    it('systematic row cell shows data-replay="true" after flash completes', async () => {
+      const user = userEvent.setup();
+      const { ReadingCell } = await import('./ReadingCell');
+      render(
+        <ReadingCell glyph="بَ" letterId="ba" vowelMode="fathah" letterChar="ب" isSystematicRow />,
+      );
+
+      const button = screen.getByRole('button');
+      // Initially no replay
+      expect(button.getAttribute('data-replay')).toBe('false');
+
+      // Tap and let flash complete
+      await user.click(button);
+      act(() => {
+        resolves[0]!();
+      });
+
+      await waitFor(() => {
+        expect(button.getAttribute('data-replay')).toBe('true');
+      });
+    });
+
+    it('replay pulse does not show during green-flash state', async () => {
+      const user = userEvent.setup();
+      const { ReadingCell } = await import('./ReadingCell');
+      render(
+        <ReadingCell glyph="بَ" letterId="ba" vowelMode="fathah" letterChar="ب" isSystematicRow />,
+      );
+
+      const button = screen.getByRole('button');
+      await user.click(button);
+
+      // During flash, data-replay should not be "true"
+      expect(button.getAttribute('data-replay')).not.toBe('true');
+    });
+
+    it('replay pulse stops on re-tap', async () => {
+      const user = userEvent.setup();
+      const { ReadingCell } = await import('./ReadingCell');
+      render(
+        <ReadingCell glyph="بَ" letterId="ba" vowelMode="fathah" letterChar="ب" isSystematicRow />,
+      );
+
+      const button = screen.getByRole('button');
+
+      // First tap, let flash complete
+      await user.click(button);
+      act(() => {
+        resolves[0]!();
+      });
+      await waitFor(() => {
+        expect(button.getAttribute('data-replay')).toBe('true');
+      });
+
+      // Re-tap — data-replay should clear
+      await user.click(button);
+      expect(button.getAttribute('data-replay')).not.toBe('true');
+      // It's in flash state again
+      expect(button.getAttribute('data-flashed')).toBe('true');
+    });
+
+    it('mixed row cells (isSystematicRow=false) never show data-replay="true"', async () => {
+      const user = userEvent.setup();
+      const { ReadingCell } = await import('./ReadingCell');
+      render(
+        <ReadingCell glyph="بَ" letterId="ba" vowelMode="fathah" letterChar="ب" isSystematicRow={false} />,
+      );
+
+      const button = screen.getByRole('button');
+
+      // Tap and let flash complete
+      await user.click(button);
+      act(() => {
+        resolves[0]!();
+      });
+      await waitFor(() => {
+        expect(button.getAttribute('data-flashed')).toBe('false');
+      });
+
+      // Even after flash, non-systematic cell never gets replay
+      expect(button.getAttribute('data-replay')).not.toBe('true');
+    });
+  });
 });

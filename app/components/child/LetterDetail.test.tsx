@@ -90,17 +90,17 @@ describe('LetterDetail', () => {
   });
 
   it('overlay has animate-bounceIn entrance animation class when open', () => {
-  useUiStore.setState({ selectedLetterId: 'alif' });
+    useUiStore.setState({ selectedLetterId: 'alif' });
 
-  const { container } = render(
-    <LetterDetail visibleLetters={visibleLetters} currentHarakat="fathah" />,
-  );
+    const { container } = render(
+      <LetterDetail visibleLetters={visibleLetters} currentHarakat="fathah" />,
+    );
 
-  const overlay = container.firstElementChild as HTMLElement;
-  expect(overlay.className).toContain('animate-bounceIn');
-});
+    const overlay = container.firstElementChild as HTMLElement;
+    expect(overlay.className).toContain('animate-bounceIn');
+  });
 
-it('renders nothing when selectedLetterId is set but does not match any visible letter', () => {
+  it('renders nothing when selectedLetterId is set but does not match any visible letter', () => {
     useUiStore.setState({ selectedLetterId: 'non-existent' });
 
     const { container } = render(
