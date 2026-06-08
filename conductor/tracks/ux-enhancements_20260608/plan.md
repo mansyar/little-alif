@@ -36,19 +36,19 @@
 
 ## Phase 3: Tap-Replay Hint on Reading Cells
 
-- [ ] Task: Write tests for replay hint behavior
-  - [ ] Test: Systematic row cell shows replay pulse after first tap
-  - [ ] Test: Replay pulse does not show during green-flash state
-  - [ ] Test: Replay pulse stops on re-tap
-  - [ ] Test: Mixed row cells never show replay pulse
-- [ ] Task: Implement `data-replay` attribute logic in `ReadingCell`
-  - [ ] Track `replayPhase` state: idle → flashing → replay-pulse
-  - [ ] Set `data-replay="true"` during replay-pulse phase
-  - [ ] Clear on re-tap (re-enters flash state)
-- [ ] Task: Add CSS animation for replay pulse
-  - [ ] `@keyframes pulseReplay` (already added in Phase 2 — verify class binding)
-  - [ ] Style `data-replay="true"` cells with the pulsing animation
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Tap-Replay Hint' (Protocol in workflow.md)
+- [x] Task: Write tests for replay hint behavior `17ba93f`
+  - [x] Test: Systematic row cell shows replay pulse after first tap
+  - [x] Test: Replay pulse does not show during green-flash state
+  - [x] Test: Replay pulse stops on re-tap
+  - [x] Test: Mixed row cells never show replay pulse
+- [x] Task: Implement `data-replay` attribute logic in `ReadingCell` `17ba93f`
+  - [x] Track `replayPhase` state: idle → flashing → replay-pulse
+  - [x] Set `data-replay="true"` during replay-pulse phase
+  - [x] Clear on re-tap (re-enters flash state)
+- [x] Task: Add CSS animation for replay pulse `17ba93f`
+  - [x] `@keyframes pulseReplay` — opacity 60→100%, 3s interval
+  - [x] `data-[replay=true]` binds `.animate-pulseReplay` class
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Tap-Replay Hint' (Protocol in workflow.md)
 
 ## Phase 4: Group Header Speaks
 

@@ -83,8 +83,13 @@
 /* ── Replay pulse hint (reading cells) ──────────────────────────────── */
 
 @keyframes pulseReplay {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .animate-pulseReplay {

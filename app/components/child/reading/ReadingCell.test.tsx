@@ -202,7 +202,13 @@ describe('ReadingCell', () => {
       const user = userEvent.setup();
       const { ReadingCell } = await import('./ReadingCell');
       render(
-        <ReadingCell glyph="بَ" letterId="ba" vowelMode="fathah" letterChar="ب" isSystematicRow={false} />,
+        <ReadingCell
+          glyph="بَ"
+          letterId="ba"
+          vowelMode="fathah"
+          letterChar="ب"
+          isSystematicRow={false}
+        />,
       );
 
       const button = screen.getByRole('button');

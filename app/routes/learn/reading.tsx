@@ -187,7 +187,7 @@ function ReadingContent({ profileId }: ReadingContentProps) {
       </div>
 
       <div className="flex flex-col items-center px-4 py-4 gap-6">
-        <GroupHeader group={activeGroup} vowelMode={currentHarakat} />
+        <GroupHeader group={activeGroup} vowelMode={currentHarakat} letterChars={letterChars} />
 
         {groups.length > 1 && (
           <GroupPills

@@ -25,7 +25,9 @@ export function ReadingCell({
   const handleClick = useCallback(() => {
     setReplayPhase('flashing');
     void audioEngine.speak(letterId, vowelMode, letterChar).finally(() => {
-      setReplayPhase((prev) => (prev === 'flashing' ? (isSystematicRow ? 'replay' : 'idle') : prev));
+      setReplayPhase((prev) =>
+        prev === 'flashing' ? (isSystematicRow ? 'replay' : 'idle') : prev,
+      );
     });
   }, [letterId, vowelMode, letterChar, isSystematicRow]);
 
