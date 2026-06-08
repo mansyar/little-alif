@@ -66,11 +66,20 @@ export function LetterDetail({ visibleLetters, currentHarakat }: LetterDetailPro
 
   const glyph = composeLetter(letter.character, currentHarakat);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  /**
+   * Swipe detection uses pointer events (onPointerDown / onPointerUp) for
+   * uniform handling of touch, pen, and mouse input. The `touch-none` class
+   * prevents the browser from processing touch gestures (scroll, zoom).
+   *
+   * Note: jsdom does not implement PointerEvent, so unit tests dispatch
+   * MouseEvent instead (touch devices synthesize mouse events; this is
+   * functionally equivalent for unit test purposes).
+   */
+  const handlePointerDown = (e: React.MouseEvent<HTMLDivElement>) => {
     pointerStart.current = { x: e.clientX, y: e.clientY };
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handlePointerUp = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!pointerStart.current) return;
 
     const deltaX = e.clientX - pointerStart.current.x;
@@ -101,8 +110,10 @@ export function LetterDetail({ visibleLetters, currentHarakat }: LetterDetailPro
       role="dialog"
       aria-label={`Letter ${letter.letterId}`}
       className="fixed inset-0 z-50 flex items-center justify-center bg-text-dark/30 animate-bounceIn touch-none"
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onMouseDown={handlePointerDown}
+      onMouseUp={handlePointerUp}
     >
       <span
         aria-hidden="true"

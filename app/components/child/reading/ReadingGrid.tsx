@@ -92,7 +92,7 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
           <div
             key={rowIndex}
             className={`rounded-large p-2 transition-colors duration-300 ${
-              isComplete ? 'border-2 border-green bg-green-light/10' : ''
+              isComplete ? 'border-2 border-green/50 bg-green-light/10' : ''
             }`}
             aria-label={
               isComplete
