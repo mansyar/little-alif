@@ -119,6 +119,10 @@
   - [x] After 1s timeout, navigate to `/learn`
 - [x] Task: Conductor - User Manual Verification 'Phase 7: Completion Acknowledgement' (Protocol in workflow.md)
 
+## Phase 8: Review Fixes
+
+- [x] Task: Apply review suggestions `929c150`
+
 ## Verification
 
 - [x] Run full test suite: `pnpm test` — all 600 passing
