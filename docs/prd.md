@@ -4,7 +4,7 @@
 **Tagline:** Introducing the Arabic alphabet, one letter at a time.
 **Target Audience:** Children (Ages 3–6) being introduced to Hijaiyah letters.
 **Tech Stack:** TanStack Start (React), Vite 8 (Rolldown + Oxc), Tailwind CSS v4, Zustand, Better Auth, Zod, Radix UI, Lucide React, typesafe-i18n, SQLite (via Drizzle ORM), Docker, Coolify on VPS.
-**Version:** 1.15 (Vite 8 Upgrade complete)
+**Version:** 1.16 (UX Enhancements v1.1 complete)
 **Development Phase:** Foundation Complete — Feature Development In Progress
 
 ---
@@ -50,6 +50,7 @@ The app is intentionally simple: no gamification, no tracing, no auto-progressio
 | **Security Hardening**                | ✅ Complete | Path traversal fix, hardened child-mode cookie (httpOnly + secure), HMAC fail-fast, rate limiting on auth endpoints, security headers (CSP, X-Frame-Options), open redirect prevention, Docker non-root user, FK constraint on profiles.userId, WCAG AA contrast fix, prefers-reduced-motion. See [`t19-security-hardening`](../conductor/archive/t19-security-hardening/)        |
 | **Vite 8 Upgrade**                    | ✅ Complete | Vite 7→8 (Rolldown + Oxc bundler/transforms), `@vitejs/plugin-react` 4→6, removed `vite-tsconfig-paths` and `vinxi`, native `resolve.tsconfigPaths`. See [`vite-8-upgrade`](../conductor/archive/vite-8-upgrade/)                                                                                                                                                                 |
 | **Drizzle SQL Migration Workflow**    | ✅ Complete | Migration from `drizzle-kit push` to `drizzle-kit generate` + `drizzle-kit migrate` with auto-migration on server startup, version-controlled migration SQL files, and updated `package.json` scripts. Seed process runs inside Nitro server via `boot.ts`, eliminating separate Docker seed step. See [`sql_migrations_20260607`](../conductor/archive/sql_migrations_20260607/) |
+| **UX Enhancements (v1.1)**           | ✅ Complete | 7 client-side UX enhancements: swipeable letter detail, reading row progress indicators, persisted child harakat selection (session cookie), page transitions (CSS keyframes), tappable group header audio, reading completion acknowledgement, tap-replay hints. See [`ux-enhancements_20260608`](../conductor/archive/ux-enhancements_20260608/) |
 
 ---
 
