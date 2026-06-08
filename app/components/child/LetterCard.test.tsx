@@ -1,25 +1,9 @@
 // @vitest-environment jsdom
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { render, screen, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useUiStore } from '~/stores/ui-store';
 import { composeLetter } from '~/lib/utils/harakat';
-
-const speakMock = vi.fn();
-let speakPromise: Promise<void> | null = null;
-let resolveSpeak: (() => void) | null = null;
-
-vi.mock('~/lib/audio/audio-engine', () => ({
-  audioEngine: {
-    speak: (...args: unknown[]) => {
-      speakMock(...args);
-      speakPromise = new Promise<void>((resolve) => {
-        resolveSpeak = resolve;
-      });
-      return speakPromise;
-    },
-  },
-}));
 
 import { LetterCard } from './LetterCard';
 import type { LetterId } from '~/lib/constants/letters';
@@ -41,9 +25,6 @@ describe('LetterCard', () => {
       toasts: [],
       currentHarakat: 'fathah' as VowelMode,
     });
-    speakMock.mockClear();
-    speakPromise = null;
-    resolveSpeak = null;
   });
 
   afterEach(() => {
@@ -60,65 +41,13 @@ describe('LetterCard', () => {
     expect(screen.getByText(expected)).toBeTruthy();
   });
 
-  it('tap calls audioEngine.speak(letter.letterId, currentHarakat)', async () => {
-    useUiStore.setState({ currentHarakat: 'kasrah' });
-
-    render(<LetterCard letter={letter} />);
-
-    const user = userEvent.setup();
-    const card = screen.getByRole('button', { name: 'alif' });
-    await user.click(card);
-
-    expect(speakMock).toHaveBeenCalledTimes(1);
-    expect(speakMock).toHaveBeenCalledWith('alif', 'kasrah', 'ا');
-  });
-
   it('tap sets selectedLetterId in useUiStore (opens the LetterDetail overlay)', async () => {
     render(<LetterCard letter={letter} />);
 
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: 'alif' }));
 
-    // The setSelectedLetter call happens synchronously in the click handler,
-    // before the await on audioEngine.speak(...).
     expect(useUiStore.getState().selectedLetterId).toBe('alif');
-  });
-
-  it('clears selectedLetterId when the speak() promise resolves', async () => {
-    render(<LetterCard letter={letter} />);
-
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: 'alif' }));
-
-    // Sanity: selectedLetterId is set during playback.
-    expect(useUiStore.getState().selectedLetterId).toBe('alif');
-
-    // Resolve the speak() promise (simulating utterance end).
-    await act(async () => {
-      resolveSpeak?.();
-      await speakPromise;
-    });
-
-    expect(useUiStore.getState().selectedLetterId).toBeNull();
-  });
-
-  it('clears selectedLetterId in .finally() when speak() resolves (symmetric for reject)', async () => {
-    render(<LetterCard letter={letter} />);
-
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: 'alif' }));
-
-    expect(useUiStore.getState().selectedLetterId).toBe('alif');
-
-    // The component uses .finally(...), which runs on both fulfill and reject,
-    // so a normal resolve exercises the same code path as a cancellation. A
-    // normal resolve is sufficient to assert the .finally contract.
-    await act(async () => {
-      resolveSpeak?.();
-      if (speakPromise) await speakPromise;
-    });
-
-    expect(useUiStore.getState().selectedLetterId).toBeNull();
   });
 
   it('glyph re-renders with the new composeLetter result when currentHarakat changes', () => {
@@ -186,21 +115,4 @@ describe('LetterCard', () => {
     expect(screen.getByText(plain)).toBeTruthy();
   });
 
-  it('passes letter.character (not letterId) as the third argument to audioEngine.speak', async () => {
-    const user = userEvent.setup();
-    render(<LetterCard letter={letter} />);
-
-    await user.click(screen.getByRole('button', { name: 'alif' }));
-
-    expect(speakMock).toHaveBeenCalledWith('alif', 'fathah', 'ا');
-  });
-
-  it('does not crash when speak() rejects - .finally() handles rejection', async () => {
-    speakMock.mockRejectedValueOnce(new Error('Audio failed'));
-
-    const user = userEvent.setup();
-    render(<LetterCard letter={letter} />);
-
-    await expect(user.click(screen.getByRole('button', { name: 'alif' }))).resolves.toBeUndefined();
-  });
 });

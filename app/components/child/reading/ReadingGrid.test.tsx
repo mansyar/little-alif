@@ -20,11 +20,7 @@ vi.mock('./ReadingCell', () => ({
   ReadingCell: (props: ReadingCellMockProps) => {
     mockCell(props);
     return (
-      <button
-        data-testid="reading-cell"
-        data-glyph={props.glyph}
-        onClick={() => props.onTap?.()}
-      >
+      <button data-testid="reading-cell" data-glyph={props.glyph} onClick={() => props.onTap?.()}>
         {props.glyph}
       </button>
     );

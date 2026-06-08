@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { audioEngine } from '~/lib/audio/audio-engine';
 import { composeLetter } from '~/lib/utils/harakat';
 import { type LetterId, LETTER_BG_COLORS } from '~/lib/constants/letters';
 import { useUiStore } from '~/stores/ui-store';
@@ -19,11 +18,9 @@ interface LetterCardProps {
 /**
  * A single tappable letter card on the /learn grid.
  *
- * Tap behaviour (FR-3, KD-4, KD-5):
+ * Tap behaviour:
  *   1. `setSelectedLetter(letterId)` opens the `LetterDetail` overlay.
- *   2. `await audioEngine.speak(...)` pronounces the composed glyph.
- *   3. `.finally(() => setSelectedLetter(null))` auto-dismisses the overlay
- *      whether the utterance ended normally or was cancelled.
+ *   2. `LetterDetail` handles audio playback and auto-dismiss.
  *
  * The `currentHarakat` is read at render time from `useUiStore` (DD-6). When
  * the child switches vowel mode via the harakat bar, all cards re-render
@@ -42,9 +39,6 @@ export const LetterCard = memo(function LetterCard({ letter }: LetterCardProps) 
 
   const handleClick = () => {
     setSelectedLetter(letter.letterId);
-    void audioEngine.speak(letter.letterId, currentHarakat, letter.character).finally(() => {
-      setSelectedLetter(null);
-    });
   };
 
   return (

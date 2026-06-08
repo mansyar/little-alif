@@ -83,8 +83,8 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
     <div role="grid" aria-rowcount={6} className="flex flex-col gap-2">
       {rows.map((row, rowIndex) => {
         const cellsInRow = row.cells.length;
-        const tappedCount = row.cells.filter(
-          (_, ci) => tappedCells.has(`${rowIndex}-${ci}`),
+        const tappedCount = row.cells.filter((_, ci) =>
+          tappedCells.has(`${rowIndex}-${ci}`),
         ).length;
         const isComplete = tappedCount === cellsInRow;
 
@@ -101,11 +101,7 @@ export function ReadingGrid({ group, letterChars, randomHarakats }: ReadingGridP
             }
           >
             <div className="flex items-center gap-2">
-              <div
-                role="row"
-                className="flex flex-1 flex-wrap gap-2"
-                aria-rowindex={rowIndex + 1}
-              >
+              <div role="row" className="flex flex-1 flex-wrap gap-2" aria-rowindex={rowIndex + 1}>
                 {row.cells.map((cell, cellIndex) => (
                   <ReadingCell
                     key={`${rowIndex}-${cellIndex}`}
