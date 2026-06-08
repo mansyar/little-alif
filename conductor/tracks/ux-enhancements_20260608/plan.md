@@ -86,24 +86,24 @@
 
 ## Phase 6: Swipeable Letter Detail Overlay
 
-- [ ] Task: Write tests for swipe navigation
-  - [ ] Test: Swipe left goes to next letter
-  - [ ] Test: Swipe right goes to previous letter
-  - [ ] Test: Wrap-around from last → first (and first → last)
-  - [ ] Test: Audio plays on swipe-navigated letter
-  - [ ] Test: Swipe during playback cancels previous utterance
-  - [ ] Test: Sub-threshold swipe (< 50px) does not navigate
-  - [ ] Test: Single letter: swipe is a no-op (stays on same letter)
-- [ ] Task: Add swipe handlers to LetterDetail
-  - [ ] Track `pointerDown` position (x, y) and `pointerUp` position
-  - [ ] Calculate X-axis delta; if |delta| >= 50px and horizontal > vertical, trigger navigation
-  - [ ] Update `selectedLetterId` in store to the target letter
-  - [ ] Auto-play audio for the new letter
-- [ ] Task: Handle edge cases
-  - [ ] Cancel previous utterance on swipe (audioEngine.cancel())
-  - [ ] Ignore vertical swipes (deltaY > deltaX)
-  - [ ] Disable pointer events during audio playback? No — swipes should still work
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: Swipeable Overlay' (Protocol in workflow.md)
+- [x] Task: Write tests for swipe navigation `0684007`
+  - [x] Test: Swipe left goes to next letter
+  - [x] Test: Swipe right goes to previous letter
+  - [x] Test: Wrap-around from last → first (and first → last)
+  - [x] Test: Audio plays on swipe-navigated letter
+  - [x] Test: Swipe during playback cancels previous utterance
+  - [x] Test: Sub-threshold swipe (< 50px) does not navigate
+  - [x] Test: Single letter: swipe is a no-op (stays on same letter)
+- [x] Task: Add swipe handlers to LetterDetail `0684007`
+  - [x] Track `mouseDown` position (x, y) and `mouseUp` position
+  - [x] Calculate X-axis delta; if |delta| >= 50px and horizontal > vertical, trigger navigation
+  - [x] Update `selectedLetterId` in store to the target letter
+  - [x] Auto-play audio for the new letter
+- [x] Task: Handle edge cases `0684007`
+  - [x] Cancel previous utterance on swipe (audioEngine.cancel())
+  - [x] Ignore vertical swipes (deltaY > deltaX)
+  - [x] Disable pointer events during audio playback? No — swipes should still work
+- [x] Task: Conductor - User Manual Verification 'Phase 6: Swipeable Overlay' (Protocol in workflow.md)
 
 ## Phase 7: Reading Completion Acknowledgement
 
