@@ -3,17 +3,17 @@
 
 ## Phase 1: Persist Child's Last Harakat Selection
 
-- [ ] Task: Write tests for harakat cookie (get, set, fallback)
-  - [ ] Test: Cookie initializes from valid value on mount
-  - [ ] Test: Cookie falls back to profile vowelMode when missing/corrupt
-  - [ ] Test: Cookie updates when child taps a different harakat
-  - [ ] Test: Cookie value is a valid VowelMode
-- [ ] Task: Implement harakat cookie read on mount
-  - [ ] Add `readHarakatCookie(): VowelMode | null` utility
-  - [ ] Modify `ChildHarakatBar` initial read: check cookie before profile vowelMode
-- [ ] Task: Implement harakat cookie write on change
-  - [ ] Add `writeHarakatCookie(mode: VowelMode): void` utility
-  - [ ] Wire into `setHarakat()` path so every harakat change updates the cookie
+- [x] Task: Write tests for harakat cookie (get, set, fallback) `980b3ca`
+  - [x] Test: Cookie initializes from valid value on mount
+  - [x] Test: Cookie falls back to profile vowelMode when missing/corrupt
+  - [x] Test: Cookie updates when child taps a different harakat
+  - [x] Test: Cookie value is a valid VowelMode
+- [x] Task: Implement harakat cookie read on mount `980b3ca`
+  - [x] Add `readHarakatCookie(): VowelMode | null` utility
+  - [x] Modify `ChildHarakatBar` initial read: check cookie before profile vowelMode
+- [x] Task: Implement harakat cookie write on change `980b3ca`
+  - [x] Add `writeHarakatCookie(mode: VowelMode): void` utility
+  - [x] Wire into `setHarakat()` path so every harakat change updates the cookie
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Harakat Cookie' (Protocol in workflow.md)
 
 ## Phase 2: Page Transitions
