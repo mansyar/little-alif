@@ -82,7 +82,7 @@
 - [x] Task: Add visual indicators
   - [x] Completed row: 2px green border + green checkmark in circle
   - [x] Row counter: `aria-label` only (no visible text for pre-literate children)
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Reading Row Progress' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Reading Row Progress' (Protocol in workflow.md)
 
 ## Phase 6: Swipeable Letter Detail Overlay
 
